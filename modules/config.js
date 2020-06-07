@@ -54,8 +54,6 @@
             apiKey: '',
             apiSecret: '',
             from: ''
-            // apiKey: '5b752c5e',
-            // apiSecret: 'dpFbo3BnkxmRPhpd'
         },
 
         stripe_secret_key: '',
