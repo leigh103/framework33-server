@@ -1,0 +1,66 @@
+<% layout('dashboard.ejs') -%>
+
+    <h3 class="mb-3">Server Components</h3>
+
+    <% if (typeof components != 'undefined'){ %>
+
+        <div class="table list-items">
+
+            <% components.forEach((component) => { %>
+                <div class="row">
+                    <div class="cell capitalise text-weight-500 flex-1"><%- component.name %></div>
+                    <div class="cell capitalise text-weight-500 flex-1 text-center <% if (component.loaded){ %>text-33-green<% } else { %>text-33-red<% } %>"><% if (!component.loaded){  %><i class="fas fa-times"></i><% } else { %><i class="fas fa-check"></i><% } %></div>
+                    <div class="cell flex-3 <% if (!component.loaded){ %>text-33-red<% } %>">
+                    <% if (!component.loaded){  %>
+                        <%- component.error %>
+                    <% } else if (typeof component.settings != 'undefined'){ %>
+                        <div>Default Route: <span class="text-weight-500">/<% if (component.settings.default_route != 'root'){ %><%- component.settings.default_route %><% } %></span></div>
+                        <% if (component.settings.views){ %>
+                            <div>Views: <span class="text-weight-500">/components/<%- component.settings.views %></span></div>
+                        <% } %>
+                        <% if (component.settings.protected_guards){ %>
+                            <div>Guards: <span class="text-weight-500"><% component.settings.protected_guards.forEach((guard,ii)=>{ %><%- guard %><% if (ii < component.settings.protected_guards.length-1){ %>,<% } %><% }) %></span></div>
+                        <% } %>
+
+                    <% } %>
+
+                    </div>
+                    <div class="cell flex-5">
+                        <div class="grid col-5 gap-1">
+
+                            <% if (component.settings && component.settings.menu){ %>
+                                <% for (var i in component.settings.menu){ %>
+
+                                    <div class="text-weight-500 text-right"><%- view.functions.parseName(i,true) %></div>
+                                    <div class="table colspan-4">
+                                        <% component.settings.menu[i].forEach((menu_item) => { %>
+
+                                            <div class="row">
+                                                <div class="cell p-0" style="width:40%"><%- menu_item.link %></div>
+                                                <div class="cell p-0"><a href="<%- menu_item.slug %>" target="ext"><%- menu_item.slug %></a></div>
+                                            </div>
+
+                                            <% if (menu_item.subitems){ %>
+                                                <% menu_item.subitems.forEach((sub_item) => { %>
+                                                    <div class="row">
+                                                        <div class="cell p-0 pl-2"><%- sub_item.link %></div>
+                                                        <div class="cell p-0"><a href="<%- sub_item.slug %>" target="ext"><%- sub_item.slug %></a></div>
+                                                    </div>
+                                                <% }) %>
+                                            <% } %>
+
+                                        <% }) %>
+
+                                    </div>
+
+                                <% } %>
+                            <% } %>
+
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+
+        </div>
+
+    <% } %>

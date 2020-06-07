@@ -1,0 +1,54 @@
+<% layout('dashboard.ejs') -%>
+
+    <div class="grid col-2 mb-3">
+        <div class="flex flex-middle-left">
+            <h3><%- title %></h3>
+        </div>
+        <div class="flex flex-middle-right">
+            <div class="flex-1 flex">
+                <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
+                <input type="text" class="" onkeyup="scope.searchApi('<%- table %>',this.value)">
+            </div>
+            <button class="flex-none btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
+        </div>
+    </div>
+
+    <div class="table" app-init="get('<%- table %>')">
+        <div class="row table-header">
+            <% fields.forEach((item)=>{ %>
+
+                <div class="cell middle <%- item.type.toLowerCase() %>"><%- view.functions.parseName(item.name) %></div>
+            <% }) %>
+            <div class="cell middle action"></div>
+        </div>
+
+        <div class="row" app-for="<%- view.functions.depluralise(table) %> in <%- table %>">
+            <% fields.forEach((item)=>{ %>
+
+                <% if (item.input_type == 'image'){ %>
+                    <div class="cell middle"><img src="/images/Profile_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
+                <% } else { %>
+                    <div class="cell middle" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></div>
+                <% } %>
+            <% }) %>
+            <div class="cell middle text-right" app-attr="{id:'cell-'+<%- view.functions.depluralise(table) %>._key}">
+
+                <div class="context-link btn bg-33-white text-secondary" app-click="toggleContext('context',<%- view.functions.depluralise(table) %>)">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div id="context" class="context dropdown text-left" style="display: none">
+        <div class="link" app-click="editItem('<%- table %>',context)">
+            <i class="fas fa-pen-alt"></i>
+            Edit
+        </div>
+        <div class="link" app-click="deleteItem('<%- table %>',context)">
+            <i class="fas fa-trash"></i>
+            Delete
+        </div>
+    </div>

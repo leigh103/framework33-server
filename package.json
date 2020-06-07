@@ -1,0 +1,51 @@
+{
+  "name": "framework33-server",
+  "version": "1.0.0",
+  "description": "NodeJS server component of Framework33",
+  "main": "server-33.js",
+  "dependencies": {
+    "@sendgrid/mail": "^6.5.5",
+    "arangojs": "^6.14.0",
+    "async": "^3.2.0",
+    "bwip-js": "^2.0.6",
+    "connect-busboy": "0.0.2",
+    "connect-redis": "^4.0.4",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "cron": "^1.8.2",
+    "ejs-mate": "^3.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "glob": "^7.1.6",
+    "lodash": "^4.17.15",
+    "lowdb": "^1.0.0",
+    "moment": "^2.24.0",
+    "nexmo": "^2.6.0",
+    "node-watch": "^0.6.3",
+    "path": "^0.12.7",
+    "querystring": "^0.2.0",
+    "redis": "^3.0.2",
+    "require-dir": "^1.2.0",
+    "simple-js-sha2-256": "^1.0.7",
+    "twilio": "^3.43.0",
+    "uuid": "^7.0.2",
+    "ws": "^7.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leigh103/framework33-server.git"
+  },
+  "keywords": [
+    "framework33"
+  ],
+  "author": "Lee Anderson",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/leigh103/framework33-server/issues"
+  },
+  "homepage": "https://github.com/leigh103/framework33-server#readme"
+}

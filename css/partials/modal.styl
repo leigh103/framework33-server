@@ -1,0 +1,42 @@
+.modal {
+
+    background-color: rgba(0,0,0,0.5);
+    z-index:500;
+
+    &-body {
+        background-color: $color-light-grey;
+        padding: 1.7rem 2rem 2rem 2rem;
+        min-width: 40vw;
+        max-width: 60vw;
+        overflow-y: auto;
+        border-radius: 0.313rem;
+        -webkit-box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.26);
+        -moz-box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.26);
+        box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.26);
+        text-align: left;
+
+        @media small {
+            width: 100vw;
+            max-height:100vh;
+            overflow-y: auto;
+        }
+
+        .avatar {
+            border-radius: 50%;
+            height: 4.3rem;
+            width: 4.3rem;
+        }
+
+    }
+
+    &.expanded {
+
+        justify-content: flex-end;
+
+        .modal-body {
+            width: 100vw;
+            height: calc(100vh - 3.750em);
+        }
+    }
+
+}

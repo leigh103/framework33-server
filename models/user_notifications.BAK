@@ -1,0 +1,104 @@
+
+
+    const user_notifications = {
+
+        all:(req) => {
+
+            return new Promise(function(resolve, reject){
+
+                let data = {}, collection
+
+                if (req.session.user){
+
+                    data._key = req.session.user._key
+
+                    if (req.session.user._id.match(/admins/)){
+                        collection = db.db.collection('admins')
+                    } else {
+                        collection = db.db.collection('users')
+                    }
+
+                }
+
+                collection.document(req.session.user._key).then((doc) => {
+
+                    resolve(doc.notifications)
+
+                }).catch((err)=>{
+                    reject(err)
+                })
+
+            })
+
+        },
+
+        save:(data) => {
+
+            if (data.admin){
+                collection = db.db.collection('admins')
+            } else {
+                collection = db.db.collection('users')
+            }
+
+            return new Promise(function(resolve, reject){
+
+                if (!data.msg){
+                    reject([])
+                }
+
+                collection.document(data._key).then((doc) => {
+
+                    data.msg._created = new Date()
+                    data.msg._created = data.msg._created.toISOString()
+                    doc.notifications.push(data.msg)
+                    collection.replace(doc, doc)
+
+                    resolve('ok')
+
+                }).catch((err)=>{
+                    reject(err)
+                })
+
+            })
+
+        },
+
+        delete:(index, req) => {
+
+            let data = {}, collection
+
+            if (req.session.user){
+
+                data._key = req.session.user._key
+
+                if (req.session.user._id.match(/admins/)){
+                    collection = db.db.collection('admins')
+                } else {
+                    collection = db.db.collection('users')
+                }
+
+            }
+
+            return new Promise(function(resolve, reject){
+
+                if (!index || !data._key){
+                    reject([])
+                }
+
+                collection.document(data._key).then((doc) => {
+
+                    doc.notifications.splice(index, 1)
+                    collection.update(doc, doc)
+                    resolve(doc.notifications)
+
+                }).catch((err)=>{
+                    reject(err)
+                })
+
+            })
+
+        }
+
+    }
+
+    module.exports = user_notifications

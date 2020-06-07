@@ -1,0 +1,29 @@
+<% layout('page.ejs') -%>
+
+<div class="vh-80 flex flex-middle">
+    <div class="vw-30 vw-s-100 px-s-2 text-left">
+        <div class="grid col-2 mb-2 ">
+            <h1 class="text-light capitalise">Login</h1>
+            <div class="flex flex-middle-right">
+                <a href="/sign-up">Sign Up</a>
+            </div>
+        </div>
+        <form method="post" action="/login/<%- guard %>" class="grid col-2 col-s-1 gap-1">
+            <div class="colspan-2">
+                <input type="text" name="email" placeholder="Email Address" class="border">
+            </div>
+            <div class="colspan-2">
+                <input type="password" name="password" placeholder="Password" class="border">
+            </div>
+            <div>
+                <input type="submit" class="btn highlight width-full bg-33-topaz" value="Login">
+            </div>
+            <div class="text-right">
+                <a href="/login/<%- guard %>/reset">Forgot password?</a>
+            </div>
+            <% if (typeof error != 'undefined'){ %>
+                <div class="colspan-2 text-33-red"><%- error %></div>
+            <% } %>
+        </form>
+    </div>
+</div>

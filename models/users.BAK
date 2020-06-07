@@ -1,0 +1,623 @@
+
+    const collection = 'users',
+          fs = require('fs'),
+          moment = require('moment')
+    //
+    // db.createCollection(collection)
+    //
+    const users = {
+
+        settings: {
+            fields: [
+                {name:'avatar',input_type:'image',placeholder:'Profile Picture', type:'image'},
+                {name:'full_name',input_type:'text',placeholder:'Full name', type:'string'},
+                {name:'email',input_type:'email',placeholder:'Email address', type:'string'},
+                {name:'tel',input_type:'text',placeholder:'Telephone Number', type:'string'},
+                {name:'activated',input_type:'select',options:[{text:'Yes',value:true},{text:'No',value:false}],placeholder:'Telephone Number', type:'boolean'}
+            ]
+        },
+
+        routes: {
+            login: '/login',
+            logged_in: '/'
+        },
+    //
+    //     find:(key) => {
+    //
+    //         return new Promise(function(resolve, reject){
+    //             db.read(collection, {_key:key}).then((data)=>{
+    //                 resolve(data)
+    //             }).catch((err)=>{
+    //                 resolve(err)
+    //             })
+    //         })
+    //
+    //     },
+    //
+        all:() => {
+
+            return new Promise(async (resolve, reject) => {
+
+                let result = await db.read(collection).get()
+
+                resolve(result)
+                // result = await db.read(collection).value().then((data)=>{
+                //     resolve(result)
+                // }).catch((err)=>{
+                //     resolve(err)
+                // })
+            })
+
+        },
+    //
+    //     findOrSave:(data) => {
+    //
+    //         return new Promise(function(resolve, reject){
+    //
+    //             if (!data.email && !data.username && !data.tel){
+    //                 resolve([])
+    //                 return false
+    //             }
+    //             if (!data.email){
+    //                 data.email = ''
+    //             }
+    //             if (!data.tel){
+    //                 data.tel = ''
+    //             } else {
+    //                 data.tel = data.tel.replace(/\s/g,'')
+    //             }
+    //             if (!data.username){
+    //                 data.username = ''
+    //             }
+    //
+    //             if (data.password && data.password_conf && data.password != data.password_conf){
+    //                 reject('Passwords are incorrect')
+    //                 return false
+    //             }
+    //
+    //             db.read(collection, {email:data.email}).then((user_data)=>{
+    //
+    //                 if (user_data.length > 0){
+    //
+    //                     if (config.users.email_activation === true && !user_data[0].activated){
+    //                         users.completeRegistration(user_data[0]).then((reg_res)=>{
+    //                             reject(reg_res)
+    //                         }).catch((err)=>{
+    //                             reject(err)
+    //                         })
+    //                     } else {
+    //                         resolve(user_data[0])
+    //                     }
+    //
+    //                 } else {
+    //
+    //
+    //
+    //                 }
+    //
+    //             }).catch((err) => {
+    //
+    //                 users.save(data).then((user_data)=>{
+    //
+    //                     if (config.users.email_activation === true && !user_data.activated){
+    //                         users.completeRegistration(user_data).then((reg_res)=>{
+    //                             reject(reg_res)
+    //                         }).catch((err)=>{
+    //                             reject(err)
+    //                         })
+    //                     } else {
+    //                         resolve(user_data)
+    //                     }
+    //
+    //                 })
+    //
+    //             })
+    //
+    //         })
+    //
+    //     },
+    //
+    //     search:(search)=>{
+    //
+    //         if (search.length < 3){
+    //             return false
+    //         }
+    //
+    //         let filter = []
+    //
+    //         filter.push(['full_name','LIKE',search])
+    //         filter.push(['email','LIKE',search])
+    //         filter.push(['tel','LIKE',search])
+    //
+    //         return new Promise(async (resolve, reject) => {
+    //             await db.read(collection).orWhere(filter).return().then((data)=>{
+    //                 console.log(data)
+    //                 resolve(data)
+    //             }).catch((err)=>{
+    //                 resolve(err)
+    //             })
+    //         })
+    //
+    //     },
+    //
+    //     save: async (data) => {
+    //
+    //         if (data.tel){
+    //             data.tel = data.tel.replace(/\s/g,'')
+    //         }
+    //
+    //         if (typeof data.full_name == 'string'){
+    //             let name = data.full_name.split(" ")
+    //             data.name = {}
+    //             data.name.first = view.functions.capitalise(name[0])
+    //             data.name.last = view.functions.capitalise(name[name.length-1])
+    //             data.full_name = view.functions.capitalise(data.full_name)
+    //         } else if (data.name) {
+    //             data.full_name = view.functions.capitalise(data.name.first+' '+data.name.last)
+    //         }
+    //
+    //         if (data.name && data.name.first && data.name.last){
+    //             await images.saveAll(data,data.name.first+'-'+data.name.last,'avatars').then((new_data)=>{
+    //                 data = new_data
+    //             })
+    //         }
+    //
+    //         if (data.password && data.password_conf && data.password == data.password_conf){
+    //
+    //             data.password = db.hash(data.password)
+    //             delete data.password_conf
+    //
+    //         } else if (data.password && data.password_conf && data.password == data.password_conf){
+    //
+    //             reject('Passwords do not match')
+    //             return false
+    //
+    //         } else {
+    //
+    //             delete data.password
+    //
+    //         }
+    //
+    //         if (config.users.email_activation === true){
+    //             data.activated = false
+    //         }
+    //
+    //         let date = new Date().toISOString()
+    //
+    //         return new Promise(function(resolve, reject){
+    //
+    //             db.upsert(collection, data).then((result) => {
+    //                 resolve(result)
+    //             }).catch((err) => {
+    //                 reject(err)
+    //             })
+    //
+    //         })
+    //
+    //     },
+    //
+    //     delete:(key) => {
+    //
+    //         return new Promise(function(resolve, reject){
+    //
+    //             db.delete(collection, key).then((user_data)=>{
+    //                 resolve(user_data)
+    //             }).catch((err) => {
+    //                 reject(err)
+    //             })
+    //
+    //         })
+    //
+    //     },
+    //
+    //     authenticate:(data) => {
+    //
+    //         return new Promise(function(resolve, reject){
+    //
+    //             db.read(collection, {email: data.email, password: db.hash(data.password)}).then((user_data)=>{
+    //
+    //                 admin_data.guard = 'user'
+    //                 resolve(user_data)
+    //
+    //             }).catch((err) => {
+    //                 reject('Email address and or password incorrect')
+    //             })
+    //
+    //
+    //         //     db.query('FOR u in users FILTER u.email == "'+data.email+'" && !u.blocked RETURN u', (user_data)=>{
+    //         //
+    //         //         if (user_data.length > 0){
+    //         //
+    //         //             if (!user_data[0].password || config.users.email_activation === true && !user_data[0].activated){
+    //         //
+    //         //                 users.completeRegistration(user_data[0]).then((reg_res)=>{
+    //         //                     reject(reg_res)
+    //         //                 }).catch((err)=>{
+    //         //                     reject(err)
+    //         //                 })
+    //         //
+    //         //             } else if (config.users.email_activation === false && user_data[0].password == db.hash(data.password) || config.users.email_activation === true && user_data[0].activated === true && user_data[0].password == db.hash(data.password)) {
+    //         //
+    //         //                 user_data[0].guard = 'user'
+    //         //                 resolve(user_data[0])
+    //         //
+    //         //             } else {
+    //         //                 reject('Email address and or password incorrect')
+    //         //             }
+    //         //
+    //         //         } else {
+    //         //             reject('Email address and or password incorrect')
+    //         //         }
+    //         //
+    //         //     })
+    //          })
+    //
+    //     },
+    //
+    //     completeRegistration: (data) => {
+    //
+    //         //return new Promise(function(resolve, reject) {
+    //
+    //             // let hash = db.hash('password-reset'+Date.now()),
+    //             //     email_data = {
+    //             //         email: data.email,
+    //             //         hash: hash
+    //             //     }
+    //             //
+    //             // db.query('LET user = DOCUMENT("users/'+data._key+'") UPDATE user WITH {password_reset:"'+hash+'"} IN users', ()=>{})
+    //             //
+    //             // notification.toUser('complete_registration',email_data).then((email_res)=>{
+    //             //     resolve('Please activate your account. We have sent you a link to your registered email address with more detail.')
+    //             // }).catch((err)=>{
+    //             //     reject(err)
+    //             // })
+    //
+    //         //})
+    //
+    //     },
+    //
+    //     activate:(data) => {
+    //
+    //         //return new Promise(function(resolve, reject){
+    //
+    //             // db.query('FOR u in users FILTER u.password_reset == "'+data+'" && !u.blocked && !u.activated UPDATE u WITH {activated: true, password_reset: ""} IN users RETURN NEW', (user_data)=>{
+    //             //
+    //             //     if (user_data.length > 0){
+    //             //         resolve(user_data[0])
+    //             //     } else {
+    //             //         reject('Not found')
+    //             //     }
+    //             //
+    //             // })
+    //
+    //         //})
+    //
+    //     },
+    //
+    //     sendReset:(data) => {
+    //
+    //         //return new Promise(function(resolve, reject){
+    //
+    //         //     let hash = db.hash('password-reset'+Date.now()),
+    //         //         filter
+    //         //
+    //         //     if (data.email){
+    //         //         filter = 'u.email == "'+data.email+'"'
+    //         //     } else if (data.key){
+    //         //         filter = 'u._key == "'+data.key+'"'
+    //         //     } else {
+    //         //         reject('Invalid data')
+    //         //         return false
+    //         //     }
+    //         //
+    //         //     db.query('FOR u in users FILTER '+filter+' UPDATE u WITH {password_reset:"'+hash+'"} IN users RETURN NEW', (user_data)=>{
+    //         //
+    //         //         if (user_data.length > 0){
+    //         //
+    //         //             let msg
+    //         //
+    //         //             if (!user_data[0].password){
+    //         //
+    //         //                 let email_data = {
+    //         //                     hash: hash,
+    //         //                     email: user_data[0].email
+    //         //                 }
+    //         //                 notification.toUser('complete_registration',email_data)
+    //         //
+    //         //             } else {
+    //         //
+    //         //                 let email_data = {
+    //         //                     hash: hash,
+    //         //                     email: user_data[0].email
+    //         //                 }
+    //         //                 notification.toUser('password_reset',email_data)
+    //         //
+    //         //             }
+    //         //
+    //         //
+    //         //             notification.email(msg)
+    //         //             resolve(user_data[0])
+    //         //
+    //         //         } else {
+    //         //             reject(data)
+    //         //         }
+    //         //
+    //         //     })
+    //         // })
+    //
+    //     },
+    //
+    //     resetPassword:(data) => {
+    //
+    //         return new Promise(function(resolve, reject){
+    //
+    //             if (data.password != data.password_conf || !data.password){
+    //                 reject('Mismatching passwords')
+    //             } else {
+    //
+    //                 db.update(collection, {email:data.email, password_reset:data.hash},{password:db.hash(data.password), password_reset:""}).then((user_data)=>{
+    //
+    //                     resolve(user_data)
+    //
+    //                 }).catch((err) => {
+    //                     reject(err)
+    //                 })
+    //
+    //             }
+    //
+    //         })
+    //
+    //     },
+    //
+    //     addStripeID:(email, stripe_id)=>{
+    //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     let date = moment().toISOString()
+    //         //
+    //         //     db.query('FOR u in users FILTER u.email == "'+email+'" UPDATE u WITH {stripe_id:"'+stripe_id+'"} IN users RETURN NEW', (data)=>{
+    //         //         if (data.length>0){
+    //         //             resolve(date)
+    //         //         } else {
+    //         //             resolve([])
+    //         //         }
+    //         //
+    //         //     })
+    //         //
+    //         // })
+    //
+    //     },
+    //
+    //     getBalance:(key)=>{
+    //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     db.query('LET u = DOCUMENT("users/'+key+'") LET total = HAS(c,"balance") ? u.balance.total : 0 RETURN total', (data)=>{
+    //         //         resolve(data[0])
+    //         //     })
+    //         //
+    //         // })
+    //
+    //     },
+    //
+    //     useBalance:(key, amount)=>{
+    //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     users.readBalance(key).then((balance)=>{
+    //         //         if (parseFloat(balance) >= parseFloat(amount)){
+    //         //             db.query('LET u = DOCUMENT("users/'+key+'") LET total = HAS(c,"balance") ? u.balance.total : 0 UPDATE u WITH {balance:{total: total - '+amount+'}} IN users RETURN NEW.balance.total', (data)=>{
+    //         //                 resolve(data[0])
+    //         //             })
+    //         //         } else {
+    //         //             reject('Not enough funds')
+    //         //         }
+    //         //     })
+    //         //
+    //         // })
+    //
+    //     },
+    //
+    //     getCart:(key)=>{
+    //
+    //         // let query
+    //         //
+    //         // if (key.match(/^[0-9]*$/)){
+    //         //     query = 'LET u = DOCUMENT("users/'+key+'")'
+    //         // } else {
+    //         //     query = 'FOR u in users FILTER u.payment_link == "'+key+'"'
+    //         // }
+    //         //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     db.query(query+' LET uart = HAS(c,"cart") ? u.cart : null RETURN u', (data)=>{
+    //         //         resolve(data[0])
+    //         //     })
+    //         //
+    //         // })
+    //
+    //     },
+    //
+    //     processCart:(link,cart_id, intent_id)=>{
+    //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     db.query('FOR u in users FILTER u.payment_link == "'+link+'" LET uart = HAS(c,"cart") ? u.cart : null RETURN {cart:cart,user:u}', (data)=>{
+    //         //
+    //         //         if (data[0].cart.id == cart_id){
+    //         //
+    //         //             data[0].cart.payment_id = intent_id
+    //         //             data[0].cart.payment = {'online':data[0].cart.total}
+    //         //             data[0].cart.method = 'stripe'
+    //         //
+    //         //             const transaction = require('../models/transactions')
+    //         //
+    //         //             transaction.insertTransaction(data[0].cart).then((trans_data)=>{
+    //         //                 users.emptyCart(data[0].user._key, cart_id).then((cart_data)=>{
+    //         //                     resolve(data[0])
+    //         //                 }).catch((err)=>{
+    //         //                     reject(err)
+    //         //                 })
+    //         //                 // resolve(data[0])
+    //         //
+    //         //             }).catch((err)=>{
+    //         //                 reject(err)
+    //         //             })
+    //         //         }
+    //         //
+    //         //     })
+    //         //
+    //         // })
+    //
+    //     },
+    //
+    //     emptyCart:(key, cart_id)=>{
+    //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     db.query('LET u = DOCUMENT("users/'+key+'") UPDATE u WITH {payment_link:"",cart:""} IN users RETURN NEW', (data)=>{
+    //         //
+    //         //         if (data[0].cart == ""){
+    //         //             resolve('ok')
+    //         //         } else {
+    //         //             reject('not cleared')
+    //         //         }
+    //         //
+    //         //     })
+    //         //
+    //         // })
+    //
+    //     },
+    //
+    //     updateBalance:(intent, req)=>{
+    //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     if (req && intent){
+    //         //
+    //         //         collection.document(intent.metadata.balance_top_up).then((doc)=>{
+    //         //
+    //         //             if (!dou.balance){
+    //         //                 dou.balance = {
+    //         //                     total:0,
+    //         //                     payment_intents:[],
+    //         //                     backup:{
+    //         //                         data:'never',
+    //         //                         amount:0
+    //         //                     }
+    //         //                 }
+    //         //             } else {
+    //         //                 dou.balance.backup = {
+    //         //                     date: new Date().toISOString(),
+    //         //                     amount: dou.balance.total
+    //         //                 }
+    //         //             }
+    //         //
+    //         //             let amount = parseFloat(intent.amount)/100
+    //         //
+    //         //             if (!parseFloat(dou.balance.total)){
+    //         //                 dou.balance.total = 0
+    //         //             }
+    //         //             dou.balance.total = parseFloat(dou.balance.total)+amount
+    //         //
+    //         //             if (!dou.balance.payment_intents){
+    //         //                 dou.balance.payment_intents = []
+    //         //             }
+    //         //
+    //         //             dou.balance.payment_intents.push({
+    //         //                 date:new Date().toISOString(),
+    //         //                 id: req.session.intent,
+    //         //                 old:dou.balance.backup.amount,
+    //         //                 new: dou.balance.total
+    //         //             })
+    //         //
+    //         //             collection.update(doc, doc).then(()=>{
+    //         //                 resolve(doc)
+    //         //             })
+    //         //
+    //         //         })
+    //         //
+    //         //     } else {
+    //         //
+    //         //         reject('Not found')
+    //         //
+    //         //     }
+    //         //
+    //         //
+    //         // })
+    //
+    //     },
+    //
+    //     sendPaymentLink:(data) => {
+    //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     let hash = db.hash('payment-link'+Date.now()),
+    //         //         filter
+    //         //
+    //         //     if (!data.cart){
+    //         //         reject('Invalid data')
+    //         //         return false
+    //         //     }
+    //         //
+    //         //     if (data.email){
+    //         //         filter = 'u.email == "'+data.email+'"'
+    //         //     } else if (data.key){
+    //         //         filter = 'u._key == "'+data.key+'"'
+    //         //     } else {
+    //         //         reject('Invalid data')
+    //         //         return false
+    //         //     }
+    //         //
+    //         //     db.query('FOR u in users FILTER '+filter+' UPDATE u WITH {payment_link:"'+hash+'",cart:'+JSON.stringify(data.cart)+'} IN users RETURN NEW', (user_data)=>{
+    //         //
+    //         //         if (user_data.length > 0){
+    //         //
+    //         //             let msg = {
+    //         //                 to: user_data[0].email,
+    //         //                 subject: 'Payment Link',
+    //         //                 text: "Please click the following link to pay a total of £"+data.cart.total.toFixed(2)+" for your items. Please contact us if there are any problems. Thanks very much for your business.",
+    //         //                 button_text: 'Pay Now',
+    //         //                 button_url: config.site_url+'/checkout/stripe/'+hash
+    //         //             }
+    //         //
+    //         //             notification.email(msg)
+    //         //             resolve(user_data[0])
+    //         //
+    //         //         } else {
+    //         //             reject([])
+    //         //         }
+    //         //
+    //         //     })
+    //         //
+    //         // })
+    //
+    //     },
+    //
+    //     saveDocument:(key, filename, filepath)=>{
+    //
+    //         // let doc = {
+    //         //     name: filename,
+    //         //     path: filepath,
+    //         //     _created: new Date().toISOString()
+    //         // }
+    //         //
+    //         // return new Promise(function(resolve, reject){
+    //         //
+    //         //     db.query('LET u = DOCUMENT("users/'+key+'") UPDATE u WITH {documents: PUSH(u.documents, '+JSON.stringify(doc)+')} IN users RETURN NEW', (data)=>{
+    //         //
+    //         //         if (data[0] && data[0].documents.length>0){
+    //         //             resolve(data[0].documents)
+    //         //         } else {
+    //         //             reject([])
+    //         //         }
+    //         //
+    //         //     })
+    //         //
+    //         // })
+    //
+    //     }
+    //
+    }
+
+    module.exports = users

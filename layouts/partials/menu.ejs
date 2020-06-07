@@ -1,0 +1,30 @@
+
+<% if (typeof menu != 'undefined'){ %>
+    <% for (var i in menu){ %>
+
+        <div class="link">
+
+            <% if (
+                !menu[i].protected_guards && typeof menu[i].authenticated == 'undefined' ||
+                typeof user != 'undefined' && user.guard && menu[i].protected_guards && menu[i].protected_guards.indexOf(user.guard) >= 0 ||
+                typeof user == 'object' && menu[i].authenticated == true ||
+                typeof user == 'undefined' && menu[i].authenticated == false
+            ){ %>
+                <% if (menu[i].icon){ %><div class="icon"><%= menu[i].icon %></div><% } %>
+                <a href="<%= menu[i].slug %>" class="<% if (view.current_view == menu[i].link.toLowerCase()){ %>active<% } %>"><%= menu[i].link %></a>
+            <% } %>
+            <% if (typeof menu[i].subitems != 'undefined'){ %>
+                <div class="subitems">
+                    <% for (var ii in menu[i].subitems){ %>
+                        <a href="<%= menu[i].subitems[ii].slug %>" class="subitem <% if (view.current_view == menu[i].subitems[ii].link.toLowerCase()){ %>active<% } %>">
+                            <% if (menu[i].subitems[ii].icon){ %><div class="icon"><%= menu[i].subitems[ii].icon %></div><% } %>
+                            <%= menu[i].subitems[ii].link %>
+                        </a>
+                    <% } %>
+                </div>
+            <% } %>
+
+        </div>
+
+    <% } %>
+<% } %>

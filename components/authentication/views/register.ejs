@@ -1,0 +1,29 @@
+<% layout('page.ejs') -%>
+
+<div class="vh-80 flex flex-middle">
+    <div class="vw-30 vw-s-100 px-s-2 text-left">
+
+        <h1 class="text-light mb-2">Sign Up</h1>
+
+        <% if (typeof error == 'undefined'){ %>
+
+            <form method="post" action="/login/register" class="grid col-1 col-s-1 gap-1">
+
+                <input type="text" name="email" placeholder="Email Address" class="border">
+
+
+                <input type="password" name="password" placeholder="Password" class="border">
+                <input type="password" name="password_conf" placeholder="Confirm Password" class="border">
+
+                <input type="submit" class="btn bg-33-topaz w-100 mt-2" value="Sign Up!">
+
+            </form>
+
+        <% } else { %>
+
+            <p class="pt-1 text-33-blue"><%- error %></p>
+
+        <% } %>
+
+    </div>
+</div>

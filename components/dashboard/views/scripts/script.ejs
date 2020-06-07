@@ -1,0 +1,134 @@
+
+    <script>
+
+        extendedController = function(){
+
+            scope.toggleContext = function(type, data){
+
+                let el = document.getElementById(type)
+
+                if (el && el.style && el.style.display != 'none'){
+                    el.style.display = 'none'
+                    scope.context = {}
+                } else {
+                    contextCloseAll()
+                }
+
+                el.style.display = 'block'
+                let top = scope._clicked_element.y,
+                    left = scope._clicked_element.x
+
+                if (left+el.offsetWidth > window.innerWidth){
+                    left = scope._clicked_element.x - el.offsetWidth + scope._clicked_element.width
+                }
+
+                top = top+scope._clicked_element.height
+
+                el.style.top = top+'px'
+                el.style.left = left+'px'
+                scope.context = data
+
+            }
+
+            scope.searchApi = function(collection, str, prefix){
+
+                clearTimeout(scope.view.typing)
+                scope.view.typing = setTimeout(function(){
+
+                    let url = '/api/'+collection+'/search?str='+str.toLowerCase()
+
+                    http(url)
+                        .then((data) => {
+                            scope[collection] = JSON.parse(data)
+
+                            if (prefix){
+                                scope.view[prefix+'_search_results'] = true
+                            } else {
+                                scope.view.search_results = true
+                            }
+
+                            // console.log(scope[collection])
+                        }).catch((err) => {
+                            scope.notify(err, 'error')
+                        })
+
+                },500)
+
+            }
+
+            scope.newObj = function(type){
+                scope.new = {}
+                scope.view.modal = 'show_edit'
+            }
+
+            scope.resetNew = function(){
+
+                return new Promise(function(resolve, reject) {
+                    for (var i in scope.new){
+                        scope.new[i] = ''
+                    }
+                    resolve()
+                });
+
+            }
+
+            scope.editItem = function(collection, obj){
+
+                contextCloseAll()
+
+                scope.resetNew().then(()=>{
+                //    console.log(collection, obj)
+
+                    if (typeof obj == 'string'){
+                        scope.new._key = obj
+                    } else {
+                        scope.new = JSON.parse(JSON.stringify(obj))
+                    }
+
+                    scope.view.modal = 'show_edit'
+
+                })
+
+            }
+
+            scope.addItem = function(collection, obj){
+
+                scope.post(collection, obj).then((data)=>{
+                    scope.notify('Added')
+                }).catch((err)=>{
+                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                })
+
+            }
+
+            scope.saveItem = function(collection, obj){
+
+                scope.post(collection, obj).then((data)=>{
+                    scope.notify('Updated')
+                }).catch((err)=>{
+                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                })
+
+            }
+
+            scope.deleteItem = function(collection, obj){
+
+                if (scope.view.modal && scope.view.modal == 'delete_confirm'){
+
+                    contextCloseAll()
+
+                    scope.delete(collection,obj._key).then(()=>{
+                        scope.notify('Deleted')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                    })
+
+                } else {
+                    scope.view.modal = 'delete_confirm'
+                }
+
+            }
+
+        }
+
+    </script>

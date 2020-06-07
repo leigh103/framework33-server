@@ -1,0 +1,20 @@
+<% layout('page.ejs') -%>
+
+<div class="vh-80 flex flex-middle">
+    <div class="vw-30 vw-s-100 px-s-2 text-center">
+
+        <% if (typeof user != 'undefined'){ %>
+
+            <h1 class="text-light mb-1">Account Activated!</h1>
+            <a class="btn bg-33-topaz" href="/login">Please Login</a>
+
+        <% } else if (typeof err != 'undefined'){ %>
+
+            <h1 class="text-light mb-1">Hmmm...</h1>
+            <p class="text-weight-500">Looks like we've had trouble activating your account</p>
+            <p class="text-33-blue">Error: <%- err %></p>
+
+        <% } %>
+
+    </div>
+</div>

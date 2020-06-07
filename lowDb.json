@@ -1,0 +1,14 @@
+{
+  "admins": [
+    {
+      "email": "lee@reformedreality.com",
+      "password": "",
+      "full_name": "Admin",
+      "_id": "admins/0",
+      "_key": 0,
+      "_created": "2020-06-01T13:11:58.489Z"
+    }
+  ],
+  "user_notifications": [],
+  "users": []
+}

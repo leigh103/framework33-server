@@ -1,0 +1,48 @@
+
+.nav {
+
+    position: fixed;
+    width: 100vw;
+    border-bottom: 1px solid rgba(120,120,120,0.1);
+    z-index: 999;
+    height: 4rem;
+
+    div.link {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
+
+        a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 0 1.3rem;
+            transition: 0.5s all ease;
+
+            &:hover {
+                color: inherit;
+            }
+        }
+
+        .logo {
+            padding: 0;
+            text-align: left;
+
+            img {
+                height: 2rem;
+                width: auto;
+            }
+        }
+    }
+
+    .subitems {
+        display: block;
+        position: absolute;
+        a {
+            display: block;
+        }
+    }
+
+}
