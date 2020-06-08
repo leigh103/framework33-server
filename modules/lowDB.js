@@ -315,7 +315,7 @@
 
             if (collection){
 
-                let result = await lowDb.get(this.collection)
+                let result = await lowDb.get(collection)
                     .size()
                     .value()
 

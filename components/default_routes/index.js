@@ -14,7 +14,7 @@ var express = require('express'),
         views: 'default_routes/views',
         menu: {
             nav: [
-                {link:'Home',slug:'/', weight:0}
+                // {link:'Home',slug:'/', weight:0}
             ]
         }
     }
@@ -45,7 +45,7 @@ var express = require('express'),
     routes.get('/testemail', (req,res) => {
 
         let data = {
-          to: 486288,
+          to: config.admin.email,
           subject: 'This is a test email',
           text: 'This is a test email. '+config.site_url+'/book/confirm/1582455692451 ',
           html: '<h1>This is a test email</h1><p>Wowzers</p>'

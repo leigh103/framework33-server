@@ -26,6 +26,8 @@
 
             this.data
 
+            this.setDefault()
+
         }
 
         async find(key) {
@@ -275,11 +277,11 @@
 
         }
 
-        setDefault() {
+        async setDefault() {
 
-            let admin_count = db.count(collection)
+            let admin_count = await db.count(collection)
 
-            if (!admin_length){
+            if (!admin_count && config.admin.email){
 
                 console.log('Creating new default admin')
                 let default_admin = {
@@ -289,12 +291,14 @@
                 }
 
                 db.create(collection, default_admin)
+            } else if (!config.admin.email){
+                console.log('Please set admin email address in modules/config.js')
             }
 
         }
 
     }
     //
-    // this.setDefault()
+    //
     //
     module.exports = admins

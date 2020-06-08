@@ -6,7 +6,7 @@
         menus: {},
         dont_track: ["/login"],
         meta:{
-            title: 'ReformedReality'
+            title: config.site.name
         },
         basedir: global.basedir,
         functions:{

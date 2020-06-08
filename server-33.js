@@ -26,7 +26,7 @@ const express = require('express'),
     global.config = require('./modules/config')
 
     dbModule = require('./modules/'+config.db.module)
-    global.db = new dbModule
+    global.db = new dbModule()
     global.moment = require('moment')
     global.model = {}
     global.ws_clients = {}
@@ -34,6 +34,7 @@ const express = require('express'),
     global.basedir = __dirname
 
     glob.sync( './modules/*.js' ).forEach( function( file ) {
+
         let module = path.resolve( file ),
             module_name = module.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1]
             re = RegExp(config.db.module+'|config')
@@ -45,12 +46,14 @@ const express = require('express'),
     })
 
     glob.sync( './models/*.js' ).forEach( function( file ) {
+
         let model = path.resolve( file ),
             model_name = model.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1]
 
+        db.createCollection(model_name)
         global.model[model_name] = require(model)
         global[model_name] = new global.model[model_name]()
-        db.createCollection(model_name)
+
     })
 
 // setup express
