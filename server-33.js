@@ -36,7 +36,7 @@ const express = require('express'),
     glob.sync( './modules/*.js' ).forEach( function( file ) {
 
         let module = path.resolve( file ),
-            module_name = module.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1]
+            module_name = module.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
             re = RegExp(config.db.module+'|config')
 
         if (!module.match(re)){
@@ -48,11 +48,11 @@ const express = require('express'),
     glob.sync( './models/*.js' ).forEach( function( file ) {
 
         let model = path.resolve( file ),
-            model_name = model.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1]
+            model_name = model.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
+            model_class_name = model_name.charAt(0).toUpperCase() + model_name.slice(1)
 
         db.createCollection(model_name)
-        global.model[model_name] = require(model)
-        global[model_name] = new global.model[model_name]()
+        global[model_class_name] = require(model)
 
     })
 

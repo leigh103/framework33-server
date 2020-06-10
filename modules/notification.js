@@ -96,7 +96,7 @@
                 }
 
                 notification.email(msg, date).then((data)=>{
-                    console.log(data)
+                //    console.log(data)
                     resolve(data)
                 }).catch((err)=>{
                     console.log(err)

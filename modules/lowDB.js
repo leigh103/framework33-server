@@ -123,85 +123,91 @@
 
         update(data) {
 
-            this.result = this.result.map(async (item,i) => {
+            if (this.result.length > 0){
+                this.result = this.result.map(async (item,i) => {
 
-                item._updated = moment().toISOString()
+                    item._updated = moment().toISOString()
 
-                await lowDb.get(this.collection)
-                    .find({_key: item._key})
-                    .assign(data)
-                    .write()
+                    await lowDb.get(this.collection)
+                        .find({_key: item._key})
+                        .assign(data)
+                        .write()
 
-                item = Object.assign(item, data)
+                    item = Object.assign(item, data)
 
-                return item
+                    return item
 
-            })
-
+                })
+            }
+            
             return this
 
         }
 
         where(filters){
 
-            this.result = this.result.filter((o) => {
+            if (this.result && this.result.length > 0){
 
-                let match = false,
-                    match_count = 0
+                this.result = this.result.filter((o) => {
 
-                filters.map((filter) => {
+                    let match = false,
+                        match_count = 0
 
-                    let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like)\s*["|']*([^'"]*)["|']*/i)
+                    filters.map((filter) => {
 
-                    if (op[3]){ // if middle item is operator
+                        let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like)\s*["|']*([^'"]*)["|']*/i)
 
-                        if (op[2] == '==' && o[op[1]] == op[3]){
-                            match_count++
-                        } else if (op[2] == '!=' && o[op[1]] != op[3]){
-                            match_count++
-                        } else if (op[2] == '>' && o[op[1]] > op[3]){
-                            match_count++
-                        } else if (op[2] == '>=' && o[op[1]] >= op[3]){
-                            match_count++
-                        } else if (op[2] == '<' && o[op[1]] < op[3]){
-                            match_count++
-                        } else if (op[2] == '<=' && o[op[1]] <= op[3]){
-                            match_count++
-                        } else if (op[2].match(/^like/i)){
+                        if (op[3]){ // if middle item is operator
 
-                            let re = new RegExp(op[3],'i')
-
-                            if (o[op[1]] && o[op[1]].match(re)){
+                            if (op[2] == '==' && o[op[1]] == op[3]){
                                 match_count++
+                            } else if (op[2] == '!=' && o[op[1]] != op[3]){
+                                match_count++
+                            } else if (op[2] == '>' && o[op[1]] > op[3]){
+                                match_count++
+                            } else if (op[2] == '>=' && o[op[1]] >= op[3]){
+                                match_count++
+                            } else if (op[2] == '<' && o[op[1]] < op[3]){
+                                match_count++
+                            } else if (op[2] == '<=' && o[op[1]] <= op[3]){
+                                match_count++
+                            } else if (op[2].match(/^like/i)){
+
+                                let re = new RegExp(op[3],'i')
+
+                                if (o[op[1]] && o[op[1]].match(re)){
+                                    match_count++
+                                }
+
+                            } else if (op[2].match(/^not\s*like/i)){
+
+                                let re = new RegExp(op[3],'i')
+
+                                if (!o[op[1]] || !o[op[1]].match(re)){
+                                    match_count++
+                                }
+
                             }
 
-                        } else if (op[2].match(/^not\s*like/i)){
+                        } else {
 
-                            let re = new RegExp(op[3],'i')
-
-                            if (!o[op[1]] || !o[op[1]].match(re)){
+                            if (o[op[1]] == op[2]){
                                 match_count++
                             }
 
                         }
 
-                    } else {
-
-                        if (o[op[1]] == op[2]){
-                            match_count++
+                        if (filters.length === match_count) {
+                            match = true
                         }
 
-                    }
+                    })
 
-                    if (filters.length === match_count) {
-                        match = true
-                    }
+                    return match
 
                 })
 
-                return match
-
-            })
+            }
 
             return this
 
@@ -209,60 +215,64 @@
 
         orWhere(filters) {
 
-            this.result = this.result.filter((o) => {
+            if (this.result && this.result.length > 0){
 
-                let match = false
+                this.result = this.result.filter((o) => {
 
-                filters.map((filter) => {
+                    let match = false
 
-                    let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like)\s*["|']*([^'"]*)["|']*/i)
+                    filters.map((filter) => {
 
-                    if (op[3]){ // if middle item is operator
+                        let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like)\s*["|']*([^'"]*)["|']*/i)
 
-                        if (op[2] == '==' && o[op[1]] == op[3]){
-                            match = true
-                        } else if (op[2] == '!=' && o[op[1]] != op[3]){
-                            match = true
-                        } else if (op[2] == '>' && o[op[1]] > op[3]){
-                            match = true
-                        } else if (op[2] == '>=' && o[op[1]] >= op[3]){
-                            match = true
-                        } else if (op[2] == '<' && o[op[1]] < op[3]){
-                            match = true
-                        } else if (op[2] == '<=' && o[op[1]] <= op[3]){
-                            match = true
-                        } else if (op[2].match(/^like/i)){
+                        if (op[3]){ // if middle item is operator
 
-                            let re = new RegExp(op[3],'i')
-
-                            if (o[op[1]] && o[op[1]].match(re)){
+                            if (op[2] == '==' && o[op[1]] == op[3]){
                                 match = true
+                            } else if (op[2] == '!=' && o[op[1]] != op[3]){
+                                match = true
+                            } else if (op[2] == '>' && o[op[1]] > op[3]){
+                                match = true
+                            } else if (op[2] == '>=' && o[op[1]] >= op[3]){
+                                match = true
+                            } else if (op[2] == '<' && o[op[1]] < op[3]){
+                                match = true
+                            } else if (op[2] == '<=' && o[op[1]] <= op[3]){
+                                match = true
+                            } else if (op[2].match(/^like/i)){
+
+                                let re = new RegExp(op[3],'i')
+
+                                if (o[op[1]] && o[op[1]].match(re)){
+                                    match = true
+                                }
+
+                            } else if (op[2].match(/^not\s*like/i)){
+
+                                let re = new RegExp(op[3],'i')
+
+                                if (!o[op[1]] || !o[op[1]].match(re)){
+                                    match = true
+                                }
+
                             }
 
-                        } else if (op[2].match(/^not\s*like/i)){
+                        } else {
 
-                            let re = new RegExp(op[3],'i')
-
-                            if (!o[op[1]] || !o[op[1]].match(re)){
+                            if (o[op[1]] == op[2]){
                                 match = true
                             }
 
                         }
 
-                    } else {
 
-                        if (o[op[1]] == op[2]){
-                            match = true
-                        }
+                    })
 
-                    }
-
+                    return match
 
                 })
 
-                return match
-
-            })
+            }
 
             return this
 
@@ -311,11 +321,11 @@
 
         }
 
-        async count(collection){
+        count(collection){
 
             if (collection){
 
-                let result = await lowDb.get(collection)
+                let result = lowDb.get(collection)
                     .size()
                     .value()
 
@@ -329,64 +339,60 @@
 
         }
 
-        get(fields){
+        show(fields){
 
-            if (fields){
+            this.result = this.result.map((item,i) => {
 
-                let result = JSON.parse(JSON.stringify(this.result))
-                result = result.map((item,i)=>{
+                let new_item = {}
 
-                    fields.map((field)=>{
+                fields.map((field)=>{
 
-                        if (field && item[field]){
-                            delete item[field]
-                        }
-
-                    })
-
-                    return item
+                    if (field && item[field]){
+                        new_item[field] = item[field]
+                    }
 
                 })
 
-                return result
+                return new_item
 
-            } else {
+            })
 
-                return this.result
+            return this
 
-            }
+        }
+
+        omit(fields){
+
+            this.result = this.result.map((item,i) => {
+
+                fields.map((field)=>{
+
+                    if (field && item[field]){
+                        delete item[field]
+                    }
+
+                })
+
+                return item
+
+            })
+
+            return this
+
+        }
+
+        get(){
+
+            return this.result
 
         }
 
         first(fields){
 
-            if (fields){
-
-                let result = JSON.parse(JSON.stringify(this.result[0]))
-
-                fields.map((field)=>{
-
-                    if (result[field]){
-                        delete result[field]
-                    }
-
-                })
-
-                return result
-
-            } else {
-
-                return this.result[0]
-
-            }
+            return this.result[0]
 
         }
 
-        getOmit(fields){
-
-
-
-        }
 
         hash(str){
             return sha2_256(str)

@@ -1,15 +1,28 @@
 {
-  "admins": [
+  "admin": [
     {
       "email": "lee@reformedreality.com",
-      "password": "",
+      "password": "3d1ed0ebb7fdedf6e14c27279b2dafa9b008e61cbafe3e7d27776914558969e7",
       "full_name": "Admin",
-      "_id": "admins/0",
+      "guard": "admin",
+      "_id": "admin/0",
       "_key": 0,
-      "_created": "2020-06-08T18:03:11.578Z",
-      "_updated": "2020-06-08T18:16:41.789Z",
-      "password_reset": "5f1fedd23b2494d9d26ffd0d7ad80db6ccff6f87fb368590c0150bcf6c83c9f2"
+      "_created": "2020-06-10T15:18:23.870Z",
+      "_updated": "2020-06-10T16:18:28.796Z",
+      "password_reset": false,
+      "activated": true
     }
   ],
-  "users": []
+  "user": [
+    {
+      "email": "leeanderson60@gmail.com",
+      "password": "3d1ed0ebb7fdedf6e14c27279b2dafa9b008e61cbafe3e7d27776914558969e7",
+      "tel": "",
+      "username": "",
+      "guard": "user",
+      "_id": "user/0",
+      "_key": 0,
+      "_created": "2020-06-10T17:38:51.748Z"
+    }
+  ]
 }
