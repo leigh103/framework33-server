@@ -114,91 +114,45 @@ const express = require('express'),
 
     routes.post('/login/:guard', (req, res) => {
 
-        if (req.params.guard == 'admin'){
+        let user = new global[parseClassName(req.params.guard)]().find(req.body),
+            auth_data = user.authenticate(req.body)
 
-            let admin = new Admin().find(req.body),
-                auth_data = new Auth(admin.data, req.body).authenticate()
-
-            if (auth_data && auth_data.error){
-                res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})
-            } else if (auth_data){
-                req.session.user = auth_data
-                res.redirect(admin.routes.redirects.logged_in)
-            } else {
-                res.render('authentication/views/login.ejs', {guard:req.params.guard,error:'Email address and/or password incorrect'})
-            }
-
-        } else if (req.params.guard == 'user'){
-
-            let user = new User().find(req.body),
-                auth_data = new Auth(user.data, req.body).authenticate()
-
-            if (auth_data && auth_data.error){
-                res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})
-            } else if (auth_data){
-                req.session.user = auth_data
-                res.redirect(user.routes.redirects.logged_in)
-            }
-
+        if (auth_data && auth_data.error){
+            res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})
+        } else if (auth_data && auth_data._id){
+            req.session.user = auth_data
+            res.redirect(user.routes.redirects.logged_in)
+        } else {
+            res.render('authentication/views/reset.ejs', {type:'reset',guard:req.params.guard,error:'There has been an issue resetting your password, please try again'})
         }
 
     })
 
     routes.post('/login/:guard/send-reset', async (req, res) => {
 
-        if (req.params.guard == 'admin'){
+        let user = await new global[parseClassName(req.params.guard)]().find(req.body),
+            auth_data = user.sendReset()
 
-            let user = await new Admin().find(req.body),
-                auth_data = await new Auth(user.data, req.body).sendReset()
-
-            if (auth_data && auth_data.error){
-                res.render('authentication/views/reset.ejs', {type:'reset',error:auth_data.error,guard:req.params.guard})
-            } else if (auth_data){
-                res.render('authentication/views/reset.ejs', {type:'reset_sent',guard:req.params.guard})
-            }
-
-        } else if (req.params.guard == 'user'){
-
-            let user = await new User().find(req.body),
-                auth_data = await new Auth(user.data, req.body).sendReset()
-
-            if (auth_data && auth_data.error){
-                res.render('authentication/views/reset.ejs', {type:'reset',error:auth_data.error,guard:req.params.guard})
-            } else if (auth_data){
-                res.render('authentication/views/reset.ejs', {type:'reset_sent',guard:req.params.guard})
-            }
-
+        if (auth_data && auth_data.error){
+            res.render('authentication/views/reset.ejs', {type:'reset',error:auth_data.error,guard:req.params.guard})
+        } else if (auth_data){
+            res.render('authentication/views/reset.ejs', {type:'reset_sent',guard:req.params.guard})
         }
 
     })
 
     routes.post('/login/:guard/reset-password', async (req, res) => {
 
-        if (req.params.guard == 'admin'){
+        let user = await new global[parseClassName(req.params.guard)]().find(req.body.password_reset),
+            auth_data = await user.resetPassword(req.body)
 
-            let user = await new Admin().find(req.body.hash),
-                auth_data = await new Auth(user.data, req.body).resetPassword()
-
-            if (auth_data && auth_data.error){
-                res.render('authentication/views/reset.ejs', {type:'reset',guard:'admin',error:auth_data.error})
-            } else if (auth_data){
-                res.redirect('/login/admin')
-            }
-
-            // admins.resetPassword(req.body).then((data)=>{
-            //     res.redirect('/login/admin')
-            // }).catch((err)=>{
-            //     res.render('authentication/views/reset.ejs', {type:'reset',guard:'admin',error:'Incorrect email address or invalid access code. Please try again.'})
-            // })
-
-        } else if (req.params.guard == 'user'){
-
-            users.resetPassword(req.body).then((data)=>{
-                res.redirect('/login')
-            }).catch((err)=>{
-                res.render('authentication/views/reset.ejs', {type:'reset',guard:'user',error:'Incorrect email address or invalid access code. Please try again.'})
-            })
-
+        if (auth_data && auth_data.error){
+            res.render('authentication/views/reset.ejs', {type:'',guard:req.params.guard,error:auth_data.error})
+        } else if (auth_data && auth_data._id){
+            req.session.user = auth_data
+            res.redirect(user.routes.redirects.logged_in)
+        } else {
+            res.render('authentication/views/reset.ejs', {type:'reset',guard:req.params.guard,error:'There has been an issue resetting your password, please try again'})
         }
 
     })

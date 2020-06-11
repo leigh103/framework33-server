@@ -1,71 +1,31 @@
 
-    class Auth {
+    const Model = require('../modules/Models')
 
-        constructor(user_data, posted_data){
+    class Auth extends Model {
 
-            if (!user_data){
-                this.error = 'Not found'
-                return this
-            }
+        constructor(data){
 
-            if (user_data.data){
-                user_data = user_data.data
-            }
-
-            this.collection = user_data.guard
-            this.email = user_data.email
-            this.activated = user_data.activated
-            this.blocked = user_data.blocked
-            this.password = user_data.password
-            this.user_data = user_data
-
-            if (user_data.password_reset){
-                this.password_reset = user_data.password_reset
-            }
-
-            this.error = ''
-            this.success = ''
-
-            if (posted_data){
-
-                if (posted_data.email){
-                    this.email = posted_data.email
-                }
-
-                if (posted_data.password){
-                    this.password_check = db.hash(posted_data.password)
-                }
-
-                if (posted_data.password_confirmation){
-                    this.password_confirmation = db.hash(posted_data.password_confirmation)
-                }
-
-                if (posted_data.password_reset){
-                    this.password_reset = posted_data.password_reset
-                }
-
-            }
-
+            super(data)
 
         }
 
-        authenticate() {
+        authenticate(attempt) {
 
-            if (!this.collection || this.blocked){
+            if (this.data.blocked){
                 this.error = 'Email address and/or password incorrect'
                 return this
             }
 
-            if (!this.activated && this.email){
+            if (!this.data.activated && this.data.email){
 
                 this.sendReset()
                 this.error = 'Email address and/or password incorrect. Please check your email for confirmation'
                 return this
 
-            } else if (this.activated && this.password == this.password_check){
+            } else if (this.data.activated && this.data.password == db.hash(attempt.password) && this.data.email == attempt.email){
 
-                this.user_data.guard = this.collection
-                return this.user_data
+                this.data.guard = this.settings.collection
+                return this.data
 
             } else {
 
@@ -76,31 +36,31 @@
 
         }
 
-        async resetPassword() {
+        async resetPassword(password_reset) {
 
-            if (!this.collection || this.blocked){
+            if (this.data.blocked){
                 this.error = 'Email address and/or password incorrect'
                 return this
             }
 
-            if (this.password_check != this.password_confirmation || !this.password_check){
+            if (password_reset.password != password_reset.password_confirmation || !password_reset.password){
 
                 this.error = 'Passwords no not match'
                 return this
 
-            } else if (this.password_check == this.password_confirmation){
+            } else if (password_reset.password == password_reset.password_confirmation){
 
                 let update_data = {
-                    password: this.password_check,
+                    password: db.hash(password_reset.password),
                     password_reset: false,
                     activated: true
                 }
 
-                this.user_data = await db.read(this.collection).where(['email == '+this.email, 'password_reset == '+this.password_reset]).update(update_data).first()
+                this.data = await db.read(this.settings.collection).where(['email == '+this.data.email, 'password_reset == '+password_reset.password_reset]).update(update_data).first()
 
-                if (this.user_data && this.user_data._id){
+                if (this.data){
 
-                    return this.user_data
+                    return this.data
 
                 } else {
 
@@ -119,7 +79,7 @@
                 this.error = 'Not found'
                 return this
             } else {
-                this.user_data = db.read(this.collection).where(['password_reset == '+this.password_reset]).update({activated:true,password_reset:false}).first()
+                this.user_data = db.read(this.settings.collection).where(['password_reset == '+this.password_reset]).update({activated:true,password_reset:false}).first()
                 return this.user_data
             }
 
@@ -130,18 +90,18 @@
             let hash = db.hash('password-reset'+Date.now()),
                 filter = []
 
-            if (this.email){
-                filter.push('email == '+this.email)
-            } else if (this.user_data._key){
-                filter.push('_key == '+this.user_data._key)
+            if (this.data.email){
+                filter.push('email == '+this.data.email)
+            } else if (this.data._key){
+                filter.push('_key == '+this.data._key)
             } else {
                 this.error = 'Reset not sent - Not found'
                 return this
             }
 
-            db.read(this.collection).orWhere(filter).update({password_reset:hash}).first()
+            db.read(this.settings.collection).orWhere(filter).update({password_reset:hash}).first()
 
-            if (this.user_data && this.user_data.email){
+            if (this.data && this.data.email){
 
                 let msg,
                     notification_type
@@ -156,12 +116,12 @@
 
                 let email_data = {
                     hash: hash,
-                    guard: this.collection,
-                    email: this.user_data.email
+                    guard: this.settings.collection,
+                    email: this.data.email
                 }
 
                 notification.template(notification_type,email_data) //.then((email_data)=>{
-                    return this.user_data
+                    return this.data
                 // }).catch((err)=>{
                 //     this.error = 'Unfortunately we could not send the password reset to your registered email address'
                 //     return this

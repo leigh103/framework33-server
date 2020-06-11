@@ -36,6 +36,8 @@ var express = require('express'),
 
                     if (model.routes.private[http_method][method] && guard && model.routes.private[http_method][method].indexOf(guard) !== -1){ // if it's a private method and the guard is allowed
                         resolve()
+                    } else if (model.routes.private[http_method][method] && guard && model.routes.private[http_method][method].indexOf('self') !== -1){ // if the user is allowed to use the function on their own data
+                        resolve(true)
                     } else if (guard){
                         reject(settings.not_authorized)
                     } else {
@@ -66,16 +68,22 @@ var express = require('express'),
 
     routes.get('/:collection/:id',(req,res)=>{
 
-        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
+        let model_class_name = parseClassName(req.params.collection)
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
             let model = new global[model_class_name]()
 
-            functions.accessGranted(model,req,'find').then(()=>{
+            functions.accessGranted(model,req,'find').then((self)=>{
 
                 model = model.find(req.params.id)
-                res.json(model.data)
+                if (self === true && model.data._id == req.session.user._id){
+                    res.json(model.data)
+                } else if (!self) {
+                    res.json(model.data)
+                } else {
+                    res.status(401).send(settings.not_authorized)
+                }
 
             }).catch((err)=>{
 
@@ -99,7 +107,7 @@ var express = require('express'),
 
     routes.get('/:collection',async (req,res)=>{
 
-        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
+        let model_class_name = parseClassName(req.params.collection)
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
@@ -137,7 +145,7 @@ var express = require('express'),
             method = req.params.method.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
         }
 
-        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
+        let model_class_name = parseClassName(req.params.collection)
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
@@ -151,10 +159,22 @@ var express = require('express'),
                 return
             }
 
-            functions.accessGranted(model, req, method).then(async ()=>{
+            functions.accessGranted(model, req, method).then(async (self)=>{
 
                 let result = await model[method]()
-                res.json(result)
+
+                if (result.error){
+                    res.status(500).send(result.error)
+                } else {
+                    if (self === true && result.data._id == req.session.user._id){
+                        res.json(result.data)
+                    } else if (!self) {
+                        res.json(result.data)
+                    } else {
+                        res.status(401).send(settings.not_authorized)
+                    }
+                }
+
 
             }).catch((err)=>{
 
@@ -182,7 +202,7 @@ var express = require('express'),
             method = req.params.method.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
         }
 
-        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
+        let model_class_name = parseClassName(req.params.collection)
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
@@ -199,7 +219,11 @@ var express = require('express'),
             functions.accessGranted(model, req, method).then(async ()=>{
 
                 let result = await model[method]()
-                res.json(result)
+                if (result.error){
+                    res.status(500).send(result.error)
+                } else {
+                    res.json(result.data)
+                }
 
             }).catch((err)=>{
 
@@ -222,16 +246,22 @@ var express = require('express'),
 
     routes.delete('/:collection/:id',(req,res)=>{
 
-        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
+        let model_class_name = parseClassName(req.params.collection)
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
             let model = new global[model_class_name]()
 
-            functions.accessGranted(model,req,'delete').then(()=>{
+            functions.accessGranted(model,req,'delete').then(async ()=>{
 
-                model = model.find(req.params.id).delete()
-                res.json(model)
+                model = await model.find(req.params.id).delete()
+
+                if (model.error){
+                    res.status(500).send(model.error)
+                } else {
+                    res.json(model)
+                }
+
 
             }).catch((err)=>{
 

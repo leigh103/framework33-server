@@ -123,7 +123,7 @@
 
         update(data) {
 
-            if (this.result.length > 0){
+            if (this.result && this.result.length > 0){
                 this.result = this.result.map(async (item,i) => {
 
                     item._updated = moment().toISOString()
@@ -139,7 +139,7 @@
 
                 })
             }
-            
+
             return this
 
         }
@@ -305,11 +305,11 @@
 
         }
 
-        delete(){
+        async delete(){
 
-            this.result = this.result.map((item,i) =>{
+            this.result.map(async(item,i) =>{
 
-                lowDb.get(this.collection)
+                await lowDb.get(this.collection)
                     .remove({ _key: parseInt(item._key) })
                     .write()
 
@@ -317,6 +317,7 @@
 
             })
 
+            this.result = []
             return this.result
 
         }
@@ -389,7 +390,12 @@
 
         first(fields){
 
-            return this.result[0]
+            if (this.result && this.result.length > 0){
+                return this.result[0]
+            } else {
+                return this.result
+            }
+
 
         }
 

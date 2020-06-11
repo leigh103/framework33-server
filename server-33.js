@@ -25,25 +25,31 @@ const express = require('express'),
 
     global.config = require('./modules/config')
 
-    dbModule = require('./modules/'+config.db.module)
+    dbModule = require('./modules/'+config.modules.db.module)
     global.db = new dbModule()
+
     global.moment = require('moment')
-    global.models = {}
     global.ws_clients = {}
     global.component = {}
     global.basedir = __dirname
 
-    glob.sync( './modules/*.js' ).forEach( function( file ) {
+    config.modules.load.forEach( (file) => {
 
-        let module = path.resolve( file ),
-            module_name = module.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
-            re = RegExp(config.db.module+'|config')
-
-        if (!module.match(re)){
-            global[module_name] = require(module)
-        }
+        global[file] = require('./modules/'+file)
 
     })
+
+    // glob.sync( './modules/*.js' ).forEach( function( file ) {
+    //
+        // let module = path.resolve( file ),
+        //     module_name = module.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
+        //     re = RegExp(config.db.module+'|config')
+        //
+        // if (!module.match(re)){
+        //     global[module_name] = require(module)
+        // }
+    //
+    // })
 
     glob.sync( './models/*.js' ).forEach( function( file ) {
 
@@ -53,7 +59,6 @@ const express = require('express'),
 
         db.createCollection(model_name)
         global[model_class_name] = require(model)
-        global.models[model_class_name] = global[model_class_name]
 
     })
 
