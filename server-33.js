@@ -28,7 +28,7 @@ const express = require('express'),
     dbModule = require('./modules/'+config.db.module)
     global.db = new dbModule()
     global.moment = require('moment')
-    global.model = {}
+    global.models = {}
     global.ws_clients = {}
     global.component = {}
     global.basedir = __dirname
@@ -53,6 +53,7 @@ const express = require('express'),
 
         db.createCollection(model_name)
         global[model_class_name] = require(model)
+        global.models[model_class_name] = global[model_class_name]
 
     })
 

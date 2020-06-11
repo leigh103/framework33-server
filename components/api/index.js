@@ -11,7 +11,9 @@ var express = require('express'),
 
     settings = {
         default_route: 'api',
-        not_found: {error:'404 - not found'}
+        not_found: {status:404, message:'Not found'},
+        not_allowed: {status:405,message:'Method not allowed'},
+        not_authorized: {status:401,message:'Not authorized'}
     },
 
 
@@ -19,66 +21,38 @@ var express = require('express'),
 
     functions = {
 
-        get:(collection, key)=>{
+        accessGranted: (model, req, method) =>{
 
-            if (key){
+            return new Promise(function(resolve, reject) {
 
-                return new Promise(function(resolve, reject){
-                    db.get(collection, {_key:key}).then((data)=>{
-                        resolve(data)
-                    }).catch((err)=>{
-                        resolve(err)
-                    })
-                })
+                let guard = false,
+                    http_method = req.method.toLowerCase()
 
-            } else {
+                if (req.session && req.session.user && req.session.user.guard){
+                    guard = req.session.user.guard
+                }
 
-                return new Promise(function(resolve, reject){
-                    db.get(collection).then((data)=>{
-                        resolve(data)
-                    }).catch((err)=>{
-                        resolve(err)
-                    })
-                })
+                if (model.routes && model.routes.private && model.routes.private[http_method] && guard){ // if the http method is allowed and user is auth'd
 
-            }
+                    if (model.routes.private[http_method][method] && guard && model.routes.private[http_method][method].indexOf(guard) !== -1){ // if it's a private method and the guard is allowed
+                        resolve()
+                    } else if (guard){
+                        reject(settings.not_authorized)
+                    } else {
+                        reject(settings.not_allowed)
+                    }
 
+                } else if (model.routes && model.routes.public && model.routes.public[http_method]){ // if the http method is allowed
 
-        },
+                    if (model.routes.public[http_method][method]){ // if it's a public route, regardless of guard
+                        resolve()
+                    } else {
+                        reject(settings.not_allowed)
+                    }
 
-        post:(collection, data)=>{
-
-            return new Promise(function(resolve, reject){
-                db.post(collection, data).then((data)=>{
-                    resolve(data)
-                }).catch((err)=>{
-                    resolve(err)
-                })
-            })
-
-        },
-
-        put:(collection, data)=>{
-
-            return new Promise(function(resolve, reject){
-                db.put(collection, data).then((data)=>{
-                    resolve(data)
-                }).catch((err)=>{
-                    resolve(err)
-                })
-            })
-
-        },
-
-        delete:(collection, data)=>{
-
-            return new Promise(function(resolve, reject){
-
-                db.delete(collection, data).then((data)=>{
-                    resolve(data)
-                }).catch((err)=>{
-                    resolve(err)
-                })
+                } else {
+                    reject(settings.not_allowed)
+                }
 
             })
 
@@ -86,293 +60,194 @@ var express = require('express'),
 
     }
 
+
+// routes
+
+
     routes.get('/:collection/:id',(req,res)=>{
 
-        if (req.params.id == 'search' && typeof global[req.params.collection].search == 'function'){
+        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
 
-            global[req.params.collection].search(req.query)
-                .then((data) => {
-                    res.json(data)
-                }).catch(() => {
-                    res.json([])
-                })
+        if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-        } else if (global[req.params.collection] && typeof global[req.params.collection].find == 'function'){
+            let model = new global[model_class_name]()
 
-            global[req.params.collection].find(req.params.id)
-                .then((data) => {
-                    res.json(data)
-                }).catch(() => {
-                    res.json([])
-                })
+            functions.accessGranted(model,req,'find').then(()=>{
 
-        } else if (!global[req.params.collection] || typeof global[req.params.collection].find == 'undefined'){
+                model = model.find(req.params.id)
+                res.json(model.data)
 
-            functions.get(req.params.collection, req.params.id)
-                .then((data) => {
-                    res.json(data)
-                }).catch(() => {
-                    res.json([])
-                })
+            }).catch((err)=>{
+
+                if (err.status){
+                    res.status(err.status).json(err)
+                } else {
+                    log(err)
+                    res.status(500).send(err)
+                }
+
+            })
 
         } else {
 
-            res.json([])
+            let result = db.read(req.params.collection).where(['_key == '+req.params.id]).first()
+            res.json(result)
 
         }
-
-//         if (req.params.function){
-//             req.params.function = req.params.function.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
-//         } else {
-//             req.params.function = req.params.id.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
-//         }
-//
-//         if (req.params.function && global[req.params.collection] && typeof global[req.params.collection][req.params.function] == 'function'){
-// console.log(1)
-//             let data
-//
-//             if (Object.keys(req.query).length>0){
-//                 data = req.query
-//             } else {
-//                 data = req.params.id
-//             }
-//
-//             global[req.params.collection][req.params.function](data, req)
-//                 .then((data) => {
-//                     res.json(data)
-//                 }).catch(() => {
-//                     res.json([])
-//                 })
-//
-//         } else if (req.query && global[req.params.collection] && typeof global[req.params.collection][req.params.id] == 'function'){
-//
-//             global[req.params.collection][req.params.id](req.query, req)
-//                 .then((data) => {
-//                     res.json(data)
-//                 }).catch(() => {
-//                     res.json([])
-//                 })
-//
-//         } else if (global[req.params.collection] && typeof global[req.params.collection].find == 'function'){
-//
-//             global[req.params.collection].find(req.params.id)
-//                 .then((data) => {
-//                     res.json(data)
-//                 }).catch(() => {
-//                     res.json([])
-//                 })
-//
-//         } else if (!global[req.params.collection]){
-//
-//             functions.get(req.params.collection, req.params.id)
-//                 .then((data) => {
-//                     res.json(data)
-//                 }).catch(() => {
-//                     res.json([])
-//                 })
-//
-//         } else {
-//
-//             res.json([])
-//
-//         }
 
     })
 
     routes.get('/:collection',async (req,res)=>{
 
-        if (global[req.params.collection] && typeof global[req.params.collection].all == 'function'){
+        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
 
-            global[req.params.collection].all()
-                .then((data) => {
-                    res.json(data)
-                }).catch(() => {
-                    res.json([])
-                })
+        if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-        } else if (!global[req.params.collection] || typeof global[req.params.collection].all == 'undefined'){
+            let model = new global[model_class_name]()
 
-            functions.get(req.params.collection)
-                .then((data) => {
-                    res.json(data)
-                }).catch(() => {
-                    res.json([])
-                })
+            functions.accessGranted(model,req,'all').then(()=>{
 
-        } else {
+                res.json(model.all())
 
-            res.json([])
+            }).catch((err)=>{
 
-        }
+                if (err.status){
+                    res.status(err.status).json(err)
+                } else {
+                    log(err)
+                    res.status(500).send(err)
+                }
 
-    })
-
-    routes.post('/:collection/:function',async (req,res) => {
-
-        if (req.params.function){
-            req.params.function = req.params.function.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
-        }
-
-        if (global[req.params.collection] && typeof global[req.params.collection][req.params.function] == 'function'){
-
-            global[req.params.collection][req.params.function](req.body, req)
-                .then((data) => {
-                    res.json(data)
-                }).catch((err) => {
-                    if (err && err.code){ // possibly arango erro
-                        log(err.code)
-                        res.status(err.code).send(err.code)
-                    } else if (typeof err == 'string') {
-                        res.status(400).send(err)
-                    } else {
-                        res.status(500).send("Unable to complete the action")
-                    }
-                })
+            })
 
         } else {
 
-            res.json([])
+            let result = db.read(req.params.collection).get()
+            res.json(result)
 
         }
 
 
     })
 
-    routes.post('/:collection', async (req,res) => {
+    routes.post('/:collection/:method?',(req,res) => {
 
-        if (global[req.params.collection] && typeof global[req.params.collection].save == 'function'){
-
-            global[req.params.collection].save(req.body, req)
-                .then((data) => {
-                    res.json(data)
-                }).catch((err) => {
-                    if (err && err.code){ // possibly arango erro
-                        log(err.code)
-                        res.status(err.code).send(err.code)
-                    } else if (typeof err == 'string') {
-                        res.status(400).send(err)
-                    } else {
-                        res.status(500).send("Unable to complete the action")
-                    }
-                })
-
-        } else if (!global[req.params.collection]){
-
-            functions.post(req.params.collection, req.body)
-                .then((data) => {
-                    res.json(data)
-                }).catch((err) => {
-                    if (err && err.code){ // possibly arango erro
-                        log(err.code)
-                        res.status(err.code).send(err.code)
-                    } else if (typeof err == 'string') {
-                        res.status(400).send(err)
-                    } else {
-                        res.status(500).send("Unable to complete the action")
-                    }
-                })
-
-        } else {
-
-            res.json([])
-
+        let method = 'save'
+        if (req.params.method){ // convert to camel case for function name
+            method = req.params.method.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
         }
 
+        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
 
-    })
+        if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-    routes.put('/:collection/:id',(req,res)=>{
+            let model = new global[model_class_name](req.body)
 
-        if (global[req.params.collection] && typeof global[req.params.collection].save == 'function'){
+            if (!model){
+                res.status(405).json(settings.not_allowed)
+                return
+            } else if (model && !model[method]){
+                res.status(405).json(settings.not_allowed)
+                return
+            }
 
-            global[req.params.collection].save(req.body, req)
-                .then((data) => {
-                    res.json(data)
-                }).catch((err) => {
-                    if (err && err.code){ // possibly arango erro
-                        log(err.code)
-                        res.status(err.code).send(err.code)
-                    } else if (typeof err == 'string') {
-                        res.status(400).send(err)
-                    } else {
-                        res.status(500).send("Unable to complete the action")
-                    }
-                })
+            functions.accessGranted(model, req, method).then(async ()=>{
 
-        } else if (!global[req.params.collection]){
+                let result = await model[method]()
+                res.json(result)
 
-            functions.put(req.params.collection, req.params.id, req.body)
-                .then((data) => {
-                    res.json(data)
-                }).catch(() => {
-                    res.json([])
-                })
+            }).catch((err)=>{
+
+                if (err.status){
+                    res.status(err.status).json(err)
+                } else {
+                    log('Error calling the "'+method+'" method on class: '+model_class_name)
+                    res.status(500).send('Error calling the "'+method+'" method on class: '+model_class_name)
+                }
+
+            })
 
         } else {
 
-            res.json([])
+            res.status(405).json(settings.not_allowed)
 
         }
 
     })
 
-    routes.delete('/:collection/:id/:function?',(req,res)=>{
+    routes.put('/:collection/:method?',(req,res)=>{
 
-        if (req.params.function){
-            req.params.function = req.params.function.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
+        let method = 'save'
+        if (req.params.method){ // convert to camel case for function name
+            method = req.params.method.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
         }
 
-        if (req.params.function && global[req.params.collection] && typeof global[req.params.collection][req.params.function] == 'function'){
+        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
 
-            global[req.params.collection][req.params.function](req.params.id, req)
-                .then((data) => {
-                    res.json(data)
-                }).catch((err) => {
-                    if (err && err.code){ // possibly arango erro
-                        log(err.code)
-                        res.status(err.code).send(err.code)
-                    } else if (typeof err == 'string') {
-                        res.status(400).send(err)
-                    } else {
-                        res.status(500).send("Unable to complete the action")
-                    }
-                })
+        if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-        } else if (global[req.params.collection] && typeof global[req.params.collection].delete == 'function'){
+            let model = new global[model_class_name](req.body)
 
-            global[req.params.collection].delete(req.params.id, req)
-                .then((data) => {
-                    res.json(data)
-                }).catch((err) => {
-                    if (err && err.code){ // possibly arango erro
-                        log(err.code)
-                        res.status(err.code).send(err.code)
-                    } else if (typeof err == 'string') {
-                        res.status(400).send(err)
-                    } else {
-                        res.status(500).send("Unable to complete the action")
-                    }
-                })
+            if (!model){
+                res.status(405).json(settings.not_allowed)
+                return
+            } else if (model && !model[method]){
+                res.status(405).json(settings.not_allowed)
+                return
+            }
 
-        } else if (!global[req.params.collection] || global[req.params.collection] && typeof global[req.params.collection].delete == 'undefined'){
+            functions.accessGranted(model, req, method).then(async ()=>{
 
-            functions.delete(req.params.collection, req.params.id)
-                .then((data) => {
-                    res.json(data)
-                }).catch((err) => {
-                    if (err && err.code){ // possibly arango erro
-                        log(err.code)
-                        res.status(err.code).send(err.code)
-                    } else if (typeof err == 'string') {
-                        res.status(400).send(err)
-                    } else {
-                        res.status(500).send("Unable to complete the action")
-                    }
-                })
+                let result = await model[method]()
+                res.json(result)
+
+            }).catch((err)=>{
+
+                if (err.status){
+                    res.status(err.status).json(err)
+                } else {
+                    log(err)
+                    res.status(500).send(err)
+                }
+
+            })
 
         } else {
 
-            res.json(settings.not_found)
+            res.status(405).json(settings.not_allowed)
+
+        }
+
+    })
+
+    routes.delete('/:collection/:id',(req,res)=>{
+
+        let model_class_name = req.params.collection.charAt(0).toUpperCase() + req.params.collection.slice(1)
+
+        if (global[model_class_name] && typeof global[model_class_name] == 'function'){
+
+            let model = new global[model_class_name]()
+
+            functions.accessGranted(model,req,'delete').then(()=>{
+
+                model = model.find(req.params.id).delete()
+                res.json(model)
+
+            }).catch((err)=>{
+
+                if (err.status){
+                    res.status(err.status).json(err)
+                } else {
+                    log(err)
+                    res.status(500).send(err)
+                }
+
+            })
+
+        } else {
+
+            let result = db.read(req.params.collection).where(['_key == '+req.params.id]).first()
+            res.json(result)
 
         }
 

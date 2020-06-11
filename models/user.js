@@ -16,8 +16,29 @@
             }
 
             this.routes = {
-                login: '/login',
-                logged_in: '/'
+                redirects: {
+                    login: '/login',
+                    logged_in: '/'
+                },
+                public: { // unauth'd routes
+
+                },
+                private: { // auth'd routes
+                    get: {
+                        all:['admin','user'],
+                        search:['admin','user'],
+                        find:['admin','user']
+                    },
+                    post: {
+                        save:['admin','user']
+                    },
+                    put: {
+                        save:['admin','user']
+                    },
+                    delete: {
+                        delete:['admin']
+                    }
+                }
             }
 
             this.data = data
@@ -184,7 +205,7 @@
 
         }
 
-        save() {
+        async save() {
 
             if (this.data.tel){
                 this.data.tel = this.data.tel.replace(/\s/g,'')
@@ -200,11 +221,11 @@
                 this.data.full_name = view.functions.capitalise(this.data.name.first+' '+this.data.name.last)
             }
 
-            if (this.data.name && this.data.name.first && this.data.name.last){
-                images.saveAll(data,this.data.name.first+'-'+this.data.name.last,'avatars').then((new_data)=>{
-                    data = new_data
-                })
-            }
+            // if (this.data.name && this.data.name.first && this.data.name.last){
+            //     images.saveAll(data,this.data.name.first+'-'+this.data.name.last,'avatars').then((new_data)=>{
+            //         data = new_data
+            //     })
+            // }
 
             if (this.data.password && this.data.password_conf && this.data.password == this.data.password_conf){
 
@@ -225,20 +246,11 @@
 
             if (this.data._id){
 
-                this.data = db.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
+                this.data = await db.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
 
             } else {
 
-                // if (typeof this.data.activated == 'undefined' || this.data.activated == true){
-                //     if (config.users.email_activation === true){
-                //         this.data.activated = false
-                //         this.sendReset(this.data)
-                //     } else {
-                //         this.data.activated = true
-                //     }
-                // }
-
-                this.data = db.create(this.settings.collection,this.data).first()
+                this.data = await db.create(this.settings.collection,this.data).first()
 
             }
 

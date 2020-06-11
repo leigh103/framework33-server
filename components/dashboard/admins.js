@@ -49,8 +49,9 @@ const express = require('express'),
         view.current_view = 'admins'
 
         data.title = 'Admins'
-        data.table = 'admins'
-        data.fields = admins.settings.fields
+        data.table = 'admin'
+
+        data.fields = new Admin().settings.fields
 
         res.render(settings.views+'/table.ejs',data)
 

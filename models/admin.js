@@ -18,8 +18,29 @@
             }
 
             this.routes = {
-                login: '/login/admin',
-                logged_in: '/dashboard'
+                redirects: {
+                    login: '/login/admin',
+                    logged_in: '/dashboard'
+                },
+                public: { // unauth'd routes
+
+                },
+                private: { // auth'd routes
+                    get: {
+                        all:['admin'],
+                        search:['admin'],
+                        find:['admin']
+                    },
+                    post: {
+                        save:['admin']
+                    },
+                    put: {
+                        save:['admin']
+                    },
+                    delete: {
+                        delete:['admin']
+                    }
+                }
             }
 
         }
@@ -96,7 +117,7 @@
 
         all() {
 
-            this.data = db.read(this.settings.collection).orderBy('full_name','asc').get(['password','password_reset'])
+            this.data = db.read(this.settings.collection).orderBy('full_name','asc').omit(['password','password_reset']).get()
             return this.data
 
         }
@@ -131,7 +152,12 @@
 
         }
 
-        save() {
+        async save() {
+
+            if (!this.data){
+                this.error = 'No data to save'
+                return this
+            }
 
             if (this.data.tel){
                 this.data.tel = this.data.tel.replace(/\s/g,'')
@@ -147,11 +173,11 @@
                 this.data.full_name = view.functions.capitalise(this.data.name.first+' '+this.data.name.last)
             }
 
-            if (this.data.name && this.data.name.first && this.data.name.last){
-                images.saveAll(data,this.data.name.first+'-'+this.data.name.last,'avatars').then((new_data)=>{
-                    data = new_data
-                })
-            }
+            // if (this.data.name && this.data.name.first && this.data.name.last){
+            //     images.saveAll(data,this.data.name.first+'-'+this.data.name.last,'avatars').then((new_data)=>{
+            //         data = new_data
+            //     })
+            // }
 
             if (this.data.password && this.data.password_conf && this.data.password == this.data.password_conf){
 
@@ -172,20 +198,19 @@
 
             if (this.data._id){
 
-                this.data = db.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
+                this.data = await db.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
 
             } else {
 
-                // if (typeof this.data.activated == 'undefined' || this.data.activated == true){
-                //     if (config.users.email_activation === true){
-                //         this.data.activated = false
-                //         this.sendReset(this.data)
-                //     } else {
-                //         this.data.activated = true
-                //     }
-                // }
+                this.data = await db.create(this.settings.collection,this.data).first()
 
-                this.data = db.create(this.settings.collection,this.data).first()
+                if (config.users.email_activation === true){
+                    this.data.activated = false
+                } else {
+                    this.data.activated = true
+                }
+
+                new Auth(this.data).sendReset()
 
             }
 

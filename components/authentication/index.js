@@ -107,7 +107,7 @@ const express = require('express'),
             res.render('authentication/views/register.ejs', {error:success})
         } else {
             req.session.user = user.data
-            res.redirect(user.routes.logged_in)
+            res.redirect(user.routes.redirects.redirects.logged_in)
         }
 
     })
@@ -123,7 +123,7 @@ const express = require('express'),
                 res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})
             } else if (auth_data){
                 req.session.user = auth_data
-                res.redirect(admin.routes.logged_in)
+                res.redirect(admin.routes.redirects.logged_in)
             } else {
                 res.render('authentication/views/login.ejs', {guard:req.params.guard,error:'Email address and/or password incorrect'})
             }
@@ -137,7 +137,7 @@ const express = require('express'),
                 res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})
             } else if (auth_data){
                 req.session.user = auth_data
-                res.redirect(user.routes.logged_in)
+                res.redirect(user.routes.redirects.logged_in)
             }
 
         }

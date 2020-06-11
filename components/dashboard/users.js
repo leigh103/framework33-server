@@ -49,9 +49,9 @@ const express = require('express'),
         view.current_view = 'users'
 
         data.title = 'Users'
-        data.table = 'users'
+        data.table = 'user'
 
-        data.fields = users.settings.fields
+        data.fields = new User().settings.fields
 
         res.render(settings.views+'/table.ejs',data)
 

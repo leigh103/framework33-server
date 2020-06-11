@@ -42,6 +42,10 @@ var express = require('express'),
         res.render(settings.views+'/homepage.ejs', {user:req.session.user, menus:view.menus})
     })
 
+    routes.get('/session', (req,res) => {
+        res.json(req.session.user)
+    })
+
     routes.get('/testemail', (req,res) => {
 
         let data = {
