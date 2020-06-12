@@ -8,60 +8,42 @@
 
         }
 
-        find(key) {
+        async find(key) {
 
-            if (key){
+            if (key || key == 0){
 
                 let field
 
                 if (typeof key == 'object'){
 
                     if (key._key){
-
                         key = key._key
                         field = '_key'
-
                     } else if (key.email){
-
                         key = key.email
                         field = 'email'
-
                     } else if (key.password_reset){
-
                         key = key.password_reset
                         field = 'password_reset'
-
                     }
 
                 } else {
 
                     if (typeof key == 'string' && key.match(/^[0-9]*$/)){
-
-                        if (key._key){
-                            key = key._key
-                        }
-
                         field = '_key'
-
                     } else if (typeof key == 'string' && key.match(/@/)){
-
-                        if (key.email){
-                            key = key.email
-                        }
-
                         field = 'email'
-
                     } else if (key){
-
                         field = 'password_reset'
-
+                    } else {
+                        field = '_key'
                     }
 
                 }
 
-                this.data = db.read(this.settings.collection)
+                this.data = await db.read(this.settings.collection)
                                     .where([field+' == '+key])
-                                    .first(['password','password_reset'])
+                                    .first()
 
                 if (this.data){
                     this.data.guard = this.settings.collection

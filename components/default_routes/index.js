@@ -46,34 +46,20 @@ var express = require('express'),
         res.json(req.session.user)
     })
 
-    routes.get('/testemail', (req,res) => {
+    routes.get('/testemail', async (req,res) => {
 
-        let data = {
-          to: config.admin.email,
-          subject: 'This is a test email',
-          text: 'This is a test email. '+config.site_url+'/book/confirm/1582455692451 ',
-          html: '<h1>This is a test email</h1><p>Wowzers</p>'
-        }
-
-        notification.email(data).then(()=>{
-            res.send('sent!')
-        }).catch((err)=>{
-            res.send(err)
-        })
+        let user = await new User().find(0)
+        user.data.password_reset = '23412312341324'
+        let email = await new Notification(user.data).useEmailTemplate('password_reset').email()
+        res.send(email)
 
     })
 
-    routes.get('/testsms', (req,res) => {
+    routes.get('/testsms', async (req,res) => {
 
-        let data = {
-            msg: 'This is all but a test'
-        }
-
-        notification.sms(data).then(()=>{
-            res.send('sent!')
-        }).catch((err)=>{
-            res.send(err)
-        })
+        let user = await new User().find(0)
+        let sms = await new Notification(user.data).setContent('','This is a test sms whoopwhoop').sms()
+        res.send(sms)
 
     })
 

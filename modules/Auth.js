@@ -85,7 +85,7 @@
 
         }
 
-        sendReset() {
+        async sendReset() {
 
             let hash = db.hash('password-reset'+Date.now()),
                 filter = []
@@ -99,33 +99,23 @@
                 return this
             }
 
-            db.read(this.settings.collection).orWhere(filter).update({password_reset:hash}).first()
+            this.data = await db.read(this.settings.collection).orWhere(filter).update({password_reset:hash}).first()
 
             if (this.data && this.data.email){
 
                 let msg,
                     notification_type
 
-                if (!this.password){
+                if (!this.data.password){
                     notification_type = 'complete_registration'
-                } else if (!this.activated){
+                } else if (!this.data.activated){
                     notification_type = 'activate_account'
                 } else {
                     notification_type = 'password_reset'
                 }
 
-                let email_data = {
-                    hash: hash,
-                    guard: this.settings.collection,
-                    email: this.data.email
-                }
-
-                notification.template(notification_type,email_data) //.then((email_data)=>{
-                    return this.data
-                // }).catch((err)=>{
-                //     this.error = 'Unfortunately we could not send the password reset to your registered email address'
-                //     return this
-                // })
+                let email = new Notification(this.data).useEmailTemplate(notification_type).email()
+                return this.data
 
             } else {
                 this.error = 'Please check your email'
