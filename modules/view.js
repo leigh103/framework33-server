@@ -6,8 +6,11 @@
         menus: {},
         dont_track: ["/login"],
         meta:{
-            title: config.site.name
+            title: config.site.name,
+            url: config.site.url,
+            logo: config.site.logo
         },
+        users: config.users,
         basedir: global.basedir,
         functions:{
 

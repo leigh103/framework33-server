@@ -131,6 +131,11 @@ a:hover {
   padding: 0 1.5rem;
   margin: 2rem 0;
 }
+.dashboard .side-nav .logo a {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
 .dashboard .side-nav .logo img {
   display: block;
   height: 100%;
@@ -268,6 +273,11 @@ a:hover {
 .nav div.link .logo {
   padding: 0;
   text-align: left;
+}
+.nav div.link .logo a {
+  display: block;
+  height: 100%;
+  width: 100%;
 }
 .nav div.link .logo img {
   height: 2rem;

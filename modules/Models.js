@@ -150,9 +150,31 @@
                                 this.data[key] = value
                             }
 
+                        } else if (fields[key].type == 'image'){
+
+                            if (value.match(/base64/)){
+
+                                let file_name = key
+                                if (this.data.full_name){
+                                    file_name = this.data.full_name.replace(/\s/g,'-').replace(/[.,!@£$%^&*()\[\]{}'"><?;:|\\/]/g,'').toLowerCase()
+                                } else if (typeof this.data.name == 'string'){
+                                    file_name = this.data.name.replace(/\s/g,'-').replace(/[.,!@£$%^&*()\[\]{}'"><?;:|\\/]/g,'').toLowerCase()
+                                }
+
+                                this.data[key] = await new Image(value,file_name,this.settings.collection).save()
+
+                            } else if (!value.match(/(jpg|jpeg|tiff|psd|png|gif|svg|bmp)$/)){
+
+                                this.error = view.functions.parseName(key)+' should be of type: image'
+                                this.data[key] = ''
+
+                            } else {
+                                this.data[key] = value
+                            }
+
                         } else {
                             this.data[key] = ''
-                            this.error = 'Invalid value for: '+key+'. Value is "'+value+'" for type '+fields[key].type
+                            this.error = 'Invalid value for: '+view.functions.parseName(key)+'. Value is "'+value+'" for type '+fields[key].type
                             break
                         }
 

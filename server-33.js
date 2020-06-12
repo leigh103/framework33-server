@@ -153,7 +153,7 @@ const express = require('express'),
 
         fs.readdir('components', (err, files) => {
 
-            var views = ['layouts','components']
+            var views = ['themes','components']
 
             files.forEach((file, index) => {
 

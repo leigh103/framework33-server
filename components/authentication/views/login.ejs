@@ -1,29 +1,34 @@
-<% layout('page.ejs') -%>
+<% layout('default/fullscreen.ejs') -%>
 
-<div class="vh-80 flex flex-middle">
+<div class="vh-100 vw-100 flex flex-middle">
     <div class="vw-30 vw-s-100 px-s-2 text-left">
         <div class="grid col-2 mb-2 ">
             <h1 class="text-light capitalise">Login</h1>
-            <div class="flex flex-middle-right">
-                <a href="/sign-up">Sign Up</a>
-            </div>
+
+            <% if (view.users.allow_registration === true){ %>
+                <div class="flex flex-middle-right">
+                    <a href="/sign-up">Sign Up</a>
+                </div>
+            <% } %>
         </div>
-        <form method="post" action="/login/<%- guard %>" class="grid col-2 col-s-1 gap-1">
-            <div class="colspan-2">
+        <form method="post" action="/login/<%- guard %>" class="grid col-1 gap-1">
+            <div class="">
                 <input type="text" name="email" placeholder="Email Address" class="border">
             </div>
-            <div class="colspan-2">
+            <div class="">
                 <input type="password" name="password" placeholder="Password" class="border">
             </div>
-            <div>
+            <div class="">
                 <input type="submit" class="btn highlight width-full bg-33-topaz" value="Login">
             </div>
-            <div class="text-right">
-                <a href="/login/<%- guard %>/reset">Forgot password?</a>
+            <div class="text-center">
+                <a class="btn outline w-100" href="/login/<%- guard %>/reset">Forgot password?</a>
             </div>
-            <% if (typeof error != 'undefined'){ %>
-                <div class="colspan-2 text-33-red"><%- error %></div>
-            <% } %>
+            <div class="text-33-red" style="min-height: 2rem">
+                <% if (typeof error != 'undefined'){ %>
+                    <%- error %>
+                <% } %>
+            </div>
         </form>
     </div>
 </div>

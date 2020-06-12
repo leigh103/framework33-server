@@ -1,6 +1,6 @@
-<% layout('page.ejs') -%>
+<% layout('default/fullscreen.ejs') -%>
 
-<div class="vh-80 flex flex-middle">
+<div class="vh-100 vw-100 flex flex-middle">
     <div class="vw-30 vw-s-100 px-s-2 text-left">
 
         <% if (type == 'reset'){ %>
@@ -43,9 +43,11 @@
 
         <% } %>
 
-        <% if (typeof error != 'undefined'){ %>
-            <div class="my-2 text-33-red"><%- error %></div>
-        <% } %>
+        <div class="colspan-2 text-33-red" style="min-height: 2rem">
+            <% if (typeof error != 'undefined'){ %>
+                <%- error %>
+            <% } %>
+        </div>
 
     </div>
 </div>
