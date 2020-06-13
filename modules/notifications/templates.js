@@ -1,5 +1,5 @@
 
-    const notification_templates = {
+    const templates = {
 
         password_reset:{
             subject: "Password Reset",
@@ -18,4 +18,4 @@
 
     }
 
-    module.exports = notification_templates
+    module.exports = templates

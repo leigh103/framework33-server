@@ -3,6 +3,7 @@
 
     var view = {
         logo: config.site.logo,
+        websocket: config.websocket,
         menus: {},
         dont_track: ["/login"],
         meta:{

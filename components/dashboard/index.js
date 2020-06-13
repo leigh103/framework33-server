@@ -44,7 +44,10 @@ const express = require('express'),
 
 // routes
 
-    let data = {}
+    let data = {
+        include_scripts: [settings.views+'/scripts/script.ejs']
+    }
+
 
     routes.get('*', (req, res, next) => {
         if (req.session && req.session.user && req.session.user.guard){

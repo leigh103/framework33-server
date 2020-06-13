@@ -19,6 +19,7 @@ var express = require('express'),
 
 // methods
 
+
     functions = {
 
         accessGranted: (model, req, method) =>{
@@ -26,17 +27,23 @@ var express = require('express'),
             return new Promise(function(resolve, reject) {
 
                 let guard = false,
-                    http_method = req.method.toLowerCase()
+                    http_method = req.method.toLowerCase(),
+                    self = false
 
-                if (req.session && req.session.user && req.session.user.guard){
+                if (req.session && req.session.user && req.session.user){
+                    user_id = req.session.user._id
                     guard = req.session.user.guard
+                }
+
+                if (model && model.data && model.data._id && model.data._id == user_id){
+                    self = true
                 }
 
                 if (model.routes && model.routes.private && model.routes.private[http_method] && guard){ // if the http method is allowed and user is auth'd
 
                     if (model.routes.private[http_method][method] && guard && model.routes.private[http_method][method].indexOf(guard) !== -1){ // if it's a private method and the guard is allowed
                         resolve()
-                    } else if (model.routes.private[http_method][method] && guard && model.routes.private[http_method][method].indexOf('self') !== -1){ // if the user is allowed to use the function on their own data
+                    } else if (model.routes.private[http_method][method] && guard && self && model.routes.private[http_method][method].indexOf('self') !== -1){ // if the user is allowed to use the function on their own data
                         resolve(true)
                     } else if (guard){
                         reject(settings.not_authorized)
@@ -74,13 +81,13 @@ var express = require('express'),
 
             let model = new global[model_class_name]()
 
-            functions.accessGranted(model,req,'find').then((self)=>{
+            functions.accessGranted(model,req,'find').then(async (self)=>{
 
-                model = model.find(req.params.id)
+                let result = await model.find(req.params.id)
                 if (self === true && model.data._id == req.session.user._id){
-                    res.json(model.data)
+                    res.json(result.data)
                 } else if (!self) {
-                    res.json(model.data)
+                    res.json(result.data)
                 } else {
                     res.status(401).send(settings.not_authorized)
                 }
@@ -113,7 +120,7 @@ var express = require('express'),
 
             let model = new global[model_class_name]()
 
-            functions.accessGranted(model,req,'all').then(()=>{
+            functions.accessGranted(model,req,'all').then((self)=>{
 
                 res.json(model.all())
 
@@ -138,18 +145,24 @@ var express = require('express'),
 
     })
 
-    routes.post('/:collection/:method?',(req,res) => {
+    routes.post('/:collection/:method?', async (req,res) => {
 
         let method = 'save'
-        if (req.params.method){ // convert to camel case for function name
-            method = req.params.method.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
+        if (req.params.method){
+            method = parseCamelCase(req.params.method)
         }
 
         let model_class_name = parseClassName(req.params.collection)
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-            let model = new global[model_class_name](req.body)
+            let model
+
+            if (method == 'save'){
+                model = await new global[model_class_name](req.body)
+            } else if (req.body._key || req.body._key == 0){
+                model = await new global[model_class_name]().find(req.body._key)
+            }
 
             if (!model){
                 res.status(405).json(settings.not_allowed)
@@ -161,20 +174,34 @@ var express = require('express'),
 
             functions.accessGranted(model, req, method).then(async (self)=>{
 
-                let result = await model[method]()
+                let result, access = false
 
-                if (result.error){
-                    res.status(500).send(result.error)
+                if (self === true && model.data && model.data._id && model.data._id == req.session.user._id){
+                    access = true
+                } else if (!self){
+                    access = true
                 } else {
-                    if (self === true && result.data._id == req.session.user._id){
-                        res.json(result.data)
-                    } else if (!self) {
-                        res.json(result.data)
+                    res.status(405).json(settings.not_allowed)
+                    return
+                }
+
+                if (access === true){
+                    if (method == 'save'){
+                        result = await model.save()
                     } else {
-                        res.status(401).send(settings.not_authorized)
+                        result = await model[method](req.body)
                     }
                 }
 
+                if (result.error){
+                    res.status(500).send(result.error)
+                } else if (result.data) {
+                    res.json(result.data)
+                } else if (result){
+                    res.json(result)
+                } else {
+                    res.status(405).json(settings.not_allowed)
+                }
 
             }).catch((err)=>{
 
@@ -198,8 +225,8 @@ var express = require('express'),
     routes.put('/:collection/:method?',(req,res)=>{
 
         let method = 'save'
-        if (req.params.method){ // convert to camel case for function name
-            method = req.params.method.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); })
+        if (req.params.method){
+            method = parseCamelCase(req.params.method)
         }
 
         let model_class_name = parseClassName(req.params.collection)
@@ -216,9 +243,19 @@ var express = require('express'),
                 return
             }
 
-            functions.accessGranted(model, req, method).then(async ()=>{
+            functions.accessGranted(model, req, method).then(async (self)=>{
 
-                let result = await model[method]()
+                let result
+
+                if (self === true && model.data && model.data._id && model.data._id == req.session.user._id){
+                    result = await model[method](req.body)
+                } else if (!self){
+                    result = await model[method](req.body)
+                } else {
+                    res.status(405).json(settings.not_allowed)
+                    return
+                }
+
                 if (result.error){
                     res.status(500).send(result.error)
                 } else {
@@ -244,24 +281,50 @@ var express = require('express'),
 
     })
 
-    routes.delete('/:collection/:id',(req,res)=>{
+    routes.delete('/:collection/:id/:function?/:fid?', async (req,res)=>{
 
-        let model_class_name = parseClassName(req.params.collection)
+        let model_class_name = parseClassName(req.params.collection),
+            method = 'delete'
+
+        if (req.params.function){
+            method = parseCamelCase(req.params.function)
+        }
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-            let model = new global[model_class_name]()
+            let model = await new global[model_class_name]().find(req.params.id)
 
-            functions.accessGranted(model,req,'delete').then(async ()=>{
+            functions.accessGranted(model,req,method).then(async (self)=>{
 
-                model = await model.find(req.params.id).delete()
+                let result, access = false
 
-                if (model.error){
-                    res.status(500).send(model.error)
+                if (self == true && model.data && model.data._id && model.data._id == req.session.user._id){
+                    access = true
+                } else if (!self){
+                    access = true
                 } else {
-                    res.json(model)
+                    res.status(405).json(settings.not_allowed)
+                    return
                 }
 
+                if (access === true){
+                    if (req.params.function && req.params.fid){
+                        result = await model[method](req.params.fid)
+                    } else {
+                        result = await model.delete()
+                    }
+                } else {
+                    res.status(405).json(settings.not_allowed)
+                    return
+                }
+
+                if (result.error){
+                    res.status(500).send(result.error)
+                } else if (result.data){
+                    res.json(result.data)
+                } else {
+                    res.json(result)
+                }
 
             }).catch((err)=>{
 

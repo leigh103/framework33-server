@@ -25,31 +25,26 @@ const express = require('express'),
 
     global.config = require('./modules/config')
 
-    dbModule = require('./modules/'+config.modules.db.module)
+    dbModule = require('./modules/databases/'+config.modules.db.module)
     global.db = new dbModule()
 
     global.moment = require('moment')
-    global.ws_clients = {}
+    global.websocket_clients = {}
     global.component = {}
     global.basedir = __dirname
 
     config.modules.load.forEach( (file) => {
 
-        global[file] = require('./modules/'+file)
+        let file_name = file
+
+        if (file_name.match(/\//)){
+            file_name = file.split('/')
+            file_name = file_name[file_name.length-1]
+        }
+
+        global[file_name] = require('./modules/'+file)
 
     })
-
-    // glob.sync( './modules/*.js' ).forEach( function( file ) {
-    //
-        // let module = path.resolve( file ),
-        //     module_name = module.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
-        //     re = RegExp(config.db.module+'|config')
-        //
-        // if (!module.match(re)){
-        //     global[module_name] = require(module)
-        // }
-    //
-    // })
 
     glob.sync( './models/*.js' ).forEach( function( file ) {
 
@@ -101,25 +96,22 @@ const express = require('express'),
 		}
     })
 
-    wss.on('connection', function connection(ws, req) {
+    wss.on('connection', async function connection(ws, req) {
 
         ws.upgradeReq = req;
 
         if (ws.upgradeReq.headers && typeof ws.upgradeReq.headers.cookie == 'string'){
 
-            let cookies = cookie.parse(ws.upgradeReq.headers.cookie),
-                sid = cookieParser.signedCookie(cookies["connect.sid"],config.websocket.secret)
+            let cookies = cookie.parse(ws.upgradeReq.headers.cookie)
+            let user = await new Admin().find({ws_id:cookies['connect.sid']})
 
-            ws_clients['wsc_'+sid] = ws
-
-            sessionStore.get(sid,function(err, ss){
-                sessionStore.createSession(ws.upgradeReq,ss)
-                if (ws.upgradeReq.session.ws_data){
-                    ws.send(JSON.stringify(ws.upgradeReq.session.ws_data))
-                } else {
-                    ws.send('connected to session')
-                }
-            });
+            if (user.data && user.data._id){
+                new WebsocketClient(user.data._id, ws).save()
+                ws.send('connected to session')
+            } else {
+                new WebsocketClient(Date.now(), ws).save()
+                ws.send('connected, no session')
+            }
 
         } else {
             ws.send('connected, no session')

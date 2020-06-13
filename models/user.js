@@ -1,8 +1,8 @@
 
 
-    const Auth = require('../modules/Auth')
+    const Users = require('../modules/Users')
 
-    class Users extends Auth {
+    class User extends Users {
 
         constructor(data){
 
@@ -110,4 +110,4 @@
 
     }
 
-    module.exports = Users
+    module.exports = User

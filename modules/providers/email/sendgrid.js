@@ -1,6 +1,6 @@
 
     const sendgrid = require('@sendgrid/mail'),
-          notificationTemplate = require(global.basedir+'/modules/notification_templates')
+          notificationTemplate = require(global.basedir+'/modules/notifications/templates')
 
           sendgrid.setApiKey(config.email.api_key)
 

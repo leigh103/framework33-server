@@ -39,7 +39,7 @@ const express = require('express'),
 
     routes.use('/login/static', express.static(__dirname + '/static'))
 
-    routes.get('/login/:guard/:password_reset?', (req, res) => {
+    routes.get('/login/:guard/:password_reset?', async (req, res) => {
 
         let guards = config.users.guards
         if (guards.indexOf(req.params.guard) >= 0 && req.params.password_reset){ // if password reset key has been given
@@ -52,8 +52,8 @@ const express = require('express'),
 
         } else if (req.params.guard == 'activate' && req.params.password_reset){ // if a user is attempting activation
 
-            let user = new User().find(req.params),
-                auth_data = new Auth(user.data).activate()
+            let user = await new User().find(req.params),
+                auth_data = user.activate()
 
             if (auth_data.error){
                 res.render('authentication/views/activate.ejs', {err:auth_data.error})
@@ -112,15 +112,20 @@ const express = require('express'),
 
     })
 
-    routes.post('/login/:guard', (req, res) => {
+    routes.post('/login/:guard', async (req, res) => {
 
-        let user = new global[parseClassName(req.params.guard)]().find(req.body),
+        let user = await new global[parseClassName(req.params.guard)]().find(req.body),
             auth_data = user.authenticate(req.body)
 
         if (auth_data && auth_data.error){
             res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})
         } else if (auth_data && auth_data._id){
             req.session.user = auth_data
+            if (req.cookies && req.cookies['connect.sid']){
+                req.session.user.ws_id = req.cookies['connect.sid']
+                user.data.ws_id = req.cookies['connect.sid']
+                user.save()
+            }
             res.redirect(user.routes.redirects.logged_in)
         } else {
             res.render('authentication/views/reset.ejs', {type:'reset',guard:req.params.guard,error:'There has been an issue resetting your password, please try again'})

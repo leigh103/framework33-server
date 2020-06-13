@@ -48,32 +48,37 @@ var express = require('express'),
 
     routes.get('/testemail', async (req,res) => {
 
-        let user = await new User().find(0)
-        user.data.password_reset = '23412312341324'
-        let email = await new Notification(user.data).useEmailTemplate('password_reset').email()
-        res.send(email)
+        if (getGuard(req) == 'admin'){
+            let admin = await new Admin().find(0)
+            let email = await new Notification(admin.data).setContent('This is a test','This is a test email, sent from '+config.site.name).email()
+            res.send(email)
+        } else {
+            res.redirect('/login/admin')
+        }
 
     })
 
     routes.get('/testsms', async (req,res) => {
 
-        let user = await new User().find(0)
-        let sms = await new Notification(user.data).setContent('','This is a test sms whoopwhoop').sms()
-        res.send(sms)
+        if (getGuard(req) == 'admin'){
+            let admin = await new Admin().find(0)
+            let sms = await new Notification(admin).setContent('','This is a test sms whoopwhoop').sms()
+            res.send(sms)
+        } else {
+            res.redirect('/login/admin')
+        }
 
     })
 
-    routes.get('/testnotification', (req,res) => {
+    routes.get('/testnotification', async (req,res) => {
 
-        let admin_msg = {
-            msg:'This is test notification. <a href="/book">Click here</a>',
-            type:'Test Notification'
+        if (getGuard(req) == 'admin'){
+            let admin = await new Admin().find(1)
+            let sms = await new Notification(admin).setContent('Notification','This is a test notification').mailbox(req.session.user)
+            res.send(sms)
+        } else {
+            res.redirect('/login/admin')
         }
-        notification.broadcastToAdmins(admin_msg).then(()=>{
-            res.send('sent!')
-        }).catch((err)=>{
-            res.send(err)
-        })
 
     })
 

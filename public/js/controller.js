@@ -45,7 +45,7 @@
                 }
 
                 if (typeof duration == 'undefined'){
-                    duration = 2000
+                    duration = 5000
                 } else {
                     duration = parseInt(duration)*1000
                 }
@@ -205,7 +205,7 @@
                                     return true; // stop searching
                                 }
                             })
-                        } else {
+                        } else if (scope[collection] && scope[collection].length > 0) {
                             let obj = scope[collection].find((o, i) => {
                                 if (i == id || o._key === id) {
                                     scope[collection].splice(i,1)
@@ -225,12 +225,8 @@
             })
         }
 
-
-        socketConnect("wss://reformedreality.com/ws")
-
-        watch['ws_data'] = function(data){
-            console.log('incoming: ',data)
-            scope.view.data = data
+        scope.parseDate = function(date, format){
+            return moment(date).format(format)
         }
 
         if (typeof extendedController == 'function'){

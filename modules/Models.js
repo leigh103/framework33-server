@@ -25,6 +25,9 @@
                     } else if (key.password_reset){
                         key = key.password_reset
                         field = 'password_reset'
+                    } else if (key.ws_id){
+                        key = key.ws_id
+                        field = 'ws_id'
                     }
 
                 } else {
@@ -98,7 +101,7 @@
                         } else if (fields[key].type == 'float' && parseFloat(value)){
                             this.data[key] = parseFloat(value)
                         } else if (fields[key].type == 'boolean'){
-                            this.data[key] = (value == 'true')
+                            this.data[key] = (value == 'true' || value === true)
                         } else if (fields[key].type == 'price' && parseFloat(value).toFixed(2)){
                             this.data[key] = parseFloat(value).toFixed(2)
                         } else if (fields[key].type == 'name'){

@@ -6,6 +6,31 @@
     display: flex;
     flex-direction: row;
 
+    .widget {
+        background-color: #fff;
+        padding: 2rem;
+        box-shadow: $shadow;
+        border-radius: 5px;
+        max-height: 300px;
+        overflow-y: auto;
+
+        .note {
+            font-size: 0.875rem;
+            background-color: #f2f2f2;
+            padding: 1rem;
+            margin-bottom: 0.875rem;
+            border-radius: 5px;
+
+            .title {
+                font-weight: 600;
+
+                .date {
+                    opacity: 0.5;
+                }
+            }
+        }
+    }
+
     .side-nav {
         height: 100vh;
 

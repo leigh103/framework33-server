@@ -1,7 +1,7 @@
 
     const Model = require('../modules/Models')
 
-    class Auth extends Model {
+    class Users extends Model {
 
         constructor(data){
 
@@ -108,7 +108,7 @@
 
                 if (!this.data.password){
                     notification_type = 'complete_registration'
-                } else if (!this.data.activated){
+                } else if (!this.data.activated && this.data.guard != 'admin'){
                     notification_type = 'activate_account'
                 } else {
                     notification_type = 'password_reset'
@@ -125,6 +125,28 @@
 
         }
 
+        async deleteMessage(date){
+
+            if (this.data.mailbox){
+
+                for (let key in this.data.mailbox){
+
+                    if (this.data.mailbox[key].date == date){
+                        this.data.mailbox.splice(key,1)
+                    }
+                }
+
+                this.save()
+                return this.data.mailbox
+
+            } else {
+                this.error = 'No messages'
+                return this
+            }
+
+
+        }
+
     }
 
-    module.exports = Auth
+    module.exports = Users

@@ -1,6 +1,7 @@
 
 const Twilio = require('twilio'),
-      notificationTemplate = require(global.basedir+'/modules/notification_templates')
+      notificationTemplate = require(global.basedir+'/modules/notifications/templates')
+      
       twilio_c = new Twilio(config.sms.api_key, config.sms.api_secret);
 
 const send = (content)=>{

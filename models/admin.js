@@ -1,7 +1,7 @@
 
-    const Auth = require('../modules/Auth')
+    const Users = require('../modules/Users')
 
-    class Admin extends Auth {
+    class Admin extends Users {
 
         constructor(data){
 
@@ -40,7 +40,8 @@
                         save:['admin']
                     },
                     delete: {
-                        delete:['admin']
+                        delete:['admin'],
+                        deleteMessage:['self']
                     }
                 }
             }
@@ -92,7 +93,7 @@
                     this.data.activated = true
                 }
 
-                new Auth(this.data).sendReset()
+                this.sendReset()
 
             }
 
