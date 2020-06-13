@@ -116,7 +116,7 @@
         mailbox(sender){
 
             if (this.class && this.class.data){
-console.log(this.class.data)
+
                 if (this.class.data && !this.class.data.mailbox){
                     this.class.data.mailbox = []
                 }
@@ -125,11 +125,13 @@ console.log(this.class.data)
                     this.content.from = {
                         _id: sender._id,
                         name: sender.full_name,
-                        guard: sender.guard
+                        guard: sender.guard,
+                        avatar: sender.avatar
                     }
                 } else {
                     this.content.from = {
-                        name: 'System Notification'
+                        name: 'System Notification',
+                        avatar: '/images/logo.svg'
                     }
                 }
 

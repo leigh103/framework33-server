@@ -130,8 +130,8 @@
             }
 
             scope.getMailbox = function(user_id){
-                scope.get('admin',user_id).then(()=>{
-                    scope.admin.mailbox.sort((a, b) => -a.date.localeCompare(b.date))
+                scope.get('admin',user_id+'/get_messages').then((data)=>{
+                    scope.admin.mailbox = data.sort((a, b) => -a.date.localeCompare(b.date))
                 })
             }
 

@@ -226,7 +226,13 @@
         }
 
         scope.parseDate = function(date, format){
-            return moment(date).format(format)
+
+            if (format == 'ago'){
+                return moment(date).fromNow()
+            } else {
+                return moment(date).format(format)
+            }
+
         }
 
         if (typeof extendedController == 'function'){

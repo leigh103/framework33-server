@@ -67,10 +67,10 @@
 
             if (orderBy){
                 this.data = db.read(this.settings.collection).orderBy(orderBy,'asc').get(['password','password_reset'])
-                return this.data
+                return this
             } else {
                 this.data = db.read(this.settings.collection).get(['password','password_reset'])
-                return this.data
+                return this
             }
 
         }

@@ -125,6 +125,12 @@
 
         }
 
+        async getMessages(){
+
+            return this.data.mailbox
+
+        }
+
         async deleteMessage(date){
 
             if (this.data.mailbox){

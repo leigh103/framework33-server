@@ -73,9 +73,9 @@ var express = require('express'),
     routes.get('/testnotification', async (req,res) => {
 
         if (getGuard(req) == 'admin'){
-            let admin = await new Admin().find(1)
+            let admin = await new Admin().find(0)
             console.log('admin',admin)
-            let sms = await new Notification(admin).setContent('Notification','This is a test notification').mailbox(req.session.user)
+            let sms = await new Notification(admin).setContent('Notification','This is a test notification').mailbox()
             res.send(sms)
         } else {
             res.redirect('/login/admin')

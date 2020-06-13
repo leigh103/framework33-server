@@ -30,6 +30,7 @@
                 private: { // auth'd routes
                     get: {
                         all:['admin'],
+                        getMessages:['self'],
                         search:['admin'],
                         find:['admin']
                     },

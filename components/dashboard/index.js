@@ -22,6 +22,7 @@ const express = require('express'),
             ],
             side_nav:[
                 {link:'Dashboard',slug: '/dashboard', weight: 1, protected_guards:['admin'],subitems:[
+                    {link:'Mailbox',slug: '/dashboard/mailbox', weight:1},
                     {link:'Logs',slug: '/dashboard/logs', weight:2},
                     {link:'Components',slug: '/dashboard/components', weight:3}
                 ]}
@@ -87,6 +88,14 @@ const express = require('express'),
         view.current_view = 'dashboard'
         data.title = 'logs'
         res.render(settings.views+'/logs.ejs',data)
+
+    })
+
+    routes.get('/mailbox', (req, res) => {
+
+        view.current_view = 'dashboard'
+        data.title = 'mailbox'
+        res.render(settings.views+'/mailbox.ejs',data)
 
     })
 

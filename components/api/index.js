@@ -73,23 +73,46 @@ var express = require('express'),
 // routes
 
 
-    routes.get('/:collection/:id',(req,res)=>{
+    routes.get('/:collection/:id?/:function?/:fid?', async (req,res)=>{
 
-        let model_class_name = parseClassName(req.params.collection)
+        let model_class_name = parseClassName(req.params.collection),
+            method = 'find'
+
+        if (req.params.function){
+            method = parseCamelCase(req.params.function)
+        }
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-            let model = new global[model_class_name]()
+            let model
 
-            functions.accessGranted(model,req,'find').then(async (self)=>{
+            if (req.params.id){
+                model = await new global[model_class_name]().find(req.params.id)
+            } else {
+                method = 'all'
+                model = await new global[model_class_name]().all()
+            }
 
-                let result = await model.find(req.params.id)
-                if (self === true && model.data._id == req.session.user._id){
-                    res.json(result.data)
-                } else if (!self) {
+            functions.accessGranted(model,req,method).then(async ()=>{
+
+                let result
+
+                if (req.params.function){
+                    if (req.params.fid){
+                        result = await model[method](req.params.fid)
+                    } else {
+                        result = await model[method]()
+                    }
+                } else {
+                    result = model.data
+                }
+
+                if (result.error){
+                    res.status(500).send(result.error)
+                } else if (result.data){
                     res.json(result.data)
                 } else {
-                    res.status(401).send(settings.not_authorized)
+                    res.json(result)
                 }
 
             }).catch((err)=>{
@@ -109,39 +132,6 @@ var express = require('express'),
             res.json(result)
 
         }
-
-    })
-
-    routes.get('/:collection',async (req,res)=>{
-
-        let model_class_name = parseClassName(req.params.collection)
-
-        if (global[model_class_name] && typeof global[model_class_name] == 'function'){
-
-            let model = new global[model_class_name]()
-
-            functions.accessGranted(model,req,'all').then((self)=>{
-
-                res.json(model.all())
-
-            }).catch((err)=>{
-
-                if (err.status){
-                    res.status(err.status).json(err)
-                } else {
-                    log(err)
-                    res.status(500).send(err)
-                }
-
-            })
-
-        } else {
-
-            let result = db.read(req.params.collection).get()
-            res.json(result)
-
-        }
-
 
     })
 
@@ -288,8 +278,12 @@ var express = require('express'),
 
                 let result
 
-                if (req.params.function && req.params.fid){
-                    result = await model[method](req.params.fid)
+                if (req.params.function){
+                    if (req.params.fid){
+                        result = await model[method](req.params.fid)
+                    } else {
+                        result = await model[method]()
+                    }
                 } else {
                     result = await model.delete()
                 }

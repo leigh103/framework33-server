@@ -4,7 +4,7 @@
 
     <div class="grid col-2 row-4 gap-2">
 
-        <div class="widget" app-init="getMailbox('<%- user._key %>')">
+        <div class="widget rowspan-2" app-init="getMailbox('<%- user._key %>')">
             <p class="text-weight-500">Notifications</p>
             <div app-for="notification in admin.mailbox" class="note grid col-12 gap-1">
                 <div class="colspan-11">
