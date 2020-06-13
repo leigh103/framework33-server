@@ -32,7 +32,7 @@
 
                 } else {
 
-                    if (typeof key == 'string' && key.match(/^[0-9]*$/)){
+                    if (typeof key == 'number' || typeof key == 'string' && key.match(/^[0-9]*$/)){
                         field = '_key'
                     } else if (typeof key == 'string' && key.match(/@/)){
                         field = 'email'

@@ -44,7 +44,7 @@ var express = require('express'),
                     if (model.routes.private[http_method][method] && guard && model.routes.private[http_method][method].indexOf(guard) !== -1){ // if it's a private method and the guard is allowed
                         resolve()
                     } else if (model.routes.private[http_method][method] && guard && self && model.routes.private[http_method][method].indexOf('self') !== -1){ // if the user is allowed to use the function on their own data
-                        resolve(true)
+                        resolve()
                     } else if (guard){
                         reject(settings.not_authorized)
                     } else {
@@ -172,25 +172,14 @@ var express = require('express'),
                 return
             }
 
-            functions.accessGranted(model, req, method).then(async (self)=>{
+            functions.accessGranted(model, req, method).then(async ()=>{
 
-                let result, access = false
+                let result
 
-                if (self === true && model.data && model.data._id && model.data._id == req.session.user._id){
-                    access = true
-                } else if (!self){
-                    access = true
+                if (method == 'save'){
+                    result = await model.save()
                 } else {
-                    res.status(405).json(settings.not_allowed)
-                    return
-                }
-
-                if (access === true){
-                    if (method == 'save'){
-                        result = await model.save()
-                    } else {
-                        result = await model[method](req.body)
-                    }
+                    result = await model[method](req.body)
                 }
 
                 if (result.error){
@@ -243,23 +232,24 @@ var express = require('express'),
                 return
             }
 
-            functions.accessGranted(model, req, method).then(async (self)=>{
+            functions.accessGranted(model, req, method).then(async ()=>{
 
                 let result
 
-                if (self === true && model.data && model.data._id && model.data._id == req.session.user._id){
-                    result = await model[method](req.body)
-                } else if (!self){
-                    result = await model[method](req.body)
+                if (method == 'save'){
+                    result = await model.save()
                 } else {
-                    res.status(405).json(settings.not_allowed)
-                    return
+                    result = await model[method](req.body)
                 }
 
                 if (result.error){
                     res.status(500).send(result.error)
-                } else {
+                } else if (result.data) {
                     res.json(result.data)
+                } else if (result){
+                    res.json(result)
+                } else {
+                    res.status(405).json(settings.not_allowed)
                 }
 
             }).catch((err)=>{
@@ -294,28 +284,14 @@ var express = require('express'),
 
             let model = await new global[model_class_name]().find(req.params.id)
 
-            functions.accessGranted(model,req,method).then(async (self)=>{
+            functions.accessGranted(model,req,method).then(async ()=>{
 
-                let result, access = false
+                let result
 
-                if (self == true && model.data && model.data._id && model.data._id == req.session.user._id){
-                    access = true
-                } else if (!self){
-                    access = true
+                if (req.params.function && req.params.fid){
+                    result = await model[method](req.params.fid)
                 } else {
-                    res.status(405).json(settings.not_allowed)
-                    return
-                }
-
-                if (access === true){
-                    if (req.params.function && req.params.fid){
-                        result = await model[method](req.params.fid)
-                    } else {
-                        result = await model.delete()
-                    }
-                } else {
-                    res.status(405).json(settings.not_allowed)
-                    return
+                    result = await model.delete()
                 }
 
                 if (result.error){

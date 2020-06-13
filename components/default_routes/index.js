@@ -74,6 +74,7 @@ var express = require('express'),
 
         if (getGuard(req) == 'admin'){
             let admin = await new Admin().find(1)
+            console.log('admin',admin)
             let sms = await new Notification(admin).setContent('Notification','This is a test notification').mailbox(req.session.user)
             res.send(sms)
         } else {

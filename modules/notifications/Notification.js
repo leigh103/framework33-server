@@ -116,7 +116,7 @@
         mailbox(sender){
 
             if (this.class && this.class.data){
-
+console.log(this.class.data)
                 if (this.class.data && !this.class.data.mailbox){
                     this.class.data.mailbox = []
                 }
