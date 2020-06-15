@@ -1,0 +1,256 @@
+
+    <script>
+
+        extendedController = function(){
+
+            scope.view.content = {
+                blocks:[]
+            }
+            scope.view.add = true
+
+// content_type functions
+
+
+            scope.getTypes = function(){
+
+                scope.get('content_types').then((data)=>{
+                    console.log(data)
+                })
+
+            }
+
+            scope.addType = function(){
+
+                scope.new._user_id = '<%- user._id %>'
+                scope.post('content_types',scope.new).then((data)=>{
+                    scope.notify('Added content type')
+                }).catch((err)=>{
+                    scope.notify(err,'error')
+                })
+
+            }
+
+
+// content functions
+
+
+            scope.setContent = function(type){
+                scope.view.content.type = type
+            }
+
+            scope.getContent = function(type,key){
+
+                scope.get('content',key).then((content)=>{
+console.log(content)
+                    scope.view.content.blocks = content[0].blocks
+                    scope.view.content = content[0]
+
+                }).catch((err)=>{
+                    scope.notify(err,5,'error')
+                })
+
+            }
+
+            scope.selectBlock = function(block_name){
+
+                scope.get('/dashboard/content/get-blocks/'+block_name).then((block)=>{
+                    scope.view.selected_block = block
+                    scope.view.editor = block.editor
+                    scope.view.add = true
+                })
+
+            }
+
+            scope.loadBlock = function(content, index){
+
+                scope.get('/dashboard/content/get_block/'+content.block).then((block)=>{
+                    scope.view.selected_block = block
+                    scope.view.selected_block.index = index
+                    scope.view.editor = content.fields
+                    scope.view.blocks = true
+                    scope.view.add = false
+                })
+
+            }
+
+            scope.addBlock = function(){
+
+                if (scope.view.selected_block){
+                    let content = {
+                        name: scope.view.selected_block.name,
+                        block: scope.view.selected_block.block,
+                        fields: scope.view.editor
+                    }
+
+                    if (scope.view.selected_block.index){
+
+                        scope.view.content.blocks[scope.view.selected_block.index] = content
+
+                        scope.view.selected_block = {}
+                        scope.view.blocks = false
+                        scope.view.add = true
+
+                    } else {
+                        scope.view.content.blocks.push(content)
+                    }
+
+                    localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+                }
+
+            }
+
+            scope.deleteBlock = function(index){
+
+                scope.view.content.blocks.splice(index, 1)
+                localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+
+            }
+
+            scope.removeBlock = function(){
+
+                if (view.selected_block){
+                    let content = {
+                        name: scope.view.selected_block.name,
+                        block: scope.view.selected_block.block,
+                        fields: scope.view.editor
+                    }
+                    scope.view.content.blocks.push(content)
+                    localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+                }
+
+            }
+
+            scope.closeBlocks = function(){
+
+                scope.view.selected_block = false
+                scope.view.editor = {}
+
+            }
+
+            <% if (typeof content_type != 'undefined'){ %>
+                scope.saveContent = function(){
+
+                    let payload = scope.view.content
+
+                    payload.type = '<%- content_type %>'
+                    payload._user_id = '<%- user._id %>'
+
+                    if (scope.view.content.slug){
+                        payload.slug = scope.view.content.slug
+                    } else {
+                        payload.slug = scope.view.content.title
+                    }
+
+                    scope.post('content', payload).then((content)=>{
+                        scope.notify('Saved!')
+                    }).catch((err)=>{
+                        scope.notify(err,5,'error')
+                    })
+
+                }
+            <% } %>
+
+            scope.toggleContext = function(type, data){
+
+                let el = document.getElementById(type)
+
+                if (el && el.style && el.style.display != 'none'){
+                    el.style.display = 'none'
+                    scope.context = {}
+                } else {
+                    contextCloseAll()
+                }
+
+                el.style.display = 'block'
+                let top = scope._clicked_element.y,
+                    left = scope._clicked_element.x
+
+                if (left+el.offsetWidth > window.innerWidth){
+                    left = scope._clicked_element.x - el.offsetWidth + scope._clicked_element.width
+                }
+
+                top = top+scope._clicked_element.height
+
+                el.style.top = top+'px'
+                el.style.left = left+'px'
+                scope.context = data
+
+            }
+
+            scope.editItem = function(collection, obj){
+
+                contextCloseAll()
+
+                scope.resetNew().then(()=>{
+                //    console.log(collection, obj)
+
+                    if (typeof obj == 'string'){
+                        scope.new._key = obj
+                    } else {
+                        scope.new = JSON.parse(JSON.stringify(obj))
+                    }
+
+                    scope.view.modal = 'show_edit'
+
+                })
+
+            }
+
+            scope.newObj = function(type){
+                scope.new = {}
+                scope.view.modal = 'show_edit'
+            }
+
+            scope.resetNew = function(){
+
+                return new Promise(function(resolve, reject) {
+                    for (var i in scope.new){
+                        scope.new[i] = ''
+                    }
+                    resolve()
+                });
+
+            }
+
+            scope.addItem = function(collection, obj){
+
+                scope.post(collection, obj).then((data)=>{
+                    scope.notify('Added')
+                }).catch((err)=>{
+                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                })
+
+            }
+
+            scope.saveItem = function(collection, obj){
+
+                scope.post(collection, obj).then((data)=>{
+                    scope.notify('Updated')
+                }).catch((err)=>{
+                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                })
+
+            }
+
+            scope.deleteItem = function(collection, obj){
+
+                if (scope.view.modal && scope.view.modal == 'delete_confirm'){
+
+                    contextCloseAll()
+
+                    scope.delete(collection,obj._key).then(()=>{
+                        scope.notify('Deleted')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                    })
+
+                } else {
+                    scope.view.modal = 'delete_confirm'
+                }
+
+            }
+
+
+        }
+
+    </script>

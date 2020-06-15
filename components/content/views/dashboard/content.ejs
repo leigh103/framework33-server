@@ -24,7 +24,9 @@
         <div class="row" app-for="<%- view.functions.depluralise(table) %> in <%- table %>">
             <% fields.forEach((item)=>{ %>
 
-                <% if (item.input_type == 'image'){ %>
+                <% if (item.name == 'title'){ %>
+                    <div class="cell middle"><a app-click="goto('content/<%- content_type %>',<%- view.functions.depluralise(table) %>._key)" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></a></div>
+                <% } else if (item.input_type == 'image'){ %>
                     <div class="cell middle"><img src="/images/Profile_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
                 <% } else if (item.input_type == 'object'){ %>
                     <div class="cell middle" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>.length"></div>
@@ -46,7 +48,7 @@
     </div>
 
     <div id="context" class="context dropdown text-left" style="display: none">
-        <div class="link" app-click="editItem('<%- table %>',context)">
+        <div class="link" app-click="goto('content/edit',context._key)">
             <i class="fas fa-pen-alt"></i>
             Edit
         </div>

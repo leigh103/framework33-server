@@ -35,11 +35,11 @@ var express = require('express'),
                     guard = req.session.user.guard
                 }
 
-                if (model && model.data && model.data._id && model.data._id == user_id){
+                if (model && model.data && model.data._id && model.data._id == user_id || model && model.data && model.data._user_id && model.data._user_id == user_id){
                     self = true
                 }
 
-                if (model.routes && model.routes.private && model.routes.private[http_method] && guard){ // if the http method is allowed and user is auth'd
+                if (model.routes && model.routes.private && model.routes.private[http_method] && model.routes.private[http_method][method] && guard){ // if the http method is allowed and user is auth'd
 
                     if (model.routes.private[http_method][method] && guard && model.routes.private[http_method][method].indexOf(guard) !== -1){ // if it's a private method and the guard is allowed
                         resolve()
@@ -142,6 +142,7 @@ var express = require('express'),
             method = parseCamelCase(req.params.method)
         }
 
+
         let model_class_name = parseClassName(req.params.collection)
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
@@ -149,6 +150,7 @@ var express = require('express'),
             let model
 
             if (method == 'save'){
+
                 model = await new global[model_class_name](req.body)
             } else if (req.body._key || req.body._key == 0){
                 model = await new global[model_class_name]().find(req.body._key)

@@ -20,14 +20,18 @@
             },
 
             isPlural:(input)=>{
-                return input.match(/(s|ies)$/)
+                if (input && typeof input == 'string'){
+                    return input.match(/(s|ies)$/)
+                } else {
+                    return input
+                }
             },
 
             depluralise:(input)=>{
 
                 let plural = view.functions.isPlural(input)
 
-                if (plural){
+                if (plural && input && typeof input == 'string'){
                     let re = RegExp(plural[0]+'$')
                     return input.replace(re,'')
                 } else {

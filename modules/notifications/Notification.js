@@ -117,10 +117,6 @@
 
             if (this.class && this.class.data){
 
-                if (this.class.data && !this.class.data.mailbox){
-                    this.class.data.mailbox = []
-                }
-
                 if (sender){
                     this.content.from = {
                         _id: sender._id,
@@ -135,8 +131,12 @@
                     }
                 }
 
-                this.class.data.mailbox.push(this.content)
-                this.class.save()
+                this.content._user_id = this.class.data._id
+
+                // this.class.data.mailbox.push(this.content)
+                // this.class.save()
+
+                new Message(this.content).save()
 
                 if (this.class.data.ws_id){
                     new WebsocketClient(this.class.data._id).send(this.content)

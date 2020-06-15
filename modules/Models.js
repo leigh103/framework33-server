@@ -12,40 +12,38 @@
 
             if (key || key == 0){
 
-                let field
+                let query = []
 
                 if (typeof key == 'object'){
 
                     if (key._key){
-                        key = key._key
-                        field = '_key'
+                        query.push('_key == '+key._key)
                     } else if (key.email){
-                        key = key.email
-                        field = 'email'
+                        query.push('email == '+key.email)
                     } else if (key.password_reset){
-                        key = key.password_reset
-                        field = 'password_reset'
+                        query.push('password_reset == '+key.password_reset)
                     } else if (key.ws_id){
-                        key = key.ws_id
-                        field = 'ws_id'
+                        query.push('ws_id == '+key.ws_id)
+                    } else {
+                        query = key
                     }
 
                 } else {
 
                     if (typeof key == 'number' || typeof key == 'string' && key.match(/^[0-9]*$/)){
-                        field = '_key'
+                        query.push('_key == '+key)
                     } else if (typeof key == 'string' && key.match(/@/)){
-                        field = 'email'
+                        query.push('email == '+key)
                     } else if (key){
-                        field = 'password_reset'
+                        query.push('password_reset == '+key)
                     } else {
-                        field = '_key'
+                        query.push('_key == '+key)
                     }
 
                 }
 
                 this.data = await db.read(this.settings.collection)
-                                    .where([field+' == '+key])
+                                    .where(query)
                                     .first()
 
                 if (this.data){
@@ -94,16 +92,33 @@
                         break
                     } else {
 
-                        if (fields[key].type == 'string' && value.toString()){
+                        if (fields[key].type == 'string' && typeof value == 'string'){
                             this.data[key] = value.toString()
-                        } else if (fields[key].type == 'integer' && parseInt(value)){
+                        } else if (fields[key].type == 'integer' && parseInt(value) || fields[key].type == 'number' && parseInt(value)){
                             this.data[key] = parseInt(value)
+                        } else if (fields[key].type == 'date'){
+
+                            if (moment(value, "YYYY-MM-DDThh:mm:ssZ", true)){
+                                this.data[key] = value
+                            } else if (moment(value, "DD/MM/YYYY", true)){
+                                this.data[key] = moment(value, "DD/MM/YYYY").toISOString()
+                            } else if (moment(value, "DD-MM-YYYY", true)){
+                                this.data[key] = moment(value, "DD-MM-YYYY").toISOString()
+                            } else {
+                                this.error = 'Invalid date specified for '+view.functions.parseName(key)
+                                this.data[key] = ''
+                            }
+
                         } else if (fields[key].type == 'float' && parseFloat(value)){
                             this.data[key] = parseFloat(value)
+                        } else if (fields[key].type == 'slug' && typeof value == 'string'){
+                            this.data[key] = value.replace(/\s/g,'-').replace(/['",./\\()\[\]*&^%$£@!]/g,'').toLowerCase()
                         } else if (fields[key].type == 'boolean'){
                             this.data[key] = (value == 'true' || value === true)
                         } else if (fields[key].type == 'price' && parseFloat(value).toFixed(2)){
                             this.data[key] = parseFloat(value).toFixed(2)
+                        } else if (fields[key].type == 'user_id' && typeof value == 'string' && value.match(/^(.*)\/[0-9]+$/)){
+                            this.data[key] = value
                         } else if (fields[key].type == 'name'){
 
                             let name = value.split(' ')
@@ -156,7 +171,10 @@
                             } else {
                                 this.data[key] = value
                             }
-
+                        } else if (fields[key].type == 'object' && typeof value == 'object'){
+                            this.data[key] = value
+                        } else if (!fields[key].type){ // don't validate if no type specified
+                            this.data[key] = value
                         } else {
                             this.data[key] = ''
                             this.error = 'Invalid value for: '+view.functions.parseName(key)+'. Value is "'+value+'" for type '+fields[key].type

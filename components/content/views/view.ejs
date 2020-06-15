@@ -1,0 +1,11 @@
+<% layout('default/page.ejs') -%>
+
+<% for (var i in content.blocks){ %>
+
+    <% content.blocks[i].content = {} %>
+    <% for (var ii in content.blocks[i].fields){ %>
+        <% content.blocks[i].content[content.blocks[i].fields[ii].field] = content.blocks[i].fields[ii].value %>
+    <% } %>
+    <%- include('../templates/blocks/'+content.blocks[i].block+'.ejs', {data:content.blocks[i].content}) %>
+
+<% } %>

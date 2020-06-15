@@ -80,10 +80,19 @@
 
             return new Promise(function(resolve, reject){
 
-                let url = '/api/'+collection
+                let url
 
-                if (id){
-                    url += '/'+id
+                if (collection.match(/^\//)){
+                    url = collection
+                    if (id){
+                        url += '/'+id
+                    }
+                } else {
+                    url = '/api/'+collection
+
+                    if (id){
+                        url += '/'+id
+                    }
                 }
 
                 http('get',url)
@@ -111,7 +120,13 @@
 
             return new Promise(function(resolve, reject){
 
-                let url = '/api/'+collection
+                let url
+
+                if (collection.match(/^\//)){
+                    url = collection
+                } else {
+                    url = '/api/'+collection
+                }
 
                 scope.view.modal = false
 
@@ -149,7 +164,20 @@
 
             return new Promise(function(resolve, reject){
 
-                let url = '/api/'+collection+'/'+id
+                let url
+
+                if (collection.match(/^\//)){
+                    url = collection
+                    if (id){
+                        url += '/'+id
+                    }
+                } else {
+                    url = '/api/'+collection
+
+                    if (id){
+                        url += '/'+id
+                    }
+                }
 
                 scope.view.modal = false
 
@@ -191,7 +219,20 @@
                     return false
                 }
 
-                let url = '/api/'+collection+'/'+id
+                let url
+
+                if (collection.match(/^\//)){
+                    url = collection
+                    if (id){
+                        url += '/'+id
+                    }
+                } else {
+                    url = '/api/'+collection
+
+                    if (id){
+                        url += '/'+id
+                    }
+                }
 
                 http('delete',url)
                     .then((data) => {
@@ -227,10 +268,27 @@
 
         scope.parseDate = function(date, format){
 
+            if (!date.match(/Z$/)){
+                return ''
+            }
             if (format == 'ago'){
                 return moment(date).fromNow()
             } else {
                 return moment(date).format(format)
+            }
+
+        }
+
+        scope.goto = function(str1, str2){
+            str1 = str1.replace(/\s/g,'-').toLowerCase()
+
+            if (str2 || str2 == 0){
+                if (typeof str2 == 'string'){
+                    str2 = str2.replace(/\s/g,'-').toLowerCase()
+                }
+                window.location.href = '/dashboard/'+str1+'/'+str2
+            } else {
+                window.location.href = '/dashboard/'+str1
             }
 
         }

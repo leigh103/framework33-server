@@ -1,0 +1,23 @@
+<section class="content-blog" app-block="blog" app-block-description="This is a blog block">
+
+    <div class="contain text-left">
+
+        <h2 class="underline"><span app-input="text" app-field="title"><%- title %></span></h2>
+
+        <% if (typeof date != 'undefined'){ %><p class="italic"><%- date %></p><% } %>
+
+        <div class="grid col-3 col-s-1 gap-2">
+
+            <div class="colspan-2">
+                <% if (typeof image != 'undefined'){ %><img src="<%- image %>" app-input="image" app-field="image"><% } %>
+                <% if (typeof content != 'undefined'){ %><article app-input="textarea" app-field="content"><%- content %></article><% } %>
+            </div>
+            <div class="details">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

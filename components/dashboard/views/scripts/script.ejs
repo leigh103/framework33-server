@@ -135,13 +135,27 @@
                 })
             }
 
-            scope.deleteMessage = function(message){
-                scope.delete('admin',scope.admin._key+'/delete_message/'+message.date).then((data)=>{
-                    scope.notify('Notification Deleted','success',10,'fa-envelope-open-text')
-                    scope.admin.mailbox = data.sort((a, b) => -a.date.localeCompare(b.date))
-                }).catch((err)=>{
-                    scope.notify(err,'error')
-                })
+            scope.openMessage = function(message,idx){
+                if (scope.view.mailbox == message){
+                    scope.view.mailbox = false
+                } else {
+                    scope.view.mailbox = message
+                }
+            }
+
+            scope.deleteMessage = function(message,idx){
+
+                document.getElementById('message'+idx).classList.add('deleted')
+                setTimeout(function(){
+                    scope.delete('message',message._key).then((data)=>{
+                    //    console.log(data)
+                        scope.notify('Notification Deleted','success',10,'fa-envelope-open-text')
+                    //    scope.admin.mailbox = data.sort((a, b) => -a.date.localeCompare(b.date))
+                    }).catch((err)=>{
+                        scope.notify(err,'error')
+                    })
+                },500)
+
             }
 
             socketConnect("<%- view.websocket.url %>")

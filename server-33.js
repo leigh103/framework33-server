@@ -52,8 +52,9 @@ const express = require('express'),
             model_name = model.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
             model_class_name = model_name.charAt(0).toUpperCase() + model_name.slice(1)
 
-        db.createCollection(model_name)
         global[model_class_name] = require(model)
+
+        db.createCollection(new global[model_class_name]().settings.collection)
 
     })
 

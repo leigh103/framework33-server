@@ -4,20 +4,8 @@
 
     <div class="grid col-2 row-4 gap-2">
 
-        <div class="widget rowspan-2" app-init="getMailbox('<%- user._key %>')">
-            <p class="text-weight-500">Notifications</p>
-            <div app-for="notification in admin.mailbox" class="note grid col-12 gap-1">
-                <div class="colspan-11">
-                    <div class="title">
-                        <span class="date mr-05" app-bind="parseDate(notification.date,'Do MMM h:mma')"></span>:
-                        <span app-bind="notification.subject"></span>
-                    </div>
-                    <div class="text" app-bind="notification.text"></div>
-                </div>
-                <div>
-                    <a app-click="deleteMessage(notification)">&times;</a>
-                </div>
-            </div>
+        <div class="widget rowspan-2">
+
         </div>
         <div class="widget">
             <p class="text-weight-500">Widget</p>

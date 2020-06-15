@@ -17,11 +17,15 @@
         <div class="grid pb-2 gap-1 col-2">
 
             <% if (typeof fields == 'undefined') { %>
+
                 <% columns.forEach((item)=>{ %>
                     <input type="text" app-model="new.<%- item %>">
                 <% }) %>
+
             <% } else { %>
+
                 <% fields.forEach((item,i)=>{ %>
+
                     <% if (item.input_type == 'image'){ %>
 
                         <div class="flex flex-column flex-middle-left">
@@ -47,7 +51,15 @@
                             <textarea app-model="new.<%- item.name %>" placeholder="<%- item.placeholder %>"></textarea>
                         </div>
 
-                    <% } else { %>
+                    <% } else if (item.input_type == 'hidden'){ %>
+
+                        <% var value; %>
+                        <% if (item.value == 'user_id'){ %>
+                            <% value = user._id %>
+                        <% } %>
+                        <input type="hidden" app-model="new.<%- item.name %>" value="<%- value %>">
+
+                    <% } else if (item.input_type){ %>
 
                         <div class="flex flex-column flex-middle-left">
                             <label><%- view.functions.parseName(item.name) %></label>
@@ -55,7 +67,9 @@
                         </div>
 
                     <% } %>
+
                 <% }) %>
+
             <% } %>
         </div>
 

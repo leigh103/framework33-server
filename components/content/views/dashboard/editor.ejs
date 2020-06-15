@@ -1,0 +1,124 @@
+<% layout('default/dashboard.ejs') -%>
+
+
+    <% if (typeof content_key != 'undefined' && content_key != 'new'){ %>
+        <div class="page-full" app-init="getContent('<%- content_key %>')">
+    <% } else { %>
+        <div class="page-full">
+    <% } %>
+
+        <div class="h-100 grid col-3 gap-1">
+
+            <div class="colspan-2 p-2">
+                <h3 class="mb-1">Editor</h3>
+                <div app-hide="view.blocks">
+                    <div class="grid col-2">
+                        <h4 class="mb-1">Content Meta</h4>
+                        <div class="text-right">
+
+                        </div>
+                    </div>
+
+                    <div class="my-1">
+                        <label class="indent">Content Title</label>
+                        <input type="text" app-model="view.content.title">
+                    </div>
+
+                    <div class="my-1">
+                        <label class="indent">Published</label>
+                        <select app-model="view.content.status">
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                        </select>
+                    </div>
+
+                    <div class="my-1">
+                        <button app-click="view.blocks = true" class="btn highlight">Add a Content Block</button>
+                    </div>
+
+
+                </div>
+
+                <div app-show="view.blocks">
+
+                    <h4 class="mb-1" app-show="view.add">Add New Block</h4>
+                    <h4 class="mb-1" app-hide="view.add">Update <span app-bind="view.selected_block.name"></span></h4>
+
+                    <div class="my-2" app-show="view.add">
+                        <select class="thick" onchange="scope.selectBlock(this.value)">
+                            <option value="" selected disabled>Select a block...</option>
+                            <% for (var i in blocks){ %>
+                                <option value="<%- i %>"><%- blocks[i].name %></option>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="indent capitalise">Block Name</label>
+                        <input type="text" app-model="view.selected_block.name">
+                    </div>
+
+                    <div>
+                        <div class="mb-1" app-for="field in view.editor">
+
+                            <div app-show="field.input=='text'">
+                                <label class="indent capitalise" app-bind="field.field"></label>
+                                <input type="text" app-model="field.value">
+                            </div>
+
+                            <div app-show="field.input == 'textarea'">
+                                <label class="indent capitalise" app-bind="field.field"></label>
+                                <textarea class="large" app-model="field.value"></textarea>
+                            </div>
+
+                            <div app-show="field.input == 'image'">
+                                <label class="indent capitalise" app-bind="field.field"></label>
+                                <textarea class="large" app-model="field.value"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="text-right" app-show="view.selected_block">
+                        <button class="btn" app-click="closeBlocks()">Close</button>
+                        <button class="btn highlight" app-click="addBlock()"><span app-show="view.add">Add block to&nbsp;<span class="capitalise"><%- view.functions.depluralise(content_type) %></span></span><span app-hide="view.add">Save Block</span></button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="h-100 bg-33-white py-2">
+
+                <div class="grid col-2 px-2">
+                    <h4 class="mb-1">Page Layout</h4>
+                    <div class="text-right mr-2">
+                        <button class="btn highlight" app-click="saveContent()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(content_type) %></span></button>
+                    </div>
+                </div>
+
+                <div class="sortable">
+                    <div class="list-item grid col-7">
+                    
+                    </div>
+                    <div class="list-item grid col-7" app-for="block in view.content.blocks">
+                        <div class="drag-me">
+                        </div>
+                        <div app-click="loadBlock(block,{{index}})" class="colspan-5 clickable text-purple text-left flex flex-column flex-middle-left">
+                            <div class="text-bold" app-bind="block.name"></div>
+                            <div class="text-truncate text-small" app-bind="block.fields[0].value"></div>
+                        </div>
+                        <div class="flex flex-middle-right">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
