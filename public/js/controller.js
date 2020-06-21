@@ -95,6 +95,10 @@
                     }
                 }
 
+                if (collection.match(/\?/)){
+                    collection = collection.split('?')[0]
+                }
+
                 http('get',url)
                     .then((data) => {
 

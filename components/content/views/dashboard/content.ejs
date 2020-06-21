@@ -9,11 +9,11 @@
                 <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
                 <input type="text" class="" onkeyup="scope.searchApi('<%- table %>',this.value)">
             </div>
-            <button class="flex-none btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
+            <a class="flex-none btn highlight" href="/dashboard/content/<%- content_type %>/new">New <%- view.functions.parseName(content_type,true) %></a>
         </div>
     </div>
 
-    <div class="table" app-init="get('<%- table %>')">
+    <div class="table" app-init="get('<%- table %>?type=<%- content_type %>')">
         <div class="row table-header">
             <% fields.forEach((item)=>{ %>
                 <div class="cell middle <%- item.type.toLowerCase() %>"><%- view.functions.parseName(item.name) %></div>

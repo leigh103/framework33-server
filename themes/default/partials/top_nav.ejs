@@ -1,14 +1,14 @@
 
 <section class="nav bg-33-frosted-light">
 
-    <div class="contain grid col-4">
+    <div class="contain h-100 grid col-4">
 
         <div class="link text-left">
             <a href="/" class="logo"><% if (typeof view != 'undefined' && view.logo){ %><img src="<%- view.logo %>"><% } %></a>
         </div>
 
         <div class="colspan-3 text-right overflow-x">
-            <%- include('partials/menu.ejs',{menu:view.menus.nav}) %>
+            <%- include('default/partials/menu.ejs',{menu:view.menus.nav}) %>
         </div>
 
     </div>

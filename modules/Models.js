@@ -61,13 +61,16 @@
 
         }
 
-        all(orderBy) {
+        all(data) {
 
-            if (orderBy){
-                this.data = db.read(this.settings.collection).orderBy(orderBy,'asc').get(['password','password_reset'])
+            if (typeof data == 'string'){
+                this.data = db.read(this.settings.collection).orderBy(data,'asc').get()
+                return this
+            } else if (typeof data == 'object'){
+                this.data = db.read(this.settings.collection).where(data).omit(['password','password_reset']).get()
                 return this
             } else {
-                this.data = db.read(this.settings.collection).get(['password','password_reset'])
+                this.data = db.read(this.settings.collection).omit(['password','password_reset']).get()
                 return this
             }
 

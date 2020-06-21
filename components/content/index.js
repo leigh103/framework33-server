@@ -12,7 +12,6 @@ const express = require('express'),
     settings = {
         default_route: 'root',
         views: 'content/views',
-        protected_guards:['admin'],
         menu: {
             side_nav: [
                 {link:'Content',slug: '/dashboard/content', weight:1, subitems:[]}
@@ -25,6 +24,27 @@ const express = require('express'),
 
 
     functions = {
+
+        parseStyle:(style) => {
+
+            let str = ''
+
+            if (style.background){
+                if (style.background.color){
+                    str += 'background-color: '+style.background.color+';'
+                }
+                if (style.background.image){
+                    str += 'background-image: url('+style.background.image+');background-size:cover;background-repeat: no-repeat; background-position:center center;'
+                }
+            }
+            if (style.text){
+                if (style.text.color){
+                    str += 'color: '+style.text.color+';'
+                }
+            }
+            return str
+
+        },
 
         parseBlocks:()=>{
 
@@ -62,8 +82,19 @@ const express = require('express'),
                                     blocks[block_name].description = ''
                                 }
 
+                                blocks[block_name].styling = {
+                                    background:{
+                                        image:'',
+                                        color:'',
+                                        class:''
+                                    },
+                                    text:{
+                                        color:''
+                                    }
+                                }
                                 blocks[block_name].inputs = data.match(/app\-input\=['"](.*?)['"]/g)
                                 blocks[block_name].fields = data.match(/app\-field\=['"](.*?)['"]/g)
+                                blocks[block_name].element_style = data.match(/app\-styling\=['"](.*?)['"]/g)
                                 blocks[block_name].editor = []
 
                                 if (blocks[block_name].inputs && blocks[block_name].fields){
@@ -83,6 +114,14 @@ const express = require('express'),
                                             }
 
                                             blocks[block_name].editor[i] = {field:blocks[block_name].fields[i], input:blocks[block_name].inputs[i], value:''}
+
+                                            if (blocks[block_name].element_style && blocks[block_name].element_style[i]){
+                                                let styling_match = blocks[block_name].element_style[i].match(/app\-styling\=['"](.*?)['"]/)
+                                                if (styling_match && styling_match[1]){
+                                                    blocks[block_name].editor[i].styling = 'true'
+                                                    blocks[block_name].editor[i].classes = ''
+                                                }
+                                            }
 
                                         }
 
@@ -113,16 +152,18 @@ const express = require('express'),
 
 
     let data = {
-        include_scripts: [settings.views+'/scripts/script.ejs']
-    }
+        include_scripts: [settings.views+'/dashboard/scripts/script.ejs'],
+        include_styles: [settings.views+'/dashboard/styles/style.ejs']
+    },
+    blocks = []
 
     routes.get('*', (req, res, next) => {
         if (req.session && req.session.user && req.session.user.guard){
             data.user = req.session.user
-            next()
         } else {
-            res.redirect('/login/admin')
+            data.user = {}
         }
+        next()
     })
 
 
@@ -134,7 +175,7 @@ const express = require('express'),
             functions.parseBlocks().then((content_blocks)=>{
                 data.blocks = content_blocks
                 blocks = content_blocks
-                res.json(blocks[req.params.name])
+                res.json(blocks)
             }).catch((err)=>{
                 res.status(500).send(err)
             })
@@ -144,7 +185,7 @@ const express = require('express'),
 
     routes.get('/dashboard/content/:type?/:key?', async(req, res) => {
 
-        if (req.params.key){
+        if (req.params.key || req.params.key == '0'){
 
             view.current_view = 'content'
             data.title = 'Content'

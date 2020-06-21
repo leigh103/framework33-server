@@ -82,6 +82,15 @@ var express = require('express'),
             method = parseCamelCase(req.params.function)
         }
 
+        let query
+
+        if (Object.keys(req.query).length > 0){
+            query = []
+            for (let [key, value] of Object.entries(req.query)) {
+                query.push(key+' == '+value)
+            }
+        }
+
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
             let model
@@ -90,7 +99,7 @@ var express = require('express'),
                 model = await new global[model_class_name]().find(req.params.id)
             } else {
                 method = 'all'
-                model = await new global[model_class_name]().all()
+                model = await new global[model_class_name]().all(query)
             }
 
             functions.accessGranted(model,req,method).then(async ()=>{

@@ -5,7 +5,8 @@
     <% content.blocks[i].content = {} %>
     <% for (var ii in content.blocks[i].fields){ %>
         <% content.blocks[i].content[content.blocks[i].fields[ii].field] = content.blocks[i].fields[ii].value %>
+        <% content.blocks[i].content[content.blocks[i].fields[ii].field+'_classes'] = content.blocks[i].fields[ii].classes %>
     <% } %>
-    <%- include('../templates/blocks/'+content.blocks[i].block+'.ejs', {data:content.blocks[i].content}) %>
+    <%- include('../templates/blocks/'+content.blocks[i].block+'.ejs', {data:content.blocks[i].content, styling:content.blocks[i].styling}) %>
 
 <% } %>

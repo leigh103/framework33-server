@@ -7,6 +7,7 @@
                 blocks:[]
             }
             scope.view.add = true
+            scope.view.saved = true
 
 // content_type functions
 
@@ -33,6 +34,10 @@
 
 // content functions
 
+            watch['view.editor'] = function(data){
+            //    console.log(data)
+            }
+
 
             scope.setContent = function(type){
                 scope.view.content.type = type
@@ -41,7 +46,7 @@
             scope.getContent = function(type,key){
 
                 scope.get('content',key).then((content)=>{
-console.log(content)
+
                     scope.view.content.blocks = content[0].blocks
                     scope.view.content = content[0]
 
@@ -51,24 +56,42 @@ console.log(content)
 
             }
 
+            scope.addNewSection = function(){
+                scope.checkSaved().then(()=>{
+                    scope.view.modal = 'show_sections'
+                }).catch((err)=>{
+                    scope.notify(err,'error')
+                })
+            }
+
             scope.selectBlock = function(block_name){
 
                 scope.get('/dashboard/content/get-blocks/'+block_name).then((block)=>{
+                    scope.view.modal = false
                     scope.view.selected_block = block
                     scope.view.editor = block.editor
-                    scope.view.add = true
+                    scope.addBlock()
                 })
 
             }
 
             scope.loadBlock = function(content, index){
 
-                scope.get('/dashboard/content/get_block/'+content.block).then((block)=>{
-                    scope.view.selected_block = block
-                    scope.view.selected_block.index = index
-                    scope.view.editor = content.fields
-                    scope.view.blocks = true
-                    scope.view.add = false
+                scope.checkSaved().then(()=>{
+                    scope.get('/dashboard/content/get-blocks/'+content.block).then((block)=>{
+                        scope.view.selected_block = block
+                        scope.view.selected_block.index = index
+
+                        if (content.styling){
+                            scope.view.selected_block.styling = content.styling
+                        }
+
+                        scope.view.editor = content.fields
+                        scope.view.blocks = true
+                        scope.view.add = false
+                    })
+                }).catch((err)=>{
+                    scope.notify(err,'error')
                 })
 
             }
@@ -76,18 +99,20 @@ console.log(content)
             scope.addBlock = function(){
 
                 if (scope.view.selected_block){
+
                     let content = {
                         name: scope.view.selected_block.name,
+                        styling: scope.view.selected_block.styling,
                         block: scope.view.selected_block.block,
                         fields: scope.view.editor
                     }
-
+                    console.log('here', scope.view.selected_block.styling)
                     if (scope.view.selected_block.index){
 
                         scope.view.content.blocks[scope.view.selected_block.index] = content
 
                         scope.view.selected_block = {}
-                        scope.view.blocks = false
+                        scope.view.blocks = true
                         scope.view.add = true
 
                     } else {
@@ -95,6 +120,7 @@ console.log(content)
                     }
 
                     localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+
                 }
 
             }
@@ -108,13 +134,8 @@ console.log(content)
 
             scope.removeBlock = function(){
 
-                if (view.selected_block){
-                    let content = {
-                        name: scope.view.selected_block.name,
-                        block: scope.view.selected_block.block,
-                        fields: scope.view.editor
-                    }
-                    scope.view.content.blocks.push(content)
+                if (scope.view.selected_block.index){
+                    scope.view.content.blocks.splice(scope.view.selected_block.index,1)
                     localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
                 }
 
@@ -127,27 +148,96 @@ console.log(content)
 
             }
 
-            <% if (typeof content_type != 'undefined'){ %>
-                scope.saveContent = function(){
+            scope.showSettings = function(){
 
-                    let payload = scope.view.content
+                scope.view.blocks = false
+                scope.view.selected_block = false
+                scope.view.editor = {}
 
-                    payload.type = '<%- content_type %>'
-                    payload._user_id = '<%- user._id %>'
+            }
 
-                    if (scope.view.content.slug){
-                        payload.slug = scope.view.content.slug
+            scope.checkSaved = function(){
+                return new Promise(function(resolve, reject) {
+                    if (scope.view.saved === true){
+                        scope.notify('cancel')
+                        resolve()
                     } else {
-                        payload.slug = scope.view.content.title
+                        scope.view.saved = true
+                        reject('This section has not been saved')
+                    }
+                })
+            }
+
+            scope.updateCE = function(){
+
+                return new Promise(function(resolve, reject) {
+
+                    let ce_divs = document.getElementsByClassName('contenteditable')
+
+                    if (ce_divs){
+                        for (var i in ce_divs){
+                            if (ce_divs[i].innerHTML && typeof ce_divs[i].innerHTML == 'string'){
+                                let el_prop = ce_divs[i].getAttribute('app-index').replace(/__([0-9]+)__/g,'[$1].').replace(/__/g,'.')
+                                _.set(scope,el_prop,ce_divs[i].innerHTML)
+                            }
+
+                            if (i == ce_divs.length-1){
+                                resolve()
+                            }
+                        }
+                    } else {
+                        resolve()
                     }
 
-                    scope.post('content', payload).then((content)=>{
-                        scope.notify('Saved!')
+                })
+            }
+
+            scope.saveLocal = function(){
+
+                return new Promise(function(resolve, reject) {
+
+                    scope.updateCE().then(()=>{
+
+                        localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+                        scope.view.saved = true
+                        scope.notify('Section Updated')
+                        resolve()
+
+                    })
+
+                })
+
+            }
+
+            <% if (typeof content_type != 'undefined'){ %>
+
+                scope.saveContent = function(){
+
+                    scope.saveLocal().then(()=>{
+
+                        let payload = scope.view.content
+
+                        payload.type = '<%- content_type %>'
+                        payload._user_id = '<%- user._id %>'
+
+                        if (scope.view.content.slug){
+                            payload.slug = scope.view.content.slug
+                        } else {
+                            payload.slug = scope.view.content.title
+                        }
+
+                        scope.post('content', payload).then((content)=>{
+                            scope.notify('Saved!')
+                        }).catch((err)=>{
+                            scope.notify(err,5,'error')
+                        })
+
                     }).catch((err)=>{
-                        scope.notify(err,5,'error')
+                        scope.notify('Not saved: '+err,'error')
                     })
 
                 }
+
             <% } %>
 
             scope.toggleContext = function(type, data){

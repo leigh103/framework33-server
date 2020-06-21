@@ -1,0 +1,56 @@
+.list-item {
+
+    display: flex;
+    flex-direction: row;
+    font-size: 0.9rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+
+    & > * {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    div.icon {
+        flex: 0 0 2rem;
+        font-size:0.8rem;
+        display:flex;
+        padding-left: 0.2rem;
+        color:rgba(0,0,0,0.4);
+    }
+
+    .drag-me {
+        cursor:grab;
+        list-style:none;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 2rem;
+        font-size:0.6rem;
+        font-weight:200;
+        border-radius:3px;
+        position:relative;
+        color:rgba(0,0,0,0.4);
+        font-weight:bold;
+
+        &:after {
+            content:". \A . \A . ";
+            white-space: pre; /* or pre-wrap */
+            position:absolute;
+            left:0;
+            top:50%;
+            transform:translate(.4rem, calc(-50% - .2em));
+            line-height:.4rem;
+            opacity:0.3;
+            font-size:1rem;
+        }
+        &:active {
+            cursor:grabbing;
+            transform:scale(1.03);
+        }
+
+    }
+
+}
