@@ -1,5 +1,5 @@
 
-    const Models = require('../modules/Models')
+    const Models = require(basedir+'/modules/Models')
 
     class Message extends Models {
 

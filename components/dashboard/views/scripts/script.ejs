@@ -72,7 +72,7 @@
 
             }
 
-            scope.editItem = function(collection, obj){
+            scope.editItem = function(collection, obj, no_modal){
 
                 contextCloseAll()
 
@@ -85,7 +85,9 @@
                         scope.new = JSON.parse(JSON.stringify(obj))
                     }
 
-                    scope.view.modal = 'show_edit'
+                    if (!no_modal){
+                        scope.view.modal = 'show_edit'
+                    }
 
                 })
 

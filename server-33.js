@@ -28,35 +28,12 @@ const express = require('express'),
     dbModule = require('./modules/databases/'+config.modules.db.module)
     global.db = new dbModule()
 
+    global.log = require('./modules/functions/log')
     global.moment = require('moment')
     global.websocket_clients = {}
     global.component = {}
     global.basedir = __dirname
 
-    config.modules.load.forEach( (file) => {
-
-        let file_name = file
-
-        if (file_name.match(/\//)){
-            file_name = file.split('/')
-            file_name = file_name[file_name.length-1]
-        }
-
-        global[file_name] = require('./modules/'+file)
-
-    })
-
-    glob.sync( './models/*.js' ).forEach( function( file ) {
-
-        let model = path.resolve( file ),
-            model_name = model.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
-            model_class_name = model_name.charAt(0).toUpperCase() + model_name.slice(1)
-
-        global[model_class_name] = require(model)
-
-        db.createCollection(new global[model_class_name]().settings.collection)
-
-    })
 
 // setup express
 
@@ -133,8 +110,8 @@ const express = require('express'),
     });
 
 
-
 // load components
+
 
     const loadComponents = ()=>{
 
@@ -151,29 +128,32 @@ const express = require('express'),
             files.forEach((file, index) => {
 
                 let name = file.replace(/\.\w+$/,'')
+                controllers = file+'/controllers'
 
                 try {
 
                     let re = RegExp(file)
 
                     if (global.component[name]){
-                        delete require.cache[require.resolve('./components/'+file)]
+                        delete require.cache[require.resolve('./components/'+controllers)]
                         delete global.component[name]
                     }
 
-                    global.component[name] = require('./components/'+file)
-                    addComponent(name, file+'/index.js')
+                    global.component[name] = require('./components/'+controllers)
+                    addComponent(name, controllers+'/index.js')
 
                     if (isSet(global.component[name],'settings','includes')){
 
                         global.component[name].settings.includes.forEach((include, index) => {
 
-                            global.component[include.name] = require('./components/'+file+'/'+include.path)
+                            global.component[include.name] = require('./components/'+controllers+'/'+include.path)
                             addComponent(include.name, file+'/'+include.path)
 
                         })
 
                     }
+
+                    addModels(file)
 
                 }
                 catch (e) { // gracefully error if component doesn't load
@@ -200,19 +180,43 @@ const express = require('express'),
 
     }
 
+
+// boot components and servers
+
+
+    // config.modules.load.forEach( (file) => {
+
+    log('Loading modules...')
+    for (let file of config.modules.load){
+
+        let file_name = file
+
+        if (file_name.match(/\//)){
+            file_name = file.split('/')
+            file_name = file_name[file_name.length-1]
+        }
+
+        global[file_name] = require('./modules/'+file)
+
+    }
+
+    //})
+    log('Loading components...')
     loadComponents()
     app.locals.view = global.view
 
-    watch(['./components','./models','./modules'], { recursive: true }, function(evt, name) {
+    watch(['./components'], { recursive: true }, function(evt, name) {
         log('Components Reloaded')
         loadComponents()
     });
 
     server.listen(config.http.port, function() {
-        console.log('Listening on '+config.http.port);
+        log('Listening on '+config.http.port);
     });
 
+
 // functions
+
 
     const addComponent = (name, file) => {
 
@@ -245,6 +249,23 @@ const express = require('express'),
         global.component[name].loaded = true
         global.component[name].error = ''
         // log('Component loaded: '+file)
+
+    }
+
+    const addModels = (component) => {
+
+        log('Adding models for '+component)
+        glob.sync( './components/'+component+'/models/*.js' ).forEach( function( file ) {
+
+            let model = path.resolve( file ),
+                model_name = model.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
+                model_class_name = model_name.charAt(0).toUpperCase() + model_name.slice(1)
+
+            global[model_class_name] = require(model)
+
+            db.createCollection(new global[model_class_name]().settings.collection)
+
+        })
 
     }
 

@@ -1,6 +1,6 @@
 
 
-    const Users = require('../modules/Users')
+    const Users = require(basedir+'/modules/Users')
 
     class User extends Users {
 

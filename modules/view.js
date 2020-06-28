@@ -8,6 +8,7 @@
         dont_track: ["/login"],
         meta:{
             title: config.site.name,
+            description:"A NodeJS based backend and frontend platform",
             url: config.site.url,
             logo: config.site.logo
         },
@@ -68,6 +69,19 @@
                 var dayNames = {1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat', 7: 'Sun'}
                 date = new Date(date)
                 return dayNames[date.getDay()]
+
+            },
+
+            getOptionData:(table)=>{
+
+                table = parseClassName(table)
+
+                if (table && global[table] && typeof global[table] == 'function'){
+                    let data = new global[table]().all().get()
+                    return data
+                } else {
+                    return []
+                }
 
             },
 

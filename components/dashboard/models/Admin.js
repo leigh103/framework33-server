@@ -1,5 +1,5 @@
 
-    const Users = require('../modules/Users')
+    const Users = require(basedir+'/modules/Users')
 
     class Admin extends Users {
 

@@ -1,0 +1,21 @@
+<% layout('default/page.ejs') -%>
+
+<section class="pt-7 pb-4">
+
+    <div class="contain grid col-2 col-s-1 gap-2 text-left">
+
+        <div>
+            <img src="<%- product.image_1 %>">
+        </div>
+
+        <div>
+
+            <h1 class="h4"><%- product.name %></h1>
+            <a class="block my-1" href="/<%- category.data.slug %>"><%- category.data.name %></a>
+            <p><%- product.description %></p>
+
+        </div>
+
+    </div>
+
+</section>

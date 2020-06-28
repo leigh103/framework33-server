@@ -1,24 +1,28 @@
 
-    const Models = require('../modules/Models')
+    const Models = require(basedir+'/modules/Models')
 
-    class ContentTypes extends Models {
+    class Content extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'content_types',
+                collection: 'content',
                 fields: [
+                    {name:'blocks',type:'object',required:true},
                     {name:'type',input_type:'text',placeholder:'Content Type', type:'string', required:true},
-                    {name:'slug',input_type:'text',placeholder:'Content Archive URL', type:'string', required:false},
-                    {name:'_user_id',input_type:'hidden',value:'user_id', type:'user_id', required:true}
+                    {name:'tags',input_type:'text',placeholder:'Tags', type:'string', required:false},
+                    {name:'status',input_type:'text',placeholder:'Status', type:'string', required:true},
+                    {name:'title',input_type:'text',placeholder:'Content Title', type:'string', required:true},
+                    {name:'slug',input_type:'text',placeholder:'Content URL', type:'slug', required:true},
+                    {name:'publish_date',input_type:'date',placeholder:'Publish Date', type:'date', required:false}
                 ]
             }
 
             this.routes = {
                 public: { // unauth'd routes
-                    get:{
+                    get: {
                         find:[],
                         search:[],
                         all:[]
@@ -39,10 +43,16 @@
                 }
             }
 
+            this.content_types = []
+
         }
 
+        async getContentTypes(){
+
+
+        }
 
 
     }
 
-    module.exports = ContentTypes
+    module.exports = Content

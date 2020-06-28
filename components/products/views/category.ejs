@@ -1,0 +1,27 @@
+<% layout('default/page.ejs') -%>
+
+<section class="vh-60 relative flex flex-middle flex-column bg-33-light-grey bg-cover" style="background-image: url('<%- category.data.image %>')">
+    <div class="background bg-33-transparent-grey"></div>
+    <h1 class="text-33-white mb-1" anim="{'enter':'fade-in','duration':'3s'}"><%- category.data.name %></h1>
+    <h2 class="text-33-white" style="font-size: 1.2em" anim="{'enter':'move-down','delay':'1s','duration':'2s'}"><%- category.data.description %></h2>
+</section>
+
+<section class="py-6">
+
+    <div class="contain grid col-4 col-s-2 gap-2">
+
+        <% products.forEach((product,i)=>{ %>
+
+            <a class="block" href="/<%- category.data.slug %>/<%- product.slug %>">
+
+                <img src="<%- product.image_1 %>">
+                <h2><%- product.name %></h2>
+                <p class="truncate"><%- product.description %></p>
+
+            </a>
+
+        <% }) %>
+
+    </div>
+
+</section>

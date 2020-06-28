@@ -74,6 +74,12 @@ const express = require('express'),
         data.components = Object.keys(global.component).map(function(key) {
             let obj = global.component[key]
             obj.name = key
+            if (!obj.settings){
+                obj.settings = {}
+            }
+            if (obj.settings && !obj.settings.default_route){
+                obj.settings.default_route = ''
+            }
             return obj;
         })
 
