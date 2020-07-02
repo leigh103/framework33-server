@@ -478,6 +478,10 @@ a:hover {
 .table .cell.action {
   width: 6rem;
 }
+.table .cell.textarea,
+.table .cell.category.select {
+  display: none;
+}
 @media only screen and (max-width: 851px) {
   .table .cell {
     min-width: 20vw;

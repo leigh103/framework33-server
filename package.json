@@ -21,6 +21,7 @@
     "lowdb": "^1.0.0",
     "moment": "^2.24.0",
     "nexmo": "^2.6.0",
+    "node-pushnotifications": "^1.4.0",
     "node-watch": "^0.6.3",
     "path": "^0.12.7",
     "querystring": "^0.2.0",

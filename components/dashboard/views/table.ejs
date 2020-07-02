@@ -16,7 +16,7 @@
     <div class="table" app-init="get('<%- table %>')">
         <div class="row table-header">
             <% fields.forEach((item)=>{ %>
-                <div class="cell middle <%- item.type.toLowerCase() %>"><%- view.functions.parseName(item.name) %></div>
+                <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>"><%- view.functions.parseName(item.name) %></div>
             <% }) %>
             <div class="cell middle action"></div>
         </div>
@@ -25,13 +25,13 @@
             <% fields.forEach((item)=>{ %>
 
                 <% if (item.input_type == 'image'){ %>
-                    <div class="cell middle"><img src="/images/Profile_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
+                    <div class="cell middle <%- item.name %> <%- item.input_type %>"><img src="/images/Profile_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
                 <% } else if (item.input_type == 'object'){ %>
-                    <div class="cell middle" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>.length"></div>
+                    <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>.length"></div>
                 <% } else if (item.input_type == 'date'){ %>
-                    <div class="cell middle" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY')"></div>
+                    <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY')"></div>
                 <% } else { %>
-                    <div class="cell middle" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></div>
+                    <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></div>
                 <% } %>
             <% }) %>
             <div class="cell middle text-right" app-attr="{id:'cell-'+<%- view.functions.depluralise(table) %>._key}">

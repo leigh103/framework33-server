@@ -14,6 +14,8 @@
             <a class="block my-1" href="/<%- category.data.slug %>"><%- category.data.name %></a>
             <p><%- product.description %></p>
 
+            <button class="btn bg-topaz my-2" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Add to Cart</button>
+
         </div>
 
     </div>

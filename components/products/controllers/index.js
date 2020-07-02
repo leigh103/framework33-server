@@ -1,5 +1,5 @@
 //
-// Products Module
+// Products Component
 // Dashboard and frontend CMS
 //
 
@@ -34,7 +34,6 @@ const express = require('express'),
 
 
     let data = {
-        include_scripts: [settings.views+'/scripts/script.ejs','dashboard/views/scripts/script.ejs'],
         include_styles: [settings.views+'/styles/style.ejs']
     }
 
@@ -55,6 +54,7 @@ const express = require('express'),
         // } else {
 
             view.current_view = 'products'
+            data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
             data.title = 'Product Categories'
             data.table = 'product_categories'
@@ -75,6 +75,7 @@ const express = require('express'),
         // } else {
 
             view.current_view = 'products'
+            data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
             data.title = 'Products'
             data.table = 'products'
@@ -89,7 +90,17 @@ const express = require('express'),
 
     routes.get('/:category/:slug?', async (req, res, next) => {
 
+        if (!req.session.cart_id){
+            data.cart = await new Cart().init()
+            req.session.cart_id = data.cart._key
+        } else {
+            data.cart = await new Cart().find(req.session.cart_id)
+            data.cart = data.cart.get()
+        }
+
         res.locals.functions = functions
+
+        data.include_scripts = [settings.views+'/scripts/script.ejs']
 
         let category, slug
 
@@ -100,17 +111,26 @@ const express = require('express'),
             data.product = await new Products().find(['slug == '+data.slug])
             data.product = data.product.get()
             view.meta.title = 'Framework-33 | '+data.product.name
-            view.meta.description = data.product.description.substring(0,160)
+
+            if (data.product.description){
+                view.meta.description = data.product.description.substring(0,160)
+            }
+
             res.render(settings.views+'/product.ejs',data)
 
         } else {
 
             data.category = await new ProductCategories().find(['slug == '+req.params.category])
-            view.meta.title = 'Framework-33 | '+data.category.data.name
-            view.meta.description = data.category.data.description.substring(0,160)
-            data.products = await new Products().all(['category like '+data.category.data._key])
-            data.products = data.products.data
-            res.render(settings.views+'/category.ejs',data)
+
+            if (!data.category || data.category && data.category.data && !data.category.data.name){
+                next()
+            } else {
+                view.meta.title = 'Framework-33 | '+data.category.data.name
+                view.meta.description = data.category.data.description.substring(0,160)
+                data.products = await new Products().all(['category like '+data.category.data._key])
+                data.products = data.products.data
+                res.render(settings.views+'/category.ejs',data)
+            }
 
         }
 

@@ -83,6 +83,39 @@ var express = require('express'),
     })
 
 
+        routes.get('/add', async (req,res) => {
+
+            let cart, error
+
+            if (req.session.user && typeof req.session.user.cart_id != 'undefined'){
+                cart = await new Cart().find(req.session.user.cart_id)
+            } else {
+                cart = new Cart({_user_id:req.session.user._id})
+            }
+
+            if (cart.data){
+
+                await cart.addItem(1,'Products')
+
+                if (cart.error){
+                    error = cart.error
+                } else {
+                    await cart.save()
+                }
+
+                req.session.user.cart_id = cart.data._key
+
+                if (error){
+                    res.json({status:500,message:error})
+                } else {
+                    res.json(cart.data)
+                }
+
+            } else {
+                res.json({status:404,message:'Not Found'})
+            }
+
+        })
 
 // export
 

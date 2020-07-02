@@ -1,0 +1,31 @@
+<% layout('default/page.ejs') -%>
+
+<section class="pt-7 pb-4">
+
+    <div class="contain text-left">
+
+        <h1>Your <%- cart_name %></h1>
+        <h4><%- cart.reference %></h4>
+
+        <section>
+
+            <div class="grid col-3 gap-1 my-2">
+
+                <div class="">Item</div>
+                <div class="text-center">Qty</div>
+                <div class="text-right">Price</div>
+
+                <% cart.items.forEach((item,i)=>{ %>
+
+                    <div class=""><%- item.name %></div>
+                    <div class="text-center"><%- item.quantity %></div>
+                    <div class="text-right">£<%- item.price %></div>
+
+                <% }) %>
+
+            </div>
+
+        </section>
+    </div>
+
+</section>

@@ -28,7 +28,8 @@ var express = require('express'),
 
                 let guard = false,
                     http_method = req.method.toLowerCase(),
-                    self = false
+                    self = false,
+                    user_id = false
 
                 if (req.session && req.session.user && req.session.user){
                     user_id = req.session.user._id
@@ -151,7 +152,6 @@ var express = require('express'),
             method = parseCamelCase(req.params.method)
         }
 
-
         let model_class_name = parseClassName(req.params.collection)
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
@@ -159,7 +159,6 @@ var express = require('express'),
             let model
 
             if (method == 'save'){
-
                 model = await new global[model_class_name](req.body)
             } else if (req.body._key || req.body._key == 0){
                 model = await new global[model_class_name]().find(req.body._key)
@@ -198,7 +197,7 @@ var express = require('express'),
                 if (err.status){
                     res.status(err.status).json(err)
                 } else {
-                    log('Error calling the "'+method+'" method on class: '+model_class_name)
+                    log(err)
                     res.status(500).send('Error calling the "'+method+'" method on class: '+model_class_name)
                 }
 

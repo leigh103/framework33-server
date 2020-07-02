@@ -1,24 +1,27 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class Products extends Models {
+    class Transactions extends Models {
 
         constructor(data){
 
             super(data)
 
+            this.statuses = [
+                {text:'New',value:'new'},
+                {text:'Paid',value:'paid'},
+                {text:'Processing',value:'processing'},
+                {text:'Shipped',value:'shipped'},
+                {text:'Refunded',value:'refunded'},
+                {text:'Deleted',value:'deleted'}
+            ]
+
             this.settings = {
-                collection: 'products',
+                collection: 'transactions',
                 fields: [
-                    {name:'image_1',input_type:'image',placeholder:'Image', type:'image', required:false},
-                    {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
-                    {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
-                    {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},
-                    {name:'variants',input_type:'multiselect',option_data:'products', type:'string', required:false},
-                    {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', required:false},
-                    {name:'price',input_type:'text',placeholder:'Price',type:'price',required: true},
-                    {name:'activated',input_type:'select',options:[{text:'Yes',value:true},{text:'No',value:false}], type:'boolean', required:false},
-                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false}
+                    {name:'status',input_field:'select',options:this.statuses, type:'string', required:false},
+                    {name:'barcode',input_field:'_key',placeholder:'Barcode', type:'barcode', required:false},
+                    {name:'items',input_field:'_key',placeholder:'Barcode', type:'barcode', required:false}
                 ]
             }
 
@@ -60,7 +63,6 @@
                 let filter = []
 
                 filter.push('name like '+search.str)
-                filter.push('category like '+search.str)
 
                 this.data = db.read(this.settings.collection).orWhere(filter).get()
                 return this.data
@@ -72,4 +74,4 @@
 
     }
 
-    module.exports = Products
+    module.exports = Transactions

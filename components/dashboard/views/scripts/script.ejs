@@ -64,9 +64,7 @@
             scope.resetNew = function(){
 
                 return new Promise(function(resolve, reject) {
-                    for (var i in scope.new){
-                        scope.new[i] = ''
-                    }
+                    scope.new = {}
                     resolve()
                 });
 
@@ -129,6 +127,23 @@
                     scope.view.modal = 'delete_confirm'
                 }
 
+            }
+
+            scope.push = function(obj,item){
+
+                obj.push(item)
+
+            }
+
+            scope.splice = function(obj,item){
+                if (obj && obj.lenth > 0){
+                    let idx = obj.findIndex((itm,i)=>{
+                        return itm == item
+                    })
+                    if (idx >= 0){
+                        obj.splice(idx,1)
+                    }
+                }
             }
 
             scope.getMailbox = function(user_id){
