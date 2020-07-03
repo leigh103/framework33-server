@@ -15,7 +15,8 @@ const express = require('express'),
         menu: {
             side_nav: [
                 {link:'Products',slug: '/dashboard/products', weight:1, subitems:[
-                    {link:'Categories',slug: '/dashboard/products/categories', weight:1}
+                    {link:'All Products',slug: '/dashboard/products', weight:1},
+                    {link:'Categories',slug: '/dashboard/products/categories', weight:2}
                 ]}
             ]
         }
@@ -48,59 +49,41 @@ const express = require('express'),
 
     routes.get('/dashboard/products/categories', async(req, res) => {
 
-        // if (req.params.key){
-        //
-        //
-        // } else {
+        view.current_view = 'products'
+        view.current_sub_view = 'categories'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
-            view.current_view = 'products'
-            data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.title = 'Product Categories'
+        data.table = 'product_categories'
 
-            data.title = 'Product Categories'
-            data.table = 'product_categories'
+        data.fields = new ProductCategories().settings.fields
 
-            data.fields = new ProductCategories().settings.fields
-
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
-
-        //}
+        res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
     })
 
     routes.get('/dashboard/products/:key?', async(req, res) => {
 
-        // if (req.params.key){
-        //
-        //
-        // } else {
+        view.current_view = 'products'
+        view.current_sub_view = 'all products'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
-            view.current_view = 'products'
-            data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.title = 'Products'
+        data.table = 'products'
 
-            data.title = 'Products'
-            data.table = 'products'
+        data.fields = new Products().settings.fields
 
-            data.fields = new Products().settings.fields
-
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
-
-        //}
+        res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
     })
 
     routes.get('/:category/:slug?', async (req, res, next) => {
 
-        if (!req.session.cart_id){
-            data.cart = await new Cart().init()
-            req.session.cart_id = data.cart._key
-        } else {
-            data.cart = await new Cart().find(req.session.cart_id)
-            data.cart = data.cart.get()
-        }
+        data.cart = await new Cart().init(req)
 
         res.locals.functions = functions
 
-        data.include_scripts = [settings.views+'/scripts/script.ejs']
+        data.include_scripts = ['transactions/views/scripts/script.ejs']
 
         let category, slug
 

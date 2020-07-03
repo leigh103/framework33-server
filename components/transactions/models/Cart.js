@@ -32,20 +32,27 @@
 
             this.routes = {
                 public: { // unauth'd routes
+                    get: {
+                        find:['self']
+                    },
                     post: {
-                        addItem:[],
-                        save:[]
+                        empty:['self'],
+                        removeItem:['self'],
+                        addItem:['self'],
+                        save:['self']
                     },
                 },
                 private: { // auth'd routes
                     get: {
-                        all:['self'],
-                        search:['self'],
-                        find:['self']
+                        all:['admin'],
+                        search:['admin'],
+                        find:['admin','self']
                     },
                     post: {
-                        addItem:[],
-                        save:[]
+                        empty:['admin','self'],
+                        removeItem:['admin','self'],
+                        addItem:['admin','self'],
+                        save:['admin','self']
                     },
                     put: {
                     },
@@ -57,12 +64,26 @@
 
         }
 
-        async init(){
+        async init(req){
 
-            this.data = {}
-            this.data.items = []
-            await this.setReference().save()
-            return this.data
+            if (req && req.session && req.session.cart_id){
+
+                await this.find(req.session.cart_id)
+                return this.data
+
+            } else if (req && req.cookies && req.cookies['connect.sid']){
+
+                this.data = {}
+                this.data.items = []
+                this.data._user_id = req.cookies['connect.sid']
+                await this.setReference().save()
+                req.session.cart_id = this.data._key
+                return this.data
+
+            } else {
+                this.error = "Unable to create cart"
+                return this
+            }
 
         }
 
@@ -105,18 +126,18 @@
                     return this
                 }
 
-                let added = this.data.items.findIndex((cart_item,i)=>{
+                let item_idx = this.data.items.findIndex((cart_item,i)=>{
                     return cart_item._key == item_data.item_key
                 })
 
-                if (added >= 0){
+                if (item_idx >= 0){
 
-                    if (this.data.items[added].quantity >= item.stock){
+                    if (this.data.items[item_idx].quantity >= item.stock){
                         this.error = 'Stock limit reached'
                         return this
                     }
 
-                    this.data.items[added].quantity++
+                    this.data.items[item_idx].quantity++
 
                 } else {
                     item.quantity = 1
@@ -133,6 +154,33 @@
                 return this
 
             }
+
+        }
+
+        async removeItem(item_data){
+
+            let item_idx = this.data.items.findIndex((cart_item,i)=>{
+                return cart_item._key == item_data.item_key
+            })
+
+            if (this.data.items[item_idx]){
+                this.data.items[item_idx].quantity--
+
+                if (this.data.items[item_idx].quantity <= 0){
+                    this.data.items.splice(item_idx,1)
+                }
+            }
+
+            await this.save()
+            return this.data
+
+        }
+
+        async empty(){
+
+            this.data.items = []
+            await this.save()
+            return this.data
 
         }
 

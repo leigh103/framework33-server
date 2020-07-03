@@ -22,9 +22,10 @@ const express = require('express'),
             ],
             side_nav:[
                 {link:'Dashboard',slug: '/dashboard', weight: 1, protected_guards:['admin'],subitems:[
-                    {link:'Mailbox',slug: '/dashboard/mailbox', weight:1},
-                    {link:'Logs',slug: '/dashboard/logs', weight:2},
-                    {link:'Components',slug: '/dashboard/components', weight:3}
+                    {link:'Overview',slug: '/dashboard', weight:1},
+                    {link:'Mailbox',slug: '/dashboard/mailbox', weight:2},
+                    {link:'Logs',slug: '/dashboard/logs', weight:3},
+                    {link:'Components',slug: '/dashboard/components', weight:4}
                 ]}
             ]
         },

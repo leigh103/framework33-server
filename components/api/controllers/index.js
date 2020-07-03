@@ -34,6 +34,9 @@ var express = require('express'),
                 if (req.session && req.session.user && req.session.user){
                     user_id = req.session.user._id
                     guard = req.session.user.guard
+                } else if (req.cookies['connect.sid']){
+                    user_id = req.cookies['connect.sid']
+                    guard = 'guest'
                 }
 
                 if (model && model.data && model.data._id && model.data._id == user_id || model && model.data && model.data._user_id && model.data._user_id == user_id){

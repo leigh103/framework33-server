@@ -240,7 +240,8 @@ a:hover {
   cursor: pointer;
   font-size: 0.9em;
 }
-.dashboard .side-nav .link .subitems a:hover {
+.dashboard .side-nav .link .subitems a:hover,
+.dashboard .side-nav .link .subitems a.active {
   background-color: rgba(255,255,255,0.2);
 }
 .dashboard .side-nav .link .subitems a:last-child {

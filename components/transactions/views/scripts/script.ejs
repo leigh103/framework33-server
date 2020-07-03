@@ -1,0 +1,62 @@
+
+    <script>
+
+        extendedController = function(){
+
+            <% if (typeof cart != 'undefined' && cart._key) { %>
+
+                scope.cart = <%- JSON.stringify(cart) %>
+
+                scope.addToCart = function(item_key, type){
+
+                    let payload = {
+                        _key: '<%- cart._key %>',
+                        item_key: item_key,
+                        type: type
+                    }
+
+                    scope.post('cart/add-item',payload).then((cart)=>{
+                        scope.notify('Item Added!')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                    })
+
+                }
+
+                scope.removeFromCart = function(item_key){
+
+                    let payload = {
+                        _key: '<%- cart._key %>',
+                        item_key: item_key
+                    }
+
+                    scope.post('cart/remove-item',payload).then((cart)=>{
+                        scope.cart = cart
+                        scope.notify('Item Removed')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                    })
+
+                }
+
+                scope.emptyCart = function(item_key, type){
+
+                    let payload = {
+                        _key: '<%- cart._key %>'
+                    }
+
+                    scope.post('cart/empty',payload).then((cart)=>{
+                        scope.cart = cart
+                        scope.notify('Cart Emptied')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                    })
+
+                }
+
+
+            <% } %>
+
+        }
+
+    </script>

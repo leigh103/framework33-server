@@ -43,7 +43,6 @@ const express = require('express'),
 
 
     let data = {
-        include_scripts: [settings.views+'/scripts/script.ejs','dashboard/views/scripts/script.ejs'],
         include_styles: [settings.views+'/styles/style.ejs'],
         cart_name: view.functions.capitalise(cart_name)
     }
@@ -59,19 +58,16 @@ const express = require('express'),
 
     routes.get('/'+cart_name, async(req, res) => {
 
-        if (!req.session.cart_id){
-            data.cart = await new Cart().init()
-            req.session.cart_id = data.cart._key
-        } else {
-            data.cart = await new Cart().find(req.session.cart_id)
-            data.cart = data.cart.get()
-        }
+        data.include_scripts = [settings.views+'/scripts/script.ejs']
+        data.cart = await new Cart().init(req)
 
         res.render(settings.views+'/cart.ejs',data)
 
     })
 
     routes.get('/dashboard/transactions/:status', async(req, res) => {
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
         view.current_view = 'transactions'
 
