@@ -2,7 +2,7 @@
 
     <body class="bg-white">
 
-        <div class="notification" app-show="view.notification.msg" app-click="view.notification = {}" anim="{'enter':'slide-left','exit':'slide-left'}">
+        <div class="notification" app-show="view.notification.msg" anim="{'enter':'slide-left','exit':'slide-left'}">
             <div class="background" app-class="view.notification.type"></div>
             <div app-bind="view.notification.msg" class="text pr-2">This is a message</div>
             <div class="icon"><i class="fas" app-class="view.notification.icon"></i></div>
@@ -15,7 +15,7 @@
         <%- include partials/footer.ejs %>
 
         <%- include partials/scripts.ejs %>
-        
+
         <% if (typeof include_scripts != 'undefined') { %>
 
             <% include_scripts.forEach((script,i)=>{ %>

@@ -8,7 +8,7 @@
                 !menu[i].protected_guards && typeof menu[i].authenticated == 'undefined' ||
                 typeof user != 'undefined' && user.guard && menu[i].protected_guards && menu[i].protected_guards.indexOf(user.guard) >= 0 ||
                 typeof user != 'undefined' && user.guard && menu[i].authenticated == true ||
-                typeof user == 'object' && menu[i].authenticated == false ||
+                typeof user == 'object' && !user.guard  && menu[i].authenticated == false ||
                 typeof user == 'undefined' && menu[i].authenticated == false
             ){ %>
                 <% if (menu[i].icon){ %><div class="icon"><%= menu[i].icon %></div><% } %>

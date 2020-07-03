@@ -269,7 +269,7 @@ const express = require('express'),
 
     }
 
-    const addMenu = (obj) => {
+    global.addMenu = (obj) => {
 
         async.forEach(Object.keys(obj.menu),(item, callback )=>{
 

@@ -109,7 +109,9 @@ const express = require('express'),
                 next()
             } else {
                 view.meta.title = 'Framework-33 | '+data.category.data.name
-                view.meta.description = data.category.data.description.substring(0,160)
+                if (data.category.data.description){
+                    view.meta.description = data.category.data.description.substring(0,160)
+                }
                 data.products = await new Products().all(['category like '+data.category.data._key])
                 data.products = data.products.data
                 res.render(settings.views+'/category.ejs',data)
@@ -120,8 +122,8 @@ const express = require('express'),
     })
 
 
-
 // export
+
 
     module.exports = functions
     module.exports.routes = routes

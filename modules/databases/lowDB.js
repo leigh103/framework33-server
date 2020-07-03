@@ -388,7 +388,7 @@
 
         }
 
-        first(fields){
+        first(){
 
             if (this.result && this.result.length > 0){
                 return this.result[0]
@@ -396,9 +396,17 @@
                 return this.result
             }
 
-
         }
 
+        last(){
+
+            if (this.result && this.result.length > 0){
+                return this.result[this.result.length-1]
+            } else {
+                return this.result
+            }
+
+        }
 
         hash(str){
             return sha2_256(str)

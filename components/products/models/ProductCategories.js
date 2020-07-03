@@ -63,7 +63,44 @@
 
         }
 
+        async postSave(){
+
+            await this.makeMenus()
+            return this
+
+        }
+
+        async makeMenus(){
+
+            let menus = {},
+                menu_item
+
+            menus.menu = {}
+            menus.menu.nav = []
+
+            if (this.data.name){
+
+                menu_item = {link:this.data.name, slug: this.data.slug, weight:view.menus.nav.length}
+                menus.menu.nav.push(menu_item)
+
+            } else {
+                this.data.map((category,i)=>{
+
+                    menu_item = {link:category.name, slug: category.slug, weight:i}
+                    menus.menu.nav.push(menu_item)
+
+                })
+
+            }
+
+            global.addMenu(menus)
+            return this
+
+        }
+
 
     }
+
+    new ProductCategories().all().makeMenus()
 
     module.exports = ProductCategories

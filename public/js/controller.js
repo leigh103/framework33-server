@@ -299,4 +299,11 @@
 
         }
 
+        if (document.cookie.indexOf("cookietest=") == -1){
+            document.cookie = "cookietest=1";
+            if (document.cookie.indexOf("cookietest=") != -1){
+                scope.notify("This site uses cookies to enhance your experience. By continuing to use the site, we'll assume you're ok with that. Yum!","success",30,"fa-cookie-bite")
+            }
+        }
+
     }

@@ -259,6 +259,10 @@
                 this.data = await db.create(this.settings.collection,this.data).first()
             }
 
+            if (this.postSave && typeof this.postSave == 'function'){
+                await this.postSave()
+            }
+
             return this
 
         }
