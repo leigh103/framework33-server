@@ -1,6 +1,8 @@
 
     controller = function(){
 
+        scope.extend = {}
+
         scope.view = {
             question: {
                 question:'',
@@ -295,10 +297,6 @@
                 window.location.href = '/dashboard/'+str1
             }
 
-        }
-
-        if (typeof extendedController == 'function'){
-            extendedController()
         }
 
     }
