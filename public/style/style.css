@@ -283,11 +283,21 @@ input[type="file"] {
   right: 100%;
   bottom: 100%;
 }
-a {
-  color: #1dc7d5;
+input.underline,
+select.underline,
+textarea.underline {
+  background: none;
+  text-decoration: none !important;
+  border-bottom: 1px solid #d2d6d9;
+  padding: 0 !important;
+  height: 3.5rem !important;
 }
-a:hover {
-  color: #1398a3;
+.page {
+  min-height: calc(100vh - 14rem);
+  margin-top: 4rem;
+}
+.page .h-100 {
+  min-height: calc(100vh - 14rem);
 }
 .list-item {
   display: flex;
@@ -418,10 +428,12 @@ a:hover {
   display: block;
 }
 .notification {
-  color: #fff;
-  background-color: #00d6c6;
+  color: #33424b;
+  background-color: #fbfbfb;
   border-radius: 6px;
-  box-shadow: 0px 15px 7px -10px rgba(0,0,0,0.2);
+  box-shadow: 4px 17px 56px -5px rgba(0,0,0,0.75);
+  top: auto;
+  bottom: 1rem;
 }
 .notification .icon {
   display: flex;
@@ -431,7 +443,8 @@ a:hover {
 }
 @media only screen and (max-width: 851px) {
   .notification {
-    max-width: 100vw;
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
   }
 }
 .notification.error {
@@ -439,8 +452,8 @@ a:hover {
   background-color: #ff8c8d;
 }
 .notification.success {
-  color: #fff;
-  background-color: #00d6c6;
+  color: #33424b;
+  background-color: #fbfbfb;
 }
 .notification-bar {
   background-color: #fff;
@@ -524,4 +537,8 @@ h4,
 h5,
 h6 {
   font-weight: 300;
+}
+html,
+body {
+  font-family: 'Montserrat', sans-serif;
 }

@@ -8,7 +8,7 @@
 const express = require('express'),
     routes = express.Router(),
 
-    cart_name = 'cart',
+    cart_name = view.ecommerce.cart_name,
 
     settings = {
         default_route: 'root',

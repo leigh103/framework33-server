@@ -12,6 +12,9 @@
             url: config.site.url,
             logo: config.site.logo
         },
+        ecommerce:{
+            cart_name: 'cart'
+        },
         users: config.users,
         basedir: global.basedir,
         functions:{

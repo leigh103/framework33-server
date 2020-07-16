@@ -1,42 +1,73 @@
 <% layout('default/page.ejs') -%>
 
-<section class="pt-7 pb-4">
+<section class="page">
 
-    <div class="contain text-left">
+    <div class="contain text-left h-100">
 
-        <h1 class="h2">Your <%- cart_name %></h1>
-        <h4><%- cart.reference %></h4>
+        <section class="grid col-2 col-s-1 gap-2 h-100">
 
-        <section>
+            <div class="pr-2 pt-7 pt-s-2">
 
-            <div class="grid col-4 gap-1 my-2">
-                <div class="colspan-2">Item</div>
-                <div class="text-center">Qty</div>
-                <div class="text-right">Price</div>
-            </div>
+                <h1 class="h4 text-weight-900">Shopping <%- view.ecommerce.cart_name %></h1>
 
-            <div>
-                <div class="grid col-4 gap-1 my-2" app-for="item in cart.items">
-                    <div class="colspan-2"><a app-click="removeFromCart(item._key)" class="text-33-red mr-1"><i class="fas fa-times"></i></a> <a href="" app-bind="item.name"></a></div>
-                    <div class="text-center" app-bind="item.quantity"></div>
-                    <div class="text-right">£<span app-bind="item.price"></span></div>
+                <div class="grid col-4 gap-1 mb-2 mt-5 text-33-grey">
+                    <div class="colspan-2">Item</div>
+                    <div class="text-center">Qty</div>
+                    <div class="text-right">Price</div>
                 </div>
-            </div>
 
-            <div class="grid col-4 gap-1 my-2">
-                <div><a app-click="emptyCart()">Empty <%- cart_name %></a></div>
-                <div></div>
-                <div></div>
-                <div class="grid col-2 gap-1">
-
-                    <div>Sub Total</div>
-                    <div class="text-right">£<span app-bind="cart.sub_total"></span></div>
-                    <div>VAT</div>
-                    <div class="text-right">£<span app-bind="cart.tax"></span></div>
-                    <div class="text-weight-500">Total</div>
-                    <div class="text-right text-weight-500">£<span app-bind="cart.total"></span></div>
-
+                <div>
+                    <div class="grid col-4 gap-1 my-2" app-for="item in cart.items">
+                        <div class="colspan-2 text-weight-700"><a href="" app-bind="item.name"></a></div>
+                        <div class="text-center" app-bind="item.quantity"></div>
+                        <div class="text-right text-weight-700">£<span app-bind="item.price"></span></div>
+                    </div>
                 </div>
+
+                <div class="grid col-4 gap-1 my-5">
+                    <div><a app-click="emptyCart()">Empty <%- view.ecommerce.cart_name %></a></div>
+                    <div></div>
+                    <div class="colspan-2 grid col-2">
+
+                        <div class="text-weight-500 text-33-grey text-right">Total</div>
+                        <div class="text-right text-weight-700 h4">£<span app-bind="cart.total"></span></div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="h-100 bg-33-light-grey rounded p-3 pt-7 pt-s-2">
+
+                <h2 class="h4 text-weight-900">Billing and Shipping</h2>
+
+                <form autocomplete="on" style="margin-top: -0.3rem">
+                    <div class="flex mt-4">
+
+                        <select class="flex-1 underline">
+                            <option selected disabled value="">Title...</option>
+                            <option value="Mr">Mr</option>
+                            <option value="Dr">Dr</option>
+                            <option value="Mrs">Mrs</option>
+                            <option value="Miss">Miss</option>
+                            <option value="Ms">Ms</option>
+                        </select>
+
+                        <input type="text" placeholder="Your Name" class="flex-2 underline" id="name" name="name" autocomplete="name">
+
+                    </div>
+
+                    <input type="text" placeholder="Address Line 1" class="underline" name="address_line1">
+                    <input type="text" placeholder="Address Line 2" class="underline" name="address_line2">
+                    <input type="text" placeholder="Address City" class="underline" name="city">
+
+                    <div class="flex">
+                        <input type="text" placeholder="Address Postcode" class="underline flex-1" name="postal_code">
+                        <input type="tel" placeholder="Mobile No." class="underline flex-2" name="tel">
+                    </div>
+
+                </form>
+
+                <button class="btn bg-33-green thick w-100 mt-5 text-weight-700">Checkout <i class="fas fa-chevron-right ml-1"></i></button>
             </div>
 
         </section>

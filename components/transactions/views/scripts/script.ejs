@@ -16,7 +16,7 @@
                     }
 
                     scope.post('cart/add-item',payload).then((cart)=>{
-                        scope.notify('Item Added!')
+                        scope.notify('Item Added! <a href="/<%- view.ecommerce.cart_name.toLowerCase() %>">View <%- view.ecommerce.cart_name %></a>')
                     }).catch((err)=>{
                         scope.notify(err,'error',5,'fa-exclamation-circle')
                     })
@@ -24,6 +24,10 @@
                 }
 
                 scope.removeFromCart = function(item_key){
+
+                    if (item_key == 'item._key'){
+                        item_key = 0
+                    }
 
                     let payload = {
                         _key: '<%- cart._key %>',

@@ -1,9 +1,11 @@
 .notification {
 
-    color: white;
-    background-color: #00d6c6;
+    color: $text-black;
+    background-color: $color-light-grey;
     border-radius: $border-radius;
-    box-shadow: $shadow;
+    box-shadow: $shadow-lg;
+    top: auto;
+    bottom: 1rem;
 
     .icon {
         display:flex;
@@ -13,7 +15,8 @@
     }
 
     @media $small {
-        max-width: 100vw;
+        width: calc(100vw - 2rem);
+        max-width: calc(100vw - 2rem);
     }
 
     &.error {
@@ -22,8 +25,8 @@
     }
 
     &.success {
-        color: white;
-        background-color: #00D6C6
+        color: $text-black;
+        background-color: $color-light-grey;
     }
 
     &-bar {
