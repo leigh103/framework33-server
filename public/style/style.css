@@ -530,6 +530,14 @@ textarea.underline {
 .table.list-items > .row > .cell.flex-auto {
   flex: auto;
 }
+.tabs a {
+  display: inline-block;
+  margin-right: 1rem;
+  padding-bottom: 0.5rem;
+}
+.tabs a.active {
+  border-bottom: 2px solid;
+}
 h1,
 h2,
 h3,

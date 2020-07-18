@@ -129,14 +129,33 @@
 
             }
 
-            scope.push = function(obj,item){
+            scope.push = function(obj,item,input){
 
-                obj.push(item)
+                if (typeof obj == 'string'){
+                    _.set(scope,obj,[])
+                    obj = _.get(scope,obj)
+                }
+
+
+
+                if (input){
+                    if (typeof item == 'string'){
+                        item = {
+                            _key:obj.length,
+                            value: item
+                        }
+                    }
+                    obj.push(item)
+                    _.set(scope,input,'')
+                } else {
+                    obj.push(item)
+                }
 
             }
 
             scope.splice = function(obj,item){
-                if (obj && obj.lenth > 0){
+
+                if (obj && obj.length > 0){
                     let idx = obj.findIndex((itm,i)=>{
                         return itm == item
                     })
@@ -144,6 +163,7 @@
                         obj.splice(idx,1)
                     }
                 }
+
             }
 
             scope.getMailbox = function(user_id){

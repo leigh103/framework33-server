@@ -161,6 +161,15 @@
 
                     return parseFloat(value).toFixed(2)
 
+                } else if (field.type == 'discount'){
+
+                    if (value && value.match(/^-*[0-9]{1,3}%*$/)){
+                        return value
+                    } else if (value){
+                        this.error = 'Invalid adjustment value. Should be a positive or negative number, or a positive or negative percentage'
+                        return ''
+                    }
+
                 } else if (field.type == 'user_id' && typeof value == 'string' && value.match(/^(.*)\/[0-9]+$/)){
 
                     return value

@@ -206,8 +206,12 @@ const express = require('express'),
     app.locals.view = global.view
 
     watch(['./components'], { recursive: true }, function(evt, name) {
-        log('Components Reloaded')
-        loadComponents()
+
+        if (config.site.mode == 'production'){
+            log('Components Reloaded')
+            loadComponents()
+        }
+
     });
 
     server.listen(config.http.port, function() {

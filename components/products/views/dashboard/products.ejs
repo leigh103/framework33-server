@@ -1,0 +1,150 @@
+<% layout('default/dashboard.ejs') -%>
+
+    <div class="grid col-2 mb-3">
+        <div class="flex flex-middle-left">
+            <h3><%- title %></h3>
+        </div>
+        <div class="flex flex-middle-right">
+            <div class="flex-1 flex">
+                <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
+                <input type="text" class="" onkeyup="scope.searchApi('<%- table %>',this.value)">
+            </div>
+            <button class="flex-none btn highlight" app-click="editProduct('<%- table %>','')">New <%- view.functions.parseName(table,true) %></button>
+        </div>
+    </div>
+
+    <%- include(basedir+'/components/dashboard/views/partials/table.ejs') %>
+
+    <div id="context" class="context dropdown text-left" style="display: none">
+        <div class="link" app-click="editProduct('<%- table %>',context)">
+            <i class="fas fa-pen-alt"></i>
+            Edit
+        </div>
+        <div class="link" app-click="deleteItem('<%- table %>',context)">
+            <i class="fas fa-trash"></i>
+            Delete
+        </div>
+    </div>
+
+
+    <div class="modal" app-show="view.modal == 'show_product_edit'" anim="{'enter':'fade-in'}">
+
+        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}" style="width:85vw;height:85vh">
+
+            <div class="grid col-2 pb-1">
+                <div>
+                    <h4 class="text-light capitalise">
+                        <span app-show="new._id">Edit Product</span>
+                        <span app-hide="new._id">Add New <%- view.functions.depluralise(table) %></span>
+                    </h4>
+                </div>
+                <div class="text-right">
+                    <h4 class="text-light clickable" onclick="modalCloseAll()">&times;</h4>
+                </div>
+            </div>
+
+            <div class="tabs my-2" app-init="view.tab = 'details'">
+                <a app-click="view.tab = 'details'" app-class="{'active':view.tab == 'details'}">Details</a>
+                <a app-click="view.tab = 'gallery'" app-class="{'active':view.tab == 'gallery'}">Gallery</a>
+                <a app-click="view.tab = 'prices'" app-class="{'active':view.tab == 'prices'}">Prices</a>
+                <a app-click="view.tab = 'attributes'" app-class="{'active':view.tab == 'attributes'}">Attributes</a>
+                <a app-click="view.tab = 'customisation'" app-class="{'active':view.tab == 'customisation'}">Customisation</a>
+            </div>
+
+            <div app-show="view.tab == 'details'">
+
+                <div class="grid pb-2 gap-1 col-2" style="align-items: start;">
+
+                    <div class="rowspan-5 flex flex-column flex-middle-left">
+                        <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="new.image_1" class="image_1"></label>
+                        <input id="image_1" type="file" app-model="new.image_1">
+                    </div>
+
+                    <div class="flex flex-column flex-middle-left">
+                        <label>Name</label>
+                        <input type="text" app-model="new.name" placeholder="Add a product name">
+                    </div>
+
+                    <div class="flex flex-column flex-middle-left">
+                        <label>Slug</label>
+                        <input type="text" app-model="new.slug" placeholder="Add a URL">
+                    </div>
+
+                    <div class="flex flex-column flex-middle-left">
+                        <label>Category</label>
+                        <select app-model="new.category">
+
+                            <% var option_data = view.functions.getOptionData('product_categories') %>
+                            <% option_data.forEach((option)=>{ %>
+                                <option value="<%- option._key %>"><%- option.name %></option>
+                            <% }) %>
+
+                        </select>
+                    </div>
+
+                    <div class="flex flex-column flex-middle-left">
+                        <label>Stock</label>
+                        <input type="number" app-model="new.stock" placeholder="Stock number">
+                    </div>
+
+                    <div class="colspan-2 rowspan-2 flex flex-column flex-middle-left">
+                        <label>Descripton</label>
+                        <textarea app-model="new.description" placeholder="Add a description"></textarea>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div app-show="view.tab == 'gallery'">
+
+                <div class="grid pb-2 gap-1 col-3" style="align-items: start;">
+
+                    <% [1,2,3,4,5,6].forEach((idx)=>{ %>
+
+                        <div class="">
+                            <label for="image_<%- idx %>" class="clickable"><img src="/images/Product_Placeholder.svg" app-src="new.gallery.image_<%- idx %>" class="image_<%- idx %>"></label>
+                            <input id="image_<%- idx %>" type="file" app-model="new.gallery.image_<%- idx %>">
+                        </div>
+
+                    <% }) %>
+
+                </div>
+
+            </div>
+
+            <div app-show="view.tab == 'prices'">
+
+                <div class="grid pb-2 gap-1 col-4" style="align-items: start;">
+                    <div class="flex flex-column flex-middle-left">
+                        <label>Price</label>
+                        <input type="text" app-model="new.price" placeholder="Item Price">
+                    </div>
+                    <div class="flex flex-column flex-middle-left">
+                        <label>Adjustment</label>
+                        <input type="text" app-model="new.adjustment" placeholder="Discount">
+                    </div>
+                </div>
+
+            </div>
+
+            <div app-show="view.tab == 'attributes'">
+
+            </div>
+
+            <div app-show="view.tab == 'customisation'">
+
+            </div>
+
+            <div class="text-right">
+                <button class="btn highlight capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
+                    <span>Save <%- view.functions.depluralise(table) %></span>
+                </button>
+                <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
+                    <span>Add <%- view.functions.depluralise(table) %></span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>

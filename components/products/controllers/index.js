@@ -16,7 +16,8 @@ const express = require('express'),
             side_nav: [
                 {link:'Products',slug: '/dashboard/products', weight:1, subitems:[
                     {link:'All Products',slug: '/dashboard/products', weight:1},
-                    {link:'Categories',slug: '/dashboard/products/categories', weight:2}
+                    {link:'Categories',slug: '/dashboard/products/categories', weight:2},
+                    {link:'Attributes',slug: '/dashboard/products/attributes', weight:3}
                 ]}
             ]
         }
@@ -62,18 +63,33 @@ const express = require('express'),
 
     })
 
+    routes.get('/dashboard/products/attributes', async(req, res) => {
+
+        view.current_view = 'products'
+        view.current_sub_view = 'attributes'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+
+        data.title = 'Product Attributes'
+        data.table = 'product_attributes'
+
+        data.fields = new ProductAttributes().settings.fields
+
+        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+    })
+
     routes.get('/dashboard/products/:key?', async(req, res) => {
 
         view.current_view = 'products'
         view.current_sub_view = 'all products'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
 
         data.title = 'Products'
         data.table = 'products'
 
         data.fields = new Products().settings.fields
 
-        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        res.render(settings.views+'/dashboard/products.ejs',data)
 
     })
 

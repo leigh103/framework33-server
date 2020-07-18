@@ -1,0 +1,28 @@
+<script>
+
+    extend.products = function(){
+
+        scope.editProduct = function(collection, obj, no_modal){
+
+            contextCloseAll()
+
+            scope.resetNew().then(()=>{
+            //    console.log(collection, obj)
+
+                if (typeof obj == 'string'){
+                    scope.new._key = obj
+                } else {
+                    scope.new = JSON.parse(JSON.stringify(obj))
+                }
+
+                if (!no_modal){
+                    scope.view.modal = 'show_product_edit'
+                }
+
+            })
+
+        }
+
+    }
+
+</script>
