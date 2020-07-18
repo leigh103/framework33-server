@@ -134,7 +134,7 @@
                     url = '/api/'+collection
                 }
 
-                scope.view.modal = false
+            //    scope.view.modal = false
 
                 http('post',url,obj)
                     .then((data) => {

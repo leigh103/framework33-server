@@ -2,6 +2,8 @@
 
     extend.products = function(){
 
+        scope.view.upload_text = "Upload Image"
+
         scope.editProduct = function(collection, obj, no_modal){
 
             contextCloseAll()
@@ -19,6 +21,27 @@
                     scope.view.modal = 'show_product_edit'
                 }
 
+            })
+
+        }
+
+        scope.upload = function(image, obj, input){
+
+            let payload = {
+                base64: image,
+                file_name: "test-image-upload",
+                file_path: "products"
+            }
+
+            scope.view.upload_text = 'Uploading...'
+
+            http('post','/api/image/save',payload).then((data) => {
+                if (obj){
+                    scope.push(obj,data, input)
+                }
+                scope.view.upload_text = 'Upload Image'
+            }).catch((err)=>{
+                scope.notify(err,'error')
             })
 
         }

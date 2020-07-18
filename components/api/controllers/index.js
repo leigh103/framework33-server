@@ -103,7 +103,15 @@ var express = require('express'),
                 model = await new global[model_class_name]().find(req.params.id)
             } else {
                 method = 'all'
-                model = await new global[model_class_name]().all(query)
+                model = await new global[model_class_name]()
+
+                if (model.all){ // if the class exists and the all function exists
+                    model.all(query)
+                } else { // else fail
+                    res.json(settings.not_found)
+                    return false
+                }
+
             }
 
             functions.accessGranted(model,req,method).then(async ()=>{

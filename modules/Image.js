@@ -5,6 +5,17 @@
 
         constructor(base64, file_name, file_path){
 
+            if (!base64){
+                this.error = "No data provided"
+                return this
+            }
+
+            if (typeof base64 == 'object'){
+                file_name = base64.file_name
+                file_path = base64.file_path
+                base64 = base64.base64
+            }
+
             this.base64 = base64
             this.file_name = file_name
             this.ext = base64.split(';')[0].split('/')[1]
@@ -17,6 +28,26 @@
             this.dir_check2 = this.dir_check1+'/'+this.dir2
             this.name = this.dir_check2+'/'+file_name+'-'+this.time+'.'+this.ext
             this.result = '/images/'+file_path+'/'+this.dir1+'/'+this.dir2+'/'+file_name+'-'+this.time+'.'+this.ext
+
+            this.routes = {
+                public: { // unauth'd routes
+
+                },
+                private: { // auth'd routes
+                    get: {
+
+                    },
+                    post: {
+                        save:['admin']
+                    },
+                    put: {
+                        save:['admin']
+                    },
+                    delete: {
+                        delete:['admin']
+                    }
+                }
+            }
 
         }
 

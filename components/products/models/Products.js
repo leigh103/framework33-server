@@ -11,14 +11,7 @@
                 collection: 'products',
                 fields: [
                     {name:'image_1',input_type:'image',placeholder:'Image', type:'image', required:false},
-                    {name:'gallery', type:'object', required:false, subitems:[
-                        {name:'image_1',input_type:'image',placeholder:'Image 1', type:'image', required:false},
-                        {name:'image_2',input_type:'image',placeholder:'Image 2', type:'image', required:false},
-                        {name:'image_3',input_type:'image',placeholder:'Image 3', type:'image', required:false},
-                        {name:'image_4',input_type:'image',placeholder:'Image 4', type:'image', required:false},
-                        {name:'image_5',input_type:'image',placeholder:'Image 5', type:'image', required:false},
-                        {name:'image_6',input_type:'image',placeholder:'Image 5', type:'image', required:false}
-                    ]},
+                    {name:'gallery',input_type:'img_array',placeholder:'Gallery', type:'object', required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
                     {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},

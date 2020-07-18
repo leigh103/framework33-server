@@ -136,16 +136,16 @@
                     obj = _.get(scope,obj)
                 }
 
-
-
                 if (input){
                     if (typeof item == 'string'){
                         item = {
                             _key:obj.length,
-                            value: item
+                            value: item.replace(/"/g,'')
                         }
                     }
+
                     obj.push(item)
+                    console.log(obj)
                     _.set(scope,input,'')
                 } else {
                     obj.push(item)
