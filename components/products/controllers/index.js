@@ -29,6 +29,28 @@ const express = require('express'),
 
     functions = {
 
+        getPrice: (price, adjustment) => {
+
+            if (adjustment){
+
+                if (adjustment.match(/%/)){
+
+                    adjustment_value = adjustment.replace(/%/,'')
+                    adjustment_value = (price/100)*adjustment_value
+                    return (parseFloat(price)+parseFloat(adjustment_value)).toFixed(2)
+
+                } else {
+
+                    return (parseFloat(price)+parseFloat(adjustment)).toFixed(2)
+
+                }
+
+            } else {
+                return price
+            }
+
+        }
+
     }
 
 
@@ -99,7 +121,7 @@ const express = require('express'),
 
         res.locals.functions = functions
 
-        data.include_scripts = ['transactions/views/scripts/script.ejs']
+        data.include_scripts = ['transactions/views/scripts/script.ejs','products/views/scripts/products_client.ejs']
 
         let category, slug
 

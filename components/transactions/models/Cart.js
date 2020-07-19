@@ -109,7 +109,14 @@
 
         async addItem(item_data){
 
+            let qty_check
             item_data.type = parseClassName(item_data.type)
+
+            if (!item_data.quantity){
+                item_data.quantity = 1
+            } else {
+                item_data.quantity = parseInt(item_data.quantity)
+            }
 
             if (typeof global[item_data.type] == 'function'){
 
@@ -132,15 +139,23 @@
 
                 if (item_idx >= 0){
 
-                    if (this.data.items[item_idx].quantity >= item.stock){
-                        this.error = 'Stock limit reached'
+                    qty_check = this.data.items[item_idx].quantity+item_data.quantity
+
+                    if (qty_check > item.stock || item.items_per_customer && qty_check > item.items_per_customer){
+                        this.error = "We are currently unable to supply that number of this particular item. Please lower the quantity and try again."
                         return this
                     }
 
-                    this.data.items[item_idx].quantity++
+                    this.data.items[item_idx].quantity = qty_check
 
                 } else {
-                    item.quantity = 1
+
+                    if (item_data.quantity > item.stock || item.items_per_customer && item_data.quantity > item.items_per_customer){
+                        this.error = "We are currently unable to supply that number of this particular item. Please lower the quantity and try again."
+                        return this
+                    }
+
+                    item.quantity = item_data.quantity
                     item.type = item_data.type
                     this.data.items.push(item)
                 }
@@ -183,7 +198,7 @@
         async empty(){
 
             this.data.items = []
-            
+
             await this.calcTotals()
             await this.save()
             return this.data

@@ -29,7 +29,7 @@ a:hover {
   color: #1398a3;
 }
 .bg-light-grey {
-  background-color: #fbfbfb;
+  background-color: #f8f8f8;
 }
 .btn:hover {
   color: #fff;
@@ -138,7 +138,7 @@ a:hover {
   opacity: 0.5;
 }
 .dashboard .mailbox .messages {
-  background-color: #fbfbfb;
+  background-color: #f8f8f8;
   height: 100%;
   overflow-y: auto;
   padding: 1rem;
@@ -175,14 +175,13 @@ a:hover {
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #33424b;
   text-align: left;
   font-size: 0.9rem;
   z-index: 1;
 }
 @media (min-width: 1180px) {
   .dashboard .side-nav {
-    flex: 0 0 14rem;
+    flex: 0 0 18rem;
   }
 }
 @media (min-width: 851px) and (max-width: 1180px) {
@@ -195,14 +194,17 @@ a:hover {
     display: none;
   }
 }
+.dashboard .side-nav .header {
+  height: 13.4rem;
+  padding: 3.2rem 3rem 0 3rem;
+}
 .dashboard .side-nav .logo {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
   height: 3.5rem;
-  padding: 0 1.5rem;
-  margin: 2rem 0;
+  margin-bottom: 1rem;
 }
 .dashboard .side-nav .logo a {
   display: block;
@@ -214,20 +216,23 @@ a:hover {
   height: 100%;
   width: auto;
 }
+.dashboard .side-nav .user-info {
+  margin-bottom: 2rem;
+}
 .dashboard .side-nav .link a {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
   height: 3rem;
-  padding: 0 1.5rem;
+  padding: 0 3rem;
   cursor: pointer;
 }
 .dashboard .side-nav .link a:hover {
   background-color: rgba(255,255,255,0.5);
 }
 .dashboard .side-nav .link a.active {
-  background-color: rgba(255,255,255,0.5);
+  background-color: #f8f8f8;
   border-left: 3px solid #1dc7d5;
 }
 .dashboard .side-nav .link .subitems a {
@@ -236,7 +241,7 @@ a:hover {
   justify-content: flex-start;
   width: 100%;
   height: 2.5rem;
-  padding: 0 2rem 0 3rem;
+  padding: 0 2rem 0 4rem;
   cursor: pointer;
   font-size: 0.9em;
 }
@@ -253,17 +258,21 @@ a:hover {
 }
 .dashboard .side-nav a {
   display: block;
-  color: #fff;
+  color: #33424b;
 }
 .dashboard .page {
-  background-color: #fbfbfb;
+  background-color: #f8f8f8;
   height: 100vh;
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 2rem;
+  padding: 3rem;
   text-align: left;
   z-index: 2;
+}
+.dashboard .page .header {
+  height: 10rem;
+  align-items: start;
 }
 .dashboard .page-full {
   margin: -2rem;
@@ -353,7 +362,7 @@ body:not(.dashboard) .page .h-100 {
   z-index: 500;
 }
 .modal-body {
-  background-color: #fbfbfb;
+  background-color: #f8f8f8;
   padding: 1.7rem 2rem 2rem 2rem;
   min-width: 40vw;
   max-width: 60vw;
@@ -429,7 +438,7 @@ body:not(.dashboard) .page .h-100 {
 }
 .notification {
   color: #33424b;
-  background-color: #fbfbfb;
+  background-color: #f8f8f8;
   border-radius: 6px;
   box-shadow: 4px 17px 56px -5px rgba(0,0,0,0.75);
   top: auto;
@@ -453,7 +462,7 @@ body:not(.dashboard) .page .h-100 {
 }
 .notification.success {
   color: #33424b;
-  background-color: #fbfbfb;
+  background-color: #f8f8f8;
 }
 .notification-bar {
   background-color: #fff;
@@ -545,6 +554,15 @@ h4,
 h5,
 h6 {
   font-weight: 300;
+}
+.h5 {
+  font-size: 1.25rem !important;
+}
+.h6 {
+  font-size: 1.12rem !important;
+}
+.p {
+  font-size: 1rem !important;
 }
 html,
 body {

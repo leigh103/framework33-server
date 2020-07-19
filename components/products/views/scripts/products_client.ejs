@@ -1,0 +1,21 @@
+<script>
+
+    extend.products = function(){
+
+        scope.view.gallery_image = false
+        scope.view.add_item = {
+            quantity: 1,
+            _key:''
+        }
+
+        scope.quantity = function(type){
+            if (type == 'add'){
+                scope.view.add_item.quantity++
+            } else if (scope.view.add_item.quantity > 1){
+                scope.view.add_item.quantity--
+            }
+        }
+
+    }
+
+</script>

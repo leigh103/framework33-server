@@ -1,8 +1,9 @@
 <% layout('default/dashboard.ejs') -%>
 
-    <div class="grid col-2 mb-3">
-        <div class="flex flex-middle-left">
-            <h3><%- title %></h3>
+    <div class="grid col-2 header">
+        <div class="flex flex-middle-left flex-column">
+            <h3 class="text-weight-600"><%- title %></h3>
+            <p class="transparent-2" app-show="<%- table %>">This table contains <span app-bind="<%- table %>.length"></span> items</p>
         </div>
         <div class="flex flex-middle-right">
             <div class="flex-1 flex">

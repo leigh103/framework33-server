@@ -12,7 +12,8 @@
                     let payload = {
                         _key: '<%- cart._key %>',
                         item_key: item_key,
-                        type: type
+                        type: type,
+                        quantity: scope.view.add_item.quantity
                     }
 
                     scope.post('cart/add-item',payload).then((cart)=>{

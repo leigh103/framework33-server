@@ -5,16 +5,47 @@
     <div class="contain grid col-2 col-s-1 gap-2 text-left">
 
         <div>
-            <img src="<%- product.image_1 %>">
+            <img src="<%- product.image_1 %>" app-src="view.gallery_image">
+            <div class="overflow-x" style="height: 5rem">
+                <% if (typeof product.gallery != 'undefined'){ %>
+                    <% product.gallery.forEach((image)=>{ %>
+                        <img src="<%- image.value %>" class="inline-block h-100 clickable" app-click="view.gallery_image = '<%- image.value %>'">
+                    <% }) %>
+                <% } %>
+            </div>
         </div>
 
-        <div>
+        <div class="pt-2">
 
-            <h1 class="h4"><%- product.name %></h1>
-            <a class="block my-1" href="/<%- category.data.slug %>"><%- category.data.name %></a>
+            <div class="">
+                <a class="block" href="/<%- category.data.slug %>"><%- category.data.name %></a>
+                <h1 class="h3 text-weight-600"><%- product.name %></h1>
+                <h2 class="h4 py-2 text-primary text-weight-600">
+                    £<%- functions.getPrice(product.price, product.adjustment) %>
+                    <% if (product.adjustment){ %>
+                        <br>
+                        <span class="h6 strikethrough text-33-blue">£<%- product.price %></span>
+                        <% if (product.adjustment.match(/%/)){ %>
+                            <span class="p text-right text-33-blue"><%- Math.abs(product.adjustment.replace(/%/g,'')) %>% off</span>
+                        <% } else { %>
+                            <span class="p text-right text-33-blue">£<%- Math.abs(product.adjustment) %> off!</span>
+                        <% } %>
+                    <% } %>
+                </h2>
+
+            </div>
+
+
             <p><%- product.description %></p>
 
-            <button class="btn bg-topaz my-2" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Add to Cart</button>
+            <div class="flex my-2">
+                <div class="flex flex-1">
+                    <button class="flex-1 btn bg-33-white text-33-grey" app-click="quantity('minus')"><i class="fas fa-minus"></i></button>
+                    <input type="text" class="flex-1 shadow text-center" app-model="view.add_item.quantity">
+                    <button class="flex-1 btn bg-33-white text-33-grey" app-click="quantity('add')"><i class="fas fa-plus"></i></button>
+                </div>
+                <button class="flex-1 btn bg-33-blue" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Add to <%- view.functions.capitalise(view.ecommerce.cart_name) %></button>
+            </div>
 
         </div>
 

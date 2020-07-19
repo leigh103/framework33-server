@@ -1,6 +1,13 @@
 
-        <div class="logo">
-            <a href="/"><img src="/images/logo.svg"></a>
+        <div class="header">
+            <div class="logo">
+                <a href="/"><img src="<%- user.avatar %>"></a>
+            </div>
+
+            <div class="user-info">
+                <p class="h5 text-weight-600"><%- view.functions.getTimeOfDay() %> <%- user.name.first %></p>
+                <p class="text-small transparent-2">Logged in as <%- user.guard %></p>
+            </div>
         </div>
 
         <div class="">

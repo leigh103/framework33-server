@@ -80,13 +80,13 @@
 
             if (this.data.name){
 
-                menu_item = {link:this.data.name, slug: this.data.slug, weight:view.menus.nav.length}
+                menu_item = {link:this.data.name, slug: '/'+this.data.slug, weight:view.menus.nav.length}
                 menus.menu.nav.push(menu_item)
 
             } else {
                 this.data.map((category,i)=>{
 
-                    menu_item = {link:category.name, slug: category.slug, weight:i}
+                    menu_item = {link:category.name, slug: '/'+category.slug, weight:i}
                     menus.menu.nav.push(menu_item)
 
                 })

@@ -44,6 +44,13 @@
 
             },
 
+            truncate:(input, words) => {
+                if (!words){
+                    words = 10
+                }
+                return input.split(" ").splice(0,words).join(" ")
+            },
+
             parseName:(input, depluralise)=>{
                 input = input.replace(/^_/,'').replace(/_/g,' ')
                 input = view.functions.capitalise(input)
@@ -67,14 +74,6 @@
                 return moment(date).format(format)
             },
 
-            getDay:(date)=>{
-
-                var dayNames = {1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat', 7: 'Sun'}
-                date = new Date(date)
-                return dayNames[date.getDay()]
-
-            },
-
             getOptionData:(table)=>{
 
                 table = parseClassName(table)
@@ -84,6 +83,32 @@
                     return data
                 } else {
                     return []
+                }
+
+            },
+
+            getDay:(date)=>{
+
+                var dayNames = {1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat', 7: 'Sun'}
+                date = new Date(date)
+                return dayNames[date.getDay()]
+
+            },
+
+            getTimeOfDay:(date)=>{
+
+                if (!date){
+                    date = moment().format('HH')
+                } else {
+                    date = moment(date).format('HH')
+                }
+
+                if (date < 12){
+                    return 'Morning'
+                } else if (date >= 12 && date < 17){
+                    return 'Afternoon'
+                } else {
+                    return 'Evening'
                 }
 
             },
