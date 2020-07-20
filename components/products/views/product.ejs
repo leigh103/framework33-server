@@ -44,7 +44,11 @@
                     <input type="text" class="flex-1 shadow text-center" app-model="view.add_item.quantity">
                     <button class="flex-1 btn bg-33-white text-33-grey" app-click="quantity('add')"><i class="fas fa-plus"></i></button>
                 </div>
-                <button class="flex-1 btn bg-33-blue" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Add to <%- view.functions.capitalise(view.ecommerce.cart_name) %></button>
+                <% if (product.stock){ %>
+                    <button class="flex-1 btn bg-33-blue" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Add to <%- view.functions.capitalise(view.ecommerce.cart_name) %></button>
+                <% } else { %>
+                    <button class="flex-1 btn bg-33-blue transparent" >Out of stock</button>
+                <% } %>
             </div>
 
         </div>

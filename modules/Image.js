@@ -18,8 +18,17 @@
 
             this.base64 = base64
             this.file_name = file_name
-            this.ext = base64.split(';')[0].split('/')[1]
-            this.base64Data = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/i, "")
+            this.ext = base64.match(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i)[1]
+
+            if (this.ext == 'svg+xml'){
+                this.ext = 'svg'
+            }
+
+            if (this.ext == 'jpeg'){
+                this.ext = 'jpg'
+            }
+
+            this.base64Data = base64.replace(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i, "")
             this.time = Date.now()+''
             this.dir1 = this.time.substr(0,3)
             this.dir2 = this.time.substr(3,1)

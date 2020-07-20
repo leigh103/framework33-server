@@ -37,7 +37,13 @@
 
                 if (plural && input && typeof input == 'string'){
                     let re = RegExp(plural[0]+'$')
-                    return input.replace(re,'')
+
+                    if (input.match(/ies/)){
+                        return input.replace('ies','y')
+                    } else {
+                        return input.replace(re,'')
+                    }
+
                 } else {
                     return input
                 }

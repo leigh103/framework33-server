@@ -218,14 +218,7 @@
 
                     if (value.match(/base64/)){
 
-                        let file_name = key
-                        if (data.full_name){
-                            file_name = data.full_name.replace(/\s/g,'-').replace(/[.,!@£$%^&*()\[\]{}'"><?;:|\\/]/g,'').toLowerCase()
-                        } else if (typeof data.name == 'string'){
-                            file_name = data.name.replace(/\s/g,'-').replace(/[.,!@£$%^&*()\[\]{}'"><?;:|\\/]/g,'').toLowerCase()
-                        }
-
-                        return await new Image(value,file_name,this.settings.collection).save()
+                        return await new Image(value,key,this.settings.collection).save()
 
                     } else if (!value.match(/(jpg|jpeg|tiff|psd|png|gif|svg|bmp)$/)){
 
@@ -235,6 +228,11 @@
                     } else {
                         return value
                     }
+
+                } else if (field.type == 'array' && typeof value == 'object'){
+
+                    return value
+
                 } else if (field.type == 'object' && typeof value == 'object'){
 
                     return value

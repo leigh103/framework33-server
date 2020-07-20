@@ -12,8 +12,16 @@
                 fields: [
                     {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
+                    {name:'sub_title',input_type:'text',placeholder:'Sub Title', type:'string', required:true},
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
-                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false}
+                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false},
+                    {name:'sub_categories',input_type:'array',placeholder:'Sub Categories', type:'array', required:false, subitems:[
+                        {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
+                        {name:'name',input_type:'text',placeholder:'Name', type:'string', required:false},
+                        {name:'sub_title',input_type:'text',placeholder:'Sub Title', type:'string', required:false},
+                        {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
+                        {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false}
+                    ]},
                 ]
             }
 
