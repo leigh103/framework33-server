@@ -156,7 +156,6 @@
                         }
 
                         resolve(data)
-                        scope.resetNew()
 
                     }).catch((err) => {
                         reject(err)
@@ -207,7 +206,6 @@
                         }
 
                         resolve(data)
-                        scope.resetNew()
 
                     }).catch((err) => {
                         console.log(err)
