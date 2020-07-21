@@ -1,3 +1,5 @@
+
+<div class="hidden" id="stripe-id" data-stripe-id="<%- stripe_id %>"></div>
 <form action="/charge" method="post" id="payment-form" class="stripe">
     <div class="form-row">
         <label for="card-element">
@@ -21,8 +23,8 @@
         <% } %>
     </div>
     <% if (typeof user == "object"){ %>
-        <% if (typeof user.name != "undefined"){ %>
-            <input type="hidden" value="<%- functions.parseName(user.name) %>" id="customer_name">
+        <% if (typeof user.full_name != "undefined"){ %>
+            <input type="hidden" value="<%- user.full_name %>" id="customer_name">
         <% } %>
         <% if (typeof user.email != "undefined"){ %>
             <input type="hidden" value="<%- user.email %>" id="customer_email">

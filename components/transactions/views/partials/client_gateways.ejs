@@ -8,7 +8,7 @@
 
             <% if (gateway.name == 'Stripe'){ %>
 
-                <button class="btn w-100 mb-1" href="/checkout/stripe"><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></button>                
+                <a class="btn w-100 mb-1" href="/checkout/stripe"><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></a>                
 
             <% } else { %>
                 <button class="btn w-100 mb-1"<% if (gateway.url){ %>href="<%- gateway.url %>" target="payment"<% } %>><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></button>

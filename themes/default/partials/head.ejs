@@ -31,6 +31,10 @@
     <link href="/style/framework33.css?v=3.0.9" rel="stylesheet">
     <link href="/style/style.css?v=3.0.54" rel="stylesheet">
 
+    <% if (typeof stripe_id != 'undefined'){ %>
+        <script src="https://js.stripe.com/v3/"></script>
+    <% } %>
+
     <% if (typeof include_styles != 'undefined') { %>
 
         <% include_styles.forEach((style,i)=>{ %>

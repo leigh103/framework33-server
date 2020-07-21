@@ -171,14 +171,15 @@ var express = require('express'),
     })
 
 
-    routes.get('/stripe', (req, res) => {
+    routes.get('/stripe', async (req, res) => {
 
         res.locals.functions = functions
 
         let data = {
-            title:"Stripe Checkout",
-            total:0
+            title:"Stripe Checkout"
         }
+
+        data.cart = await new Cart().init(req)
 
         if (req.session && req.session.user){
             data.user = req.session.user
@@ -189,7 +190,7 @@ var express = require('express'),
         (async () => {
 
             const paymentIntent = await stripe.paymentIntents.create({
-                amount: data.total,
+                amount: (parseFloat(data.cart.total)*100).toFixed(0),
                 currency: 'gbp',
                 payment_method_types: ['card'],
                 setup_future_usage: 'off_session',

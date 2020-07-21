@@ -70,16 +70,6 @@ const express = require('express'),
 
     })
 
-    routes.get('/checkout/stripe', async(req, res) => {
-
-        data.transactions = view.transactions
-        data.include_scripts = [settings.views+'/scripts/script.ejs']
-        data.cart = await new Cart().init(req)
-
-        res.render(settings.views+'/gateways/stripe.ejs',data)
-
-    })
-
     routes.get('/dashboard/transactions/settings', async(req, res) => {
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
