@@ -72,6 +72,7 @@ const express = require('express'),
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
         view.current_view = 'transactions'
+        view.current_sub_view = 'settings'
 
         data.title = 'Transaction Settings'
         data.table = 'transaction_settings'

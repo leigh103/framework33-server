@@ -6,6 +6,8 @@
 
         <% transactions.payment_methods.forEach((gateway)=>{ %>
 
+            <button class="btn w-100 mb-1"<% if (gateway.url){ %>href="<%- gateway.url %>" target="payment"<% } %>><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></button>
+
         <% }) %>
 
     </div>
