@@ -13,6 +13,12 @@
             logo: config.site.logo
         },
         ecommerce:{
+            shop:{
+                name: 'Framework-33 Shop',
+                slug: 'shop',
+                sub_title: 'Showcase of the products module for Framework-33',
+                description: 'Lorem ipsum dolor sit amet, eos duis intellegam ex, ne quas probo aliquando est. Has habemus percipit iudicabit no. Neglegentur concludaturque in ius, nec te quot doming quaeque, cum mundi laudem temporibus ad. Vim vidit everti eu, has te nulla accusam. Amet vituperata an mea. Vim cu utinam everti saperet, ius in mundi vivendo omittantur, sale decore at qui.'
+            },
             cart_name: 'cart'
         },
         users: config.users,
