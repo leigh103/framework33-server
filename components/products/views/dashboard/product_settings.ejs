@@ -1,0 +1,22 @@
+<% layout(config.site.theme+'/dashboard.ejs') -%>
+
+    <div class="grid col-2 header">
+        <div class="flex flex-middle-left flex-column">
+            <h3 class="text-weight-600"><%- title %></h3>
+            <p class="transparent-2">Edit your shop and product settings here</p>
+        </div>
+        <div class="flex flex-middle-right">
+
+        </div>
+    </div>
+
+    <div class="grid pb-2 gap-1 col-2" style="align-items: start;" app-init="get('<%- table %>','0','new')">
+
+        <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
+
+    </div>
+    <div class="text-right">
+        <button class="btn highlight capitalise" app-click="saveSingle('<%- table %>','0',new)">
+            <span>Save <%- view.functions.parseName(table) %></span>
+        </button>
+    </div>

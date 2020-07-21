@@ -4,6 +4,22 @@
 
         scope.view.upload_text = "Upload Image"
 
+
+        watch['new'] = function(data){
+            if (data.category >= 0){
+                scope.get('product_categories/'+data.category).then((category)=>{
+                    scope.sub_categories = category.sub_categories
+                })
+            }
+
+        }
+
+        watch['new.category'] = function(data){
+            scope.get('product_categories/'+data).then((category)=>{
+                scope.sub_categories = category.sub_categories
+            })
+        }
+
         scope.editProduct = function(collection, obj, no_modal){
 
             contextCloseAll()

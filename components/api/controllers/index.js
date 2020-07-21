@@ -222,7 +222,7 @@ var express = require('express'),
 
     })
 
-    routes.put('/:collection/:method?',(req,res)=>{
+    routes.put('/:collection/:key/:method?',(req,res)=>{
 
         let method = 'save'
         if (req.params.method){
@@ -248,9 +248,11 @@ var express = require('express'),
                 let result
 
                 if (method == 'save'){
-                    result = await model.save()
+                    result = await model.find(['_key == '+req.params.key])
+                    result = await result.save(req.body)
                 } else {
-                    result = await model[method](req.body)
+                    result = await model.find(['_key == '+req.params.key])
+                    result = await result[method](req.body)
                 }
 
                 if (result.error){

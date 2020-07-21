@@ -18,7 +18,12 @@
         <div class="pt-2">
 
             <div class="">
-                <a class="block" href="/<%- category.data.slug %>"><%- category.data.name %></a>
+                <div class="text-small mb-2">
+                    <a class="" href="/<%- category.slug %>"><%- category.name %></a>
+                    <% if (typeof sub_category == 'object'){ %>
+                        / <a class="" href="/<%- category.slug %>/<%- sub_category.slug %>"><%- sub_category.name %></a>
+                    <% } %>
+                </div>
                 <h1 class="h3 text-weight-600"><%- product.name %></h1>
                 <h2 class="h4 py-2 text-primary text-weight-600">
                     £<%- functions.getPrice(product.price, product.adjustment) %>

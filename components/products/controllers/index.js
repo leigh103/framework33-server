@@ -17,7 +17,8 @@ const express = require('express'),
                 {link:'Products',slug: '/dashboard/products', weight:1, subitems:[
                     {link:'All Products',slug: '/dashboard/products', weight:1},
                     {link:'Categories',slug: '/dashboard/products/categories', weight:2},
-                    {link:'Attributes',slug: '/dashboard/products/attributes', weight:3}
+                    {link:'Attributes',slug: '/dashboard/products/attributes', weight:3},
+                    {link:'Settings',slug: '/dashboard/products/settings', weight:4}
                 ]}
             ]
         }
@@ -54,10 +55,16 @@ const express = require('express'),
     }
 
 
+// init
+
+
+
+
 // routes
 
 
     let data = {
+        shop: view.ecommerce.shop,
         include_styles: [settings.views+'/styles/style.ejs']
     }
 
@@ -100,6 +107,22 @@ const express = require('express'),
 
     })
 
+    routes.get('/dashboard/products/settings', async(req, res) => {
+
+        view.current_view = 'products'
+        view.current_sub_view = 'settings'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+
+        data.title = 'Product Settings'
+        data.table = 'product_settings'
+
+        data.fields = new ProductSettings().settings.fields
+
+        res.render(settings.views+'/dashboard/product_settings.ejs',data)
+    //    res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+    })
+
     routes.get('/dashboard/products/:key?', async(req, res) => {
 
         view.current_view = 'products'
@@ -115,7 +138,25 @@ const express = require('express'),
 
     })
 
-    routes.get('/:category/:slug?', async (req, res, next) => {
+    routes.get('/:shop_slug', async (req, res, next) => {
+
+        if (req.params.shop_slug == data.shop.slug){
+
+            view.meta.title = 'Framework-33 | '+data.shop.name
+            if (data.shop.description){
+                view.meta.description = data.shop.description.substring(0,160)
+            }
+            data.categories = await new ProductCategories().all()
+            data.categories = data.categories.data
+            res.render(settings.views+'/categories.ejs',data)
+
+        } else {
+            next()
+        }
+
+    })
+
+    routes.get('/:category/:sub_category?/:product?', async (req, res, next) => {
 
         data.cart = await new Cart().init(req)
 
@@ -123,36 +164,91 @@ const express = require('express'),
 
         data.include_scripts = ['transactions/views/scripts/script.ejs','products/views/scripts/products_client.ejs']
 
-        let category, slug
+        data.category = await new ProductCategories().find(['slug == '+req.params.category])
 
-        if (req.params.slug){
+        if (!data.category || data.category && data.category.data && !data.category.data.name){ // if a cateoory is not found, go on to try other routes
 
-            data.category = await new ProductCategories().find(['slug == '+req.params.category])
-            data.slug = req.params.slug
-            data.product = await new Products().find(['slug == '+data.slug])
-            data.product = data.product.get()
-            view.meta.title = 'Framework-33 | '+data.product.name
-
-            if (data.product.description){
-                view.meta.description = data.product.description.substring(0,160)
-            }
-
-            res.render(settings.views+'/product.ejs',data)
+            next()
 
         } else {
 
-            data.category = await new ProductCategories().find(['slug == '+req.params.category])
+            data.category = data.category.data
 
-            if (!data.category || data.category && data.category.data && !data.category.data.name){
-                next()
-            } else {
-                view.meta.title = 'Framework-33 | '+data.category.data.name
-                if (data.category.data.description){
-                    view.meta.description = data.category.data.description.substring(0,160)
+            if (req.params.product){ // get product
+
+                data.sub_category = data.category.sub_categories.find((sub_category,i)=>{
+                    return sub_category.slug == req.params.sub_category
+                })
+
+                data.slug = req.params.product
+                data.product = await new Products().find(['slug == '+data.slug])
+                data.product = data.product.get()
+
+                if (data.product){
+
+                    view.meta.title = 'Framework-33 | '+data.product.name
+
+                    if (data.product.description){
+                        view.meta.description = data.product.description.substring(0,160)
+                    }
+
+                    res.render(settings.views+'/product.ejs',data)
+
+                } else {
+                    next()
                 }
-                data.products = await new Products().all(['category like '+data.category.data._key])
+
+            } else if (req.params.sub_category && !req.params.product){ // check for sub category first, if not, then check products
+
+                data.sub_category = data.category.sub_categories.find((sub_category,i)=>{
+                    return sub_category.slug == req.params.sub_category
+                })
+
+                if (data.sub_category){ // it's a sub category
+
+                    data.parent_category = data.category
+                    data.category = data.sub_category
+                    view.meta.title = 'Framework-33 | '+data.sub_category.name
+                    if (data.sub_category.description){
+                        view.meta.description = data.sub_category.description.substring(0,160)
+                    }
+                    data.products = await new Products().all(['category like '+data.parent_category._key, 'sub_category like '+data.sub_category._key])
+                    data.products = data.products.data
+                    res.render(settings.views+'/category.ejs',data)
+
+                } else { // check if it's a product
+
+                    data.slug = req.params.sub_category
+                    data.product = await new Products().find(['slug == '+data.slug])
+                    data.product = data.product.get()
+
+                    if (data.product){
+
+                        view.meta.title = 'Framework-33 | '+data.product.name
+
+                        if (data.product.description){
+                            view.meta.description = data.product.description.substring(0,160)
+                        }
+
+                        res.render(settings.views+'/product.ejs',data)
+
+                    } else {
+                        next()
+                    }
+
+                }
+
+            } else { // top level category
+
+                delete data.parent_category
+                view.meta.title = 'Framework-33 | '+data.category.name
+                if (data.category.description){
+                    view.meta.description = data.category.description.substring(0,160)
+                }
+                data.products = await new Products().all(['category like '+data.category._key,'sub_category NOT EXISTS'])
                 data.products = data.products.data
                 res.render(settings.views+'/category.ejs',data)
+
             }
 
         }

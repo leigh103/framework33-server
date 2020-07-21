@@ -1,4 +1,4 @@
-<% layout('default/dashboard.ejs') -%>
+<% layout(config.site.theme+'/dashboard.ejs') -%>
 
     <div class="grid col-2 header">
         <div class="flex flex-middle-left flex-column">
@@ -80,6 +80,14 @@
                                 <option value="<%- option._key %>"><%- option.name %></option>
                             <% }) %>
 
+                        </select>
+                    </div>
+
+                    <div class="flex flex-column flex-middle-left">
+                        <label>Sub Category</label>
+                        <select app-model="new.sub_category">
+                            <option value="" selected disabled>Please select...</option>
+                            <option app-for="sub_category in sub_categories" app-value="sub_category._key" app-bind="sub_category.name"></option>
                         </select>
                     </div>
 

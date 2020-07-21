@@ -1,0 +1,177 @@
+<% if (typeof fields == 'undefined') { %>
+
+    <% columns.forEach((item)=>{ %>
+        <input type="text" app-model="new.<%- item %>">
+    <% }) %>
+
+<% } else { %>
+
+    <% fields.forEach((item,i)=>{ %>
+
+        <% if (item.input_type == 'image'){ %>
+
+            <div class="rowspan-5 flex flex-column flex-middle-left">
+                <label for="image_<%- i %>" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="new.<%- item.name %>" class="<%- item.name %>"></label>
+                <input id="image_<%- i %>" type="file" app-model="new.<%- item.name %>">
+            </div>
+
+        <% } else if (item.input_type == 'select'){ %>
+
+            <div class="flex flex-column flex-middle-left">
+                <label><%- view.functions.parseName(item.name) %></label>
+                <select app-model="new.<%- item.name %>">
+                    <% if (item.options){ %>
+                        <% item.options.forEach((option)=>{ %>
+                            <option value="<%- option.value %>"><%- option.text %></option>
+                        <% }) %>
+                    <% } %>
+                    <% if (item.option_data){ %>
+                        <% var option_data = view.functions.getOptionData(item.option_data) %>
+                        <% option_data.forEach((option)=>{ %>
+                            <option value="<%- option._key %>"><%- option.name %></option>
+                        <% }) %>
+                    <% } %>
+                </select>
+            </div>
+
+        <% } else if (item.input_type == 'multiselect'){ %>
+
+            <div class="relative layer-2">
+                <label><%- view.functions.parseName(item.name) %></label>
+                <div class="tag-wrap bg-33-white p-1 w-100" app-click="view.dropdown<%- item.name %> = !view.dropdown<%- item.name %>">
+                    <div class="tag">
+                    </div>
+                </div>
+                <div class="context absolute w-100 shadow bg-33-white layer-2" app-show="view.dropdown<%- item.name %>" anim="{'enter':'move-down','exit':'move-up'}">
+                    <% if (item.options){ %>
+                        <% item.options.forEach((option)=>{ %>
+                            <div class="p-05 clickable" app-click="push(new.<%- item.name %>,'<%- option.value %>')"><%- option.text %></div>
+                        <% }) %>
+                    <% } %>
+                    <% if (item.option_data){ %>
+                        <% var option_data = view.functions.getOptionData(item.option_data) %>
+                        <% option_data.forEach((option)=>{ %>
+                            <div class="p-05 clickable" app-click="push(new.<%- item.name %>,'<%- option._key %>')"><%- option.name %></div>
+                        <% }) %>
+                    <% } %>
+                </div>
+            </div>
+
+        <% } else if (item.input_type == 'textarea'){ %>
+
+            <div class="colspan-2 rowspan-2 flex flex-column flex-middle-left">
+                <label><%- view.functions.parseName(item.name) %></label>
+                <textarea app-model="new.<%- item.name %>" placeholder="<%- item.placeholder %>"></textarea>
+            </div>
+
+        <% } else if (item.input_type == 'array' && item.subitems){ %>
+
+            <% var obj = item.name.toLowerCase() %>
+
+            <div class="colspan-2">
+                <label><%- view.functions.parseName(item.name) %></label>
+                <div class="mb-2 w-100" app-show="new.<%- item.name %>">
+                    <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1" app-for="<%- obj %> in new.<%- item.name %>">
+
+                        <% item.subitems.forEach((subitem,i)=>{ %>
+
+                            <% if (subitem.input_type == 'text'){ %>
+
+                                <div class="colspan-2">
+                                    <label><%- view.functions.parseName(subitem.name) %></label>
+                                    <input type="text" app-model="<%- obj %>.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>">
+                                </div>
+
+                            <% } else if (subitem.input_type == 'textarea'){ %>
+
+                                <div class="colspan-4">
+                                    <label><%- view.functions.parseName(subitem.name) %></label>
+                                    <textarea app-model="<%- obj %>.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>"></textarea>
+                                </div>
+
+                            <% } else if (subitem.input_type == 'image'){ %>
+
+                                <div class="rowspan-4">
+                                    <label><%- view.functions.parseName(subitem.name) %></label>
+                                    <label app-attr="{'for':'sub_image_'+{{index}}}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="<%- obj %>.<%- subitem.name %>" class="<%- subitem.name %>"></label>
+                                    <input app-attr="{'id':'sub_image_'+{{index}}}" type="file" app-model="<%- obj %>.<%- subitem.name %>">
+                                </div>
+
+                            <% } else if (subitem.input_type == 'select'){ %>
+
+                                <div class="colspan-2">
+
+                                    <label><%- view.functions.parseName(subitem.name) %></label>
+
+                                    <select app-model="<%- obj %>.<%- subitem.name %>">
+
+                                        <% if (subitem.options){ %>
+                                            <% subitem.options.forEach((option)=>{ %>
+                                                <option value="<%- option.value %>"><%- option.text %></option>
+                                            <% }) %>
+                                        <% } %>
+                                        <% if (subitem.option_data){ %>
+                                            <% var option_data = view.functions.getOptionData(subitem.option_data) %>
+                                            <% option_data.forEach((option)=>{ %>
+                                                <option value="<%- option._key %>"><%- option.name %></option>
+                                            <% }) %>
+                                        <% } %>
+
+                                    </select>
+
+                                </div>
+
+                            <% } %>
+
+                        <% }) %>
+
+                    </div>
+                </div>
+                <div class="text-right">
+
+                    <% item.subitems.forEach((subitem,i)=>{ %>
+                        <input type="text" class="hidden" app-model="<%- obj %>.<%- subitem.name %>">
+                    <% }) %>
+
+                    <button class="btn bg-33-blue text-33-white" app-click="push(new.<%- item.name %>,new.new_array,'new.new_array')">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
+                </div>
+            </div>
+
+        <% } else if (item.input_type == 'array'){ %>
+
+            <% var obj = item.name.toLowerCase() %>
+
+            <div class="colspan-2">
+                <label><%- view.functions.parseName(item.name) %></label>
+                <div class="mb-2 grid col-4 gap-1" app-show="new.<%- item.name %>">
+                    <div class="flex flex-row" app-for="<%- obj %> in new.<%- item.name %>">
+                        <input type="text" app-model="<%- obj %>.value" placeholder="<%- item.placeholder %>">
+                        <button class="btn bg-33-white text-33-red" app-click="splice(new.<%- item.name %>,<%- obj %>)"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="flex flex-row">
+                    <input type="text" app-model="new.<%- item.name %>_new" placeholder="Add new <%- view.functions.depluralise(item.name) %>">
+                    <button class="btn bg-33-blue text-33-white" app-click="push(new.<%- item.name %>,new.<%- item.name %>_new,'new.<%- item.name %>_new')"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+        <% } else if (item.input_type == 'hidden'){ %>
+
+            <% var value; %>
+            <% if (item.value == 'user_id'){ %>
+                <% value = user._id %>
+            <% } %>
+            <input type="hidden" app-model="new.<%- item.name %>" value="<%- value %>">
+
+        <% } else if (item.input_type){ %>
+
+            <div class="flex flex-column flex-middle-left">
+                <label><%- view.functions.parseName(item.name) %></label>
+                <input type="<%- item.input_type %>" app-model="new.<%- item.name %>" placeholder="<%- item.placeholder %>">
+            </div>
+
+        <% } %>
+
+    <% }) %>
+
+<% } %>

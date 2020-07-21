@@ -1,11 +1,12 @@
-<% layout('default/page.ejs') -%>
+<% layout(config.site.theme+'/page.ejs') -%>
 
-<section class="vh-60 relative flex flex-middle flex-column bg-33-light-grey bg-cover" style="background-image: url('<%- category.data.image %>')">
+
+<section class="<% if (typeof parent_category == 'object'){ %>vh-30<% } else { %>vh-60<% } %> relative flex flex-middle flex-column bg-33-light-grey bg-cover pt-3" style="background-image: url('<%- category.image %>')">
     <div class="background bg-33-transparent-dark-grey"></div>
-    <h1 class="text-33-white mb-1" anim="{'enter':'fade-in','duration':'3s'}"><%- category.data.name %></h1>
+    <h1 class="text-33-white mb-1" anim="{'enter':'fade-in','duration':'3s'}"><%- category.name %></h1>
     <div class="contain">
         <div class="contain">
-            <h2 class="text-33-white" style="font-size: 1.2em" anim="{'enter':'move-down','delay':'1s','duration':'2s'}"><%- category.data.sub_title %></h2>
+            <h2 class="text-33-white" style="font-size: 1.2em" anim="{'enter':'move-down','delay':'0.5s','duration':'0.5s'}"><%- category.sub_title %></h2>
         </div>
     </div>
 </section>
@@ -15,22 +16,59 @@
     <div class="contain">
 
         <div class="contain mb-6">
-            <p class="h6 lh2"><%- category.data.description %></p>
+            <% if (typeof parent_category == 'object'){ %>
+                <a class="h6 lh2 block <% if (category.description){ %>mb-3<% } %>" href="/<%- parent_category.slug %>">Back to <%- parent_category.name %></a>
+            <% } %>
+            <% if (category.description){ %>
+                <p class="h6 lh2"><%- category.description %></p>
+            <% } %>
         </div>
+
+        <% if (category.sub_categories){ %>
+
+            <div class="grid col-2 col-s-1 gap-2">
+
+                <% category.sub_categories.forEach((sub_category,i)=>{ %>
+
+                    <a href="/<%- category.slug %>/<%- sub_category.slug %>" class="block bg-33-light-grey rounded flex overflow-hidden shadow" anim="{'enter':'move-up'}">
+
+                        <div class="flex-1">
+                            <img src="<%- sub_category.image %>" class="object-fit">
+                        </div>
+                        <div class="flex-1 p-2 text-left">
+                            <h2 class="h6 text-weight-500"><%- sub_category.name %></h2>
+                            <p><%- sub_category.sub_title %></p>
+                        </div>
+
+                    </a>
+
+                <% }) %>
+
+            </div>
+
+        <% } %>
 
         <div class="grid col-4 col-s-2 gap-2">
 
-            <% products.forEach((product,i)=>{ %>
+            <% if (typeof products == 'object' && products.length > 0){ %>
 
-                <a class="block" href="/<%- category.data.slug %>/<%- product.slug %>">
+                <% products.forEach((product,i)=>{ %>
 
-                    <img src="<%- product.image_1 %>">
-                    <h2 class="h4"><%- product.name %></h2>
-                    <h3 class="h6 text-weight-600">£<%- product.price %></h3>
+                    <a class="block" href="<% if (typeof parent_category == 'object'){ %>/<%- parent_category.slug %><% } %>/<%- category.slug %>/<%- product.slug %>">
 
-                </a>
+                        <img src="<%- product.image_1 %>">
+                        <h2 class="h6"><%- product.name %></h2>
+                        <h3 class="h6 text-weight-600">£<%- product.price %></h3>
 
-            <% }) %>
+                    </a>
+
+                <% }) %>
+
+            <% } else { %>
+
+                <div class="colspan-4 text-center italic">No products currently available in this category</div>
+
+            <% } %>
 
         </div>
 

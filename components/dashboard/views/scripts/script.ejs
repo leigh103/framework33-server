@@ -95,6 +95,7 @@
             scope.addItem = function(collection, obj){
 
                 scope.post(collection, obj).then((data)=>{
+                    this.resetNew()
                     scope.notify('Added')
                 }).catch((err)=>{
                     scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -105,6 +106,17 @@
             scope.saveItem = function(collection, obj){
 
                 scope.post(collection, obj).then((data)=>{
+                    this.resetNew()
+                    scope.notify('Updated')
+                }).catch((err)=>{
+                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                })
+
+            }
+
+            scope.saveSingle = function(collection, key, obj){
+
+                scope.put(collection, key, obj).then((data)=>{
                     scope.notify('Updated')
                 }).catch((err)=>{
                     scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -119,6 +131,7 @@
                     contextCloseAll()
 
                     scope.delete(collection,obj._key).then(()=>{
+                        this.resetNew()
                         scope.notify('Deleted')
                     }).catch((err)=>{
                         scope.notify(err,'error',5,'fa-exclamation-circle')

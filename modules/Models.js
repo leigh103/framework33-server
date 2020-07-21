@@ -251,14 +251,22 @@
 
         }
 
-        async save() {
+        async save(update_data) {
 
-            if (!this.data){
+            if (!this.data && !update_data){
                 this.error = 'No data'
                 return this
             }
 
+            if (update_data){
+                this.data = update_data
+            }
+
             await this.validate()
+
+            if (this.preSave && typeof this.preSave == 'function'){
+                await this.preSave()
+            }
 
             if (this.data._id){
                 this.data = await db.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
