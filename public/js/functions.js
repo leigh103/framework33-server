@@ -126,10 +126,12 @@ document.addEventListener("click", function (e) {
 let notification_els = document.getElementsByClassName('notification')
 if (notification_els){
     for (var i in notification_els){
-        notification_els[i].addEventListener('click', function(e){
-            this.classList.remove('in-view')
-            this.classList.add('exit-view')
-        })
+        if (notification_els[i] && typeof notification_els[i].addEventListener == 'function'){
+            notification_els[i].addEventListener('click', function(e){
+                this.classList.remove('in-view')
+                this.classList.add('exit-view')
+            })
+        }
     }
 }
 
