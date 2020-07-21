@@ -1,0 +1,30 @@
+<div class="pr-2 pt-7 pt-s-2">
+
+    <h1 class="h4 text-weight-500">Shopping <%- view.ecommerce.cart_name %></h1>
+
+    <div class="grid col-4 gap-1 mb-2 mt-5 text-33-grey">
+        <div class="colspan-2">Item</div>
+        <div class="text-center">Qty</div>
+        <div class="text-right">Price</div>
+    </div>
+
+    <div>
+        <div class="grid col-4 gap-1 my-2" app-for="item in cart.items">
+            <div class="colspan-2 text-weight-700"><a href="" app-bind="item.name"></a></div>
+            <div class="text-center" app-bind="item.quantity"></div>
+            <div class="text-right text-weight-700">£<span app-bind="item.price"></span></div>
+        </div>
+    </div>
+
+    <div class="grid col-4 gap-1 my-5">
+        <div><a app-click="emptyCart()">Empty <%- view.ecommerce.cart_name %></a></div>
+        <div></div>
+        <div class="colspan-2 grid col-2">
+
+            <div class="text-weight-500 text-33-grey text-right">Total</div>
+            <div class="text-right text-weight-500 h4">£<span app-bind="cart.total"></span></div>
+
+        </div>
+    </div>
+
+</div>

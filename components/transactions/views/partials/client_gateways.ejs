@@ -6,12 +6,18 @@
 
         <% transactions.payment_methods.forEach((gateway)=>{ %>
 
-            <button class="btn w-100 mb-1"<% if (gateway.url){ %>href="<%- gateway.url %>" target="payment"<% } %>><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></button>
+            <% if (gateway.name == 'Stripe'){ %>
+
+                <button class="btn w-100 mb-1" href="/checkout/stripe"><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></button>                
+
+            <% } else { %>
+                <button class="btn w-100 mb-1"<% if (gateway.url){ %>href="<%- gateway.url %>" target="payment"<% } %>><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></button>
+            <% } %>
 
         <% }) %>
 
     </div>
 
-    <button class="btn w-100 mt-5 text-weight-700" app-click="view.page = 'shipping'"><i class="fas fa-chevron-left mr-1"></i>Shipping Address</button>
+    <a class="block mt-5 text-left" app-click="view.page = 'shipping'"><i class="fas fa-chevron-left mr-1"></i>Shipping Address</a>
 
 </div>

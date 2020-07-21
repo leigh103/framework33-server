@@ -1,0 +1,39 @@
+<form action="/charge" method="post" id="payment-form" class="stripe">
+    <div class="form-row">
+        <label for="card-element">
+            <img src="/images/payment_icons.png">
+        </label>
+
+        <% if (typeof methods != "undefined"){ %>
+            <div class="my-1 text-left">
+                <% for (var i in methods){ %>
+                    <label class="p-1 bg-white rounded block mb-1 text-center clickable"><input type="radio" name="payment_method" value="<%- methods[i].id %>" class="mr-5">**** **** **** <%- methods[i].card.last4 %></label>
+                <% } %>
+            </div>
+        <% } %>
+        <div id="card-element" class="">
+        <!-- A Stripe Element will be inserted here. -->
+        </div>
+
+        <div id="card-errors" role="alert" class="mb-2 text-33-red"></div>
+        <% if (typeof error != "undefined"){ %>
+            <div id="card-errors" role="alert" class="mb-2 text-33-red"><%- error %></div>
+        <% } %>
+    </div>
+    <% if (typeof user == "object"){ %>
+        <% if (typeof user.name != "undefined"){ %>
+            <input type="hidden" value="<%- functions.parseName(user.name) %>" id="customer_name">
+        <% } %>
+        <% if (typeof user.email != "undefined"){ %>
+            <input type="hidden" value="<%- user.email %>" id="customer_email">
+        <% } %>
+        <% if (typeof user.tel != "undefined"){ %>
+            <input type="hidden" value="<%- user.tel %>" id="customer_tel">
+        <% } %>
+    <% } %>
+    <% if (typeof intent.client_secret != "undefined"){ %>
+    <input type="hidden" value="<%- intent.client_secret %>" id="client_secret">
+
+    <button class="btn highlight" id="pay-now">Pay Now</button>
+    <% } %>
+</form>

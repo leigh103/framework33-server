@@ -28,7 +28,10 @@ const express = require('express'),
             nav: [
                 {link:view.functions.capitalise(cart_name),slug: '/'+cart_name, weight:30}
             ]
-        }
+        },
+        includes: [
+            {name:'stripe',path:'stripe.js'}
+        ]
     },
 
 
@@ -64,6 +67,16 @@ const express = require('express'),
         data.cart = await new Cart().init(req)
 
         res.render(settings.views+'/cart.ejs',data)
+
+    })
+
+    routes.get('/checkout/stripe', async(req, res) => {
+
+        data.transactions = view.transactions
+        data.include_scripts = [settings.views+'/scripts/script.ejs']
+        data.cart = await new Cart().init(req)
+
+        res.render(settings.views+'/gateways/stripe.ejs',data)
 
     })
 
