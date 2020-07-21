@@ -23,6 +23,7 @@ const express = require('express'),
 
 // load scope and config
 
+    global.basedir = __dirname
     global.config = require('./modules/config')
 
     dbModule = require('./modules/databases/'+config.modules.db.module)
@@ -32,8 +33,6 @@ const express = require('express'),
     global.moment = require('moment')
     global.websocket_clients = {}
     global.component = {}
-    global.basedir = __dirname
-
 
 // setup express
 
