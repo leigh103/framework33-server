@@ -155,7 +155,7 @@
 
                     filters.map((filter) => {
 
-                        let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like)\s*["|']*([^'"]*)["|']*/i)
+                        let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like|exists|not exists)\s*["|']*([^'"]*)["|']*/i)
 
                         if (op[3]){ // if middle item is operator
 
@@ -187,6 +187,12 @@
                                     match_count++
                                 }
 
+                            }
+
+                        } else if (op[2].match(/^not exists/i)){
+
+                            if (!o[op[1]]){
+                                match_count++
                             }
 
                         } else {
@@ -223,7 +229,7 @@
 
                     filters.map((filter) => {
 
-                        let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like)\s*["|']*([^'"]*)["|']*/i)
+                        let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like|not exists)\s*["|']*([^'"]*)["|']*/i)
 
                         if (op[3]){ // if middle item is operator
 
@@ -255,6 +261,12 @@
                                     match = true
                                 }
 
+                            }
+
+                        } else if (op[2].match(/^not exists/i)){
+
+                            if (!o[op[1]]){
+                                match_count++
                             }
 
                         } else {
