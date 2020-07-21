@@ -13,7 +13,6 @@
                     {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'sub_title',input_type:'text',placeholder:'Sub Title', type:'string', required:true},
-                    {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false}
                 ]
             }
@@ -54,7 +53,23 @@
 
         }
 
+        async init(){
+
+            let product_settings = await this.find(['_key == 0'])
+            if (product_settings && product_settings.data && product_settings.data.name && product_settings.data.slug){
+                let slug = global.view.ecommerce.shop.slug
+                global.view.ecommerce.shop = product_settings.data
+                global.view.ecommerce.shop.slug = slug
+                log('Setting up product shop: '+global.view.ecommerce.shop.name)
+            } else {
+                console.log('nowt')
+            }
+
+        }
+
 
     }
+
+    new ProductSettings().init()
 
     module.exports = ProductSettings

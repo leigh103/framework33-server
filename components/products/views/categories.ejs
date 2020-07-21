@@ -1,23 +1,27 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
 
-<section class="vh-90 relative flex flex-middle flex-column bg-33-light-grey bg-cover pt-3" style="background-image: url('<%- category.image %>')">
+<section class="vh-90 relative flex flex-middle flex-column bg-33-light-grey bg-cover pt-3"<% if (shop.image){ %> style="background-image: url('<%- shop.image %>')"<% } %>>
     <div class="background bg-33-transparent-dark-grey"></div>
     <h1 class="text-33-white mb-1" anim="{'enter':'fade-in','duration':'3s'}"><%- shop.name %></h1>
-    <div class="contain">
+    <% if (shop.sub_title){ %>
         <div class="contain">
-            <h2 class="text-33-white" style="font-size: 1.2em" anim="{'enter':'move-down','delay':'0.5s','duration':'0.5s'}"><%- shop.sub_title %></h2>
+            <div class="contain">
+                <h2 class="text-33-white" style="font-size: 1.2em" anim="{'enter':'move-down','delay':'0.5s','duration':'0.5s'}"><%- shop.sub_title %></h2>
+            </div>
         </div>
-    </div>
+    <% } %>
 </section>
 
 <section class="py-6">
 
     <div class="contain">
 
-        <div class="contain mb-6">
-            <p class="h6 lh2"><%- shop.description %></p>
-        </div>
+        <% if (shop.description){ %>
+            <div class="contain mb-6">
+                <p class="h6 lh2"><%- shop.description %></p>
+            </div>
+        <% } %>
 
         <% if (typeof categories == 'object'){ %>
 

@@ -20,6 +20,9 @@ const express = require('express'),
                     {link:'Attributes',slug: '/dashboard/products/attributes', weight:3},
                     {link:'Settings',slug: '/dashboard/products/settings', weight:4}
                 ]}
+            ],
+            nav: [
+                {link:'Shop',slug: view.ecommerce.shop.slug, weight:1}
             ]
         }
     },
@@ -53,11 +56,6 @@ const express = require('express'),
         }
 
     }
-
-
-// init
-
-
 
 
 // routes
@@ -140,9 +138,10 @@ const express = require('express'),
 
     routes.get('/:shop_slug', async (req, res, next) => {
 
-        if (req.params.shop_slug == data.shop.slug){
+        if (req.params.shop_slug == view.ecommerce.shop.slug){
 
-            view.meta.title = 'Framework-33 | '+data.shop.name
+            data.shop = view.ecommerce.shop
+            view.meta.title = 'Framework-33 | '+view.ecommerce.shop.name
             if (data.shop.description){
                 view.meta.description = data.shop.description.substring(0,160)
             }

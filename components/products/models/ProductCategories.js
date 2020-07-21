@@ -109,6 +109,6 @@
 
     }
 
-    new ProductCategories().all().makeMenus()
+    // new ProductCategories().all().makeMenus()
 
     module.exports = ProductCategories
