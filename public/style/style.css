@@ -31,6 +31,12 @@ a:hover {
 .bg-light-grey {
   background-color: #f8f8f8;
 }
+.bg-primary {
+  background-color: #1dc7d5;
+}
+.bg-secondary {
+  background-color: #1398a3;
+}
 .btn:hover {
   color: #fff;
 }
@@ -300,6 +306,10 @@ textarea.underline {
   border-bottom: 1px solid #d2d6d9;
   padding: 0 !important;
   height: 3.5rem !important;
+}
+input[type=number] {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
 }
 body:not(.dashboard) .page {
   min-height: calc(100vh - 14rem);

@@ -1,0 +1,21 @@
+<div app-show="view.page == 'shipping'">
+
+    <h2 class="h4 text-weight-500">Shipping Address</h2>
+
+    <form autocomplete="on" style="margin-top: -0.3rem" class="mt-4">
+
+        <input type="text" placeholder="Address Line 1 *" class="underline" name="address_line1" app-model="cart.shipping_address.address_line1">
+        <input type="text" placeholder="Address Line 2" class="underline" name="address_line2" app-model="cart.shipping_address.address_line2">
+        <input type="text" placeholder="Town" class="underline" name="address_level1" app-model="cart.shipping_address.address_level1">
+
+        <div class="flex">
+            <input type="text" placeholder="City / County *" class="underline flex-2" name="address_level2" app-model="cart.shipping_address.address_level2">
+            <input type="text" placeholder="Address Postcode *" class="underline flex-1" name="postal_code" app-model="cart.shipping_address.postal_code">
+        </div>
+
+    </form>
+
+    <button class="btn bg-33-green thick w-100 mt-5 text-weight-700" app-click="payment()">Payment <i class="fas fa-chevron-right ml-1"></i></button>
+    <button class="btn w-100 mt-5 text-weight-700" app-click="view.page = 'billing'"><i class="fas fa-chevron-left mr-1"></i>Your Details</button>
+
+</div>

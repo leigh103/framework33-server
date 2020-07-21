@@ -1,0 +1,44 @@
+<div app-show="view.page == 'billing'">
+
+    <h2 class="h4 text-weight-500">Your Details</h2>
+
+    <form autocomplete="on" style="margin-top: -0.3rem">
+        <div class="flex mt-4">
+
+            <select class="flex-1 underline">
+                <option selected disabled value="">Title...</option>
+                <option value="Mr">Mr</option>
+                <option value="Dr">Dr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Miss">Miss</option>
+                <option value="Ms">Ms</option>
+            </select>
+
+            <input type="text" placeholder="Your Name *" class="flex-2 underline" id="name" name="name" autocomplete="name" app-model="cart.name">
+
+        </div>
+
+        <input type="text" placeholder="Address Line 1 *" class="underline" name="address_line1" app-model="cart.billing_address.address_line1">
+        <input type="text" placeholder="Address Line 2" class="underline" name="address_line2" app-model="cart.billing_address.address_line2">
+        <input type="text" placeholder="Town" class="underline" name="address_level1" app-model="cart.billing_address.address_level1">
+
+        <div class="flex">
+            <input type="text" placeholder="City / County *" class="underline flex-2" name="address_level2" app-model="cart.billing_address.address_level2">
+            <input type="text" placeholder="Address Postcode *" class="underline flex-1" name="postal_code" app-model="cart.billing_address.postal_code">
+        </div>
+
+        <label class="block mt-2">Select preferred notification method:</label>
+        <div class="flex">
+
+            <a class="btn flex-1" app-class="{'bg-primary':cart.notification_method == 'sms'}" app-click="cart.notification_method = 'sms'">SMS / Text</a>
+            <a class="btn flex-1" app-class="{'bg-primary':cart.notification_method == 'email'}" app-click="cart.notification_method = 'email'">Email</a>
+        </div>
+
+        <input type="number" app-show="cart.notification_method == 'sms'" placeholder="Mobile Number *" class="underline" name="tel" app-model="cart.tel">
+        <input type="text" app-show="cart.notification_method == 'email'" placeholder="Email Address *" class="underline" name="email" app-model="cart.email">
+
+    </form>
+
+    <button class="btn bg-33-green thick w-100 mt-5 text-weight-700" app-click="checkout()">Checkout <i class="fas fa-chevron-right ml-1"></i></button>
+
+</div>

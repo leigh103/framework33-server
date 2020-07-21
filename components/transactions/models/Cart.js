@@ -10,21 +10,24 @@
             this.settings = {
                 collection: 'cart',
                 fields: [
-                    {name:'name',input_type:'text',placeholder:'Name', type:'string', required:false},
+                    {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
+                    {name:'email',input_type:'email',placeholder:'Email Address', type:'email', required:false},
+                    {name:'tel',input_type:'number',placeholder:'Moile Number', type:'tel', required:false},
+                    {name:'notification_method',input_type:'select',options:[{text:'SMS Text',value:'sms'},{text:'Email',value:'email'}],placeholder:'Select preferred notification method', type:'string', required:false},
                     {name:'items', type:'object', required:false},
                     {name:'billing_address', type:'object', required:false, subitems:[
-                        {name:'address_line1',input_type:'text',placeholder:'Address Line 1', type:'string', required:false},
+                        {name:'address_line1',input_type:'text',placeholder:'Address Line 1', type:'string', required:true},
                         {name:'address_line2',input_type:'text',placeholder:'Address Line 2', type:'string', required:false},
                         {name:'address_level1',input_type:'text',placeholder:'County', type:'string', required:false},
-                        {name:'address_level2',input_type:'text',placeholder:'City', type:'string', required:false},
-                        {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'string', required:false}
+                        {name:'address_level2',input_type:'text',placeholder:'City', type:'string', required:true},
+                        {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'string', required:true}
                     ]},
                     {name:'shipping_address', type:'object', required:false, subitems:[
-                        {name:'address_line1',input_type:'text',placeholder:'Address Line 1', type:'string', required:false},
+                        {name:'address_line1',input_type:'text',placeholder:'Address Line 1', type:'string', required:true},
                         {name:'address_line2',input_type:'text',placeholder:'Address Line 2', type:'string', required:false},
                         {name:'address_level1',input_type:'text',placeholder:'County', type:'string', required:false},
-                        {name:'address_level2',input_type:'text',placeholder:'City', type:'string', required:false},
-                        {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'postcode', required:false}
+                        {name:'address_level2',input_type:'text',placeholder:'City', type:'string', required:true},
+                        {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'postcode', required:true}
                     ]},
                     {name:'_user_id', type:'string', required:true}
                 ]
@@ -39,6 +42,9 @@
                         empty:['self'],
                         removeItem:['self'],
                         addItem:['self'],
+                        save:['self']
+                    },
+                    put: {
                         save:['self']
                     },
                 },

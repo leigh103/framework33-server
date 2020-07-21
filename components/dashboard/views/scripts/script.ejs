@@ -116,7 +116,7 @@
 
             scope.saveSingle = function(collection, key, obj){
 
-                scope.put(collection, key, obj).then((data)=>{
+                scope.put(collection, key, scope.new).then((data)=>{
                     scope.notify('Updated')
                 }).catch((err)=>{
                     scope.notify(err,'error',5,'fa-exclamation-circle')

@@ -190,7 +190,7 @@
                 } else if (field.type.match(/tel|phone/)){
 
                     if (value && !value.match(/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/)){
-                        this.error = 'Invalid phone number'
+                        this.error = 'Invalid phone number. Please enter a UK mobile number, starting 07..'
                         return ''
                     } else {
                         return value.replace(/\s/g,'')
@@ -301,6 +301,31 @@
 
         first(){
             return this.data[0]
+        }
+
+        async getTemplate(){
+
+            let fields = {},
+                subfields = {}
+
+            this.error = false
+
+            this.data = {}
+
+            this.settings.fields.map((field)=>{
+                if (field.type == 'object'){
+                    this.data[field.name] = {}
+                } else if (field.type == 'array'){
+                    this.data[field.name] = []
+                } else if (field.type == 'boolean'){
+                    this.data[field.name] = false
+                } else {
+                    this.data[field.name] = ''
+                }
+            })
+
+            return this
+
         }
 
     }

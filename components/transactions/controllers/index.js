@@ -21,7 +21,8 @@ const express = require('express'),
                     {link:'Processing',slug: '/dashboard/transactions/open', weight:3},
                     {link:'Shipped',slug: '/dashboard/transactions/open', weight:4},
                     {link:'Refunded',slug: '/dashboard/transactions/open', weight:5},
-                    {link:'Deleted',slug: '/dashboard/transactions/open', weight:6}
+                    {link:'Deleted',slug: '/dashboard/transactions/open', weight:6},
+                    {link:'Settings',slug: '/dashboard/transactions/settings', weight:7}
                 ]}
             ],
             nav: [
@@ -58,10 +59,26 @@ const express = require('express'),
 
     routes.get('/'+cart_name, async(req, res) => {
 
+        data.transactions = view.transactions
         data.include_scripts = [settings.views+'/scripts/script.ejs']
         data.cart = await new Cart().init(req)
 
         res.render(settings.views+'/cart.ejs',data)
+
+    })
+
+    routes.get('/dashboard/transactions/settings', async(req, res) => {
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+
+        view.current_view = 'transactions'
+
+        data.title = 'Transaction Settings'
+        data.table = 'transaction_settings'
+
+        data.fields = new TransactionSettings().settings.fields
+
+        res.render(settings.views+'/dashboard/transaction_settings.ejs',data)
 
     })
 

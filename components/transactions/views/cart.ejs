@@ -36,38 +36,12 @@
                 </div>
 
             </div>
+
             <div class="h-100 bg-33-light-grey rounded p-3 pt-7 pt-s-2">
-
-                <h2 class="h4 text-weight-500">Billing and Shipping</h2>
-
-                <form autocomplete="on" style="margin-top: -0.3rem">
-                    <div class="flex mt-4">
-
-                        <select class="flex-1 underline">
-                            <option selected disabled value="">Title...</option>
-                            <option value="Mr">Mr</option>
-                            <option value="Dr">Dr</option>
-                            <option value="Mrs">Mrs</option>
-                            <option value="Miss">Miss</option>
-                            <option value="Ms">Ms</option>
-                        </select>
-
-                        <input type="text" placeholder="Your Name" class="flex-2 underline" id="name" name="name" autocomplete="name">
-
-                    </div>
-
-                    <input type="text" placeholder="Address Line 1" class="underline" name="address_line1">
-                    <input type="text" placeholder="Address Line 2" class="underline" name="address_line2">
-                    <input type="text" placeholder="Address City" class="underline" name="city">
-
-                    <div class="flex">
-                        <input type="text" placeholder="Address Postcode" class="underline flex-1" name="postal_code">
-                        <input type="tel" placeholder="Mobile No." class="underline flex-2" name="tel">
-                    </div>
-
-                </form>
-
-                <button class="btn bg-33-green thick w-100 mt-5 text-weight-700">Checkout <i class="fas fa-chevron-right ml-1"></i></button>
+                <%- include(view.basedir+'/components/transactions/views/partials/client_billing.ejs') %>
+                <%- include(view.basedir+'/components/transactions/views/partials/client_shipping.ejs') %>
+                <%- include(view.basedir+'/components/transactions/views/partials/client_gateways.ejs') %>
+                <%- include(view.basedir+'/components/transactions/views/partials/client_stripe.ejs') %>
             </div>
 
         </section>

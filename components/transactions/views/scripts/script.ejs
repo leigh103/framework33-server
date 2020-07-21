@@ -3,9 +3,30 @@
 
         extend.cart = function(){
 
+            scope.view.page = 'billing'
+
             <% if (typeof cart != 'undefined' && cart._key) { %>
 
+                watch['cart.notification_method'] = function(){
+                    scope.cart.email = ''
+                    scope.cart.tel = ''
+                }
+
+                watch['cart.email'] = function(data){
+                    if (data.match(/hotmail/i)){
+                        scope.notify('We sometimes have issues sending mail notiications to hotmail accounts. Please consider our SMS/Text notification option where possible','error',15,'fa-exclamation-circle')
+                    }
+                }
+
                 scope.cart = <%- JSON.stringify(cart) %>
+
+                if (!scope.cart.billing_address){
+                    scope.cart.billing_address = {}
+                }
+
+                if (!scope.cart.shipping_address){
+                    scope.cart.shipping_address = {}
+                }
 
                 scope.addToCart = function(item_key, type){
 
@@ -56,6 +77,51 @@
                     }).catch((err)=>{
                         scope.notify(err,'error',5,'fa-exclamation-circle')
                     })
+
+                }
+
+                scope.checkout = function(){
+
+                    if (!scope.cart.name){
+                        scope.notify('Please add your name','error',5,'fa-exclamation-circle')
+                        return false
+                    }
+
+                    if (!scope.cart.billing_address.address_line1){
+                        scope.notify('Please add your address','error',5,'fa-exclamation-circle')
+                        return false
+                    }
+
+                    if (!scope.cart.billing_address.address_level2){
+                        scope.notify('Please add your town or city','error',5,'fa-exclamation-circle')
+                        return false
+                    }
+
+                    if (!scope.cart.notification_method){
+                        scope.notify('Please select your preferred notification method','error',5,'fa-exclamation-circle')
+                        return false
+                    }
+
+                    if (!scope.cart.tel && !scope.cart.email){
+                        scope.notify('Please add your mobile contact number, or email address','error',5,'fa-exclamation-circle')
+                        return false
+                    }
+
+                    scope.cart.shipping_address = scope.cart.billing_address
+
+                    scope.put('cart',<%- cart._key %>,scope.cart).then((cart)=>{
+                        scope.cart = cart
+                        scope.view.page = 'shipping'
+                        scope.notify('Cart Updated')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                    })
+
+                }
+
+                scope.payment = function(){
+
+                    scope.view.page = 'gateways'
 
                 }
 
