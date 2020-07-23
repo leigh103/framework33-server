@@ -89,6 +89,13 @@
                                     <textarea app-model="<%- obj %>.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>"></textarea>
                                 </div>
 
+                            <% } else if (subitem.input_type == 'contenteditable'){ %>
+
+                                <div class="colspan-4">
+                                    <label><%- view.functions.parseName(subitem.name) %></label>
+                                    <div class="large resize contenteditable" app-model="<%- obj %>.<%- subitem.name %>"></div>
+                                </div>
+
                             <% } else if (subitem.input_type == 'image'){ %>
 
                                 <div class="rowspan-4">

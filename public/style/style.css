@@ -311,12 +311,25 @@ input[type=number] {
   -webkit-appearance: none;
   -moz-appearance: textfield;
 }
+div[contenteditable=true] {
+  font-size: 0.875rem;
+  background-color: #fff;
+  padding: 1rem 1.2rem;
+  width: 100%;
+  min-height: 10rem;
+}
+div[contenteditable=true]:hover {
+  background-color: #fff;
+}
 body:not(.dashboard) .page {
   min-height: calc(100vh - 14rem);
   margin-top: 4rem;
 }
 body:not(.dashboard) .page .h-100 {
   min-height: calc(100vh - 14rem);
+}
+figure {
+  margin: 0;
 }
 .list-item {
   display: flex;
@@ -512,7 +525,12 @@ body:not(.dashboard) .page .h-100 {
   width: 6rem;
 }
 .table .cell.textarea,
-.table .cell.category.select {
+.table .cell.category.select,
+.table .cell.contenteditable,
+.table .cell.img_array,
+.table .cell.object,
+.table .cell.array,
+.table .cell.multiselect {
   display: none;
 }
 @media only screen and (max-width: 851px) {

@@ -126,7 +126,7 @@
 
                 if (field.type == 'string' && typeof value == 'string'){
 
-                    return value.toString()
+                    return value
 
                 } else if (field.type == 'integer' && value.match(/\d/) || field.type == 'number' && value.match(/\d/)){
 

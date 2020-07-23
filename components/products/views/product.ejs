@@ -1,15 +1,21 @@
 <% layout('default/page.ejs') -%>
 
-<section class="pt-7 pb-4">
+<section class="page pb-4">
 
-    <div class="contain grid col-2 col-s-1 gap-2 text-left">
+    <% if (product.content_before_details && product.content_before_details===true){ %>
+        <div class="contain my-6 text-left">
+            <%- product.content %>
+        </div>
+    <% } %>
+
+    <div class="contain grid col-2 col-s-1 gap-2 text-left pt-2">
 
         <div>
-            <img src="<%- product.image_1 %>" app-src="view.gallery_image">
+            <img src="<%- product.image_1 %>" app-src="view.gallery_image" class="product-image">
             <div class="overflow-x" style="height: 5rem">
                 <% if (typeof product.gallery != 'undefined'){ %>
                     <% product.gallery.forEach((image)=>{ %>
-                        <img src="<%- image.value %>" class="inline-block h-100 clickable" app-click="view.gallery_image = '<%- image.value %>'">
+                        <img src="<%- image.value %>" class="inline-block h-100 clickable" onclick="scope.view.gallery_image = '<%- image.value %>'">
                     <% }) %>
                 <% } %>
             </div>
@@ -40,8 +46,9 @@
 
             </div>
 
-
-            <p><%- product.description %></p>
+            <% if (product.description){ %>
+                <p><%- product.description %></p>
+            <% } %>
 
             <div class="flex my-2">
                 <div class="flex flex-1">
@@ -59,5 +66,11 @@
         </div>
 
     </div>
+
+    <% if (!product.content_before_details){ %>
+        <div class="contain my-6 text-left">
+            <%- product.content %>
+        </div>
+    <% } %>
 
 </section>

@@ -22,7 +22,9 @@
                     {name:'attributes',input_type:'array',placeholder:'Attributes',type:'object',required: false},
                     {name:'customisation',input_type:'array',placeholder:'Customisation',type:'object',required: false},
                     {name:'activated',input_type:'select',options:[{text:'Yes',value:true},{text:'No',value:false}], type:'boolean', required:false},
-                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false}
+                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false},
+                    {name:'content_before_details',input_type:'checkbox',placeholder:'Show content before product details', type:'boolean', required:false},
+                    {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:false}
                 ]
             }
 

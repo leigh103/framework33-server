@@ -3,6 +3,7 @@
 
         extend.dashboard = function(){
 
+
             scope.toggleContext = function(type, data){
 
                 let el = document.getElementById(type)
@@ -84,6 +85,11 @@
                         scope.new = JSON.parse(JSON.stringify(obj))
                     }
 
+                    if (scope.new.content){
+                        console.log(scope.new.content)
+                        contented.setData( scope.new.content )
+                    }
+
                     if (!no_modal){
                         scope.view.modal = 'show_edit'
                     }
@@ -94,8 +100,12 @@
 
             scope.addItem = function(collection, obj){
 
+                if (typeof obj.content != 'undefined'){
+                    obj.content = contented.getData()
+                }
+
                 scope.post(collection, obj).then((data)=>{
-                    this.resetNew()
+                    scope.resetNew()
                     scope.notify('Added')
                 }).catch((err)=>{
                     scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -105,8 +115,14 @@
 
             scope.saveItem = function(collection, obj){
 
+            //    const editordata = editor.getData()
+
+                if (typeof obj.content != 'undefined'){
+                    obj.content = contented.getData()
+                }
+
                 scope.post(collection, obj).then((data)=>{
-                    this.resetNew()
+                    scope.resetNew()
                     scope.notify('Updated')
                 }).catch((err)=>{
                     scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -131,7 +147,7 @@
                     contextCloseAll()
 
                     scope.delete(collection,obj._key).then(()=>{
-                        this.resetNew()
+                        scope.resetNew()
                         scope.notify('Deleted')
                     }).catch((err)=>{
                         scope.notify(err,'error',5,'fa-exclamation-circle')

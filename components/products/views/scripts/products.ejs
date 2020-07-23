@@ -1,3 +1,29 @@
+
+<script src="/js/ckeditor/ckeditor.js?v=1.0.3"></script>
+
+<script>
+
+    var contented
+
+
+
+    ClassicEditor
+        .create( document.querySelector( '#editor' ), {
+        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|','indent','outdent', '|','imageUpload','imageTextAlternative', '|','insertTable','tablerow'  ],
+        image: {
+            toolbar: [ 'imageTextAlternative' ]
+        }
+    })
+        .then( editor => {
+            contented = editor
+            console.log(Array.from( editor.ui.componentFactory.names() ))
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+
+</script>
+
 <script>
 
     extend.products = function(){
@@ -31,6 +57,12 @@
                     scope.new._key = obj
                 } else {
                     scope.new = JSON.parse(JSON.stringify(obj))
+                }
+
+                if (scope.new.content){
+                    contented.setData( scope.new.content )
+                } else {
+                    contented.setData( '' )
                 }
 
                 if (!no_modal){

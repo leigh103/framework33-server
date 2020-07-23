@@ -63,7 +63,7 @@ const express = require('express'),
 
     let data = {
         shop: view.ecommerce.shop,
-        include_styles: [settings.views+'/styles/style.ejs']
+        include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs']
     }
 
     routes.get('*', (req, res, next) => {
@@ -199,9 +199,13 @@ const express = require('express'),
 
             } else if (req.params.sub_category && !req.params.product){ // check for sub category first, if not, then check products
 
-                data.sub_category = data.category.sub_categories.find((sub_category,i)=>{
-                    return sub_category.slug == req.params.sub_category
-                })
+                if (data.category && data.category.sub_categories && data.category.sub_categories.length > 0){
+                    data.sub_category = data.category.sub_categories.find((sub_category,i)=>{
+                        return sub_category.slug == req.params.sub_category
+                    })
+                } else {
+                    data.sub_category = false
+                }
 
                 if (data.sub_category){ // it's a sub category
 
