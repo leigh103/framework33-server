@@ -17,15 +17,13 @@
                 return savedRange;
             }
 
-            function setCaret(idx, selection) {
+            function setCaret(selection) {
 
-                var els = document.getElementsByClassName("contenteditable")
-                var el = els[idx]
                 var range = document.createRange()
                 var sel = window.getSelection()
-
+console.log(selection.startOffset, selection.endOffset)
                 range.setStart(selection.startContainer, selection.startOffset)
-                range.collapse(true)
+                range.setEnd(selection.startContainer, selection.endOffset)
 
                 sel.removeAllRanges()
                 sel.addRange(range)
@@ -39,7 +37,9 @@
 
                     scope.view.exec = {}
                     scope.view.exec.input_el = idx
+
                     scope.view.exec.selection = getSelection()
+
                     console.log(scope.view.exec.selection )
                     scope.view.modal = 'show_input'
 
@@ -64,7 +64,7 @@
                     scope.view.modal = false
                     type = scope.view.exec.type
 
-                    setCaret(scope.view.exec.input_el,scope.view.exec.selection)
+                    setCaret(scope.view.exec.selection)
 
                     if (scope.view.text_input){
                         data = scope.view.text_input
