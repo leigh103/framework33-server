@@ -1,0 +1,51 @@
+.editor-buttons {
+
+    font-size: 0;
+    width: 100%;
+    background-color: white;
+    border-bottom: 2px solid $bg-light-grey;
+    height: 3rem;
+    display: flex;
+    position: relative;
+    z-index: 500;
+
+    button {
+        font-size: 0.8rem;
+        height: 3rem;
+        background: none;
+        border: none;
+        margin:0;
+        color: $text-black;
+        padding: 0 0.75rem !important;
+    }
+
+    .dropdown {
+        position: absolute;
+        top: 3rem;
+        left: 0;
+        background-color: white;
+        padding: 1rem;
+        z-index: 999;
+        box-shadow: $shadow;
+
+        button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            height: 2rem;
+
+            &:hover {
+                background-color: #f2f2f2;
+            }
+        }
+    }
+
+    .spacer {
+        display: inline-block;
+        height: 2rem;
+        width: 2px;
+        border-left: 2px solid #f2f2f2;
+        margin: 0.5rem 1rem 0 1rem;
+    }
+
+}

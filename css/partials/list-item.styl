@@ -54,3 +54,25 @@
     }
 
 }
+
+ul {
+    li {
+
+        list-style: none;
+		position: relative;
+		padding: 0 0 0 2rem;
+
+        &::before {
+        	content: "";
+        	position: absolute;
+        	left: 0;
+        	top: 0.4rem;
+        	height: 0.6rem;
+        	width: 0.6rem;
+        	border: 1px solid $color-primary;
+        	border-width: 2px 2px 0 0;
+        	transform: rotate(45deg);
+
+        }
+    }
+}

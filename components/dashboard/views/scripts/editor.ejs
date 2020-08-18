@@ -1,0 +1,107 @@
+
+    <script>
+
+        extend.editor = function(){
+
+            scope.view.heading = ''
+
+            var savedrange = null;
+
+            function getSelection(){
+                var savedRange;
+                if (window.getSelection && window.getSelection().rangeCount > 0){
+                    savedRange = window.getSelection().getRangeAt(0).cloneRange();
+                } else if (document.selection){
+                    savedRange = document.selection.createRange();
+                }
+                return savedRange;
+            }
+
+            function setCaret(idx, selection) {
+
+                var els = document.getElementsByClassName("contenteditable")
+                var el = els[idx]
+                var range = document.createRange()
+                var sel = window.getSelection()
+
+                range.setStart(selection.startContainer, selection.startOffset)
+                range.collapse(true)
+
+                sel.removeAllRanges()
+                sel.addRange(range)
+
+            }
+
+            scope.exec = function(type, data, idx){
+
+
+                if (type.match(/createLink|insertImage/)){ // functions that need input
+
+                    scope.view.exec = {}
+                    scope.view.exec.input_el = idx
+                    scope.view.exec.selection = getSelection()
+                    console.log(scope.view.exec.selection )
+                    scope.view.modal = 'show_input'
+
+
+                    if (type.match(/createLink/)){
+                        scope.view.exec.title = 'Insert URL'
+                        scope.view.exec.input = 'Add link URL'
+                        scope.view.exec.type = type
+                        scope.view.exec.data = data
+                    } else if (type.match(/insertImage/)){
+                        scope.view.exec.title = 'Insert URL or Upload Image'
+                        scope.view.exec.input = 'Add image URL'
+                        scope.view.exec.image = true
+                        scope.view.exec.type = type
+                        scope.view.exec.data = data
+                    }
+
+                    return
+
+                } else if (type == 'exec'){
+
+                    scope.view.modal = false
+                    type = scope.view.exec.type
+
+                    setCaret(scope.view.exec.input_el,scope.view.exec.selection)
+
+                    if (scope.view.text_input){
+                        data = scope.view.text_input
+                    } else if (scope.view.image_url){
+                        data = scope.view.image_url
+                    } else {
+                        data = scope.view.exec.data
+                    }
+
+                    delete scope.view.exec
+                    scope.view.text_input = ''
+                    scope.view.image_url = ''
+
+                }
+
+                if (type.match(/insertImage/)){
+                    type = 'insertHTML'
+                    data = '<img src="'+data+'" class="w-100">'
+                }
+
+                if (type == 'formatBlock'){
+                    let selection = window.getSelection();
+                    type = 'insertHTML'
+                    data = '<'+data+'>'+selection+'</'+data+'>'
+                }
+
+                if (type == 'align'){
+                    let selection = window.getSelection();
+                    type = 'insertHTML'
+                    data = '<p class="text-'+data+'">'+selection+'</p>'
+                }
+
+                document.execCommand(type,false,data)
+
+
+            }
+
+        }
+
+    </script>

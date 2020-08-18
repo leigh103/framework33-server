@@ -169,7 +169,7 @@ const express = require('express'),
 
 
     let data = {
-        include_scripts: [settings.views+'/dashboard/scripts/script.ejs'],
+        include_scripts: [settings.views+'/dashboard/scripts/script.ejs','dashboard/views/scripts/editor.ejs'],
         include_styles: [settings.views+'/dashboard/styles/style.ejs']
     },
     blocks = []
@@ -224,6 +224,10 @@ const express = require('express'),
     })
 
     routes.get('/dashboard/content/:type?/:edit?/:key?', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Content'
+        }
 
         if (req.params.edit == 'new' || req.params.key || req.params.key == '0'){
 

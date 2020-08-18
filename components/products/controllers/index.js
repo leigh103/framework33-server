@@ -63,7 +63,7 @@ const express = require('express'),
 
     let data = {
         shop: view.ecommerce.shop,
-        meta:{},
+        meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs']
     }
 
@@ -77,6 +77,10 @@ const express = require('express'),
     })
 
     routes.get('/dashboard/products/categories', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Product Categories'
+        }
 
         view.current_view = 'products'
         view.current_sub_view = 'categories'
@@ -93,6 +97,10 @@ const express = require('express'),
 
     routes.get('/dashboard/products/attributes', async(req, res) => {
 
+        data.meta = {
+            title: config.site.name+' | Product Attributes'
+        }
+
         view.current_view = 'products'
         view.current_sub_view = 'attributes'
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
@@ -107,6 +115,10 @@ const express = require('express'),
     })
 
     routes.get('/dashboard/products/settings', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Product Settings'
+        }
 
         view.current_view = 'products'
         view.current_sub_view = 'settings'
@@ -123,6 +135,10 @@ const express = require('express'),
     })
 
     routes.get('/dashboard/products/:key?', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Products'
+        }
 
         view.current_view = 'products'
         view.current_sub_view = 'all products'
@@ -142,7 +158,7 @@ const express = require('express'),
         if (req.params.shop_slug == view.ecommerce.shop.slug){
 
             data.shop = view.ecommerce.shop
-            data.meta.title = 'Framework-33 | '+view.ecommerce.shop.name
+            data.meta.title = config.site.name+' | '+view.ecommerce.shop.name
             if (data.shop.description){
                 data.meta.description = data.shop.description.substring(0,160)
             }
@@ -186,7 +202,7 @@ const express = require('express'),
 
                 if (data.product){
 
-                    data.meta.title = 'Framework-33 | '+data.product.name
+                    data.meta.title = config.site.name+' | '+data.product.name
 
                     if (data.product.description){
                         data.meta.description = data.product.description.substring(0,160)
@@ -212,7 +228,7 @@ const express = require('express'),
 
                     data.parent_category = data.category
                     data.category = data.sub_category
-                    data.meta.title = 'Framework-33 | '+data.sub_category.name
+                    data.meta.title = config.site.name+' | '+data.sub_category.name
                     if (data.sub_category.description){
                         data.meta.description = data.sub_category.description.substring(0,160)
                     }
@@ -228,7 +244,7 @@ const express = require('express'),
 
                     if (data.product){
 
-                        data.meta.title = 'Framework-33 | '+data.product.name
+                        data.meta.title = config.site.name+' | '+data.product.name
 
                         if (data.product.description){
                             data.meta.description = data.product.description.substring(0,160)
@@ -245,7 +261,7 @@ const express = require('express'),
             } else { // top level category
 
                 delete data.parent_category
-                data.meta.title = 'Framework-33 | '+data.category.name
+                data.meta.title = config.site.name+' | '+data.category.name
                 if (data.category.description){
                     data.meta.description = data.category.description.substring(0,160)
                 }

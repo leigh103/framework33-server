@@ -13,7 +13,7 @@
 
                 <% if (typeof data == 'object'){ %>
                     <% if (typeof data.image != 'undefined'){ %><img src="<%- data.image %>" app-input="image" app-field="image"><% } %>
-                    <% if (typeof data.content != 'undefined'){ %><article app-input="textarea" app-field="content"><%- view.functions.stripStyle(data.content) %></article><% } %>
+                    <% if (typeof data.content != 'undefined'){ %><article app-input="textarea" app-field="content"><%- data.content %></article><% } %>
                 <% } %>
 
             </div>

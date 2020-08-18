@@ -5,8 +5,6 @@
 
     var contented
 
-
-
     ClassicEditor
         .create( document.querySelector( '#editor' ), {
         toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|','indent','outdent', '|','imageUpload','imageTextAlternative', '|','insertTable','tablerow'  ],
@@ -29,7 +27,6 @@
     extend.products = function(){
 
         scope.view.upload_text = "Upload Image"
-
 
         watch['new'] = function(data){
             if (data.category >= 0){

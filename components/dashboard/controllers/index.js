@@ -47,7 +47,10 @@ const express = require('express'),
 // routes
 
     let data = {
-        include_scripts: [settings.views+'/scripts/script.ejs']
+        include_scripts: [settings.views+'/scripts/script.ejs'],
+        meta:{
+            title: config.site.name+' | Dashboard'
+        }
     }
 
 
