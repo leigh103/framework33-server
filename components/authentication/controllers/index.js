@@ -13,15 +13,15 @@ const express = require('express'),
         default_route: 'root',
         menu: {
             nav: [
-                {link:'Login',slug: '/login', weight: 10, authenticated:false},
-                {link:'Logout',slug:'/logout', weight: 10, authenticated:true}
+                {link:'Login',slug: '/login', weight: 10, authenticated:false}
             ],
             side_nav: [
                 {link:'Login',slug: '/login', weight: 99, authenticated:false},
                 {link:'Logout',slug:'/logout', weight: 99, authenticated:true}
             ],
             footer: [
-                {link:'Admin Login',slug: '/login/admin', weight: 10, authenticated:false}
+                {link:'Admin Login',slug: '/login/admin', weight: 10, authenticated:false},
+                {link:'Logout',slug:'/logout', weight: 10, authenticated:true}
             ]
         }
     }

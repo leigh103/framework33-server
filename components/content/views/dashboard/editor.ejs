@@ -1,25 +1,21 @@
 <% layout('default/fullscreen.ejs') -%>
 
-
     <% if (typeof content_key != 'undefined' && content_key != 'new'){ %>
         <div class="page-full vh-100 bg-light-grey text-left" app-init="getContent('<%- content_key %>')">
     <% } else { %>
         <div class="page-full vh-100 bg-light-grey text-left">
     <% } %>
 
-        <div class="h-100 grid col-3 gap-1">
+        <div class="h-100 grid col-6 gap-1">
 
             <div class="h-100 bg-33-white py-2">
 
-                <div class="grid col-2 px-2">
+                <div class="px-2">
                     <h4 class="mb-1">Page Layout</h4>
-                    <div class="text-right mr-2">
-                        <button class="btn highlight" app-click="saveContent()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(content_type) %></span></button>
-                    </div>
                 </div>
 
                 <div class="sortable bg-light-grey py-1 pl-1">
-                    <div class="list-item bg-33-white clickable" app-click="showSettings()">
+                    <div class="list-item mb-0 bg-33-white clickable" app-click="showSettings()">
                         <div class="icon">
                             <i class="fas fa-cog"></i>
                         </div>
@@ -33,7 +29,7 @@
 
                 </div>
 
-                <div class="sortable bg-light-grey py-1 pl-1">
+                <div class="sortable bg-light-grey pl-1">
                     <div class="">
 
                     </div>
@@ -48,7 +44,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="sortable bg-light-grey py-1 pl-1">
+                <div class="bg-light-grey pb-1 pt-05 pl-1">
                     <div class="list-item bg-33-white text-primary" app-click="addNewSection()">
                         <div class="icon">
                             <i class="fas fa-plus"></i>
@@ -60,14 +56,16 @@
 
                         </div>
                     </div>
+                </div>
 
+                <div class="px-2 mt-2">
+                    <button class="btn highlight w-100 mb-05" app-click="saveContent()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(content_type) %></span></button>
+                    <button class="btn w-100" app-click="goto('content','<%- content_type %>')"><i class="fas fa-chevron-left mr-1"></i>Back</button>
                 </div>
 
             </div>
 
-            <div class="colspan-2 p-2 vh-100 overflow-y">
-
-                <h3 class="mb-1">Editor</h3>
+            <div class="colspan-2 py-2 pl-1 pr-2 vh-100 overflow-y">
 
                 <div app-hide="view.blocks">
                     <div class="grid col-2">
@@ -83,6 +81,11 @@
                     </div>
 
                     <div class="my-1">
+                        <label class="indent">Content URL</label>
+                        <input type="text" app-model="view.content.slug">
+                    </div>
+
+                    <div class="my-1">
                         <label class="indent">Published</label>
                         <select app-model="view.content.status">
                             <option value="draft">Draft</option>
@@ -90,11 +93,24 @@
                         </select>
                     </div>
 
+                    <h4 class="mb-1 mt-2">SEO</h4>
+
+                    <div class="my-1">
+                        <label class="indent">Title</label>
+                        <input type="text" app-model="view.content.meta.title">
+                    </div>
+
+                    <div class="my-1">
+                        <div class="float-right text-small pr-1" app-bind="view.content.meta.description.length"></div>
+                        <label class="indent">Descripton (160 chars. max)</label>
+                        <textarea app-model="view.content.meta.description"></textarea>
+                    </div>
+
                 </div>
 
                 <div app-show="view.blocks">
 
-                    <h4 class="my-2">Content</h4>
+                    <h4 class="mb-2">Content</h4>
                     <div>
                         <div class="mb-1" app-for="field in view.editor">
 
@@ -153,15 +169,20 @@
 
             </div>
 
+            <div class="colspan-3 vh-100 overflow-y">
 
+
+
+            </div>
 
         </div>
 
-
-
     </div>
 
-    <div class="modal expanded" app-show="view.modal == 'show_sections'" anim="{'enter':'fade-in'}">
+</div>
+
+
+    <div class="modal" app-show="view.modal == 'show_sections'" anim="{'enter':'fade-in'}">
 
         <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
 

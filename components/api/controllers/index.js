@@ -86,11 +86,24 @@ var express = require('express'),
             method = parseCamelCase(req.params.function)
         }
 
-        let query
+        let query,
+            sort = {
+                dir: 'desc',
+                field: '_updated'
+            }
 
         if (Object.keys(req.query).length > 0){
             query = []
             for (let [key, value] of Object.entries(req.query)) {
+                if (key == 'sort'){
+                    sort.field = value
+                }
+                if (key == 'asc'){
+                    sort.dir = 'asc'
+                }
+                if (key == 'desc'){
+                    sort.dir = 'desc'
+                }
                 query.push(key+' == '+value)
             }
         }
@@ -106,7 +119,8 @@ var express = require('express'),
                 model = await new global[model_class_name]()
 
                 if (model.all){ // if the class exists and the all function exists
-                    model.all(query)
+
+                    model.all(query).sort(sort.field,sort.dir)
                 } else { // else fail
                     res.json(settings.not_found)
                     return false

@@ -10,12 +10,16 @@
             this.settings = {
                 collection: 'content',
                 fields: [
-                    {name:'blocks',type:'object',required:true},
-                    {name:'type',input_type:'text',placeholder:'Content Type', type:'string', required:true},
-                    {name:'tags',input_type:'text',placeholder:'Tags', type:'string', required:false},
-                    {name:'status',input_type:'text',placeholder:'Status', type:'string', required:true},
                     {name:'title',input_type:'text',placeholder:'Content Title', type:'string', required:true},
                     {name:'slug',input_type:'text',placeholder:'Content URL', type:'slug', required:true},
+                    {name:'blocks',type:'object',required:true},
+                    {name:'meta', type:'object', required:false, subitems:[
+                        {name:'title',input_type:'text',placeholder:'SEO Title', type:'string', required:false},
+                        {name:'description',input_type:'text',placeholder:'SEO Descripton', type:'string', required:false, truncate:160},
+                    ]},
+                    {name:'type',input_type:'text',placeholder:'Content Type', type:'string', required:true},
+                    {name:'tags',input_type:'text',placeholder:'Tags', type:'string', required:false},
+                    {name:'status',input_type:'select',options:[{text:'Draft',value:'draft'},{text:'Published',value:'published'}],placeholder:'Status', type:'string', required:true},
                     {name:'publish_date',input_type:'date',placeholder:'Publish Date', type:'date', required:false}
                 ]
             }

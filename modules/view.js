@@ -54,6 +54,19 @@
 
             },
 
+            pluralise:(input) => {
+
+                if (typeof input != 'string'){
+                    return
+                }
+                if (input.match(/y$/)){
+                    return input.replace(/y$/,'ies')
+                } else {
+                    return input+'s'
+                }
+
+            },
+
             truncate:(input, words) => {
                 if (!words){
                     words = 10
@@ -148,6 +161,10 @@
                     return time[0]+''+time[1]+':'+time[2]+''+time[3]
                 }
 
+            },
+
+            stripStyle:(input) => {
+                return input.replace(/style=\"|'(.*?)\"|'/g,'')
             }
         }
     }

@@ -76,6 +76,18 @@
 
         }
 
+        sort(field,dir){
+
+            if (!dir || dir == 'asc'){
+                this.data.sort((a, b) => -a[field].localeCompare(b[field]))
+            } else {
+                this.data.sort((a, b) => a[field].localeCompare(b[field]))
+            }
+
+            return this
+
+        }
+
         async validate(){
 
             let fields = {},
@@ -126,7 +138,12 @@
 
                 if (field.type == 'string' && typeof value == 'string'){
 
-                    return value
+                    if (field.truncate){
+                        value = value.substring(0,field.truncate)
+                        return value
+                    } else {
+                        return value
+                    }
 
                 } else if (field.type == 'integer' && value.match(/\d/) || field.type == 'number' && value.match(/\d/)){
 

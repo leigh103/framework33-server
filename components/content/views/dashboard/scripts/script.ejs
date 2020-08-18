@@ -34,21 +34,25 @@
 
 // content functions
 
+
+            scope.gotoEditor = function(content_type, id){
+                window.location.href = '/dashboard/content/'+content_type+'/edit/'+id.replace('content/','')
+            }
+
             watch['view.editor'] = function(data){
             //    console.log(data)
             }
-
 
             scope.setContent = function(type){
                 scope.view.content.type = type
             }
 
-            scope.getContent = function(type,key){
+            scope.getContent = function(key){
 
                 scope.get('content',key).then((content)=>{
 
-                    scope.view.content.blocks = content[0].blocks
-                    scope.view.content = content[0]
+                    scope.view.content.blocks = content.blocks
+                    scope.view.content = content
 
                 }).catch((err)=>{
                     scope.notify(err,5,'error')
@@ -174,7 +178,8 @@
 
                     let ce_divs = document.getElementsByClassName('contenteditable')
 
-                    if (ce_divs){
+                    if (ce_divs.length > 0){
+
                         for (var i in ce_divs){
                             if (ce_divs[i].innerHTML && typeof ce_divs[i].innerHTML == 'string'){
                                 let el_prop = ce_divs[i].getAttribute('app-index').replace(/__([0-9]+)__/g,'[$1].').replace(/__/g,'.')
@@ -185,6 +190,7 @@
                                 resolve()
                             }
                         }
+                        
                     } else {
                         resolve()
                     }

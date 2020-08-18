@@ -1,19 +1,26 @@
-<section class="content-blog" app-block="blog" app-block-description="This is a blog block">
+<section class="content-blog <%- styling.background.class %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Blog Header" app-block-description="This is a blog block">
 
-    <div class="contain text-left">
+    <div class="contain text-left py-3">
 
-        <h2 class="underline"><span app-input="text" app-field="title"><%- title %></span></h2>
-
-        <% if (typeof date != 'undefined'){ %><p class="italic"><%- date %></p><% } %>
 
         <div class="grid col-3 col-s-1 gap-2">
 
             <div class="colspan-2">
-                <% if (typeof image != 'undefined'){ %><img src="<%- image %>" app-input="image" app-field="image"><% } %>
-                <% if (typeof content != 'undefined'){ %><article app-input="textarea" app-field="content"><%- content %></article><% } %>
-            </div>
-            <div class="details">
 
+                <h2 class="underline"><span app-input="text" app-field="title"><%- data.title %></span></h2>
+
+                <% if (typeof date != 'undefined'){ %><p class="italic"><%- view.functions.parseDate(date,'llll') %></p><% } %>
+
+                <% if (typeof data == 'object'){ %>
+                    <% if (typeof data.image != 'undefined'){ %><img src="<%- data.image %>" app-input="image" app-field="image"><% } %>
+                    <% if (typeof data.content != 'undefined'){ %><article app-input="textarea" app-field="content"><%- view.functions.stripStyle(data.content) %></article><% } %>
+                <% } %>
+
+            </div>
+            <div class="details pt-1">
+                <h4 class="capitalise mb-1">Recent <%- view.functions.pluralise(content_type) %></h4>
+                <%- recent %>
+                <a class="block mt-1" href="/<%- content_type %>">View All</a>
             </div>
 
         </div>

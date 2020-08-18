@@ -143,6 +143,23 @@ const express = require('express'),
 
             })
 
+        },
+
+        getRecent:async (type,key) => {
+
+            let articles = await new Content().all(['type == '+type]).get(),
+                article_list = ''
+
+            articles.forEach((article)=>{
+
+                if (article._key != key){
+                    article_list += '<a class="block" href="/'+article.type+'/'+article.slug+'">'+article.title+'</a>'
+                }
+
+            })
+
+            return article_list
+
         }
 
     }
@@ -166,6 +183,29 @@ const express = require('express'),
         next()
     })
 
+    routes.get('/', async (req, res, next) => {
+
+        res.locals.functions = functions
+
+        let article = await new Content().find(['slug == homepage','status == published'])
+
+        if (article.data.length == 0 || article.error){
+
+            next()
+
+        } else {
+
+            data.blocks = blocks
+            data.title = article.data.title
+            data.date = article.data._updated
+            data.meta = article.data.meta
+            data.content = article.data
+
+            res.render(settings.views+'/view.ejs',data)
+
+        }
+
+    })
 
     routes.get('/dashboard/content/get-blocks/:name?', (req, res) => {
 
@@ -183,9 +223,13 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/content/:type?/:key?', async(req, res) => {
+    routes.get('/dashboard/content/:type?/:edit?/:key?', async(req, res) => {
 
-        if (req.params.key || req.params.key == '0'){
+        if (req.params.edit == 'new' || req.params.key || req.params.key == '0'){
+
+            if (req.params.key == 'context._key'){
+                res.redirect('/dashoard/content/page/edit/0')
+            }
 
             view.current_view = 'content'
             data.title = 'Content'
@@ -225,7 +269,9 @@ const express = require('express'),
 
         res.locals.functions = functions
 
-        let content_type, slug
+        let content_type = false,
+            slug,
+            content
 
         if (req.params.slug){
             content_type = req.params.content_type
@@ -234,20 +280,63 @@ const express = require('express'),
             slug = req.params.content_type
         }
 
-        let data = {
-            user:req.session.user
-        }
+        if (content_type){ // get the article data
+            // console.log('getting article with ct', slug, content_type)
+            let article = await new Content().find(['slug == '+slug,'type == '+content_type])
 
-        let content = await new Content().find(['slug == '+slug])
+            if (article.data.length == 0 || article.error){
+                //console.log("article not found")
+                next()
+            } else {
+            //    console.log("article found")
+                data.blocks = blocks
+                data.title = article.data.title
+                data.date = article.data._updated
+                data.content = article.data
+                data.meta = article.data.meta
+                data.content_type = content_type
+                data.recent = await functions.getRecent(content_type,article._key)
 
-        if (content.data.length == 0 || content.error){
-            next()
-        } else {
-            data.blocks = blocks
-            data.title = content.data.title
-            data.date = content.data._updated
-            data.content = content.data
-            res.render(settings.views+'/view.ejs',data)
+                res.render(settings.views+'/view.ejs',data)
+
+            }
+
+        } else { // check content types first, and then check for articles
+
+            content = await new ContentTypes().find(['slug == '+slug])
+
+            if (content.data.length == 0 || content.error){ // if it's not a content type, check for page content
+
+                let article = await new Content().find(['slug == '+slug,'type == page'])
+
+                if (article.data.length == 0 || article.error){
+
+                    next()
+
+                } else {
+
+                    data.blocks = blocks
+                    data.title = article.data.title
+                    data.date = article.data._updated
+                    data.content = article.data
+                    data.meta = article.data.meta
+                    data.recent = await functions.getRecent(content_type,article._key)
+
+                    res.render(settings.views+'/view.ejs',data)
+
+                }
+
+            } else { // show a list of articles from that content type
+
+                let articles = await new Content().all(['type == '+slug])
+
+                data.content_type = content.data
+                data.articles = articles.data
+                data.meta = content.data.meta
+                res.render(settings.views+'/list.ejs',data)
+
+            }
+
         }
 
     })

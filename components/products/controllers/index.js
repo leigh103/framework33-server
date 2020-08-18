@@ -63,6 +63,7 @@ const express = require('express'),
 
     let data = {
         shop: view.ecommerce.shop,
+        meta:{},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs']
     }
 
@@ -141,9 +142,9 @@ const express = require('express'),
         if (req.params.shop_slug == view.ecommerce.shop.slug){
 
             data.shop = view.ecommerce.shop
-            view.meta.title = 'Framework-33 | '+view.ecommerce.shop.name
+            data.meta.title = 'Framework-33 | '+view.ecommerce.shop.name
             if (data.shop.description){
-                view.meta.description = data.shop.description.substring(0,160)
+                data.meta.description = data.shop.description.substring(0,160)
             }
             data.categories = await new ProductCategories().all()
             data.categories = data.categories.data
@@ -185,10 +186,10 @@ const express = require('express'),
 
                 if (data.product){
 
-                    view.meta.title = 'Framework-33 | '+data.product.name
+                    data.meta.title = 'Framework-33 | '+data.product.name
 
                     if (data.product.description){
-                        view.meta.description = data.product.description.substring(0,160)
+                        data.meta.description = data.product.description.substring(0,160)
                     }
 
                     res.render(settings.views+'/product.ejs',data)
@@ -211,9 +212,9 @@ const express = require('express'),
 
                     data.parent_category = data.category
                     data.category = data.sub_category
-                    view.meta.title = 'Framework-33 | '+data.sub_category.name
+                    data.meta.title = 'Framework-33 | '+data.sub_category.name
                     if (data.sub_category.description){
-                        view.meta.description = data.sub_category.description.substring(0,160)
+                        data.meta.description = data.sub_category.description.substring(0,160)
                     }
                     data.products = await new Products().all(['category like '+data.parent_category._key, 'sub_category like '+data.sub_category._key])
                     data.products = data.products.data
@@ -227,10 +228,10 @@ const express = require('express'),
 
                     if (data.product){
 
-                        view.meta.title = 'Framework-33 | '+data.product.name
+                        data.meta.title = 'Framework-33 | '+data.product.name
 
                         if (data.product.description){
-                            view.meta.description = data.product.description.substring(0,160)
+                            data.meta.description = data.product.description.substring(0,160)
                         }
 
                         res.render(settings.views+'/product.ejs',data)
@@ -244,9 +245,9 @@ const express = require('express'),
             } else { // top level category
 
                 delete data.parent_category
-                view.meta.title = 'Framework-33 | '+data.category.name
+                data.meta.title = 'Framework-33 | '+data.category.name
                 if (data.category.description){
-                    view.meta.description = data.category.description.substring(0,160)
+                    data.meta.description = data.category.description.substring(0,160)
                 }
                 data.products = await new Products().all(['category like '+data.category._key,'sub_category NOT EXISTS'])
                 data.products = data.products.data

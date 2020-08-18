@@ -146,7 +146,7 @@
 
         where(filters){
 
-            if (this.result && this.result.length > 0){
+            if (this.result && this.result.length > 0 && typeof filters == 'object'){
 
                 this.result = this.result.filter((o) => {
 
@@ -221,7 +221,7 @@
 
         orWhere(filters) {
 
-            if (this.result && this.result.length > 0){
+            if (this.result && this.result.length > 0 && typeof filters == 'object'){
 
                 this.result = this.result.filter((o) => {
 

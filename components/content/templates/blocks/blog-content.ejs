@@ -1,0 +1,24 @@
+<section class="content-blog <%- styling.background.class %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Blog Content" app-block-description="This is a blog content block">
+
+    <div class="contain text-left py-3">
+
+        <div class="grid col-3 col-s-1 gap-2">
+
+            <div class="colspan-2">
+
+                <h4 class="underline"><span app-input="text" app-field="sub_title"><%- data.sub_title %></span></h4>
+
+                <% if (typeof data == 'object'){ %>
+                    <% if (typeof data.image != 'undefined'){ %><img src="<%- data.image %>" app-input="image" app-field="image"><% } %>
+                    <% if (typeof data.content != 'undefined'){ %><article app-input="textarea" app-field="content"><%- view.functions.stripStyle(data.content) %></article><% } %>
+                <% } %>
+
+            </div>
+            <div class="details pt-1">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

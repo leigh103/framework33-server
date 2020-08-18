@@ -12,6 +12,10 @@
                 fields: [
                     {name:'type',input_type:'text',placeholder:'Content Type', type:'string', required:true},
                     {name:'slug',input_type:'text',placeholder:'Content Archive URL', type:'string', required:false},
+                    {name:'meta', type:'object', required:false, subitems:[
+                        {name:'title',input_type:'text',placeholder:'SEO Title', type:'string', required:false},
+                        {name:'description',input_type:'text',placeholder:'SEO Descripton', type:'string', required:false, truncate:160},
+                    ]},
                     {name:'_user_id',input_type:'hidden',value:'user_id', type:'user_id', required:true}
                 ]
             }

@@ -1,0 +1,18 @@
+<% layout('default/page.ejs') -%>
+
+
+<div class="page">
+
+    <div class="contain text-left">
+
+        <% if (articles != 'undefined'){ %>
+            <% articles.forEach((article,i)=>{ %>
+
+                <a href="<%- view.meta.url %>/<%- content_type.slug %>/<%- article.slug %>"><h2><%- article.title %></h2></a>
+
+            <% }) %>
+        <% } %>
+
+    </div>
+
+</div>
