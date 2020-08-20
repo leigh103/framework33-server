@@ -61,6 +61,7 @@
             this.content = {
                 subject: subject,
                 text: text,
+                html: text,
                 date: moment().toISOString()
             }
             return this

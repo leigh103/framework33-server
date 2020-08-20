@@ -1,0 +1,19 @@
+<section class="py-2 <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Text Three Column" app-block-description="This is a three column text block">
+
+    <div class="contain <%- data.container_classes %>"  app-input="none" app-field="container" app-styling="container_class">
+
+        <div class="grid col-3 col-s-1 gap-3">
+            <div class="text-pre-line <%- data.text_left_classes %>" app-input="textarea" app-field="text_left" app-styling="left_class">
+                <%- data.text_left %>
+            </div>
+            <div class="text-pre-line <%- data.text_mid_classes %>" app-input="textarea" app-field="text_mid" app-styling="mid_class">
+                <%- data.text_mid %>
+            </div>
+            <div class="text-pre-line <%- data.text_right_classes %>" app-input="textarea" app-field="text_right" app-styling="right_class">
+                <%- data.text_right %>
+            </div>
+        </div>
+
+    </div>
+
+</section>

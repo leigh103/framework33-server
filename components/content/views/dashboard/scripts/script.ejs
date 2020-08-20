@@ -50,14 +50,25 @@
 
             scope.getContent = function(key){
 
-                scope.get('content',key).then((content)=>{
+                if (localStorage.getItem('content')){
 
+                    let content = JSON.parse(localStorage.getItem('content'))
+                    console.log(content)
                     scope.view.content.blocks = content.blocks
                     scope.view.content = content
 
-                }).catch((err)=>{
-                    scope.notify(err,5,'error')
-                })
+                } else {
+
+                    scope.get('content',key).then((content)=>{
+
+                        scope.view.content.blocks = content.blocks
+                        scope.view.content = content
+
+                    }).catch((err)=>{
+                        scope.notify(err,5,'error')
+                    })
+
+                }
 
             }
 
@@ -93,9 +104,32 @@
                             scope.view.selected_block.styling = content.styling
                         }
 
-                        scope.view.editor = content.fields
+                        let new_fields = [], content_field
+
+                        block.editor.map((field)=>{
+
+                            content_field = content.fields.find((item)=>{
+                                return item.field == field.field
+                            })
+                            if (content_field){
+                                field.value = content_field.value
+                                field.classes = content_field.classes
+                            }
+                        })
+
+                        content.fields = block.editor
+                        scope.view.editor = block.editor
                         scope.view.blocks = true
                         scope.view.add = false
+
+                        setTimeout(function(){
+                            let elm = document.querySelector('code.contenteditable')
+                            console.log(elm)
+                            // when the contenteditable gets focused, start listening to key presses
+                            elm.addEventListener('keydown', scope.insertTab)
+
+                        },500)
+
 
                     })
 
@@ -115,7 +149,7 @@
                         block: scope.view.selected_block.block,
                         fields: scope.view.editor
                     }
-                    console.log('here', scope.view.selected_block.styling)
+
                     if (scope.view.selected_block.index){
 
                         scope.view.content.blocks[scope.view.selected_block.index] = content
@@ -137,15 +171,19 @@
             scope.deleteBlock = function(index){
 
                 scope.view.content.blocks.splice(index, 1)
-                localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
 
             }
 
-            scope.removeBlock = function(){
+            scope.removeBlock = function(conf){
 
-                if (scope.view.selected_block.index){
-                    scope.view.content.blocks.splice(scope.view.selected_block.index,1)
-                    localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+                if (conf){
+                    scope.view.modal = 'show_del_block_confirm'
+                } else {
+                    if (scope.view.selected_block.index){
+                        scope.view.content.blocks.splice(scope.view.selected_block.index,1)
+                        scope.showSettings()
+                    }
+                    scope.view.modal = false
                 }
 
             }
@@ -188,7 +226,7 @@
                         for (var i in ce_divs){
                             if (ce_divs[i].innerHTML && typeof ce_divs[i].innerHTML == 'string'){
                                 let el_prop = ce_divs[i].getAttribute('app-index').replace(/__([0-9]+)__/g,'[$1].').replace(/__/g,'.')
-                                _.set(scope,el_prop,ce_divs[i].innerHTML)
+                                _.set(scope,el_prop,scope.convertEntities(ce_divs[i].innerHTML))
                             }
 
                             if (i == ce_divs.length-1){
@@ -203,15 +241,19 @@
                 })
             }
 
+            scope.convertEntities = function(str){
+                return String(str).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+            }
+
             scope.saveLocal = function(){
 
                 return new Promise(function(resolve, reject) {
 
                     scope.updateCE().then(()=>{
 
-                        localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+                        localStorage.setItem('content',JSON.stringify(scope.view.content))
                         scope.view.saved = true
-                        scope.notify('Section Updated')
+                        scope.notify("Saved as a local draft. The live page hasn't been altered. Click 'Save' once done editing.")
                         resolve()
 
                     })
@@ -220,11 +262,29 @@
 
             }
 
+            scope.clearLocal = function(save){
+
+                localStorage.removeItem('content')
+
+                if (save){
+                    return new Promise(function(resolve, reject) {
+                        scope.updateCE().then(()=>{
+
+                            resolve()
+
+                        })
+                    })
+                } else {
+                    location.reload()
+                }
+
+            }
+
             <% if (typeof content_type != 'undefined'){ %>
 
                 scope.saveContent = function(){
 
-                    scope.saveLocal().then(()=>{
+                    scope.clearLocal(true).then(()=>{
 
                         let payload = scope.view.content
 
@@ -236,7 +296,7 @@
                         } else {
                             payload.slug = scope.view.content.title
                         }
-
+console.log(payload)
                         scope.post('content', payload).then((content)=>{
                             scope.notify('Saved!')
                         }).catch((err)=>{

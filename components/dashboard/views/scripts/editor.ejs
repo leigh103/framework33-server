@@ -4,6 +4,15 @@
         extend.editor = function(){
 
             scope.view.heading = ''
+            scope.view.form = {
+                inputs: [],
+                details: {
+                    name: '',
+                    url:'',
+                    button_text:''
+                }
+            }
+
 
             var savedrange = null;
 
@@ -21,7 +30,7 @@
 
                 var range = document.createRange()
                 var sel = window.getSelection()
-console.log(selection.startOffset, selection.endOffset)
+
                 range.setStart(selection.startContainer, selection.startOffset)
                 range.setEnd(selection.startContainer, selection.endOffset)
 
@@ -30,21 +39,30 @@ console.log(selection.startOffset, selection.endOffset)
 
             }
 
+            scope.insertTab = function(e) {
+                if (e.keyCode != 9) return // tab key
+                document.execCommand('insertHTML', false, '&#009')
+                e.preventDefault();
+            }
+
             scope.exec = function(type, data, idx){
 
-
-                if (type.match(/createLink|insertImage/)){ // functions that need input
+                if (type.match(/createLink|insertImage|insertIcon/)){ // functions that need input
 
                     scope.view.exec = {}
                     scope.view.exec.input_el = idx
 
                     scope.view.exec.selection = getSelection()
 
-                    console.log(scope.view.exec.selection )
                     scope.view.modal = 'show_input'
 
-
-                    if (type.match(/createLink/)){
+                    if (type.match(/createLinkButton/)){
+                        scope.view.exec.title = 'Insert URL'
+                        scope.view.exec.input = 'Add link URL'
+                        scope.view.exec.input_2 = 'Add link text'
+                        scope.view.exec.type = type
+                        scope.view.exec.data = data
+                    } else if (type.match(/createLink/)){
                         scope.view.exec.title = 'Insert URL'
                         scope.view.exec.input = 'Add link URL'
                         scope.view.exec.type = type
@@ -55,8 +73,24 @@ console.log(selection.startOffset, selection.endOffset)
                         scope.view.exec.image = true
                         scope.view.exec.type = type
                         scope.view.exec.data = data
+                    } else if (type.match(/insertIcon/)){
+                        scope.view.exec.title = 'Font Awesome or Upload Icon'
+                        scope.view.exec.input = 'Add Font Awesome class, eg. fa-chevron-right'
+                        scope.view.exec.image = true
+                        scope.view.exec.type = type
+                        scope.view.exec.data = data
                     }
 
+                    return
+
+                } else if (type.match(/insertForm/)){
+
+                    scope.view.exec = {}
+                    scope.view.exec.input_el = idx
+
+                    scope.view.exec.selection = getSelection()
+
+                    scope.view.modal = 'show_form_builder'
                     return
 
                 } else if (type == 'exec'){
@@ -85,20 +119,98 @@ console.log(selection.startOffset, selection.endOffset)
                     data = '<img src="'+data+'" class="w-100">'
                 }
 
-                if (type == 'formatBlock'){
-                    let selection = window.getSelection();
+                if (type.match(/insertIcon/)){
                     type = 'insertHTML'
-                    data = '<'+data+'>'+selection+'</'+data+'>'
+
+                    if (data.match(/^fa/)){
+                        data = '<i class="fas '+data+'"></i>'
+                    } else {
+                        data = '<img src="'+data+'" class="icon">'
+                    }
+
                 }
 
-                if (type == 'align'){
-                    let selection = window.getSelection();
+                if (type.match(/createLinkButton/)){
                     type = 'insertHTML'
-                    data = '<p class="text-'+data+'">'+selection+'</p>'
+                    data = '<a class="btn highlight" href="'+data+'">'+scope.view.text_input_2+'</a>'
+                    scope.view.text_input_2 = ''
                 }
+
+                // if (type == 'formatBlock'){
+                //     let selection = window.getSelection()
+                //     console.log(selection.toString())
+                //     selection = scope.stripTags(selection)
+                //     console.log(selection)
+                //     type = 'insertHTML'
+                //     data = '<'+data+'>'+selection+'</'+data+'>'
+                // }
+
+                // if (type == 'align'){
+                //     let selection = window.getSelection()
+                //     selection = scope.stripTags(selection)
+                //     type = 'insertHTML'
+                //     data = '<p class="text-'+data+'">'+selection+'</p>'
+                // }
 
                 document.execCommand(type,false,data)
 
+
+            }
+
+            scope.stripTags = function(str){
+                let div = document.createElement("div")
+                div.innerHTML = str.toString()
+                return div.innerText
+            }
+
+            scope.addInput = function(){
+
+                let payload = {
+                    type:'text',
+                    label: ''
+                }
+
+                scope.view.form.inputs.push(payload)
+
+            }
+
+            scope.insertForm = function(){
+
+                setCaret(scope.view.exec.selection)
+
+                scope.view.form.details.name = scope.view.form.details.name.replace(/\s/g,'-').toLowerCase()
+
+                let form = '<form id="'+scope.view.form.details.name+'" action="'+scope.view.form.details.url+'" method="post">'
+
+                scope.view.form.inputs.map((input)=>{
+
+                    form += '<div class="mb-1"><label>'+input.label+'</label>'
+
+                    if (input.type.match(/textarea/i)){
+                        form += '<textarea id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+scope.view.form.details.name+'"></textarea></div>'
+                    } else {
+                        form += '<input type="'+input.type+'" id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+scope.view.form.details.name+'"></div>'
+                    }
+
+                })
+
+                if (!scope.view.form.details.button_text){
+                    scope.view.form.details.button_text = 'Submit'
+                }
+
+                form += '<div class="text-right"><button class="btn highlight" app-click="submitForm(\''+scope.view.form.details.name+'\')">'+scope.view.form.details.button_text+'</div></form>'
+
+                document.execCommand('insertHTML',false,form)
+
+                scope.view.modal = false
+                scope.view.form = {
+                    inputs: [],
+                    details: {
+                        name: '',
+                        url:'',
+                        button_text:''
+                    }
+                }
 
             }
 

@@ -3,16 +3,16 @@
     <div class="contain text-left py-3">
 
 
-        <div class="grid col-3 col-s-1 gap-2">
+        <div class="grid col-3 col-s-1 gap-4">
 
             <div class="colspan-2">
 
-                <h2 class="underline"><span app-input="text" app-field="title"><%- data.title %></span></h2>
+                <h1 class="underline"><span app-input="text" app-field="title"><%- data.title %></span></h1>
+                <h4 class="underline mb-2"><span app-input="text" app-field="sub_title"><%- data.sub_title %></span></h4>
 
-                <% if (typeof date != 'undefined'){ %><p class="italic"><%- view.functions.parseDate(date,'llll') %></p><% } %>
+                <% if (typeof date != 'undefined'){ %><p class="italic mb-2"><%- view.functions.parseDate(date,'llll') %></p><% } %>
 
                 <% if (typeof data == 'object'){ %>
-                    <% if (typeof data.image != 'undefined'){ %><img src="<%- data.image %>" app-input="image" app-field="image"><% } %>
                     <% if (typeof data.content != 'undefined'){ %><article app-input="textarea" app-field="content"><%- data.content %></article><% } %>
                 <% } %>
 

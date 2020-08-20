@@ -10,8 +10,8 @@
 
             <div class="h-100 bg-33-white py-2">
 
-                <div class="px-2">
-                    <h4 class="mb-1">Page Layout</h4>
+                <div class="px-2 pb-2">
+                    <a app-click="goto('content','<%- content_type %>')"><i class="fas fa-chevron-left mr-05"></i>All <%- view.functions.depluralise(content_type) %> Content</a>
                 </div>
 
                 <div class="sortable bg-light-grey py-1 pl-1">
@@ -59,8 +59,13 @@
                 </div>
 
                 <div class="px-2 mt-2">
+                    <div app-show="view.selected_block" class="mb-3">
+                        <button class="btn bg-33-red w-100 mb-1" app-click="removeBlock(true)">Remove Block</button>
+                    </div>
+                    <button class="btn bg-33-green w-100 mb-05" app-click="saveLocal()">Save Draft</button>
+                    <button class="btn bg-33-red w-100 mb-05" app-click="clearLocal()">Clear Local Draft</button>
                     <button class="btn highlight w-100 mb-05" app-click="saveContent()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(content_type) %></span></button>
-                    <button class="btn w-100" app-click="goto('content','<%- content_type %>')"><i class="fas fa-chevron-left mr-1"></i>Back</button>
+
                 </div>
 
             </div>
@@ -110,7 +115,7 @@
 
                 <div app-show="view.blocks">
 
-                    <h4 class="mb-2">Content</h4>
+                    <h4 class="mb-2">Block Content</h4>
                     <div>
                         <div class="mb-1" app-for="field in view.editor">
 
@@ -125,9 +130,17 @@
                                 <div class="large resize contenteditable" app-model="field.value" contenteditable="true"></div>
                             </div>
 
+                            <div app-show="field.input == 'code'">
+                                <label class="indent capitalise" app-bind="field.field"></label>
+                                <pre><code class="html contenteditable" contenteditable="true" app-model="field.value"></code></pre>
+                            </div>
+
                             <div app-show="field.input == 'image'">
                                 <label class="indent capitalise" app-bind="field.field"></label>
+                            </div>
 
+                            <div app-show="field.input == 'none'">
+                                <label class="indent capitalise" app-bind="field.field"></label>
                             </div>
 
                             <input app-show="field.styling == 'true'" class="mt-05 transparent-3" type="text" app-model="field.classes" placeholder="Add element classes...">
@@ -135,9 +148,9 @@
                         </div>
                     </div>
 
-                    <h4 class="my-2">Section</h4>
+                    <h4 class="my-2">Block Styling</h4>
                     <div class="mb-2">
-                        <label class="indent capitalise">Section Name</label>
+                        <label class="indent capitalise">Block Name</label>
                         <input type="text" app-model="view.selected_block.name">
                     </div>
 
@@ -160,10 +173,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right" app-show="view.selected_block">
-                        <button class="btn bg-33-red" app-click="removeBlock()">Remove Block</button>
-                        <button class="btn highlight" app-click="saveLocal()"><span>Save Section</span></button>
-                    </div>
+
 
                 </div>
 
@@ -199,30 +209,116 @@
 
     </div>
 
-
-    <div class="modal" app-show="view.modal == 'show_input'" anim="{'enter':'fade-in'}">
+    <div class="modal" app-show="view.modal == 'show_del_block_confirm'" anim="{'enter':'fade-in'}">
 
         <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
 
             <div class="grid col-2 pb-1">
                 <div>
+                    <h4 class="text-light capitalise">
+                        Delete this block?
+                    </h4>
+                </div>
+            </div>
+            <div class="grid col-2 gap-2">
+                <button class="btn outline w-100" onclick="modalCloseAll()">Cancel</button>
+                <button class="btn highlight w-100" app-click="removeBlock()">Delete</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal" app-show="view.modal == 'show_input'" anim="{'enter':'fade-in'}">
+
+        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
+
+            <div class="grid col-2 pb-1 gap-2" style="width:50vw">
+                <div class="pb-1">
                     <h4 class="text-light capitalise" app-bind="view.exec.title">
 
                     </h4>
                 </div>
+                <div></div>
+                <div app-show="view.exec.image">
+                    <label>Upload Image</label>
+                    <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="view.image_url" class="w-100"></label>
+                    <input id="image_1" type="file" app-model="view.image_url">
+                </div>
+                <div app-show="view.exec.input">
+                    <label app-bind="view.exec.input"></label>
+                    <input type="text" app-model="view.text_input">
+                </div>
+                <div app-show="view.exec.input_2">
+                    <label app-bind="view.exec.input_2"></label>
+                    <input type="text" app-model="view.text_input_2">
+                </div>
             </div>
-            <div app-show="view.exec.image">
-                <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="view.image_url" class="w-100"></label>
-                <input id="image_1" type="file" app-model="view.image_url">
-            </div>
-            <div app-show="view.exec.input">
-                <label app-bind="view.exec.input"></label>
-                <input type="text" app-model="view.text_input">
-            </div>
+
             <div class="grid col-2 pb-1">
                 <div></div>
                 <div class="text-right">
                     <button class="btn highlight" app-click="exec('exec')">Submit</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal" app-show="view.modal == 'show_form_builder'" anim="{'enter':'fade-in'}">
+
+        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
+
+            <div class="grid col-2 pb-1 gap-2" style="width:50vw">
+                <div class="pb-1">
+                    <h4 class="text-light capitalise">
+                        Insert Form
+                    </h4>
+                </div>
+                <div></div>
+            </div>
+
+            <div class="grid col-3 gap-2 mb-2">
+                <div>
+                    <label>Form Name</label>
+                    <input type="text" app-model="view.form.details.name">
+                </div>
+                <div>
+                    <label>Post Route</label>
+                    <input type="text" app-model="view.form.details.url">
+                </div>
+                <div>
+                    <label>Button Text</label>
+                    <input type="text" app-model="view.form.details.button_text">
+                </div>
+            </div>
+
+            <div>
+                <div class="grid col-2 pb-1 gap-2" app-for="input in view.form.inputs">
+                    <div>
+                        <label>Input Label</label>
+                        <input type="text" app-model="input.label">
+                    </div>
+                    <div>
+                        <label>Input Type</label>
+                        <select app-model="input.type">
+                            <option>Text</option>
+                            <option>Textarea</option>
+                            <option>Checkbox</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="grid col-2 pb-1">
+                <div></div>
+                <div class="text-right">
+                    <button class="btn highlight" app-click="addInput()"><i class="fas fa-plus mr-05"></i> Add Input</button>
+                </div>
+            </div>
+
+            <div class="grid col-2 pb-1">
+                <div></div>
+                <div class="text-right">
+                    <button class="btn highlight" app-click="insertForm()">Insert Form</button>
                 </div>
             </div>
         </div>

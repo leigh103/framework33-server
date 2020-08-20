@@ -6,8 +6,11 @@
     border-bottom: 2px solid $bg-light-grey;
     height: 3rem;
     display: flex;
-    position: relative;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: -2rem;
     z-index: 500;
+    box-shadow: $shadow;
 
     button {
         font-size: 0.8rem;

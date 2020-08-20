@@ -4,7 +4,16 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no" />
-    <title><% if (typeof meta != 'undefined'){ %><%= meta.title %><% } else { %><%= view.meta.title %><% } %></title>
+    <title>
+        <% if (typeof meta != 'undefined'){ %>
+            <%= meta.title %>
+        <% } else { %>
+            <%= view.meta.title %>
+            <% if (typeof title != 'undefined'){ %>
+                 | <%= title %>
+            <% } %>
+        <% } %>
+    </title>
 
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
@@ -24,12 +33,12 @@
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
-    <meta name="description" content="<% if (typeof meta != 'undefined'){ %><%= meta.description %><% } else { %><%= view.meta.description %><% } %>">
+    <meta name="description" content="<% if (typeof meta != 'undefined'){ %><%= meta.description %><% } else { %><%= view.meta.description %><% if (typeof title != 'undefined'){ %>. <%= title %><% } %><% } %>">
 
     <script src="https://kit.fontawesome.com/e7faa1906b.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <link href="/style/framework33.css?v=3.0.9" rel="stylesheet">
-    <link href="/style/style.css?v=3.0.59" rel="stylesheet">
+    <link href="/style/framework33.css?v=3.0.10" rel="stylesheet">
+    <link href="/style/style.css?v=3.0.62" rel="stylesheet">
 
     <% if (typeof stripe_id != 'undefined'){ %>
         <script src="https://js.stripe.com/v3/"></script>

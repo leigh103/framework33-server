@@ -297,6 +297,43 @@
 
         }
 
+        scope.submitForm = function(form){
+
+            let form_name = 'form-'+form,
+                payload = [],
+                form_data = document.getElementById(form),
+                form_action = form_data.getAttribute('action'),
+                fields = document.getElementsByClassName(form_name)
+
+            for (let i = 0; i < fields.length; i++){
+
+                let name = fields[i].getAttribute('id')
+                if (name){
+                    name = name.replace(/form\-/,'')
+                } else {
+                    name = ''
+                }
+                let value = fields[i].value
+                payload.push({name:name,value:value})
+
+            }
+
+            scope.post('/submit-form', payload).then((data)=>{
+                scope.notify('Sent!')
+            }).catch((err)=>{
+                scope.notify(err,'error',5,'fa-exclamation-circle')
+            })
+
+        }
+
+        let page_form = document.getElementsByTagName('form')
+
+        if (page_form.length > 0){
+            page_form[0].addEventListener('submit', function(e) {
+                e.preventDefault();
+            })
+        }
+
         if (document.cookie.indexOf("cookietest=") == -1){
             document.cookie = "cookietest=1";
             if (document.cookie.indexOf("cookietest=") != -1){

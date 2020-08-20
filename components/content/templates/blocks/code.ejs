@@ -1,0 +1,5 @@
+<section class="<% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Code" app-block-description="This is a code block" app-input="code" app-field="code">
+
+    <%- data.code %>
+
+</section>
