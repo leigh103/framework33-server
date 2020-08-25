@@ -137,7 +137,7 @@
                 }
 
                 await db.create(this.settings.collection, default_admin)
-                new Auth(default_admin).sendReset()
+                new User(default_admin).sendReset()
 
             } else if (!config.admin.email){
                 console.log('Please set admin email address in modules/config.js')
