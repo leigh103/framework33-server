@@ -329,9 +329,11 @@
         let page_form = document.getElementsByTagName('form')
 
         if (page_form.length > 0){
-            page_form[0].addEventListener('submit', function(e) {
-                e.preventDefault();
-            })
+            if (!page_form[0].hasAttribute('action')){
+                page_form[0].addEventListener('submit', function(e) {
+                    e.preventDefault();
+                })
+            }
         }
 
         if (document.cookie.indexOf("cookietest=") == -1){
