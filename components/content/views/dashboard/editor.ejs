@@ -159,9 +159,16 @@
                             <label class="indent capitalise">Background Color</label>
                             <input type="text" app-model="view.selected_block.styling.background.color">
                         </div>
-                        <div>
-                            <label class="indent capitalise">Background Image</label>
-                            <input type="text" app-model="view.selected_block.styling.background.image">
+                        <div class="rowspan-5">
+                            <label class="indent capitalise">Background Image</label><br>
+                            <label for="block_bg_image" class="clickable"><img src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image"></label>
+                            <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image','content',view.selected_block.name)">
+                            <div class="grid col-2">
+                                <div></div>
+                                <div class="text-right">
+                                    <a class="text-small" app-click="delImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')" app-show="view.selected_block.styling.background.image"><i class="fas fa-times"></i> Remove Image</a>
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <label class="indent capitalise">Section Class</label>

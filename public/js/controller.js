@@ -48,6 +48,8 @@
 
                 if (typeof duration == 'undefined'){
                     duration = 5000
+                } else if (typeof duration == 'string' && duration.match(/[a-zA-Z]/)){
+                    duration = 'inf'
                 } else {
                     duration = parseInt(duration)*1000
                 }
@@ -77,6 +79,70 @@
 
         }
 
+        scope.uploadImage = function(base64, obj, path, name){
+
+            return new Promise(function(resolve, reject){
+
+                let payload = {
+                    base64: base64,
+                    file_name: name.replace(/\s/g,'-').toLowerCase(),
+                    file_path: path
+                }
+
+                scope.notify('Uploading...',false,'inf')
+
+                http('post','/api/image/save',payload).then((data) => {
+                    if (obj){
+                        data = data.replace(/\"/g,'')
+                        app.methods.setValue(scope,obj,data)
+                        let img = document.querySelector('[app-src="'+obj+'"]')
+                        console.log(img)
+                        if (img){
+                            img.setAttribute('src',data)
+                        }
+                    }
+                    scope.notify('cancel')
+                    resolve()
+
+                }).catch((err)=>{
+                    scope.notify(err,'error').then(()=>{
+                        reject(err)
+                    })
+                })
+
+            })
+
+        }
+
+        scope.deleteImage = function(path,obj){
+
+            return new Promise(function(resolve, reject){
+
+                let payload = {
+                    path: path
+                }
+
+                http('post','/api/image/delete',payload).then((data) => {
+                    if (obj){
+                        app.methods.setValue(scope,obj,'')
+                        let img = document.querySelector('[app-src="'+obj+'"]')
+                        console.log(img)
+                        if (img){
+                            img.setAttribute('src','/images/Product_Placeholder.svg')
+                        }
+                    }
+                    scope.notify('Image removed','success',2).then(()=>{
+                        resolve()
+                    })
+                }).catch((err)=>{
+                    scope.notify(err,'error').then(()=>{
+                        reject(err)
+                    })
+                })
+
+            })
+
+        }
 
         scope.get = function(collection, id, output){
 

@@ -296,7 +296,7 @@
                         } else {
                             payload.slug = scope.view.content.title
                         }
-console.log(payload)
+
                         scope.post('content', payload).then((content)=>{
                             scope.notify('Saved!')
                         }).catch((err)=>{
@@ -408,6 +408,22 @@ console.log(payload)
                 } else {
                     scope.view.modal = 'delete_confirm'
                 }
+
+            }
+
+            scope.uploadImg = function(base64, obj, path, name){
+
+                scope.uploadImage(base64, obj, path, name).then(()=>{
+                    scope.saveContent()
+                })
+
+            }
+
+            scope.delImg = function(base64, obj, path, name){
+
+                scope.deleteImage(base64, obj, path, name).then(()=>{
+                    scope.saveContent()
+                })
 
             }
 

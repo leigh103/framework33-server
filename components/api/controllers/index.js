@@ -187,6 +187,8 @@ var express = require('express'),
                 model = await new global[model_class_name](req.body)
             } else if (req.body._key || req.body._key == 0){
                 model = await new global[model_class_name]().find(req.body._key)
+            } else {
+                model = await new global[model_class_name]()
             }
 
             if (!model){

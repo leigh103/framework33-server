@@ -6,37 +6,40 @@
         constructor(base64, file_name, file_path){
 
             if (!base64){
-                this.error = "No data provided"
-                return this
+                // this.error = "No data provided"
+                // return this
+                this.result
+            } else {
+
+                if (typeof base64 == 'object'){
+                    file_name = base64.file_name
+                    file_path = base64.file_path
+                    base64 = base64.base64
+                }
+
+                this.base64 = base64
+                this.file_name = file_name
+                this.ext = base64.match(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i)[1]
+
+                if (this.ext == 'svg+xml'){
+                    this.ext = 'svg'
+                }
+
+                if (this.ext == 'jpeg'){
+                    this.ext = 'jpg'
+                }
+
+                this.base64Data = base64.replace(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i, "")
+                this.time = Date.now()+''
+                this.dir1 = this.time.substr(0,3)
+                this.dir2 = this.time.substr(3,1)
+                this.path_check = global.basedir+'/public/images/'+file_path
+                this.dir_check1 = global.basedir+'/public/images/'+file_path+'/'+this.dir1
+                this.dir_check2 = this.dir_check1+'/'+this.dir2
+                this.name = this.dir_check2+'/'+file_name+'-'+this.time+'.'+this.ext
+                this.result = '/images/'+file_path+'/'+this.dir1+'/'+this.dir2+'/'+file_name+'-'+this.time+'.'+this.ext
+
             }
-
-            if (typeof base64 == 'object'){
-                file_name = base64.file_name
-                file_path = base64.file_path
-                base64 = base64.base64
-            }
-
-            this.base64 = base64
-            this.file_name = file_name
-            this.ext = base64.match(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i)[1]
-
-            if (this.ext == 'svg+xml'){
-                this.ext = 'svg'
-            }
-
-            if (this.ext == 'jpeg'){
-                this.ext = 'jpg'
-            }
-
-            this.base64Data = base64.replace(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i, "")
-            this.time = Date.now()+''
-            this.dir1 = this.time.substr(0,3)
-            this.dir2 = this.time.substr(3,1)
-            this.path_check = global.basedir+'/public/images/'+file_path
-            this.dir_check1 = global.basedir+'/public/images/'+file_path+'/'+this.dir1
-            this.dir_check2 = this.dir_check1+'/'+this.dir2
-            this.name = this.dir_check2+'/'+file_name+'-'+this.time+'.'+this.ext
-            this.result = '/images/'+file_path+'/'+this.dir1+'/'+this.dir2+'/'+file_name+'-'+this.time+'.'+this.ext
 
             this.routes = {
                 public: { // unauth'd routes
@@ -47,13 +50,14 @@
 
                     },
                     post: {
-                        save:['admin']
+                        save:['admin'],
+                        delete:['admin']
                     },
                     put: {
                         save:['admin']
                     },
                     delete: {
-                        delete:['admin']
+
                     }
                 }
             }
@@ -93,7 +97,11 @@
 
         }
 
-        delete(path) {
+        async delete(path) {
+
+            if (typeof path == 'object'){ // if coming from an http POST
+                path = path.path
+            }
 
             if (!path.match(/^\//)){
                 path = '/'+path
@@ -101,22 +109,19 @@
 
             path = global.basedir+'/public'+path
 
-            return new Promise(function(resolve, reject) {
-
-                if (fs.existsSync(path)){
-                    try {
-                        fs.unlinkSync(path)
-                        return this.result = 'deleted'
-                    } catch(err) {
-                        this.err = 'Image not deleted'
-                        return this
-                    }
-                } else {
-                    this.err = 'Image does not exist'
+            if (fs.existsSync(path)){
+                try {
+                    await fs.unlinkSync(path)
+                    this.result = 'deleted'
+                    return this
+                } catch(err) {
+                    this.err = 'Image not deleted'
                     return this
                 }
-
-            })
+            } else {
+                this.err = 'Image does not exist'
+                return this
+            }
 
         }
 
