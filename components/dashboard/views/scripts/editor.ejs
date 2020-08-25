@@ -47,6 +47,8 @@
 
             scope.exec = function(type, data, idx){
 
+                let sup_data
+
                 if (type.match(/createLink|insertImage|insertIcon/)){ // functions that need input
 
                     scope.view.exec = {}
@@ -70,6 +72,7 @@
                     } else if (type.match(/insertImage/)){
                         scope.view.exec.title = 'Insert URL or Upload Image'
                         scope.view.exec.input = 'Add image URL'
+                        scope.view.exec.input_2 = 'Image name / ALT tag (required)'
                         scope.view.exec.image = true
                         scope.view.exec.type = type
                         scope.view.exec.data = data
@@ -95,6 +98,11 @@
 
                 } else if (type == 'exec'){
 
+                    if (type.match(/insertImage/) && !scope.view.text_input_2){
+                        scope.notify('Please set an image name. This is used for the image alt tag, and is important for SEO','error')
+                        return false
+                    }
+
                     scope.view.modal = false
                     type = scope.view.exec.type
 
@@ -108,6 +116,10 @@
                         data = scope.view.exec.data
                     }
 
+                    if (scope.view.text_input_2){
+                        sup_data = scope.view.text_input_2
+                    }
+
                     delete scope.view.exec
                     scope.view.text_input = ''
                     scope.view.image_url = ''
@@ -115,44 +127,67 @@
                 }
 
                 if (type.match(/insertImage/)){
-                    type = 'insertHTML'
-                    data = '<img src="'+data+'" class="w-100">'
-                }
 
-                if (type.match(/insertIcon/)){
                     type = 'insertHTML'
 
-                    if (data.match(/^fa/)){
-                        data = '<i class="fas '+data+'"></i>'
+                    if (data.match(/base64/)){
+
+                        scope.uploadImage(data,false,'content',sup_data).then((img_url)=>{
+                            data = '<img src="'+img_url+'" alt="'+sup_data+'" class="w-100">'
+                            document.execCommand(type,false,data)
+                        }).catch((err)=>{
+                            scope.notify(err,'error')
+                        })
+
                     } else {
-                        data = '<img src="'+data+'" class="icon">'
+
+                        data = '<img src="'+data+'" alt="'+sup_data+'" class="w-100">'
+                        document.execCommand(type,false,data)
+
                     }
 
-                }
-
-                if (type.match(/createLinkButton/)){
-                    type = 'insertHTML'
-                    data = '<a class="btn highlight" href="'+data+'">'+scope.view.text_input_2+'</a>'
                     scope.view.text_input_2 = ''
+
+                } else {
+
+                    if (type.match(/insertIcon/)){
+                        type = 'insertHTML'
+
+                        if (data.match(/^fa/)){
+                            data = '<i class="fas '+data+'"></i>'
+                        } else {
+                            data = '<img src="'+data+'" class="icon">'
+                        }
+
+                    }
+
+                    if (type.match(/createLinkButton/)){
+                        type = 'insertHTML'
+                        data = '<a class="btn highlight" href="'+data+'">'+scope.view.text_input_2+'</a>'
+                        scope.view.text_input_2 = ''
+                    }
+
+                    // if (type == 'formatBlock'){
+                    //     let selection = window.getSelection()
+                    //     console.log(selection.toString())
+                    //     selection = scope.stripTags(selection)
+                    //     console.log(selection)
+                    //     type = 'insertHTML'
+                    //     data = '<'+data+'>'+selection+'</'+data+'>'
+                    // }
+
+                    // if (type == 'align'){
+                    //     let selection = window.getSelection()
+                    //     selection = scope.stripTags(selection)
+                    //     type = 'insertHTML'
+                    //     data = '<p class="text-'+data+'">'+selection+'</p>'
+                    // }
+
+                    document.execCommand(type,false,data)
+
                 }
 
-                // if (type == 'formatBlock'){
-                //     let selection = window.getSelection()
-                //     console.log(selection.toString())
-                //     selection = scope.stripTags(selection)
-                //     console.log(selection)
-                //     type = 'insertHTML'
-                //     data = '<'+data+'>'+selection+'</'+data+'>'
-                // }
 
-                // if (type == 'align'){
-                //     let selection = window.getSelection()
-                //     selection = scope.stripTags(selection)
-                //     type = 'insertHTML'
-                //     data = '<p class="text-'+data+'">'+selection+'</p>'
-                // }
-
-                document.execCommand(type,false,data)
 
 
             }

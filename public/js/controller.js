@@ -92,8 +92,10 @@
                 scope.notify('Uploading...',false,'inf')
 
                 http('post','/api/image/save',payload).then((data) => {
+
+                    data = data.replace(/\"/g,'')
+
                     if (obj){
-                        data = data.replace(/\"/g,'')
                         app.methods.setValue(scope,obj,data)
                         let img = document.querySelector('[app-src="'+obj+'"]')
                         console.log(img)
@@ -101,8 +103,9 @@
                             img.setAttribute('src',data)
                         }
                     }
+                    
                     scope.notify('cancel')
-                    resolve()
+                    resolve(data)
 
                 }).catch((err)=>{
                     scope.notify(err,'error').then(()=>{
