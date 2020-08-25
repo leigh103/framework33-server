@@ -79,9 +79,17 @@
         sort(field,dir){
 
             if (!dir || dir == 'asc'){
-                this.data.sort((a, b) => -a[field].localeCompare(b[field]))
+                this.data.sort((a, b) => {
+                    if (a[field] && b[field]){
+                        -a[field].localeCompare(b[field])
+                    }
+                })
             } else {
-                this.data.sort((a, b) => a[field].localeCompare(b[field]))
+                this.data.sort((a, b) => {
+                    if (a[field] && b[field]){
+                        a[field].localeCompare(b[field])
+                    }
+                })
             }
 
             return this
