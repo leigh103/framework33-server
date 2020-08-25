@@ -8,7 +8,7 @@
 
         <div class="h-100 grid col-3 gap-1">
 
-            <div class="h-100 bg-33-white py-2">
+            <div class="h-100 bg-33-white py-2 overflow-y">
 
                 <div class="px-2 pb-2">
                     <a app-click="goto('content','<%- content_type %>')"><i class="fas fa-chevron-left mr-05"></i>All <%- view.functions.depluralise(content_type) %> Content</a>
@@ -119,7 +119,7 @@
                     <div>
                         <div class="mb-1" app-for="field in view.editor">
 
-                            <div app-show="field.input=='text'">
+                            <div app-show="field.input == 'text'">
                                 <label class="indent capitalise" app-bind="field.field"></label>
                                 <input type="text" app-model="field.value">
                             </div>

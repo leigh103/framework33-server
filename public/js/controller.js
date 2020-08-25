@@ -98,12 +98,11 @@
                     if (obj){
                         app.methods.setValue(scope,obj,data)
                         let img = document.querySelector('[app-src="'+obj+'"]')
-                        console.log(img)
                         if (img){
                             img.setAttribute('src',data)
                         }
                     }
-                    
+
                     scope.notify('cancel')
                     resolve(data)
 
@@ -129,7 +128,6 @@
                     if (obj){
                         app.methods.setValue(scope,obj,'')
                         let img = document.querySelector('[app-src="'+obj+'"]')
-                        console.log(img)
                         if (img){
                             img.setAttribute('src','/images/Product_Placeholder.svg')
                         }

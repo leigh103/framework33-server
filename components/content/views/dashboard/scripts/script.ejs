@@ -123,13 +123,30 @@
                         scope.view.add = false
 
                         setTimeout(function(){
-                            let elm = document.querySelector('code.contenteditable')
-                            console.log(elm)
-                            // when the contenteditable gets focused, start listening to key presses
-                            elm.addEventListener('keydown', scope.insertTab)
+
+                            let code = document.querySelectorAll('code.contenteditable')
+                            if (code){
+
+                                for (var i in code){
+                                    if (code[i] && typeof code[i].addEventListener == 'function'){
+                                        //when the contenteditable gets focused, start listening to key presses
+                                        code[i].removeEventListener('keydown', scope.insertTab)
+                                        code[i].addEventListener('keydown', scope.insertTab)
+                                    }
+                                }
+                            }
+
+                            let imgs = document.querySelectorAll('.contenteditable img')
+                            if (imgs){
+                                for (var i in imgs){
+                                    if (imgs[i] && typeof imgs[i].addEventListener == 'function'){
+                                        imgs[i].removeEventListener('click', scope.showImageEdit)
+                                        imgs[i].addEventListener('click', scope.showImageEdit)
+                                    }
+                                }
+                            }
 
                         },500)
-
 
                     })
 
@@ -224,7 +241,9 @@
                     if (ce_divs.length > 0){
 
                         for (var i in ce_divs){
-                            if (ce_divs[i].innerHTML && typeof ce_divs[i].innerHTML == 'string'){
+
+                            let ce_style = window.getComputedStyle(ce_divs[i])
+                            if (ce_divs[i] && ce_style.display == 'block' && ce_divs[i].innerHTML && typeof ce_divs[i].innerHTML == 'string'){
                                 let el_prop = ce_divs[i].getAttribute('app-index').replace(/__([0-9]+)__/g,'[$1].').replace(/__/g,'.')
                                 _.set(scope,el_prop,scope.convertEntities(ce_divs[i].innerHTML))
                             }
@@ -424,6 +443,23 @@
                 scope.deleteImage(base64, obj, path, name).then(()=>{
                     scope.saveContent()
                 })
+
+            }
+
+            scope.showImageEdit = function(img){
+
+                scope.view.exec = {}
+                scope.view.exec.title = 'Edit URL or Upload New Image'
+                scope.view.exec.input = 'Add image URL'
+                scope.view.exec.input_2 = 'Image name / ALT tag (required)'
+                scope.view.exec.image = img
+                scope.view.exec.replace = true
+                scope.view.exec.type = 'insertImage'
+                scope.view.exec.data = img.target.getAttribute('src')
+                scope.view.text_input_2 = img.target.getAttribute('alt')
+                scope.view.image_url = img.target.getAttribute('src')
+
+                scope.view.modal = 'show_input'
 
             }
 

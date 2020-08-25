@@ -47,7 +47,7 @@
 
             scope.exec = function(type, data, idx){
 
-                let sup_data
+                let sup_data, img_node
 
                 if (type.match(/createLink|insertImage|insertIcon/)){ // functions that need input
 
@@ -106,7 +106,11 @@
                     scope.view.modal = false
                     type = scope.view.exec.type
 
-                    setCaret(scope.view.exec.selection)
+                    if (scope.view.exec.selection){
+                        setCaret(scope.view.exec.selection)
+                    } else if (typeof scope.view.exec.image == 'object'){
+                        img_node = scope.view.exec.image
+                    }
 
                     if (scope.view.text_input){
                         data = scope.view.text_input
@@ -133,16 +137,40 @@
                     if (data.match(/base64/)){
 
                         scope.uploadImage(data,false,'content',sup_data).then((img_url)=>{
-                            data = '<img src="'+img_url+'" alt="'+sup_data+'" class="w-100">'
-                            document.execCommand(type,false,data)
+
+                            if (typeof img_node == 'object'){
+
+                                let new_img = document.createElement("img")
+                                new_img.setAttribute('src', img_url)
+                                new_img.setAttribute('alt', sup_data)
+
+                                img_node.target.parentNode.replaceChild(new_img, img_node.target)
+                                scope.updateCE()
+
+                            } else {
+                                data = '<img src="'+img_url+'" alt="'+sup_data+'" class="w-100">'
+                                document.execCommand(type,false,data)
+                            }
+
                         }).catch((err)=>{
                             scope.notify(err,'error')
                         })
 
                     } else {
 
-                        data = '<img src="'+data+'" alt="'+sup_data+'" class="w-100">'
-                        document.execCommand(type,false,data)
+                        if (typeof img_node == 'object'){
+
+                            let new_img = document.createElement("img")
+                            new_img.setAttribute('src', data)
+                            new_img.setAttribute('alt', sup_data)
+
+                            img_node.target.parentNode.replaceChild(new_img, img_node.target)
+                            scope.updateCE()
+
+                        } else {
+                            data = '<img src="'+data+'" alt="'+sup_data+'" class="w-100">'
+                            document.execCommand(type,false,data)
+                        }
 
                     }
 
@@ -250,5 +278,7 @@
             }
 
         }
+
+
 
     </script>
