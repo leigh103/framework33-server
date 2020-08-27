@@ -69,6 +69,49 @@ var express = require('express'),
 
             })
 
+        },
+
+        sanitizeOutput: (result) => {
+
+            return new Promise((resolve, reject) => {
+
+                if (result.error){
+
+                    delete result.data
+                    resolve(result)
+
+                } else if (result.data){
+
+                    result.data = result.data.map((item)=>{
+                        delete item.password
+                        delete item.password_reset
+                        delete item.ws_id
+                        return item
+                    })
+
+                    resolve(result)
+
+                } else if (typeof result == 'object' && typeof result.map == 'function'){
+
+                    result = result.map((item)=>{
+                        delete item.password
+                        delete item.password_reset
+                        delete item.ws_id
+                        return item
+                    })
+                    resolve(result)
+
+                } else {
+
+                    delete result.password
+                    delete result.password_reset
+                    delete result.ws_id
+                    resolve(result)
+
+                }
+
+            })
+
         }
 
     }
@@ -141,6 +184,8 @@ var express = require('express'),
                 } else {
                     result = model.data
                 }
+
+                result = await functions.sanitizeOutput(result)
 
                 if (result.error){
                     res.status(500).send(result.error)

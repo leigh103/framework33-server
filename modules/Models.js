@@ -67,10 +67,10 @@
                 this.data = db.read(this.settings.collection).orderBy(data,'asc').get()
                 return this
             } else if (typeof data == 'object'){
-                this.data = db.read(this.settings.collection).where(data).omit(['password','password_reset']).get()
+                this.data = db.read(this.settings.collection).where(data).get() //.omit(['password','password_reset']).get()
                 return this
             } else {
-                this.data = db.read(this.settings.collection).omit(['password','password_reset']).get()
+                this.data = db.read(this.settings.collection).get() //.omit(['password','password_reset']).get()
                 return this
             }
 
