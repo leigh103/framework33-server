@@ -463,6 +463,11 @@ console.log(content)
 
             }
 
+            scope.removeNotification = function(){
+                scope.view.content.notification = ''
+                document.getElementById('content_notification').innerHTML = ''
+            }
+
 
         }
 
