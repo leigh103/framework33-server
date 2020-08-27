@@ -364,39 +364,79 @@
 
         }
 
+
         scope.submitForm = function(form){
 
             let form_name = 'form-'+form,
                 payload = [],
                 form_data = document.getElementById(form),
                 form_action = form_data.getAttribute('action'),
-                fields = document.getElementsByClassName(form_name)
+                fields = document.getElementsByClassName(form_name),
+                error = false
 
             for (let i = 0; i < fields.length; i++){
 
-                let name = fields[i].getAttribute('id')
+                fields[i].classList.remove('invalid')
+
+                let name = fields[i].getAttribute('id'),
+                    type = fields[i].getAttribute('type'),
+                    required = fields[i].hasAttribute('required')
+
                 if (name){
                     name = name.replace(/form\-/,'')
                 } else {
                     name = ''
                 }
-                let value = fields[i].value
-                payload.push({name:name,value:value})
+
+                let field_val = fields[i].value
+
+                if (required == true && !field_val){
+                    error = 'The field "'+name.replace(/\-/g,' ')+'" is required'
+                    fields[i].classList.add('invalid')
+                    break
+                }
+
+                if (type == 'email' && !field_val.match(/[^@]+@[^\.]+\..+/gi)){
+                    error = 'Please enter a valid email address'
+                    fields[i].classList.add('invalid')
+                    break
+                }
+
+                if (type == 'tel' && !field_val.match(/^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/gi)){
+                    error = 'Please enter a valid phone number'
+                    fields[i].classList.add('invalid')
+                    break
+                }
+
+                payload.push({name:name,value:field_val})
 
             }
 
-            scope.post('/submit-form', payload).then((data)=>{
-                scope.notify('Sent!')
-            }).catch((err)=>{
-                scope.notify(err,'error',5,'fa-exclamation-circle')
-            })
+            if (error){
+                scope.notify(error,'error',15,'fa-exclamation-circle')
+                return
+            }
+
+            if (typing_count > fields.length*3){
+
+                scope.post('/submit-form', payload).then((data)=>{
+                    scope.notify('Your message has been sent, someone will respond as soon as possible')
+                }).catch((err)=>{
+                    scope.notify(err,'error',15,'fa-exclamation-circle')
+                })
+
+            } else {
+                scope.notify('This website features bot protection. Please refrain from pasting content into the fields, maybe try giving us a little more information so we can help you further and try again.','error',5,'fa-exclamation-circle')
+            }
+
 
         }
 
         let page_form = document.getElementsByTagName('form')
 
         if (page_form.length > 0){
-            if (!page_form[0].hasAttribute('action')){
+            let action = page_form[0].getAttribute('action')
+            if (!action){
                 page_form[0].addEventListener('submit', function(e) {
                     e.preventDefault();
                 })

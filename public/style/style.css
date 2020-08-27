@@ -368,6 +368,11 @@ div[contenteditable=true] {
 div[contenteditable=true]:hover {
   background-color: #fff;
 }
+input.invalid,
+textarea.invalid,
+select.invalid {
+  border: 2px solid #de4848 !important;
+}
 body:not(.dashboard) .page {
   min-height: calc(100vh - 14rem);
   margin-top: 4rem;
@@ -479,7 +484,8 @@ ul li::before {
   height: calc(100vh - 3.75em);
 }
 .nav {
-  position: fixed;
+  position: sticky;
+  top: 0;
   width: 100vw;
   border-bottom: 1px solid rgba(120,120,120,0.1);
   z-index: 999;
@@ -568,6 +574,13 @@ ul li::before {
 }
 .notification-bar * {
   white-space: normal !important;
+}
+.page-notification {
+  background-color: #1dc7d5;
+  color: #fff;
+  text-align: right;
+  font-size: 0.875rem;
+  padding: 1rem;
 }
 .table .table-header {
   font-weight: 500;

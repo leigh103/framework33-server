@@ -7,6 +7,14 @@
             <div class="icon"><i class="fas" app-class="view.notification.icon"></i></div>
         </div>
 
+        <% if (typeof content != 'undefined' && content.notification) { %>
+            <section class="page-notification">
+                <div class="contain">
+                    <%- content.notification %>
+                </div>
+            </section>
+        <% } %>
+
         <%- include partials/top_nav.ejs %>
 
         <%- body -%>

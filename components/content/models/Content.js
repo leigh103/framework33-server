@@ -12,6 +12,7 @@
                 fields: [
                     {name:'title',input_type:'text',placeholder:'Content Title', type:'string', required:true},
                     {name:'slug',input_type:'text',placeholder:'Content URL', type:'slug', required:true},
+                    {name:'notification',input_type:'text',placeholder:'Content Notificaton', type:'string', required:false, truncate:400},
                     {name:'blocks',type:'object',required:true},
                     {name:'meta', type:'object', required:false, subitems:[
                         {name:'title',input_type:'text',placeholder:'SEO Title', type:'string', required:false},

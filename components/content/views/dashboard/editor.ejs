@@ -98,6 +98,13 @@
                         </select>
                     </div>
 
+                    <div>
+                        <div class="float-right text-small pr-1" app-bind="view.content.notification.length"></div>
+                        <label class="indent capitalise">Add a notification to this page (400 chars. max)</label>
+                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:"simple"}) %>
+                        <div class="large resize contenteditable" app-model="view.content.notification" contenteditable="true"></div>
+                    </div>
+
                     <h4 class="mb-1 mt-2">SEO</h4>
 
                     <div class="my-1">
@@ -310,6 +317,8 @@
                         <select app-model="input.type">
                             <option>Text</option>
                             <option>Textarea</option>
+                            <option>Email</option>
+                            <option>Tel</option>
                             <option>Checkbox</option>
                         </select>
                     </div>
