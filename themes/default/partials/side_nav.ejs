@@ -1,7 +1,13 @@
 
         <div class="header">
             <div class="logo">
-                <a href="/"><img src="<%- user.avatar %>"></a>
+                <a href="/">
+                    <% if (user.avatar){ %>
+                        <img src="<%- user.avatar %>">
+                    <% } else { %>
+                        <img src="/images/logo.svg">
+                    <% } %>
+                </a>
             </div>
 
             <div class="user-info">
