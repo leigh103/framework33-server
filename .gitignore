@@ -1,4 +1,11 @@
+public/images
 public/style/style.css
+public/*.jpg
+public/*.png
+public/*.ico
+public/*.xml
+public/*.json
+public/*.txt
 modules/config.js
 db.json
 
