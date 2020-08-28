@@ -65,11 +65,13 @@ var express = require('express'),
 
             try {
                 let sms = await new Notification(admin).setContent('','This is a test sms whoopwhoop').sms()
+                res.send(sms)
             } catch (error) {
                 log(error)
+                res.send(error)
             }
 
-            res.send(sms)
+
         } else {
             res.redirect('/login/admin')
         }
