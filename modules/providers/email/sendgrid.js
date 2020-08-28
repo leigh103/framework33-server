@@ -19,7 +19,16 @@
             sendgrid.send(msg).then((email_res) => {
                 resolve(email_res)
             }).catch((error) => {
-                log('Mail error: ',error)
+
+                if (error && error.response.body.errors){
+                    error = error.response.body.errors
+                } else if (error && error.response.body){
+                    error = error.response.body
+                } else if (error && error.response){
+                    error = error.response
+                }
+
+                log('Mail error: '+JSON.stringify(error))
                 reject(error)
             })
 
@@ -45,7 +54,6 @@
                     subject: subject,
                     text: content,
                     html: content,
-                    templateId: config.email.templates[0],
                     dynamic_template_data: {
                         body: content,
                         subject: subject,
@@ -71,7 +79,6 @@
                     subject: subject,
                     text: content,
                     html: content,
-                    templateId: config.email.templates[0],
                     dynamic_template_data: {
                         body: content,
                         subject: subject,
@@ -96,7 +103,6 @@
                     subject: subject,
                     text: content,
                     html: content,
-                    templateId: config.email.templates[0],
                     dynamic_template_data: {
                         body: content,
                         subject: subject,
@@ -110,6 +116,13 @@
 
             }
 
+        }
+
+        if (config.email && config.email.templates && config.email.templates[0]){
+            msg.templateId = config.email.templates[0]
+        } else if (msg.dynamic_template_data && msg.dynamic_template_data.link && msg.dynamic_template_data.link.url) {
+            msg.text = msg.text+'\n'+msg.dynamic_template_data.link.url
+            msg.html = msg.html+'<br><br><a href="'+msg.dynamic_template_data.link.url+'">'+msg.dynamic_template_data.link.url+'</a>'
         }
 
         return msg

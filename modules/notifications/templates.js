@@ -8,12 +8,12 @@
 
         activate_account: {
             subject: "Activate your account",
-            content: "Please click the following link to activate your account."
+            content: "Please click or copy and paste the following link to activate your account."
         },
 
         complete_registration: {
             subject: "Complete Your Registration",
-            content:"Welcome to "+config.site.name+"! To complete your registration, please click the link below to activate to your account."
+            content:"Welcome to "+config.site.name+"! To complete your registration, please click or copy and paste the following link to activate to your account."
         }
 
     }
