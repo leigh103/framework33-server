@@ -181,75 +181,6 @@ const express = require('express'),
     }
 
 
-// boot components and servers
-
-
-    // config.modules.load.forEach( (file) => {
-
-    log('Loading modules...')
-    for (let file of config.modules.load){
-
-        let file_name = file
-
-        if (file_name.match(/\//)){
-            file_name = file.split('/')
-            file_name = file_name[file_name.length-1]
-        }
-
-        global[file_name] = require('./modules/'+file)
-
-    }
-
-    //})
-    log('Loading components...')
-    loadComponents()
-    app.locals.view = global.view
-
-    watch(['./components'], { recursive: true }, function(evt, name) {
-
-        if (config.site.mode == 'production'){
-            log('Components Reloaded')
-            loadComponents()
-        }
-
-    })
-
-    watch(['./themes/'+config.site.theme+'/css'], { recursive: true }, function(evt, name) {
-
-        let styl = fs.readFileSync(__dirname + '/themes/'+config.site.theme+'/css/css.styl', 'utf8'),
-            style_path = __dirname + '/public/style/style.css'
-
-        stylus(styl)
-            .set('paths', [__dirname + '/themes/'+config.site.theme+'/css'])
-            .render(function(err, css){
-
-                if (err) return console.error(err)
-
-                let header_path = __dirname + '/themes/'+config.site.theme+'/partials/head.ejs',
-                    header = fs.readFileSync(header_path, 'utf8')
-
-                if (typeof header == 'string'){
-                    header = header.replace(/\/style\/style\.css\?v=(.*?)\"/,'/style/style.css?v='+Date.now()+'"')
-                    fs.writeFile(header_path, header, function (err) {
-                        if (err) return log(err)
-                        log('Style cache updated')
-                    })
-                }
-
-                fs.writeFile(style_path, css, function (err) {
-                    if (err) return log(err)
-                    log('Styl rendered')
-                })
-
-        });
-
-    })
-
-    server.listen(config.http.port, function() {
-        log('Listening on '+config.http.port);
-    });
-
-
 // functions
 
 
@@ -380,3 +311,81 @@ const express = require('express'),
         })
 
     }
+
+    global.renderTheme = () => {
+
+        let styl = fs.readFileSync(__dirname + '/themes/'+config.site.theme+'/css/css.styl', 'utf8'),
+            style_path = __dirname + '/public/style/style.css'
+
+        stylus(styl)
+            .set('paths', [__dirname + '/themes/'+config.site.theme+'/css'])
+            .render(function(err, css){
+
+                if (err) return console.error(err)
+
+                let header_path = __dirname + '/themes/'+config.site.theme+'/partials/head.ejs',
+                    header = fs.readFileSync(header_path, 'utf8')
+
+                if (typeof header == 'string'){
+                    header = header.replace(/\/style\/style\.css\?v=(.*?)\"/,'/style/style.css?v='+Date.now()+'"')
+                    fs.writeFile(header_path, header, function (err) {
+                        if (err) return log(err)
+                        log('Style cache updated')
+                    })
+                }
+
+                fs.writeFile(style_path, css, function (err) {
+                    if (err) return log(err)
+                    log('Styl rendered')
+                })
+
+        })
+
+    }
+
+
+
+
+    // boot components and servers
+
+
+        // config.modules.load.forEach( (file) => {
+
+        log('Loading modules...')
+        for (let file of config.modules.load){
+
+            let file_name = file
+
+            if (file_name.match(/\//)){
+                file_name = file.split('/')
+                file_name = file_name[file_name.length-1]
+            }
+
+            global[file_name] = require('./modules/'+file)
+
+        }
+
+        //})
+        log('Loading components...')
+        loadComponents()
+        global.renderTheme()
+        app.locals.view = global.view
+
+        watch(['./components'], { recursive: true }, function(evt, name) {
+
+            if (config.site.mode == 'production'){
+                log('Components Reloaded')
+                loadComponents()
+            }
+
+        })
+
+        watch(['./themes/'+config.site.theme+'/css'], { recursive: true }, function(evt, name) {
+
+            global.renderTheme()
+
+        })
+
+        server.listen(config.http.port, function() {
+            log('Listening on '+config.http.port);
+        });
