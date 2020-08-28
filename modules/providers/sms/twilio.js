@@ -1,12 +1,23 @@
 
 const Twilio = require('twilio'),
       notificationTemplate = require(global.basedir+'/modules/notifications/templates')
-      
-      twilio_c = new Twilio(config.sms.api_key, config.sms.api_secret);
+
+      if (config.sms && config.sms.api_key && config.sms.api_secret){
+          twilio_c = new Twilio(config.sms.api_key, config.sms.api_secret)
+      } else {
+          twilio_c = false
+      }
 
 const send = (content)=>{
 
         return new Promise(function(resolve, reject) {
+
+            if (twilio_c === false){
+                let err = 'Unable to send SMS: no Twilio API settings. Please add to modules/config.js and restart the server'
+                log(err)
+                reject(err)
+                return
+            }
 
             twilio_c.messages.create({
                 body: content.text,

@@ -1,0 +1,97 @@
+
+
+    var config = {
+
+        modules:{
+            db: {
+                module:'lowDB',
+                name: '',
+                username: '',
+                password: ''
+            },
+            load: [
+                'Image',
+                'functions/isSet',
+                'localStorage',
+                'notifications/Notification',
+                'view',
+                'WebsocketClient',
+                'functions/parseClassName',
+                'functions/parseCamelCase',
+                'functions/getGuard'
+            ]
+        },
+
+        components:{
+            load: [
+                'api',
+                'authentication',
+                'content',
+                'dashboard',
+                'default_routes',
+                'products',
+                'transactions'
+            ]
+        },
+
+        admin: {
+            email: ''
+        },
+
+        host:'localhost',
+        websocket:{
+            port:6430,
+            secret: 'ssshhh',
+            url: ""
+        },
+
+        http:{
+            port:8033
+        },
+
+        timezone:'Europe/London',
+
+        site: {
+            mode: 'development',
+            url:'',
+            name: '',
+            logo: '/images/logo.svg',
+            theme: 'default',
+            theme_path: __dirname+'/themes/default'
+        },
+
+        tax_amount: 1.20,
+
+        users: {
+            allow_registration:true,
+            email_activation: true,
+            guards:['admin','user']
+        },
+
+        providers: {
+            sms: 'twilio',
+            email: 'sendgrid'
+        },
+
+        email:{
+            api_key:'',
+            api_secret:'',
+            from_address: '',
+            admin_to: '',
+            templates:[
+                ''
+            ]
+        },
+
+        sms:{
+            api_key: '',
+            api_secret: '',
+            from: ''
+        },
+
+        stripe_secret_key: '',
+        stripe_publishable_key: ''
+
+    }
+
+    module.exports = config
