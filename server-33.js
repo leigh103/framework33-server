@@ -17,6 +17,7 @@ const express = require('express'),
     uuid = require('uuid'),
     redis = require("redis"),
     glob = require( 'glob' ),
+    stylus = require('stylus'),
     redisStore = require('connect-redis')(session),
     client  = redis.createClient(),
     sessionStore = new redisStore({ host: 'localhost', port: 6379, client: client,ttl: 86400})
@@ -211,7 +212,38 @@ const express = require('express'),
             loadComponents()
         }
 
-    });
+    })
+
+    watch(['./themes/'+config.site.theme+'/css'], { recursive: true }, function(evt, name) {
+
+        let styl = fs.readFileSync(__dirname + '/themes/'+config.site.theme+'/css/css.styl', 'utf8'),
+            style_path = __dirname + '/public/style/style.css'
+
+        stylus(styl)
+            .set('paths', [__dirname + '/themes/'+config.site.theme+'/css'])
+            .render(function(err, css){
+
+                if (err) return console.error(err)
+
+                let header_path = __dirname + '/themes/'+config.site.theme+'/partials/head.ejs',
+                    header = fs.readFileSync(header_path, 'utf8')
+
+                if (typeof header == 'string'){
+                    header = header.replace(/\/style\/style\.css\?v=(.*?)\"/,'/style/style.css?v='+Date.now()+'"')
+                    fs.writeFile(header_path, header, function (err) {
+                        if (err) return log(err)
+                        log('Style cache updated')
+                    })
+                }
+
+                fs.writeFile(style_path, css, function (err) {
+                    if (err) return log(err)
+                    log('Styl rendered')
+                })
+
+        });
+
+    })
 
     server.listen(config.http.port, function() {
         log('Listening on '+config.http.port);

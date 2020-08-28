@@ -85,6 +85,14 @@
                 }
             },
 
+            getFirstName:(input) => {
+                if (input.match(/\s/)){
+                    return input.split(/\s/)[0]
+                } else {
+                    return input
+                }
+            },
+
             parseSnake:(input)=>{
                 return input.replace(/\s/g,'_').toLowerCase
             },

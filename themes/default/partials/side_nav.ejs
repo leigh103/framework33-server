@@ -11,7 +11,7 @@
             </div>
 
             <div class="user-info">
-                <p class="h5 text-weight-600"><%- view.functions.getTimeOfDay() %> <% if(typeof user.name == 'object'){ %><%- user.name.first %><% } %></p>
+                <p class="h5 text-weight-600"><%- view.functions.getTimeOfDay() %> <% if(typeof user.full_name != 'undefined'){ %><%- view.functions.getFirstName(user.full_name) %><% } %></p>
                 <p class="text-small transparent-2">Logged in as <%- user.guard %></p>
             </div>
         </div>

@@ -30,6 +30,7 @@
     "require-dir": "^1.2.0",
     "simple-js-sha2-256": "^1.0.7",
     "stripe": "^8.77.0",
+    "stylus": "^0.54.8",
     "twilio": "^3.43.0",
     "utf-8-validate": "^5.0.2",
     "uuid": "^7.0.2",

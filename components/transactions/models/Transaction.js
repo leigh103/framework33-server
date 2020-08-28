@@ -28,14 +28,14 @@
             this.routes = {
                 public: { // unauth'd routes
                     get: {
-                        all:[],
-                        search:[],
-                        find:[]
+
                     },
                 },
                 private: { // auth'd routes
                     get: {
-
+                        all:['admin','self'],
+                        search:['admin'],
+                        find:['admin','self']
                     },
                     post: {
                         save:['admin']
