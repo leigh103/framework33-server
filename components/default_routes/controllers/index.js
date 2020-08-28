@@ -62,7 +62,13 @@ var express = require('express'),
 
         if (getGuard(req) == 'admin'){
             let admin = await new Admin().find(0)
-            let sms = await new Notification(admin).setContent('','This is a test sms whoopwhoop').sms()
+
+            try {
+                let sms = await new Notification(admin).setContent('','This is a test sms whoopwhoop').sms()
+            } catch (error) {
+                log(error)
+            }
+
             res.send(sms)
         } else {
             res.redirect('/login/admin')

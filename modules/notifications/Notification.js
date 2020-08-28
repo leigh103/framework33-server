@@ -70,11 +70,11 @@
 
         sms(){
 
-            if (!this.to.tel.match(/^(07|\+447|\+4407)/)){
+            if (this.to && this.to.tel && !this.to.tel.match(/^(07|\+447|\+4407)/)){
                 this.error = 'Invalid mobile number'
             }
 
-            if (!this.to.tel){
+            if (!this.to || !this.to.tel){
                 this.error = 'No recipient specified'
             }
 
