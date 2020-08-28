@@ -1,4 +1,4 @@
-<% layout('default/dashboard.ejs') -%>
+<% layout(config.site.theme+'/dashboard.ejs') -%>
 
     <div class="grid col-9 h-100 page-full mailbox" app-init="getMailbox('<%- user._key %>')">
 
