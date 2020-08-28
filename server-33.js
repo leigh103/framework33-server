@@ -121,11 +121,11 @@ const express = require('express'),
             global.component = {}
         }
 
-        fs.readdir('components', (err, files) => {
+        // fs.readdir('components', (err, files) => {
 
             var views = ['themes','components']
 
-            files.forEach((file, index) => {
+            config.components.load.forEach((file, index) => {
 
                 let name = file.replace(/\.\w+$/,'')
                 controllers = file+'/controllers'
@@ -170,13 +170,13 @@ const express = require('express'),
 
                 }
 
-                if (index >= files.length - 1){
+                if (index >= config.components.load.length - 1){
                     app.set('views', views)
                 }
 
             })
 
-        })
+        // })
 
     }
 
