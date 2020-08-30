@@ -11,7 +11,7 @@
 
             <% if (item.input_type == 'image'){ %>
                 <div class="cell middle <%- item.name %> <%- item.input_type %>"><img src="/images/Profile_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
-            <% if (item.input_type == 'text' && item.type.match(/barcode|qrcode/)){ %>
+            <% } else if (item.input_type == 'text' && item.type.match(/barcode|qrcode/)){ %>
                 <div class="cell middle <%- item.name %> <%- item.input_type %>"><img app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
             <% } else if (item.input_type == 'object'){ %>
                 <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>.length"></div>
