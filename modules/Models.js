@@ -239,6 +239,22 @@
                         return value
                     }
 
+                } else if (field.type == 'barcode' || field.type == 'qrcode'){
+
+                    if (value){
+
+                        let type = 'qrcode'
+
+                        if (field.type == 'barcode'){
+                            type = 'ean13'
+                        }
+
+                        value = await new Barcode(value,key).save()
+
+                    } else {
+                        return value
+                    }
+
                 } else if (field.type == 'image'){
 
                     if (value.match(/base64/)){
