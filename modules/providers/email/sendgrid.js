@@ -38,7 +38,7 @@
 
     const templates = (template, data) => {
 
-        let hash = db.hash('email-'+Date()),
+        let hash = DB.hash('email-'+Date()),
             msg,
             content,
             subject
