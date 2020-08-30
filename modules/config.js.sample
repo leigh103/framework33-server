@@ -11,6 +11,7 @@
             },
             load: [
                 'Image',
+                'Barcode',
                 'functions/isSet',
                 'localStorage',
                 'notifications/Notification',

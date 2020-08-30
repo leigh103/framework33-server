@@ -241,7 +241,7 @@
 
                 } else if (field.type == 'barcode' || field.type == 'qrcode'){
 
-                    if (value){
+                    if (value && value.match(/^[a-zA-Z0-9\s]+$/)){
 
                         let type = 'qrcode'
 
@@ -249,7 +249,18 @@
                             type = 'ean13'
                         }
 
-                        value = await new Barcode(value,key).save()
+                        value = await new Barcode(value,type).save()
+
+                        if (typeof value == 'object' && value.error){
+                            this.error = value.error
+
+                            return ''
+                        } else if (typeof value == 'string'){
+                            return value
+                        } else {
+                            this.error = 'Code not generated, please try again'
+                            return ''
+                        }
 
                     } else {
                         return value

@@ -1,7 +1,7 @@
 
     const bwipjs = require('bwip-js')
 
-    class Image {
+    class Barcode {
 
         constructor(data, type){
 
@@ -14,12 +14,12 @@
                 if (typeof data == 'object'){
                     this.code = data.code
                     this.type = data.type
-                    this.save = data.save
                 } else {
                     this.code = data
                     this.type = type
-                    this.save = save
                 }
+
+                this.result
 
             }
 
@@ -49,18 +49,35 @@
         async get(){
 
             this.save = false
-            this.result = await this.generateCodeImage()
+            await this.generateCodeImage()
 
-            return this.result
+            if (!this.result && !this.error){
+                this.error = 'Code not generated, please try again'
+            }
+
+            if (this.error){
+                return this
+            } else {
+                return this.result
+            }
 
         }
 
         async save(){
 
             this.save = true
-            this.result = await this.generateCodeImage()
+            await this.generateCodeImage()
 
-            return this.result
+            if (!this.result && !this.error){
+                this.error = 'Code not generated, please try again'
+            }
+
+            if (this.error){
+                return this
+            } else {
+                return this.result
+            }
+
 
         }
 
@@ -106,25 +123,28 @@
                     text:        this.code,    // Text to encode
                     scale:       3,               // 3x scaling factor
                     height:      20,
-                    width:       20,              // Bar height, in millimeters
+                    width:       40,              // Bar height, in millimeters
                     includetext: true,            // Show human-readable text
                     textxalign:  'center',        // Always good to set this
                 })
                 .then(async (buffer) => {
 
-                    let base64 = `data:image/png;base64,${buffer.toString('base64')}`
+                    let base64 = `data:image/png;base64,${buffer.toString('base64')}`,
+                        output
 
                     if (this.save){
-                        img_url = await new Image(base64,'code-'+this.code,'codes').save()
-                        return img_url
+                        this.result = await new Image(base64,'code-'+this.code,'codes').save()
                     } else {
-                        return base64
+                        this.result = base64
                     }
+
+                    resolve()
 
                 })
                 .catch(err => {
-                    this.error = err
-                    return this
+                    this.error = JSON.stringify(err, Object.getOwnPropertyNames(err))
+                //    this.error = this.error.split('\\n')[0].replace('{"stack":"','')
+                    resolve()
                 })
 
             })
@@ -133,4 +153,4 @@
 
     }
 
-    module.exports = Image
+    module.exports = Barcode
