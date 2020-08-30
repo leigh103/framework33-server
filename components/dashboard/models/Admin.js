@@ -53,7 +53,7 @@
 
             if (search.str.length < 3){
 
-                this.data = db.read(this.settings.collection).limit(30).get()
+                this.data = DB.read(this.settings.collection).limit(30).get()
                 return this.data
 
             } else {
@@ -64,7 +64,7 @@
                 filter.push('email like '+search.str)
                 filter.push('full_name like '+search.str)
 
-                this.data = db.read(this.settings.collection).orWhere(filter).get()
+                this.data = DB.read(this.settings.collection).orWhere(filter).get()
                 return this.data
 
             }
@@ -82,11 +82,11 @@
 
             if (this.data._id){
 
-                this.data = await db.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
+                this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
 
             } else {
 
-                this.data = await db.create(this.settings.collection,this.data).first()
+                this.data = await DB.create(this.settings.collection,this.data).first()
 
                 if (config.users.email_activation === true){
                     this.data.activated = false
@@ -104,10 +104,10 @@
 
         async delete(){
 
-            let admin_count = await db.count(this.settings.collection)
+            let admin_count = await DB.count(this.settings.collection)
 
             if (admin_count > 1){
-                this.data = db.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
+                this.data = DB.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
                 if (this.data.length > 0){
                     this.error = 'Not deleted'
                     return this
@@ -124,7 +124,7 @@
 
         async setDefault() {
 
-            let admin_count = db.count(this.settings.collection)
+            let admin_count = DB.count(this.settings.collection)
 
             if (!admin_count && config.admin.email){
 
@@ -136,7 +136,7 @@
                     guard:this.settings.collection
                 }
 
-                await db.create(this.settings.collection, default_admin)
+                await DB.create(this.settings.collection, default_admin)
                 new User(default_admin).sendReset()
 
             } else if (!config.admin.email){

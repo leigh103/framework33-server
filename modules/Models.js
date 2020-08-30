@@ -42,7 +42,7 @@
 
                 }
 
-                this.data = await db.read(this.settings.collection)
+                this.data = await DB.read(this.settings.collection)
                                     .where(query)
                                     .first()
 
@@ -64,13 +64,13 @@
         all(data) {
 
             if (typeof data == 'string'){
-                this.data = db.read(this.settings.collection).orderBy(data,'asc').get()
+                this.data = DB.read(this.settings.collection).orderBy(data,'asc').get()
                 return this
             } else if (typeof data == 'object'){
-                this.data = db.read(this.settings.collection).where(data).get() //.omit(['password','password_reset']).get()
+                this.data = DB.read(this.settings.collection).where(data).get() //.omit(['password','password_reset']).get()
                 return this
             } else {
-                this.data = db.read(this.settings.collection).get() //.omit(['password','password_reset']).get()
+                this.data = DB.read(this.settings.collection).get() //.omit(['password','password_reset']).get()
                 return this
             }
 
@@ -310,9 +310,9 @@
             }
 
             if (this.data._id){
-                this.data = await db.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
+                this.data = await new DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
             } else {
-                this.data = await db.create(this.settings.collection,this.data).first()
+                this.data = await new DB.create(this.settings.collection,this.data).first()
             }
 
             if (this.postSave && typeof this.postSave == 'function'){
@@ -325,7 +325,7 @@
 
         async delete(){
 
-            this.data = await db.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
+            this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
 
             if (this.data.length > 0){
                 this.error = 'Not deleted'

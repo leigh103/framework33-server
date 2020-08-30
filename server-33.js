@@ -29,7 +29,7 @@ const express = require('express'),
         global.config = require('./modules/config')
 
         dbModule = require('./modules/databases/'+config.modules.db.module)
-        global.db = new dbModule()
+        global.DB = new dbModule()
 
         global.log = require('./modules/functions/log')
         global.moment = require('moment')
@@ -232,7 +232,7 @@ const express = require('express'),
 
                 global[model_class_name] = require(model)
 
-                db.createCollection(new global[model_class_name]().settings.collection)
+                DB.createCollection(new global[model_class_name]().settings.collection)
 
             })
 

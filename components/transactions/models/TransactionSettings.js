@@ -49,7 +49,7 @@
             } else {
 
                 let new_transaction_settings = await this.getTemplate()
-                global.view.transactions = await db.create(this.settings.collection,new_transaction_settings.data).first()
+                global.view.transactions = await DB.create(this.settings.collection,new_transaction_settings.data).first()
                 global.view.transactions = new_transaction_settings.data
                 global.view.transactions.payment_methods = []
                 console.error('No transaction settings available. Please set these options via the dashboard and restart Framework-33')

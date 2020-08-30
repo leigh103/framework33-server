@@ -58,7 +58,7 @@
                 return this
             }
 
-            let existing = db.read(this.settings.collection).where(['email == '+this.data.email]).get()
+            let existing = DB.read(this.settings.collection).where(['email == '+this.data.email]).get()
 
             if (existing.length > 0){
 
@@ -90,7 +90,7 @@
 
             if (search.str.length < 3){
 
-                this.data = db.read(this.settings.collection).limit(30).get()
+                this.data = DB.read(this.settings.collection).limit(30).get()
                 return this.data
 
             } else {
@@ -101,7 +101,7 @@
                 filter.push('email like '+search.str)
                 filter.push('full_name like '+search.str)
 
-                this.data = db.read(this.settings.collection).orWhere(filter).get()
+                this.data = DB.read(this.settings.collection).orWhere(filter).get()
                 return this.data
 
             }

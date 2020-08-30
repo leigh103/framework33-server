@@ -22,7 +22,7 @@
                 this.error = 'Email address and/or password incorrect. Please check your email for confirmation'
                 return this
 
-            } else if (this.data.activated && this.data.password == db.hash(attempt.password) && this.data.email == attempt.email){
+            } else if (this.data.activated && this.data.password == DB.hash(attempt.password) && this.data.email == attempt.email){
 
                 this.data.guard = this.settings.collection
                 return this.data
@@ -51,12 +51,12 @@
             } else if (password_reset.password == password_reset.password_confirmation){
 
                 let update_data = {
-                    password: db.hash(password_reset.password),
+                    password: DB.hash(password_reset.password),
                     password_reset: false,
                     activated: true
                 }
 
-                this.data = await db.read(this.settings.collection).where(['email == '+this.data.email, 'password_reset == '+password_reset.password_reset]).update(update_data).first()
+                this.data = await DB.read(this.settings.collection).where(['email == '+this.data.email, 'password_reset == '+password_reset.password_reset]).update(update_data).first()
 
                 if (this.data){
 
@@ -79,7 +79,7 @@
                 this.error = 'Not found'
                 return this
             } else {
-                this.user_data = db.read(this.settings.collection).where(['password_reset == '+this.password_reset]).update({activated:true,password_reset:false}).first()
+                this.user_data = DB.read(this.settings.collection).where(['password_reset == '+this.password_reset]).update({activated:true,password_reset:false}).first()
                 return this.user_data
             }
 
@@ -87,7 +87,7 @@
 
         async sendReset() {
 
-            let hash = db.hash('password-reset'+Date.now()),
+            let hash = DB.hash('password-reset'+Date.now()),
                 filter = []
 
             if (this.data.email){
@@ -99,7 +99,7 @@
                 return this
             }
 
-            this.data = await db.read(this.settings.collection).orWhere(filter).update({password_reset:hash}).first()
+            this.data = await DB.read(this.settings.collection).orWhere(filter).update({password_reset:hash}).first()
 
             if (this.data && this.data.email){
 
@@ -127,7 +127,7 @@
 
         async getMessages(){
 
-            let mailbox = db.read('messages').where(['_user_id == '+this.data._id]).get()
+            let mailbox = DB.read('messages').where(['_user_id == '+this.data._id]).get()
             return mailbox
 
         }

@@ -55,7 +55,7 @@
 
             if (search.str.length < 3){
 
-                this.data = db.read(this.settings.collection).limit(30).get()
+                this.data = DB.read(this.settings.collection).limit(30).get()
                 return this.data
 
             } else {
@@ -64,7 +64,7 @@
 
                 filter.push('name like '+search.str)
 
-                this.data = db.read(this.settings.collection).orWhere(filter).get()
+                this.data = DB.read(this.settings.collection).orWhere(filter).get()
                 return this.data
 
             }
