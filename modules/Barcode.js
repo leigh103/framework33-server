@@ -116,14 +116,37 @@
                 this.type = 'qrcode'
             }
 
+            if (this.type == 'qrcode'){
+                this.dimensions = {
+                    width: 40,
+                    height:40
+                }
+            } else if (this.type == 'ean13'){
+                this.dimensions = {
+                    width: 40,
+                    height:20
+                }
+            } else if (this.code.length > 14){
+                this.dimensions = {
+                    width: 80,
+                    height:20
+                }
+            } else {
+                this.dimensions = {
+                    width: 40,
+                    height:20
+                }
+            }
+
+
             return new Promise(async (resolve, reject) => {
 
                 bwipjs.toBuffer({
                     bcid:        this.type,       // Barcode type
                     text:        this.code,    // Text to encode
                     scale:       3,               // 3x scaling factor
-                    height:      20,
-                    width:       40,              // Bar height, in millimeters
+                    height:      this.dimensions.height,
+                    width:       this.dimensions.width,              // Bar height, in millimeters
                     includetext: true,            // Show human-readable text
                     textxalign:  'center',        // Always good to set this
                 })

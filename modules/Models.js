@@ -245,8 +245,12 @@
 
                         let type = 'qrcode'
 
-                        if (field.type == 'barcode'){
-                            type = 'ean13'
+                        if (!field.barcode_type && field.type == 'barcode'){
+                            type = 'code11'
+                        }
+
+                        if (field.barcode_type){
+                            type = field.barcode_type
                         }
 
                         value = await new Barcode(value,type).save()
