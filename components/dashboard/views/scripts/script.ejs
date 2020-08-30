@@ -117,6 +117,8 @@
 
             //    const editordata = editor.getData()
 
+                scope.notify('Saving...')
+
                 if (typeof obj.content != 'undefined'){
                     obj.content = contented.getData()
                 }
@@ -131,6 +133,8 @@
             }
 
             scope.saveSingle = function(collection, key, obj){
+
+                scope.notify('Saving...','success','inf','fa-save rotate')
 
                 scope.put(collection, key, scope.new).then((data)=>{
                     scope.notify('Updated')

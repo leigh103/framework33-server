@@ -41,6 +41,10 @@
 
                 scope.view.modal = false
 
+                if (scope.view.notification.timer){
+                    clearTimeout(scope.view.notification.timer)
+                }
+
                 if (msg == 'cancel'){
                     scope.view.notification = {}
                     return false
@@ -69,7 +73,7 @@
                 }
 
                 if (duration > 0){
-                    setTimeout(function(){
+                    scope.view.notification.timer = setTimeout(function(){
                         scope.view.notification = {}
                         resolve()
                     },duration)
