@@ -73,40 +73,42 @@ var express = require('express'),
 
         sanitizeOutput: (result) => {
 
+            result_copy = JSON.parse(JSON.stringify(result))
+
             return new Promise((resolve, reject) => {
 
-                if (result.error){
+                if (result_copy.error){
 
-                    delete result.data
-                    resolve(result)
+                    delete result_copy.data
+                    resolve(result_copy)
 
-                } else if (result.data){
+                } else if (result_copy.data){
 
-                    result.data = result.data.map((item)=>{
+                    result_copy.data = result_copy.data.map((item)=>{
                         delete item.password
                         delete item.password_reset
                         delete item.ws_id
                         return item
                     })
 
-                    resolve(result)
+                    resolve(result_copy)
 
-                } else if (typeof result == 'object' && typeof result.map == 'function'){
+                } else if (typeof result_copy == 'object' && typeof result_copy.map == 'function'){
 
-                    result = result.map((item)=>{
+                    result_copy = result_copy.map((item)=>{
                         delete item.password
                         delete item.password_reset
                         delete item.ws_id
                         return item
                     })
-                    resolve(result)
+                    resolve(result_copy)
 
                 } else {
 
-                    delete result.password
-                    delete result.password_reset
-                    delete result.ws_id
-                    resolve(result)
+                    delete result_copy.password
+                    delete result_copy.password_reset
+                    delete result_copy.ws_id
+                    resolve(result_copy)
 
                 }
 

@@ -310,9 +310,9 @@
             }
 
             if (this.data._id){
-                this.data = await new DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
+                this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
             } else {
-                this.data = await new DB.create(this.settings.collection,this.data).first()
+                this.data = await DB.create(this.settings.collection,this.data).first()
             }
 
             if (this.postSave && typeof this.postSave == 'function'){

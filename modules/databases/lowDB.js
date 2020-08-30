@@ -55,21 +55,10 @@
 
         }
 
-        upsert(data){
+        async upsert(data){
 
             if (this.result && this.result.length > 0){
-                this.result = this.result.map(async (item,i) =>{
-
-                    await lowDb.get(this.collection)
-                        .find({_key: item._key})
-                        .assign(data)
-                        .write()
-
-                    item = Object.assign(item, data)
-
-                    return item
-
-                })
+                await this.update(data)
             } else {
                 this.result = this.create(this.collection,data).first()
             }
@@ -126,15 +115,15 @@
             if (this.result && this.result.length > 0){
                 this.result = this.result.map(async (item,i) => {
 
+
+                    item = Object.assign(item, data)
                     item._updated = moment().toISOString()
 
                     await lowDb.get(this.collection)
                         .find({_key: item._key})
                         .assign(data)
                         .write()
-
-                    item = Object.assign(item, data)
-
+                        
                     return item
 
                 })

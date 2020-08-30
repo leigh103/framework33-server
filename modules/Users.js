@@ -1,5 +1,5 @@
 
-    const Model = require('../modules/Models')
+    const Model = require(basedir+'/modules/Models')
 
     class Users extends Model {
 

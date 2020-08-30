@@ -71,36 +71,36 @@
 
         }
 
-        async save() {
-
-            if (!this.data){
-                this.error = 'No data to save'
-                return this
-            }
-
-            await this.validate()
-
-            if (this.data._id){
-
-                this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
-
-            } else {
-
-                this.data = await DB.create(this.settings.collection,this.data).first()
-
-                if (config.users.email_activation === true){
-                    this.data.activated = false
-                } else {
-                    this.data.activated = true
-                }
-
-                this.sendReset()
-
-            }
-
-            return this
-
-        }
+        // async save() {
+        //
+        //     if (!this.data){
+        //         this.error = 'No data to save'
+        //         return this
+        //     }
+        //
+        //     await this.validate()
+        //
+        //     if (this.data._id){
+        //
+        //         this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
+        //
+        //     } else {
+        //
+        //         this.data = await DB.create(this.settings.collection,this.data).first()
+        //
+        //         if (config.users.email_activation === true){
+        //             this.data.activated = false
+        //         } else {
+        //             this.data.activated = true
+        //         }
+        //
+        //         this.sendReset()
+        //
+        //     }
+        //
+        //     return this
+        //
+        // }
 
         async delete(){
 
