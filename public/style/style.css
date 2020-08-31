@@ -284,6 +284,128 @@ a:hover {
   margin: -2rem;
   height: 100vh;
 }
+.datepicker {
+  position: fixed;
+  background-color: #fff;
+  padding: 1.563rem;
+  z-index: 999;
+  -webkit-box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.26);
+  -moz-box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.26);
+  box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.26);
+  font-size: 0.938rem;
+  color: $text-dark !important;
+}
+.datepicker > .grid {
+  min-width: 30rem;
+}
+.datepicker .dates {
+  min-width: calc(3em * 7);
+}
+.datepicker.simple {
+  top: 0;
+}
+.datepicker-select {
+  color: #1dc7d5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 2.188rem;
+  padding: 0 1.2rem;
+  font-size: 0.9em;
+}
+.datepicker-select .thick {
+  height: 3rem !important;
+}
+.datepicker .time-select {
+  height: 20rem;
+  overflow-y: scroll;
+  text-align: right;
+  border-left: 1px solid #f2f2f2;
+}
+.datepicker .time-select .clickable {
+  padding: 0.5rem;
+}
+.datepicker .time-select .start_time {
+  background-color: #00d6c6;
+  color: #fff;
+  border-radius: 50%;
+}
+.datepicker .time-select .end_time {
+  background-color: #ff8c8d;
+  color: #fff;
+  border-radius: 50%;
+}
+.datepicker.relative {
+  top: 0;
+  z-index: 1;
+  position: relative !important;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  min-width: auto;
+}
+.datepicker.relative .dates {
+  padding-right: 0rem;
+}
+.datepicker .btn-wrap {
+  margin: 0 0 0.75rem 0 !important;
+  white-space: nowrap;
+}
+.datepicker .buttons {
+  padding-left: 1.563rem;
+}
+.datepicker .cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3em;
+  width: 3em;
+  cursor: pointer;
+  margin: auto;
+}
+.datepicker .cell .today {
+  background-color: rgba(216,209,218,0.2);
+  border-radius: 50%;
+}
+.datepicker .cell:hover,
+.datepicker .cell .selected {
+  background-color: $brand_purple;
+  color: #fff;
+  border-radius: 50%;
+}
+.datepicker .cell .start_date {
+  background-color: #00d6c6;
+  color: #fff;
+  border-radius: 50%;
+}
+.datepicker .cell .end_date {
+  background-color: #ff8c8d;
+  color: #fff;
+  border-radius: 50%;
+}
+.datepicker .cell span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.datepicker .cell .pre,
+.datepicker .cell .post {
+  opacity: 0.5;
+}
+.datepicker .cell .passed {
+  opacity: 0.5;
+}
+.datepicker .day,
+.datepicker .reg,
+.datepicker .passed {
+  font-weight: 500;
+}
+.datepicker .day {
+  font-size: 0.875rem;
+}
 .editor-buttons {
   font-size: 0;
   width: 100%;

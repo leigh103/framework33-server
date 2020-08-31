@@ -354,6 +354,81 @@
 
         }
 
+        scope.openDatePicker = function(name, obj){
+
+            let selected_date
+
+            if (obj){
+                selected_date = _.get(scope,obj)
+            } else {
+                selected_date = _.get(scope,name)
+            }
+
+            if (selected_date && selected_date.match(/Z$/)){
+                scope.view.selected_date = moment(selected_date)
+            } else if (!scope.view.selected_date) {
+                scope.view.selected_date = moment()
+            }
+
+            scope.view.dates = getDaysArray(scope.view.selected_date.format('YYYY'),scope.view.selected_date.format('M'))
+            scope.view.datepicker = {
+                name: name,
+                selected_month: scope.view.selected_date.format('MMMM')+' '+scope.view.selected_date.format('YYYY')
+            }
+
+        }
+
+        scope.changeDate = function(name, type, direction){
+
+            if (!scope.view.selected_date){
+                return false
+            }
+
+            if (direction == 'next'){
+                scope.view.selected_date = scope.view.selected_date.add(1,type)
+            } else {
+                scope.view.selected_date = scope.view.selected_date.subtract(1,type)
+            }
+
+            scope.view.dates = getDaysArray(scope.view.selected_date.format('YYYY'),scope.view.selected_date.format('M'))
+            scope.view.datepicker = {
+                name: name,
+                selected_month: scope.view.selected_date.format('MMMM')+' '+scope.view.selected_date.format('YYYY')
+            }
+
+        }
+
+        scope.datepickerClass = function(date, time){
+
+            if (time){
+
+                if (scope.selected_date && scope.selected_date.time == date){
+                    return 'start_time'
+                } else if (scope.selected_end_date && scope.selected_end_date.time == date){
+                    return 'end_time'
+                } else {
+
+                }
+
+            } else {
+
+                if (date.iso){
+                    let date_obj = moment(date.iso)
+                    if (scope.selected_date && scope.selected_date.obj && scope.selected_date.obj.isSame(date_obj, 'day')){
+                        return 'start_date'
+                    } else if (scope.selected_end_date && scope.selected_end_date.obj && scope.selected_end_date.obj.isSame(date_obj, 'day')){
+                        return 'end_date'
+                    } else {
+                        return date.type
+                    }
+                } else {
+                    return date.type
+                }
+
+            }
+
+        }
+
         scope.goto = function(str1, str2){
             str1 = str1.replace(/\s/g,'-').toLowerCase()
 
@@ -367,7 +442,6 @@
             }
 
         }
-
 
         scope.submitForm = function(form){
 

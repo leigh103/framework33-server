@@ -80,6 +80,16 @@
                         </div>
                     </div>
 
+                    <div class="layer-1">
+                        <div class="float-right text-small pr-1" app-bind="view.content.notification.length"></div>
+                        <label class="indent capitalise">Add a notification to this page (400 chars. max)</label>
+                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:"simple"}) %>
+                        <div id="content_notification" class="large resize contenteditable" app-model="view.content.notification" contenteditable="true"></div>
+                        <div class="text-right text-small mt-05">
+                            <a app-click="removeNotification()"><i class="fas fa-times"></i> Remove Notification</a>
+                        </div>
+                    </div>
+
                     <div class="my-1">
                         <label class="indent">Content Title</label>
                         <input type="text" app-model="view.content.title">
@@ -90,22 +100,26 @@
                         <input type="text" app-model="view.content.slug">
                     </div>
 
-                    <div class="my-1">
-                        <label class="indent">Published</label>
-                        <select app-model="view.content.status">
-                            <option value="draft">Draft</option>
-                            <option value="published">Published</option>
-                        </select>
-                    </div>
+                    <div class="grid col-3 gap-2 relative my-1 layer-5">
 
-                    <div>
-                        <div class="float-right text-small pr-1" app-bind="view.content.notification.length"></div>
-                        <label class="indent capitalise">Add a notification to this page (400 chars. max)</label>
-                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:"simple"}) %>
-                        <div id="content_notification" class="large resize contenteditable" app-model="view.content.notification" contenteditable="true"></div>
-                        <div class="text-right text-small mt-05">
-                            <a app-click="removeNotification()"><i class="fas fa-times"></i> Remove Notification</a>
+                        <div class="">
+                            <label class="indent">Published</label>
+                            <select app-model="view.content.status">
+                                <option value="draft">Draft</option>
+                                <option value="published">Published</option>
+                            </select>
                         </div>
+
+                        <div class="">
+                            <label class="indent">Publish On</label>
+                            <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:'publish_on', datepicker_obj:'view.content'}) %>
+                        </div>
+
+                        <div class="">
+                            <label class="indent">Unpublish On</label>
+                            <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:'unpublish_on', datepicker_obj:'view.content'}) %>
+                        </div>
+
                     </div>
 
                     <h4 class="mb-1 mt-2">SEO</h4>

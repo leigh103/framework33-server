@@ -34,6 +34,10 @@
                 </select>
             </div>
 
+        <% } else if (item.input_type == 'date'){ %>
+
+            <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:item.name, datepicker_obj:'new'}) %>
+
         <% } else if (item.input_type == 'multiselect'){ %>
 
             <div class="relative layer-2">
