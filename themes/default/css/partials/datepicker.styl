@@ -1,6 +1,6 @@
 .datepicker {
 
-    position: fixed;
+    position: absolute;
     background-color: white;
     padding: 1.563rem;
     z-index:999;
@@ -8,6 +8,9 @@
     -moz-box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.26);
     box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.26);
     font-size: 0.938rem;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top: 2px solid $color-primary;
     color: $text-dark !important;
 
     & > .grid {
@@ -97,20 +100,8 @@
             border-radius: 50%;
         }
 
-        &:hover, .selected {
-            background-color: $brand_purple;
-            color: white;
-            border-radius: 50%;
-        }
-
-        .start_date {
-            background-color: #00D6C6;
-            color: white;
-            border-radius: 50%;
-        }
-
-        .end_date {
-            background-color: #FF8C8D;
+        .selected {
+            background-color: $color-primary;
             color: white;
             border-radius: 50%;
         }
@@ -123,21 +114,38 @@
             height: 100%;
         }
 
-        .pre,.post {
+        .day {
+            font-size: 0.875rem;
+            color: $text-grey;
             opacity: 0.5;
+
+            &:hover {
+                background: none;
+                color: $text-grey;
+            }
         }
 
-        .passed {
-            opacity: 0.5
+        .reg {
+            color: $text-black;
+            opacity: 1;
+
+            &:hover {
+                background-color: $color-primary;
+                color: white;
+                border-radius: 50%;
+            }
         }
-    }
 
-    .day, .reg, .passed {
-        font-weight: 500;
-    }
+        .pre, .passed, .post {
+            color: $text-grey;
+            opacity: 0.75
 
-    .day {
-        font-size: 0.875rem;
+            &:hover {
+                background-color: $color-primary;
+                color: white;
+                border-radius: 50%;
+            }
+        }
     }
 
 }

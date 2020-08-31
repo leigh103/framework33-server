@@ -1,34 +1,38 @@
-<div app-click="openDatePicker('<%- datepicker_name %>','<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>')" class="datepicker-select flex">
-    <span app-hide="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>">Set Date</span>
-    <span app-show="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>" app-bind="parseDate(<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>,'Do MMMM YYYY')"></span>
-</div>
+<div class="relative">
 
-<div app-show="view.datepicker.name == '<%- datepicker_name %>'" class="datepicker context">
+    <div app-click="openDatePicker('<%- datepicker_name %>','<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>')" class="datepicker-select flex">
+        <span app-hide="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>">Set Date</span>
+        <span app-show="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>" app-bind="parseDate(<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>,'Do MMMM YYYY')"></span>
+    </div>
 
-    <div class="dates">
+    <div app-show="view.datepicker.name == '<%- datepicker_name %>'" class="datepicker context">
 
-        <div class="flex">
+        <div class="dates">
 
-            <div class="flex-1 btn highlight" app-click="changeDate('<%- datepicker_name %>','months','prev')">
-                <i class="fas fa-chevron-left"></i>
-            </div>
+            <div class="flex mt-1">
 
-            <div class="flex-6 flex flex-middle bg-primary text-33-white">
-                <span app-bind="view.datepicker.selected_month"></span>
-            </div>
-
-            <div class="flex-1 btn highlight" app-click="changeDate('<%- datepicker_name %>','months','next')">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-
-        </div>
-
-        <div class="grid col-12 gap-1">
-
-            <div class="grid col-7 colspan-12">
-                <div app-for="date_<%- datepicker_name %> in view.dates" class="cell clickable">
-                    <span app-bind="date_<%- datepicker_name %>.date" app-class="datepickerClass(date_<%- datepicker_name %>)" app-click="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %> = date_<%- datepicker_name %>.iso"></span>
+                <div class="flex-1 pl-1" app-click="changeDate('<%- datepicker_name %>','months','prev')">
+                    <i class="fas fa-chevron-left text-primary"></i>
                 </div>
+
+                <div class="flex-6 flex flex-middle bg-33-white text-black">
+                    <span app-bind="view.datepicker.selected_month"></span>
+                </div>
+
+                <div class="flex-1 text-right pr-1" app-click="changeDate('<%- datepicker_name %>','months','next')">
+                    <i class="fas fa-chevron-right text-primary"></i>
+                </div>
+
+            </div>
+
+            <div class="grid col-12 gap-1 mt-2">
+
+                <div class="grid col-7 colspan-12">
+                    <div app-for="date_<%- datepicker_name %> in view.dates" class="cell clickable">
+                        <span app-bind="date_<%- datepicker_name %>.date" app-class="datepickerClass(date_<%- datepicker_name %>,'<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>')" app-click="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %> = date_<%- datepicker_name %>.iso"></span>
+                    </div>
+                </div>
+
             </div>
 
         </div>

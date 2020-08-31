@@ -398,33 +398,25 @@
 
         }
 
-        scope.datepickerClass = function(date, time){
+        scope.datepickerClass = function(date, obj){
 
-            if (time){
+            let selected_date
 
-                if (scope.selected_date && scope.selected_date.time == date){
-                    return 'start_time'
-                } else if (scope.selected_end_date && scope.selected_end_date.time == date){
-                    return 'end_time'
-                } else {
-
-                }
-
+            if (obj){
+                selected_date = moment(_.get(scope,obj))
             } else {
+                selected_date = moment()
+            }
 
-                if (date.iso){
-                    let date_obj = moment(date.iso)
-                    if (scope.selected_date && scope.selected_date.obj && scope.selected_date.obj.isSame(date_obj, 'day')){
-                        return 'start_date'
-                    } else if (scope.selected_end_date && scope.selected_end_date.obj && scope.selected_end_date.obj.isSame(date_obj, 'day')){
-                        return 'end_date'
-                    } else {
-                        return date.type
-                    }
+            if (date.iso){
+                let date_obj = moment(date.iso)
+                if (selected_date && selected_date.isSame(date_obj,'day')){
+                    return 'selected'
                 } else {
                     return date.type
                 }
-
+            } else {
+                return date.type
             }
 
         }
