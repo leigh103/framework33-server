@@ -398,6 +398,12 @@
 
         }
 
+        scope.removeDate = function(name){
+
+            _.set(scope,name,false)
+
+        }
+
         scope.datepickerClass = function(date, obj){
 
             let selected_date

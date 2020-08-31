@@ -1,11 +1,12 @@
 <div class="relative">
 
-    <div app-click="openDatePicker('<%- datepicker_name %>','<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>')" class="datepicker-select flex">
-        <span app-hide="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>">Set Date</span>
-        <span app-show="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>" app-bind="parseDate(<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>,'Do MMMM YYYY')"></span>
+    <div class="datepicker-select flex">
+        <div class="flex-6" app-click="openDatePicker('<%- datepicker_name %>','<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>')" app-hide="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>">Set Date</div>
+        <div class="flex-6" app-click="openDatePicker('<%- datepicker_name %>','<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>')" app-show="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>" app-bind="parseDate(<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>,'Do MMMM YYYY')"></div>
+        <div class="flex-1 flex-middle-right" app-click="removeDate('<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>')"  app-show="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>"><i class="fas fa-times"></i></div>
     </div>
 
-    <div app-show="view.datepicker.name == '<%- datepicker_name %>'" class="datepicker context">
+    <div app-show="view.datepicker.name == '<%- datepicker_name %>'" class="datepicker context" anim="{'enter':'fade-in'}">
 
         <div class="dates">
 
