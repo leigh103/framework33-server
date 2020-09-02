@@ -17,7 +17,7 @@
 
         </div>
 
-        <div class="flex-5 flex flex-column flex-middle-left w-100 mb-4">
+        <div class="flex-5 flex flex-column flex-middle-left w-100 mb-4 text-left">
 
             <h1 class="text-light mb-2">Sign Up</h1>
 
@@ -27,9 +27,9 @@
                 </div>
             <% } %>
 
-            <form method="post" action="/login/register" class="grid col-1 col-s-1 gap-1 w-100">
+            <form id="register" method="post" action="/login/register" class="grid col-1 col-s-1 gap-1 w-100">
 
-                <input type="text" name="email" placeholder="Email Address" class="underline">
+                <input id="email" type="text" name="email" placeholder="Email Address" class="underline">
 
 
                 <input type="password" name="password" placeholder="Password" class="underline">
@@ -54,3 +54,18 @@
     </div>
 
 </div>
+
+<script>
+
+    window.onload = function(evt){
+        if (localStorage.getItem('register_email')){
+            document.getElementById('email').value = localStorage.getItem('register_email')
+            localStorage.removeItem('register_email')
+        }
+    }
+
+    document.getElementById('register').addEventListener('submit', function(evt){
+        localStorage.setItem('register_email',document.getElementById('email').value)
+    })
+
+</script>

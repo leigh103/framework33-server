@@ -33,6 +33,12 @@
 
             } else {
 
+                await this.passwordValidation()
+
+                if (this.error){
+                    return this
+                }
+
                 await this.save()
 
                 if (config.users.email_activation === true){
@@ -105,10 +111,12 @@
 
         async resetPassword(password_reset) {
 
-            if (this.data.blocked){
-                this.error = 'Email address and/or password incorrect'
+            if (this.data.blocked || typeof password_reset != 'object' || !password_reset.password_reset){
+                this.error = 'Email address, password or reset token are incorrect'
                 return this
             }
+
+            password_reset.password_reset = DB.hash('password-reset'+password_reset.password_reset)
 
             if (password_reset.password != password_reset.password_confirmation || !password_reset.password){
 
@@ -149,6 +157,18 @@
                 this.data.password_reset = false
                 this.data.activated = true
                 await this.save()
+                return this
+            }
+
+        }
+
+        async deleteReset(){
+
+            if (this.data && this.data.password_reset){
+                this.data.password_reset = false
+                await this.save()
+                return this
+            } else {
                 return this
             }
 
@@ -226,6 +246,121 @@
                 return this
             }
 
+
+        }
+
+        passwordValidation(){
+
+            let error = false,
+                error_msg = "Your password must include ",
+                plural
+
+            if (this.data && this.data.password){
+
+                if (config.users.password_policy){
+
+                    if (config.users.password_policy.min_length > 0){
+
+                        if (this.data.password.length >= config.users.password_policy.min_length){
+
+                        } else {
+
+                            plural = ''
+                            if (config.users.password_policy.min_length > 1){
+                                plural = "s"
+                            }
+                            error_msg += "at least "+config.users.password_policy.min_length+" character"+plural+", "
+                            error = true
+
+                        }
+
+                    }
+
+                    if (config.users.password_policy.special_characters > 0){
+
+                        let re = RegExp('[!@€#£$%^&*()_=+]{'+config.users.password_policy.special_characters+',}')
+                        if (this.data.password.match(re)){
+
+                        } else {
+
+                            plural = ''
+                            if (config.users.password_policy.special_characters > 1){
+                                plural = "s"
+                            }
+                            error_msg += "at least "+config.users.password_policy.special_characters+" special character"+plural+", "
+                            error = true
+
+                        }
+
+                    }
+
+                    if (config.users.password_policy.uppercase_characters > 0){
+
+                        let re = RegExp('[A-Z]{'+config.users.password_policy.uppercase_characters+',}')
+                        if (this.data.password.match(re)){
+
+                        } else {
+
+                            plural = ''
+                            if (config.users.password_policy.uppercase_characters > 1){
+                                plural = "s"
+                            }
+                            error_msg += "at least "+config.users.password_policy.uppercase_characters+" uppercase character"+plural+", "
+                            error = true
+
+                        }
+
+                    }
+
+                    if (config.users.password_policy.lowercase_characters > 0){
+
+                        let re = RegExp('[a-z]{'+config.users.password_policy.lowercase_characters+',}')
+                        if (this.data.password.match(re)){
+
+                        } else {
+
+                            plural = ''
+                            if (config.users.password_policy.lowercase_characters > 1){
+                                plural = "s"
+                            }
+                            error_msg += "at least "+config.users.password_policy.lowercase_characters+" lowercase character"+plural+", "
+                            error = true
+
+                        }
+
+                    }
+
+                    if (config.users.password_policy.numbers > 0){
+
+                        let re = RegExp('[0-9]{'+config.users.password_policy.numbers+',}')
+                        if (this.data.password.match(re)){
+
+                        } else {
+
+                            plural = ''
+                            if (config.users.password_policy.numbers > 1){
+                                plural = "s"
+                            }
+                            error_msg += "at least "+config.users.password_policy.numbers+" number"+plural+", "
+
+                            error = true
+                        }
+
+                    }
+
+                }
+
+                if (error == true){
+                    error_msg = error_msg.replace(/\,\s$/,'').replace(/(.+)(\,\s)(.+)$/,'$1 and $3')
+                    this.error = error_msg
+                }
+
+                return this
+
+            } else {
+                this.error = 'No password specified'
+                return this
+            }
 
         }
 

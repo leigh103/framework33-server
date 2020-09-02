@@ -66,7 +66,15 @@
         users: {
             allow_registration:true,
             email_activation: true,
-            guards:['admin','user']
+            guards:['admin','user'],
+            password_reset_timeout: 5,
+            password_policy: {
+                min_length:8,
+                special_characters: true,
+                uppercase_characters: true,
+                lowercase_characters: true,
+                numbers: true
+            }
         },
 
         providers: {

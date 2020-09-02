@@ -12,6 +12,7 @@
                 fields: [
                     {name:'avatar',input_type:'image',placeholder:'Profile Picture', type:'image', required:false},
                     {name:'full_name',input_type:'text',placeholder:'Full name', type:'name', required:true},
+                    {name:'password',input_type:'hidden', type:'password', required:false},
                     {name:'email',input_type:'email',placeholder:'Email address', type:'email', required:true},
                     {name:'tel',input_type:'text',placeholder:'Telephone Number', type:'tel', required:false},
                     {name:'activated',input_type:'select',options:[{text:'Yes',value:true},{text:'No',value:false}], type:'boolean', required:false},
@@ -48,59 +49,6 @@
             }
 
         }
-
-        search(search) {
-
-            if (search.str.length < 3){
-
-                this.data = DB.read(this.settings.collection).limit(30).get()
-                return this.data
-
-            } else {
-
-                let filter = []
-
-                filter.push('full_name like '+search.str)
-                filter.push('email like '+search.str)
-                filter.push('full_name like '+search.str)
-
-                this.data = DB.read(this.settings.collection).orWhere(filter).get()
-                return this.data
-
-            }
-
-        }
-
-        // async save() {
-        //
-        //     if (!this.data){
-        //         this.error = 'No data to save'
-        //         return this
-        //     }
-        //
-        //     await this.validate()
-        //
-        //     if (this.data._id){
-        //
-        //         this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
-        //
-        //     } else {
-        //
-        //         this.data = await DB.create(this.settings.collection,this.data).first()
-        //
-        //         if (config.users.email_activation === true){
-        //             this.data.activated = false
-        //         } else {
-        //             this.data.activated = true
-        //         }
-        //
-        //         this.sendReset()
-        //
-        //     }
-        //
-        //     return this
-        //
-        // }
 
         async delete(){
 

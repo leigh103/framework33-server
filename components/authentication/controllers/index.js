@@ -44,7 +44,14 @@ const express = require('express'),
         let guards = config.users.guards
         if (guards.indexOf(req.params.guard) >= 0 && req.params.password_reset){ // if password reset key has been given
 
-            res.render('authentication/views/reset.ejs', {type:req.params.password_reset,guard:req.params.guard})
+            let time_diff = moment().diff(moment.unix(req.params.password_reset/1000),'minutes'),
+                timestamp_hash = DB.hash('password-reset'+req.body.password_reset)
+
+            if (time_diff > config.users.password_reset_timeout){
+                res.render('authentication/views/reset.ejs', {type:'reset',guard:req.params.guard,error:'For security reasons, password reset tokens are only value for '+config.users.password_reset_timeout+' minutes. Please try again.'})
+            } else {
+                res.render('authentication/views/reset.ejs', {type:req.params.password_reset,guard:req.params.guard})
+            }
 
         } else if (guards.indexOf(req.params.guard) >= 0 && req.params.password_reset == 'reset'){ // if password reset key is being requested
 
@@ -52,16 +59,27 @@ const express = require('express'),
 
         } else if (req.params.guard == 'activate' && req.params.password_reset){ // if a user is attempting activation
 
-            let diff = moment().diff(moment.unix(req.params.password_reset)),
+            let time_diff = moment().diff(moment.unix(req.params.password_reset/1000),'minutes'),
                 timestamp_hash = DB.hash('password-reset'+req.params.password_reset)
 
-            let user = await new User().find(['password_reset == '+timestamp_hash]),
-                auth_data = user.activate()
+            if (time_diff > config.users.password_reset_timeout){
 
-            if (auth_data.error){
-                res.render('authentication/views/activate.ejs', {err:auth_data.error})
+                let user = await new User().find(['password_reset == '+timestamp_hash]),
+                    auth_data = user.deleteReset()
+
+                res.render('authentication/views/activate.ejs', {err:'For security reasons, activation tokens are only value for '+config.users.password_reset_timeout+' minutes. Please try again.'})
+
             } else {
-                res.render('authentication/views/activate.ejs', {user:auth_data})
+
+                let user = await new User().find(['password_reset == '+timestamp_hash]),
+                    auth_data = user.activate()
+
+                if (auth_data.error){
+                    res.render('authentication/views/activate.ejs', {err:auth_data.error})
+                } else {
+                    res.render('authentication/views/activate.ejs', {user:auth_data})
+                }
+
             }
 
         } else { // redirect to login
@@ -107,7 +125,7 @@ const express = require('express'),
 
             if (!user || user.error){
 
-                res.render('authentication/views/register.ejs', {error:user.error})
+                res.render('authentication/views/register.ejs', {guard:req.body.guard,error:user.error})
 
             } else if (config.users.email_activation === true) {
 
@@ -119,7 +137,7 @@ const express = require('express'),
                 let auth_data = await user.authenticate(req.body)
 
                 if (auth_data && auth_data.error){
-                    res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})
+                    res.render('authentication/views/login.ejs', {guard:req.body.guard,error:auth_data.error})
                 } else if (auth_data && auth_data._id){
                     req.session.user = auth_data
                     if (req.cookies && req.cookies['connect.sid']){
@@ -175,16 +193,30 @@ const express = require('express'),
 
     routes.post('/login/:guard/reset-password', async (req, res) => {
 
-        let user = await new global[parseClassName(req.params.guard)]().find(req.body.password_reset),
-            auth_data = await user.resetPassword(req.body)
+        let time_diff = moment().diff(moment.unix(req.body.password_reset/1000),'minutes'),
+            timestamp_hash = DB.hash('password-reset'+req.body.password_reset)
 
-        if (auth_data && auth_data.error){
-            res.render('authentication/views/reset.ejs', {type:'',guard:req.params.guard,error:auth_data.error})
-        } else if (auth_data && auth_data._id){
-            req.session.user = auth_data
-            res.redirect(user.routes.redirects.logged_in)
+        if (time_diff > config.users.password_reset_timeout){
+
+            let user = await new User().find(['password_reset == '+timestamp_hash]),
+                auth_data = user.deleteReset()
+
+            res.render('authentication/views/reset.ejs', {type:'reset',guard:req.params.guard,error:'For security reasons, password reset tokens are only value for '+config.users.password_reset_timeout+' minutes. Please try again.'})
+
         } else {
-            res.render('authentication/views/reset.ejs', {type:'reset',guard:req.params.guard,error:'There has been an issue resetting your password, please try again'})
+
+            let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash]),
+                auth_data = await user.resetPassword(req.body)
+
+            if (auth_data && auth_data.error){
+                res.render('authentication/views/reset.ejs', {type:'',guard:req.params.guard,error:auth_data.error})
+            } else if (auth_data && auth_data._id){
+                req.session.user = auth_data
+                res.redirect(user.routes.redirects.logged_in)
+            } else {
+                res.render('authentication/views/reset.ejs', {type:'reset',guard:req.params.guard,error:'There has been an issue resetting your password, please try again'})
+            }
+
         }
 
     })
