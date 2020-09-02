@@ -28,7 +28,6 @@
                     existing.sendReset()
                 }
 
-                this.data = existing
                 return this
 
             } else {
@@ -278,7 +277,7 @@
 
                     if (config.users.password_policy.special_characters > 0){
 
-                        let re = RegExp('[!@€#£$%^&*()_=+]{'+config.users.password_policy.special_characters+',}')
+                        let re = RegExp('[!@€#£$%^&*()_\\-=+]{'+config.users.password_policy.special_characters+',}')
                         if (this.data.password.match(re)){
 
                         } else {

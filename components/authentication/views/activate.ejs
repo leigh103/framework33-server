@@ -17,18 +17,18 @@
 
         </div>
 
-        <div class="flex-5 flex flex-column flex-middle-left w-100 mb-4">
+        <div class="flex-5 flex flex-column flex-middle-left w-100 mb-4 text-left">
 
             <% if (typeof user != 'undefined'){ %>
 
-                <h1 class="text-light mb-1">Account Activated!</h1>
+                <h1 class="text-light mb-3">Account Activated!</h1>
                 <a class="btn highlight w-100" href="/login">Please Login</a>
 
-            <% } else if (typeof err != 'undefined'){ %>
+            <% } else if (typeof error != 'undefined'){ %>
 
                 <h1 class="text-light mb-1">Hmmm...</h1>
                 <p class="text-weight-500">Looks like we've had trouble activating your account</p>
-                <p class="text-33-blue">Error: <%- err %></p>
+                <p class="text-33-red"><%- error %></p>
 
             <% } %>
 

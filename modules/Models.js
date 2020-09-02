@@ -46,7 +46,7 @@
                                     .where(query)
                                     .first()
 
-                if (this.data){
+                if (this.data.length > 0 || Object.keys(this.data).length > 0){
                     this.data.guard = this.settings.collection
                     return this
                 } else {
