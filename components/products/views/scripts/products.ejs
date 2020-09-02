@@ -1,26 +1,4 @@
 
-<script src="/js/ckeditor/ckeditor.js?v=1.0.3"></script>
-
-<script>
-
-    var contented
-
-    ClassicEditor
-        .create( document.querySelector( '#editor' ), {
-        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|','indent','outdent', '|','imageUpload','imageTextAlternative', '|','insertTable','tablerow'  ],
-        image: {
-            toolbar: [ 'imageTextAlternative' ]
-        }
-    })
-        .then( editor => {
-            contented = editor
-            console.log(Array.from( editor.ui.componentFactory.names() ))
-        } )
-        .catch( error => {
-            console.error( error );
-        } );
-
-</script>
 
 <script>
 
@@ -57,10 +35,8 @@
                 }
 
                 if (scope.new.content){
-                    contented.setData( scope.new.content )
-                } else {
-                    contented.setData( '' )
-                }
+                    document.getElementById('product_content').innerHTML = scope.new.content
+                } 
 
                 if (!no_modal){
                     scope.view.modal = 'show_product_edit'

@@ -30,7 +30,7 @@
 
     <div class="modal" app-show="view.modal == 'show_product_edit'" anim="{'enter':'fade-in'}">
 
-        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}" style="width:85vw;height:85vh">
+        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}" style="width:85vw; max-width:85vw; height:85vh">
 
             <div class="grid col-2 pb-1">
                 <div>
@@ -54,7 +54,7 @@
 
             <div app-show="view.tab == 'details'">
 
-                <div class="grid pb-2 gap-1 col-2" style="align-items: start;">
+                <div class="grid pb-2 gap-2 col-2" style="align-items: start;">
 
                     <div class="rowspan-5 flex flex-column flex-middle-left">
                         <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="new.image_1" class="object-fit"></label>
@@ -119,7 +119,8 @@
                                 <label><input type="checkbox" app-model="new.content_before_details" class="mr-05">Show content before product details</label>
                             </div>
                         </div>
-                        <textarea app-model="new.content" placeholder="Add a description" id="editor"></textarea>
+                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs') %>
+                        <div id="product_content" class="large resize contenteditable" app-model="new.content" contenteditable="true"></div>
                     </div>
 
                 </div>

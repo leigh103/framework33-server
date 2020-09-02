@@ -87,7 +87,7 @@
 
                     if (scope.new.content){
                         console.log(scope.new.content)
-                        contented.setData( scope.new.content )
+                    //    contented.setData( scope.new.content )
                     }
 
                     if (!no_modal){
@@ -101,7 +101,7 @@
             scope.addItem = function(collection, obj){
 
                 if (typeof obj.content != 'undefined'){
-                    obj.content = contented.getData()
+                //    obj.content = contented.getData()
                 }
 
                 scope.post(collection, obj).then((data)=>{
@@ -120,7 +120,7 @@
                 scope.notify('Saving...')
 
                 if (typeof obj.content != 'undefined'){
-                    obj.content = contented.getData()
+                //    obj.content = contented.getData()
                 }
 
                 scope.post(collection, obj).then((data)=>{
