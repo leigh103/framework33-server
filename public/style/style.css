@@ -506,7 +506,7 @@ select.invalid {
 body:not(.dashboard):not(.fullscreen) .page {
   min-height: calc(100vh - 14rem);
 }
-body:not(.dashboard):not(.fullscreen) .page .h-100 {
+body:not(.dashboard):not(.fullscreen) .page > .h-100 {
   min-height: calc(100vh - 14rem);
 }
 body.fullscreen.no-nav .page {
