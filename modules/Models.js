@@ -212,6 +212,14 @@
                         last: name[name.length-1]
                     }
 
+                } else if (field.type == 'password'){
+
+                    if (typeof value == 'string' && value.match(/^\$\$\$(.*?)\$\$\$$/)){
+                        return value
+                    } else {
+                        return DB.hash(value)
+                    }
+
                 } else if (field.type.match(/tel|phone/)){
 
                     if (value && !value.match(/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/)){

@@ -503,12 +503,29 @@ textarea.invalid,
 select.invalid {
   border: 2px solid #de4848 !important;
 }
-body:not(.dashboard) .page {
+body:not(.dashboard):not(.fullscreen) .page {
   min-height: calc(100vh - 14rem);
-  margin-top: 4rem;
 }
-body:not(.dashboard) .page .h-100 {
+body:not(.dashboard):not(.fullscreen) .page .h-100 {
   min-height: calc(100vh - 14rem);
+}
+body.fullscreen.no-nav .page {
+  height: 100vh;
+}
+@media only screen and (max-width: 851px) {
+  body.fullscreen.no-nav .page {
+    height: auto;
+    min-height: 100vh;
+  }
+}
+body.fullscreen:not(.no-nav) .page {
+  height: calc(100vh - 4rem);
+}
+@media only screen and (max-width: 851px) {
+  body.fullscreen:not(.no-nav) .page {
+    height: auto;
+    min-height: calc(100vh - 4rem);
+  }
 }
 figure {
   margin: 0;

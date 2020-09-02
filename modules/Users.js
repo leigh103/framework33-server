@@ -9,12 +9,79 @@
 
         }
 
-        authenticate(attempt) {
+        async findOrSave() {
 
-            if (this.data.blocked){
+            if (!this.data){
+                this.error = 'No user data'
+                return this
+            }
+
+            if (this.data.password_conf){
+                delete this.data.password_conf
+            }
+
+            let existing = await new User().find(['email == '+this.data.email])
+
+            if (existing.data && existing.data.email && this.data.email == existing.data.email){
+
+                if (config.users.email_activation === true && !this.data.activated){
+                    existing.sendReset()
+                }
+
+                this.data = existing
+                return this
+
+            } else {
+
+                await this.save()
+
+                if (config.users.email_activation === true){
+                    this.data.activated = false
+                    this.sendReset()
+                } else {
+                    this.data.activated = true
+                }
+
+                return this
+
+            }
+
+        }
+
+        async preSave(){
+
+        }
+
+        search(search) {
+
+            if (search.str.length < 3){
+
+                this.data = DB.read(this.settings.collection).limit(30).get()
+                return this.data
+
+            } else {
+
+                let filter = []
+
+                filter.push('full_name like '+search.str)
+                filter.push('email like '+search.str)
+                filter.push('full_name like '+search.str)
+
+                this.data = DB.read(this.settings.collection).orWhere(filter).get()
+                return this.data
+
+            }
+
+        }
+
+        async authenticate(attempt) {
+
+            if (!this.data || this.data.blocked || !attempt || typeof attempt != 'object' || !attempt.password || !attempt.email){
                 this.error = 'Email address and/or password incorrect'
                 return this
             }
+
+            attempt.password = await DB.hash(attempt.password)
 
             if (!this.data.activated && this.data.email){
 
@@ -22,7 +89,7 @@
                 this.error = 'Email address and/or password incorrect. Please check your email for confirmation'
                 return this
 
-            } else if (this.data.activated && this.data.password == DB.hash(attempt.password) && this.data.email == attempt.email){
+            } else if (this.data.activated == true && this.data.password == attempt.password && this.data.email == attempt.email){
 
                 this.data.guard = this.settings.collection
                 return this.data
@@ -73,21 +140,24 @@
 
         }
 
-        activate(){
+        async activate(){
 
-            if (!this.password_reset){
+            if (!this.data.password_reset){
                 this.error = 'Not found'
                 return this
             } else {
-                this.user_data = DB.read(this.settings.collection).where(['password_reset == '+this.password_reset]).update({activated:true,password_reset:false}).first()
-                return this.user_data
+                this.data.password_reset = false
+                this.data.activated = true
+                await this.save()
+                return this
             }
 
         }
 
         async sendReset() {
 
-            let hash = DB.hash('password-reset'+Date.now()),
+            let timestamp = Date.now(),
+                hash = DB.hash('password-reset'+timestamp),
                 filter = []
 
             if (this.data.email){
@@ -114,7 +184,12 @@
                     notification_type = 'password_reset'
                 }
 
+                this.data.timestamp = timestamp
+
                 let email = new Notification(this.data).useEmailTemplate(notification_type).email()
+
+                delete this.data.timestamp
+
                 return this.data
 
             } else {

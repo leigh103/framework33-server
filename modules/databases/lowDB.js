@@ -123,7 +123,7 @@
                         .find({_key: item._key})
                         .assign(data)
                         .write()
-                        
+
                     return item
 
                 })
@@ -410,7 +410,12 @@
         }
 
         hash(str){
-            return sha2_256(str)
+            let hash = sha2_256(str)
+            return "$$$"+hash+"$$$"
+        }
+
+        timestamp(){
+            return Date.now()
         }
 
 

@@ -52,7 +52,10 @@ const express = require('express'),
 
         } else if (req.params.guard == 'activate' && req.params.password_reset){ // if a user is attempting activation
 
-            let user = await new User().find(req.params),
+            let diff = moment().diff(moment.unix(req.params.password_reset)),
+                timestamp_hash = DB.hash('password-reset'+req.params.password_reset)
+
+            let user = await new User().find(['password_reset == '+timestamp_hash]),
                 auth_data = user.activate()
 
             if (auth_data.error){
@@ -98,16 +101,40 @@ const express = require('express'),
 
     routes.post('/login/register', async (req, res) => {
 
-        let user = await new User(req.body).findOrSave()
+        if (req.body.password && req.body.password_conf && req.body.password != '' && req.body.password_conf != '' && req.body.password == req.body.password_conf){
 
-        if (user.error){
-            res.render('authentication/views/register.ejs', {error:user.error})
-        } else if (config.users.email_activation === true) {
-            let success = 'Please click the link in your email to activate your account'
-            res.render('authentication/views/register.ejs', {error:success})
+            let user = await new User(req.body).findOrSave()
+
+            if (!user || user.error){
+
+                res.render('authentication/views/register.ejs', {error:user.error})
+
+            } else if (config.users.email_activation === true) {
+
+                let success = 'Please click the link in your email to activate your account'
+                res.render('authentication/views/register.ejs', {error:success,guard:'user'})
+
+            } else {
+
+                let auth_data = await user.authenticate(req.body)
+
+                if (auth_data && auth_data.error){
+                    res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})
+                } else if (auth_data && auth_data._id){
+                    req.session.user = auth_data
+                    if (req.cookies && req.cookies['connect.sid']){
+                        req.session.user.ws_id = req.cookies['connect.sid']
+                        user.data.ws_id = req.cookies['connect.sid']
+                        user.save()
+                    }
+                    res.redirect(user.routes.redirects.logged_in)
+                }
+
+            }
+
         } else {
-            req.session.user = user.data
-            res.redirect(user.routes.redirects.redirects.logged_in)
+            let error = 'Password fields must match'
+            res.render('authentication/views/register.ejs', {error:error,guard:'user'})
         }
 
     })
@@ -115,7 +142,7 @@ const express = require('express'),
     routes.post('/login/:guard', async (req, res) => {
 
         let user = await new global[parseClassName(req.params.guard)]().find(req.body),
-            auth_data = user.authenticate(req.body)
+            auth_data = await user.authenticate(req.body)
 
         if (auth_data && auth_data.error){
             res.render('authentication/views/login.ejs', {guard:req.params.guard,error:auth_data.error})

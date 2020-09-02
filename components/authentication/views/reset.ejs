@@ -1,43 +1,57 @@
 <% layout(config.site.theme+'/fullscreen.ejs') -%>
 
-<div class="vh-100 vw-100 flex flex-middle">
-    <div class="vw-30 vw-s-100 px-s-2 text-left">
+<div class="page grid col-2 col-s-1">
+
+    <div class="flex flex-column px-9 px-s-2">
+
+        <div class="flex-none grid col-2 w-100 mt-4">
+            <div>
+                <a href="/" class="block w-20"><% if (typeof view != 'undefined' && view.logo){ %><img src="<%- view.logo %>"><% } %></a>
+            </div>
+            <div class="flex flex-middle-right">
+                <% if (view.users.allow_registration === true){ %>
+                    <a href="/login">Login</a>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="flex-5 flex flex-column flex-middle-left mb-4">
 
         <% if (type == 'reset'){ %>
 
             <h1 class="text-light mb-2">Reset</h1>
-            <p class="mb-2">Enter your email address below and we'll send you a password reset confirmation</p>
-            <form method="post" action="/login/<%- guard %>/send-reset" class="grid col-2 col-s-1 gap-1">
+            <p class="text-left mb-2">Enter your email address below and we'll send you a password reset link</p>
+            <form method="post" action="/login/<%- guard %>/send-reset" class="w-100">
                 <div class="colspan-2">
-                    <input type="text" name="email" placeholder="Email Address" class="border">
+                    <input type="text" name="email" placeholder="Email Address" class="underline">
                 </div>
                 <div>
-                    <input type="submit" class="btn bg-33-topaz w-100 mt-2" value="Send">
+                    <input type="submit" class="btn highlight thick w-100 mt-2" value="Send">
                 </div>
             </form>
 
         <% } else if (type == 'reset_sent'){ %>
 
             <h1 class="text-light mb-2">Reset</h1>
-            <p class="mb-2">An email has been sent to your email address. Click the link to reset your password</p>
+            <p class="text-left mb-2">An email has been sent to your email address. Click the link to reset your password</p>
 
         <% } else { %>
 
             <h1 class="text-light mb-2">Reset</h1>
-            <p class="mb-2">Enter your email address and a new password below</p>
+            <p class="text-left mb-2">Enter your email address and a new password below</p>
             <form method="post" action="/login/<%- guard %>/reset-password" class="grid col-2 col-s-1 gap-1">
                 <div class="colspan-2">
-                    <input type="text" name="email" placeholder="Email Address" class="border">
+                    <input type="text" name="email" placeholder="Email Address" class="underline">
                 </div>
                 <div class="colspan-2">
-                    <input type="password" name="password" placeholder="Password" class="border">
+                    <input type="password" name="password" placeholder="Password" class="underline">
                 </div>
                 <div class="colspan-2">
-                    <input type="password" name="password_confirmation" placeholder="Confirm Password" class="border">
+                    <input type="password" name="password_confirmation" placeholder="Confirm Password" class="underline">
                     <input type="hidden" name="password_reset" value="<%- type %>">
                 </div>
                 <div>
-                    <input type="submit" class="btn bg-33-topaz w-100 mt-2" value="Reset">
+                    <input type="submit" class="btn highlight thick w-100 mt-2" value="Reset">
                 </div>
             </form>
 
@@ -49,5 +63,14 @@
             <% } %>
         </div>
 
+        </div>
+
     </div>
+
+    <div class="bg-33-dream flex flex-middle-left flex-column p-6 p-s-2">
+
+
+
+    </div>
+
 </div>

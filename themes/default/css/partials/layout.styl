@@ -1,12 +1,40 @@
-body:not(.dashboard){
+body {
 
-    .page {
-        min-height: calc(100vh - 14rem);
-        margin-top: $top-nav-height;
-
-        & .h-100 {
+    &:not(.dashboard):not(.fullscreen){
+        .page {
             min-height: calc(100vh - 14rem);
+
+            & .h-100 {
+                min-height: calc(100vh - 14rem);
+            }
         }
+
+    }
+
+    &.fullscreen {
+
+        &.no-nav {
+            .page {
+                height: 100vh;
+
+                @media $small {
+                    height: auto;
+                    min-height: 100vh;
+                }
+            }
+        }
+
+        &:not(.no-nav) {
+            .page {
+                height: "calc(100vh - %s)" % $top-nav-height;
+
+                @media $small {
+                    height: auto;
+                    min-height: "calc(100vh - %s)" % $top-nav-height;
+                }
+            }
+        }
+
     }
 
 }

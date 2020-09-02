@@ -18,3 +18,47 @@
 
     </div>
 </div>
+
+<div class="page grid col-2 col-s-1">
+
+    <div class="flex flex-middle-left flex-column px-9 px-s-2">
+
+        <div class="flex-none grid col-2 w-100 mt-4">
+
+            <div>
+                <a href="/" class="block w-20"><% if (typeof view != 'undefined' && view.logo){ %><img src="<%- view.logo %>"><% } %></a>
+            </div>
+            <div class="flex flex-middle-right">
+                <% if (view.users.allow_registration === true){ %>
+                    <a href="/sign-up">Sign Up</a>
+                <% } %>
+            </div>
+
+        </div>
+
+        <div class="flex-5 flex flex-column flex-middle-left w-100 mb-4">
+
+            <% if (typeof user != 'undefined'){ %>
+
+                <h1 class="text-light mb-1">Account Activated!</h1>
+                <a class="btn bg-33-topaz" href="/login">Please Login</a>
+
+            <% } else if (typeof err != 'undefined'){ %>
+
+                <h1 class="text-light mb-1">Hmmm...</h1>
+                <p class="text-weight-500">Looks like we've had trouble activating your account</p>
+                <p class="text-33-blue">Error: <%- err %></p>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+    <div class="bg-33-dream flex flex-middle-left flex-column p-6 p-s-2">
+
+
+
+    </div>
+
+</div>

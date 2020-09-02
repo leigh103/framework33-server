@@ -45,7 +45,7 @@
 
         if (template == 'complete_registration'){
 
-            if (data && data.password_reset && data.guard){
+            if (data && data.timestamp && data.guard){
 
                 content = notificationTemplate.complete_registration.content
                 subject = notificationTemplate.complete_registration.subject
@@ -60,7 +60,7 @@
                         title: subject,
                         link: {
                             text:'Complete Registration',
-                            url: config.site.url+'/login/'+data.guard+'/'+data.password_reset
+                            url: config.site.url+'/login/'+data.guard+'/'+data.timestamp
                         }
                     }
                 }
@@ -70,7 +70,7 @@
         } else if (template == 'activate_account'){
 
 
-            if (data && data.password_reset){
+            if (data && data.timestamp){
 
                 content = notificationTemplate.activate_account.content
                 subject = notificationTemplate.activate_account.subject
@@ -85,7 +85,7 @@
                         title: subject,
                         link: {
                             text: subject,
-                            url: config.site.url+'/login/activate/'+data.password_reset
+                            url: config.site.url+'/login/activate/'+data.timestamp
                         }
                     }
                 }
@@ -94,7 +94,7 @@
 
         } else if (template == 'password_reset'){
 
-            if (data && data.password_reset && data.guard){
+            if (data && data.timestamp && data.guard){
 
                 content = notificationTemplate.password_reset.content
                 subject = notificationTemplate.password_reset.subject
@@ -109,7 +109,7 @@
                         title: subject,
                         link: {
                             text:'Reset Your Password',
-                            url: config.site.url+'/login/'+data.guard+'/'+data.password_reset
+                            url: config.site.url+'/login/'+data.guard+'/'+data.timestamp
                         }
                     }
                 }
