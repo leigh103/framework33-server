@@ -51,7 +51,7 @@ const express = require('express'),
             return new Promise(function(resolve, reject) {
 
                 var blocks = {}
-                fs.readdir(basedir+'/components/content/templates/blocks', (err, files) => {
+                fs.readdir(config.site.theme_path+'/templates/blocks', (err, files) => {
 
                     if (err){
                         reject(err)
@@ -59,7 +59,7 @@ const express = require('express'),
 
                         files.forEach(async (file, index) => {
 
-                            await fs.readFile(basedir+'/components/content/templates/blocks/'+file, function read(err, data) {
+                            await fs.readFile(config.site.theme_path+'/templates/blocks/'+file, function read(err, data) {
                                 if (err) {
                                     throw err;
                                 }

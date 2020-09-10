@@ -9,7 +9,7 @@
             <% content.blocks[i].content[content.blocks[i].fields[ii].field] = content.blocks[i].fields[ii].value %>
             <% content.blocks[i].content[content.blocks[i].fields[ii].field+'_classes'] = content.blocks[i].fields[ii].classes %>
         <% } %>
-        <%- include('../templates/blocks/'+content.blocks[i].block+'.ejs', {data:content.blocks[i].content, styling:content.blocks[i].styling}) %>
+        <%- include(config.site.theme_path+'/templates/blocks/'+content.blocks[i].block+'.ejs', {data:content.blocks[i].content, styling:content.blocks[i].styling}) %>
 
     <% } %>
 
