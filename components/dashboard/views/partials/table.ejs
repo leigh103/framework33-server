@@ -1,7 +1,9 @@
 <div class="table" app-init="get('<%- table %>')">
     <div class="row table-header">
         <% fields.forEach((item)=>{ %>
-            <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>"><%- view.functions.parseName(item.name) %></div>
+            <% if (item.type != 'password'){ %>
+                <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>"><%- view.functions.parseName(item.name) %></div>
+            <% } %>
         <% }) %>
         <div class="cell middle action"></div>
     </div>
@@ -15,6 +17,7 @@
                 <div class="cell middle <%- item.name %> <%- item.input_type %>"><img app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
             <% } else if (item.input_type == 'object'){ %>
                 <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>.length"></div>
+            <% } else if (item.type == 'password'){ %>
             <% } else if (item.input_type == 'date'){ %>
                 <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY')"></div>
             <% } else { %>

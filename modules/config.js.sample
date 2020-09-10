@@ -58,7 +58,7 @@
             name: '',
             logo: '/images/logo.svg',
             theme: 'default',
-            theme_path: __dirname+'/themes/default'
+            theme_path: global.basedir+'/themes/default'
         },
 
         tax_amount: 1.20,

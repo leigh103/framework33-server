@@ -326,11 +326,11 @@
                 this.data = update_data
             }
 
-            await this.validate()
-
             if (this.preSave && typeof this.preSave == 'function'){
                 await this.preSave()
             }
+
+            await this.validate()
 
             if (this.data._id){
                 this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
