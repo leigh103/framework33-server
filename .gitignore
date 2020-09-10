@@ -1,7 +1,9 @@
 public/images
+public/images/*
 public/style/style.css
 public/*.jpg
 public/*.png
+public/*.svg
 public/*.ico
 public/*.xml
 public/*.json
