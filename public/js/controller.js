@@ -493,7 +493,7 @@
                 return
             }
 
-            if (typing_count > fields.length*3){
+        //    if (typing_count > fields.length*3){
 
                 scope.post('/submit-form', payload).then((data)=>{
                     scope.notify('Your message has been sent, someone will respond as soon as possible')
@@ -501,9 +501,9 @@
                     scope.notify(err,'error',15,'fa-exclamation-circle')
                 })
 
-            } else {
-                scope.notify('This website features bot protection. Please refrain from pasting content into the fields, maybe try giving us a little more information so we can help you further and try again.','error',5,'fa-exclamation-circle')
-            }
+            // } else {
+            //     scope.notify('This website features bot protection. Please refrain from pasting content into the fields, maybe try giving us a little more information so we can help you further and try again.','error',5,'fa-exclamation-circle')
+            // }
 
 
         }
