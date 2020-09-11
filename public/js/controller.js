@@ -448,7 +448,16 @@
                 form_data = document.getElementById(form),
                 form_action = form_data.getAttribute('action'),
                 fields = document.getElementsByClassName(form_name),
-                error = false
+                error = false,
+                submit_button
+
+            if (form_data){
+                submit_button = form_data.querySelectorAll('button')
+
+                if (submit_button){
+                    submit_button[submit_button.length-1].innerHTML = '<i class="fas fa-circle-notch" anim="rotate"></i>'
+                }
+            }
 
             for (let i = 0; i < fields.length; i++){
 
@@ -501,8 +510,14 @@
 
                 scope.post('/submit-form', payload).then((data)=>{
                     scope.notify('Your message has been sent, someone will respond as soon as possible')
+                    if (submit_button){
+                        submit_button[submit_button.length-1].innerHTML = 'Sent'
+                    }
                 }).catch((err)=>{
                     scope.notify(err,'error',15,'fa-exclamation-circle')
+                    if (submit_button){
+                        submit_button[submit_button.length-1].innerHTML = 'Error'
+                    }
                 })
 
             // } else {
