@@ -466,6 +466,10 @@
 
                 let field_val = fields[i].value
 
+                if (type == 'checkbox'){
+                    field_val = fields[i].checked
+                }
+
                 if (required == true && !field_val){
                     error = 'The field "'+name.replace(/\-/g,' ')+'" is required'
                     fields[i].classList.add('invalid')
