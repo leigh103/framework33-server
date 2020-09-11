@@ -503,6 +503,9 @@
 
             if (error){
                 scope.notify(error,'error',15,'fa-exclamation-circle')
+                if (submit_button){
+                    submit_button[submit_button.length-1].innerHTML = 'Please all required fields and click to submit'
+                }
                 return
             }
 
