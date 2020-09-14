@@ -174,10 +174,10 @@ function eraseCookie(name) {
 }
 
 function toggleMenu(){
-    var nav = document.getElementById('nav')
-    if (nav && nav.classList.contains('open')){
-        nav.classList.remove('open')
-    } else if (nav) {
-        nav.classList.add('open')
+    var mega_menu = document.querySelector('.mega-menu')
+    if (mega_menu && mega_menu.classList.contains('open')){
+        mega_menu.classList.remove('open')
+    } else if (mega_menu) {
+        mega_menu.classList.add('open')
     }
 }

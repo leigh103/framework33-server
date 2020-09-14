@@ -4,9 +4,30 @@
     position: sticky;
     top:0;
     width: 100vw;
-    border-bottom: 1px solid rgba(120,120,120,0.1);
-    z-index: 999;
     height: $top-nav-height;
+    z-index: 600;
+    background-color: white;
+    transition: top 0.3s;
+
+    .links {
+        @media $small {
+            display: none;
+        }
+    }
+
+    .logo {
+        @media $small {
+            grid-column: 1 / span 3;
+        }
+    }
+
+    .burger {
+        display: none;
+        cursor: pointer;
+        @media $small {
+            display: flex;
+        }
+    }
 
     div.link {
         position: relative;
@@ -19,8 +40,7 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            padding: 0 1.3rem;
-            transition: 0.5s all ease;
+            padding: 0 1.2rem;
 
             &:hover {
                 color: inherit;
@@ -50,6 +70,37 @@
         a {
             display: block;
         }
+    }
+
+}
+
+.mega-menu {
+    position: fixed;
+    text-align: left;
+    top:0;
+    left:0;
+    display: block;
+    background-color: $bg-primary;
+    transition: transform 0.3s ease;
+    transform: translateX(-100vw);
+    height: 100vh;
+    width: 100vw;
+    padding: 2.5rem;
+
+    z-index: 700;
+
+    div.link {
+        display: block;
+        margin-bottom: 2rem;
+
+        a, .btn {
+            display: block;
+            font-size: 1.25rem !important;
+        }
+    }
+
+    &.open {
+        transform: translateX(0);
     }
 
 }
