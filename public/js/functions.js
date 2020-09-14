@@ -124,7 +124,7 @@ document.addEventListener("click", function (e) {
 });
 
 var prevScrollpos = window.pageYOffset;
-var nav_el = document.querySelector("nav auto-hide")
+var nav_el = document.querySelector(".nav.auto-hide")
 window.onscroll = function() {
 var currentScrollPos = window.pageYOffset;
     if (prevScrollpos > currentScrollPos) {
