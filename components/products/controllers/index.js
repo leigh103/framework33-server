@@ -164,7 +164,7 @@ const express = require('express'),
             }
             data.categories = await new ProductCategories().all()
             data.categories = data.categories.data
-            res.render(settings.views+'/categories.ejs',data)
+            res.render(config.site.theme_path+'/templates/products/categories.ejs',data)
 
         } else {
             next()
@@ -208,7 +208,7 @@ const express = require('express'),
                         data.meta.description = data.product.description.substring(0,160)
                     }
 
-                    res.render(settings.views+'/product.ejs',data)
+                    res.render(config.site.theme_path+'/templates/products/product.ejs',data)
 
                 } else {
                     next()
@@ -234,7 +234,7 @@ const express = require('express'),
                     }
                     data.products = await new Products().all(['category like '+data.parent_category._key, 'sub_category like '+data.sub_category._key])
                     data.products = data.products.data
-                    res.render(settings.views+'/category.ejs',data)
+                    res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
                 } else { // check if it's a product
 
@@ -250,7 +250,7 @@ const express = require('express'),
                             data.meta.description = data.product.description.substring(0,160)
                         }
 
-                        res.render(settings.views+'/product.ejs',data)
+                        res.render(config.site.theme_path+'/templates/products/product.ejs',data)
 
                     } else {
                         next()
@@ -267,7 +267,7 @@ const express = require('express'),
                 }
                 data.products = await new Products().all(['category like '+data.category._key,'sub_category NOT EXISTS'])
                 data.products = data.products.data
-                res.render(settings.views+'/category.ejs',data)
+                res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
             }
 
