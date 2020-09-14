@@ -6,23 +6,23 @@
 
             <div app-show="!admin.mailbox.length" class="text-italic">No messages</div>
 
-            <div app-for="message in admin.mailbox" app-attr="{'id':'message'+{{index}}}" class="message-summary grid col-12 gap-1 clickable" app-click="openMessage(message)" app-class="{'open':message.date == view.mailbox.date}">
+            <div app-for="message in admin.mailbox" app-attr="{'id':'message'+{{index}}}" class="message-summary flex clickable" app-click="openMessage(message)" app-class="{'open':message.date == view.mailbox.date}">
 
-                <div class="colspan-2 flex flex-middle">
-                    <img src="/images/Profile_Placeholder.svg" app-src="message.from.avatar" class="avatar sm">
+                <div class="flex-none flex flex-middle">
+                    <img src="/images/Profile_Placeholder.svg" app-src="message.from.avatar" class="avatar sm" style="margin:0 1.4rem 0 0.4rem">
                 </div>
-                <div class="colspan-10 grid col-6">
-                    <div class="colspan-4">
+                <div class="flex-4">
+                    <div class="colspan-2">
                         <div class="text" app-bind="message.from.name"></div>
+                        <div class="text-33-grey" app-bind="parseDate(message.date,'ago')"></div>
                         <div class="title">
                             <div app-bind="message.subject"></div>
                         </div>
                     </div>
-                    <div class="colspan-2 text-right text-33-grey">
-                        <div class="" app-bind="parseDate(message.date,'ago')"></div>
-                        <a app-click="deleteMessage(message,{{index}})" class="text-33-red"><i class="fas fa-trash-alt"></i></a>
-                    </div>
+                </div>
 
+                <div class="flex-none text-right pl-1">
+                    <a app-click="deleteMessage(message,{{index}})" class="text-33-red"><i class="fas fa-trash-alt"></i></a>
                 </div>
 
             </div>
@@ -32,7 +32,7 @@
             <div app-show="view.mailbox">
                 <h3 app-bind="view.mailbox.subject"></h3>
                 <p class="my-2 text-small italic">From <span app-bind="view.mailbox.from.name"></span>, <span app-bind="parseDate(view.mailbox.date,'h:mma dddd Do MMM')"></span></p>
-                <p app-bind="view.mailbox.text"></p>
+                <p class="bg-33-white p-2" app-bind="view.mailbox.text"></p>
             </div>
 
         </div>
