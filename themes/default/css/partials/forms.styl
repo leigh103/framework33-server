@@ -1,13 +1,15 @@
 label {
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: $text-black;
     display: block;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 
     &.checkbox {
         display: flex;
         align-items: flex-start;
         justify-content: flex-start;
+        padding-top: 0.4rem;
+        margin-bottom: 0;
 
         p {
             flex: 1;
@@ -69,7 +71,7 @@ input[type=checkbox] {
         justify-content: center;
         width: 2rem;
         height: 2rem;
-        top: -0.45rem;
+        top: -0.5rem;
         border-radius: 0.25rem;
         left: 0;
         background-color: white;
@@ -81,5 +83,9 @@ input[type=checkbox] {
         &:after {
             content:'\2713';
         }
+    }
+
+    &.invalid:after {
+        border: 2px solid #de4848 !important
     }
 }

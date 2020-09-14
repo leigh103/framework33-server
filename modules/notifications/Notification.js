@@ -143,7 +143,9 @@
                     new WebsocketClient(this.class.data._id).send(this.content)
                 }
 
-                this.result = 'Message sent'
+                this.result = {
+                    sent:'Message sent'
+                }
                 return this.result
 
             } else {

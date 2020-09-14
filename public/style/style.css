@@ -479,15 +479,17 @@ footer {
   font-size: 0.9rem;
 }
 label {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #33424b;
   display: block;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 label.checkbox {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  padding-top: 0.4rem;
+  margin-bottom: 0;
 }
 label.checkbox p {
   flex: 1;
@@ -543,7 +545,7 @@ input[type=checkbox]:after {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  top: -0.45rem;
+  top: -0.5rem;
   border-radius: 0.25rem;
   left: 0;
   background-color: #fff;
@@ -552,6 +554,9 @@ input[type=checkbox]:after {
 }
 input[type=checkbox]:checked:after {
   content: '\2713';
+}
+input[type=checkbox].invalid:after {
+  border: 2px solid #de4848 !important;
 }
 body:not(.dashboard):not(.fullscreen) .page {
   min-height: calc(100vh - 14rem);
@@ -825,7 +830,7 @@ ul li::before {
 .page-notification {
   background-color: #1dc7d5;
   color: #fff;
-  text-align: right;
+  text-align: center;
   font-size: 0.875rem;
   padding: 1rem;
 }

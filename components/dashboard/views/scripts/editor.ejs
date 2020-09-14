@@ -241,18 +241,30 @@
 
                 setCaret(scope.view.exec.selection)
 
-                scope.view.form.details.name = scope.view.form.details.name.replace(/\s/g,'-').toLowerCase()
+                let form_name = scope.view.form.details.name.replace(/\s/g,'-').replace(/\'|\"|\,|\./g,'').toLowerCase()
 
-                let form = '<form id="'+scope.view.form.details.name+'" action="'+scope.view.form.details.url+'" method="post">'
+                let form = '<form id="'+form_name+'" action="'+scope.view.form.details.url+'" method="post">'
 
                 scope.view.form.inputs.map((input)=>{
 
-                    form += '<div class="mb-1"><label>'+input.label+'</label>'
+                    if (!input.type.match(/checkbox/i)){
+                        form += '<div class="mb-1"><label>'+input.label+'</label>'
+                    } else {
+                        form += '<div class="mb-1">'
+                    }
+
+                    let required = ''
+
+                    if (input.required === true){
+                        required = ' required="true"'
+                    }
 
                     if (input.type.match(/textarea/i)){
-                        form += '<textarea id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+scope.view.form.details.name+'"></textarea></div>'
+                        form += '<textarea id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+form_name+'"'+required+'></textarea></div>'
+                    } else if (input.type.match(/checkbox/i)){
+                        form += '<label class="checkbox"><input type="'+input.type+'" id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+form_name+'"'+required+'><p>'+input.label+'</p></label></div>'
                     } else {
-                        form += '<input type="'+input.type+'" id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+scope.view.form.details.name+'"></div>'
+                        form += '<input type="'+input.type+'" id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+form_name+'"'+required+'></div>'
                     }
 
                 })
@@ -261,7 +273,7 @@
                     scope.view.form.details.button_text = 'Submit'
                 }
 
-                form += '<div class="text-right"><button class="btn highlight" app-click="submitForm(\''+scope.view.form.details.name+'\')">'+scope.view.form.details.button_text+'</div></form>'
+                form += '<div class="text-right"><button class="btn highlight" app-click="submitForm(\''+form_name+'\')">'+scope.view.form.details.button_text+'</div></form>'
 
                 document.execCommand('insertHTML',false,form)
 

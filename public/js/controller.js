@@ -354,6 +354,12 @@
 
         }
 
+        scope.truncate = function(input){
+
+            return input.replace(/<br><br>/,'<br>').substring(0,100)
+
+        }
+
         scope.openDatePicker = function(name, obj){
 
             let selected_date
@@ -468,8 +474,8 @@
                 fields[i].classList.remove('invalid')
 
                 let name = fields[i].getAttribute('id'),
-                    type = fields[i].getAttribute('type'),
-                    required = fields[i].hasAttribute('required')
+                    type = fields[i].type,
+                    required = fields[i].required
 
                 if (name){
                     name = name.replace(/form\-/,'')
@@ -500,6 +506,7 @@
                     if (date_check.isValid() === false){
                         error = 'The selected date is invalid'
                         fields[i-2].classList.add('invalid')
+                        scope.sendForm(payload,submit_button,error)
                         break
                     }
                 }
@@ -507,34 +514,46 @@
                 if (required == true && !field_val){
                     error = 'The field "'+name.replace(/\-/g,' ')+'" is required'
                     fields[i].classList.add('invalid')
+                    scope.sendForm(payload,submit_button,error)
                     break
                 }
 
                 if (type == 'email' && !field_val.match(/[^@]+@[^\.]+\..+/gi)){
                     error = 'Please enter a valid email address'
                     fields[i].classList.add('invalid')
+                    scope.sendForm(payload,submit_button,error)
                     break
                 }
 
                 if (type == 'tel' && !field_val.match(/^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/gi)){
                     error = 'Please enter a valid phone number'
                     fields[i].classList.add('invalid')
+                    scope.sendForm(payload,submit_button,error)
                     break
                 }
 
                 payload.push({name:name,value:field_val})
 
+                if (i >= fields.length-1){
+                    scope.sendForm(payload,submit_button,error)
+                }
+
             }
 
+
+
+        }
+
+        scope.sendForm = function(payload, submit_button, error){
+
             if (error){
+
                 scope.notify(error,'error',15,'fa-exclamation-circle')
                 if (submit_button){
                     submit_button[submit_button.length-1].innerHTML = 'Please check all required fields and click here to submit'
                 }
-                return
-            }
 
-        //    if (typing_count > fields.length*3){
+            } else {
 
                 scope.post('/submit-form', payload).then((data)=>{
                     scope.notify('Your message has been sent, someone will respond as soon as possible')
@@ -548,10 +567,7 @@
                     }
                 })
 
-            // } else {
-            //     scope.notify('This website features bot protection. Please refrain from pasting content into the fields, maybe try giving us a little more information so we can help you further and try again.','error',5,'fa-exclamation-circle')
-            // }
-
+            }
 
         }
 

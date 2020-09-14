@@ -324,14 +324,27 @@
             </div>
 
             <div>
-                <div class="grid col-3 pb-1 gap-2" app-for="input in view.form.inputs">
+
+                <div class="grid col-3 pb-1 gap-2">
 
                     <div>
                         <label>Input Label</label>
-                        <input type="text" app-model="input.label">
                     </div>
                     <div>
                         <label>Input Type</label>
+                    </div>
+                    <div>
+                        <label>Options</label>
+                    </div>
+
+                </div>
+
+                <div class="grid col-3 pb-1 gap-2" app-for="input in view.form.inputs">
+
+                    <div>
+                        <input type="text" app-model="input.label">
+                    </div>
+                    <div>
                         <select app-model="input.type">
                             <option>Text</option>
                             <option>Textarea</option>
@@ -342,11 +355,9 @@
                         </select>
                     </div>
                     <div>
-
-                        <label>Options</label><br>
-                        <label><input type="checkbox" app-model="input.required"> Required</label>
-
+                        <label class="checkbox"><input type="checkbox" app-model="input.required"> Required</label>
                     </div>
+                    
                 </div>
             </div>
             <div class="grid col-2 pb-1">

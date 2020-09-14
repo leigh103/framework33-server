@@ -60,7 +60,7 @@
                 } else {
 
                     scope.get('content',key).then((content)=>{
-console.log(content)
+
                         scope.view.content.blocks = content.blocks
                         scope.view.content = content
 
@@ -243,7 +243,7 @@ console.log(content)
                         for (var i in ce_divs){
 
                             let ce_style = window.getComputedStyle(ce_divs[i])
-                            if (ce_divs[i] && ce_style.display == 'block' && ce_divs[i].innerHTML && typeof ce_divs[i].innerHTML == 'string'){
+                            if (ce_divs[i] && ce_style.display == 'block'){
                                 let el_prop = ce_divs[i].getAttribute('app-index').replace(/__([0-9]+)__/g,'[$1].').replace(/__/g,'.')
                                 _.set(scope,el_prop,scope.convertEntities(ce_divs[i].innerHTML))
                             }

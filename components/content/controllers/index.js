@@ -351,11 +351,11 @@ const express = require('express'),
 
     routes.post('/submit-form', async (req,res) => {
 
-        if (req.session.submission && moment().diff(req.session.submission,'minutes') < 5){
-            req.session.submission = moment()
-            res.status(429).send('Too many requests, please try later')
-            return false
-        }
+        // if (req.session.submission && moment().diff(req.session.submission,'minutes') < 5){
+        //     req.session.submission = moment()
+        //     res.status(429).send('Too many requests, please try later')
+        //     return false
+        // }
 
         let content = 'You have a new message submitted via the website.<br><br>'
         req.body.map((field)=>{
@@ -363,7 +363,10 @@ const express = require('express'),
         })
         content += '<br><br>Sent from '+config.site.name
 
-        let email = await new Notification(config.admin.email).setContent('New Website Message',content).email()
+        let admin = await new Admin().find(0)
+    //    let email = await new Notification(config.admin.email).setContent('New Website Message',content).email()
+        let email = await new Notification(admin).setContent('New Website Message',content).mailbox()
+console.log(email)
         req.session.submission = moment()
         res.send(email)
 

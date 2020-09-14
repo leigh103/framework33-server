@@ -3,6 +3,9 @@
     <div class="grid col-9 h-100 page-full mailbox" app-init="getMailbox('<%- user._key %>')">
 
         <div class="colspan-3 messages">
+
+            <div app-show="!admin.mailbox.length" class="text-italic">No messages</div>
+
             <div app-for="message in admin.mailbox" app-attr="{'id':'message'+{{index}}}" class="message-summary grid col-12 gap-1 clickable" app-click="openMessage(message)" app-class="{'open':message.date == view.mailbox.date}">
 
                 <div class="colspan-2 flex flex-middle">
@@ -13,12 +16,10 @@
                         <div class="text" app-bind="message.from.name"></div>
                         <div class="title">
                             <div app-bind="message.subject"></div>
-
                         </div>
-                        <div app-bind="message.text"></div>
                     </div>
                     <div class="colspan-2 text-right text-33-grey">
-                        <div class="mb-1" app-bind="parseDate(message.date,'ago')"></div>
+                        <div class="" app-bind="parseDate(message.date,'ago')"></div>
                         <a app-click="deleteMessage(message,{{index}})" class="text-33-red"><i class="fas fa-trash-alt"></i></a>
                     </div>
 
