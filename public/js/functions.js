@@ -123,6 +123,18 @@ document.addEventListener("click", function (e) {
 
 });
 
+var prevScrollpos = window.pageYOffset;
+var nav_el = document.querySelector("nav auto-hide")
+window.onscroll = function() {
+var currentScrollPos = window.pageYOffset;
+    if (prevScrollpos > currentScrollPos) {
+        nav_el.style.top = "0";
+    } else {
+        nav_el.style.top = "-100%";
+    }
+    prevScrollpos = currentScrollPos;
+}
+
 let notification_els = document.getElementsByClassName('notification')
 if (notification_els){
     for (var i in notification_els){

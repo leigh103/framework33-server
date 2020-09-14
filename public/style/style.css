@@ -467,8 +467,18 @@ footer {
   font-size: 0.9rem;
 }
 label {
-  font-size: 0.8rem;
-  color: #82888c;
+  font-size: 1rem;
+  color: #33424b;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+label.checkbox {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+label.checkbox p {
+  flex: 1;
 }
 input[type="file"] {
   position: fixed;
@@ -503,9 +513,14 @@ textarea.invalid,
 select.invalid {
   border: 2px solid #de4848 !important;
 }
+input[disabled],
+select option[disabled] {
+  color: #82888c;
+}
 input[type=checkbox] {
+  flex: none;
   position: relative;
-  width: 2.5rem;
+  width: 3.8rem;
   margin-bottom: 1rem;
 }
 input[type=checkbox]:after {
@@ -516,7 +531,7 @@ input[type=checkbox]:after {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  top: -0.7rem;
+  top: -0.45rem;
   border-radius: 0.25rem;
   left: 0;
   background-color: #fff;

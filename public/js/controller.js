@@ -449,7 +449,11 @@
                 form_action = form_data.getAttribute('action'),
                 fields = document.getElementsByClassName(form_name),
                 error = false,
-                submit_button
+                submit_button,
+                selected_month,
+                selected_date,
+                selected_year,
+                date_check = false
 
             if (form_data){
                 submit_button = form_data.querySelectorAll('button')
@@ -477,6 +481,27 @@
 
                 if (type == 'checkbox'){
                     field_val = fields[i].checked
+                }
+
+                if (typeof name == 'string' && name.match(/year/i)){
+                    selected_year = field_val
+                }
+
+                if (typeof name == 'string' && name.match(/month/i)){
+                    selected_month = field_val
+                }
+
+                if (typeof name == 'string' && name.match(/date/i)){
+                    selected_date = field_val
+                }
+
+                if (selected_year && selected_month && selected_date && !date_check){
+                    date_check = moment(selected_date+' '+selected_month+' '+selected_year,'DD MMMM YYYY')
+                    if (date_check.isValid() === false){
+                        error = 'The selected date is invalid'
+                        fields[i-2].classList.add('invalid')
+                        break
+                    }
                 }
 
                 if (required == true && !field_val){
