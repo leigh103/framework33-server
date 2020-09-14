@@ -39,7 +39,7 @@ var express = require('express'),
                     guard = 'guest'
                 }
 
-                if (model && model.data && model.data._id && model.data._id == user_id || model && model.data && model.data._user_id && model.data._user_id == user_id){
+                if (model && model.data && model.data._id && model.data._id == user_id || model && model.data && model.data._user_id && model.data._user_id == user_id || model && model.data && model.data._user_id && model.data._user_id == guard){
                     self = true
                 }
 

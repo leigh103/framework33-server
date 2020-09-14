@@ -35,6 +35,26 @@
 
         }
 
+        adminBroadcast(content){
+
+            if (!content){
+                this.error = 'Nothing to send'
+                return this
+            }
+
+            if (typeof content == 'object'){
+                content = JSON.stringify(content)
+            }
+
+            for (var client in global.websocket_clients){
+                global.websocket_clients[client].send(content)
+            }
+
+            this.success = 'Done'
+            return this
+
+        }
+
     }
 
     module.exports = WsClient

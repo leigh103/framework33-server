@@ -82,7 +82,8 @@ var express = require('express'),
 
         if (getGuard(req) == 'admin'){
             let admin = await new Admin().find(0)
-            let sms = await new Notification(admin).setContent('Notification','This is a test notification').mailbox()
+            let user = await new User().find(0)
+            let sms = await new Notification().setContent('Notification','This is a test notification').mailbox(user.data)
             res.send(sms)
         } else {
             res.redirect('/login/admin')

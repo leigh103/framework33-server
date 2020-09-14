@@ -195,7 +195,7 @@
                         return ''
                     }
 
-                } else if (field.type == 'user_id' && typeof value == 'string' && value.match(/^(.*)\/[0-9]+$/)){
+                } else if (field.type == 'user_id' && typeof value == 'string' && value.match(/^(.*)\/[0-9]+$/) || field.type == 'user_id' && typeof value == 'string' && config.users.guards.indexOf(value) >= 0){
 
                     return value
 

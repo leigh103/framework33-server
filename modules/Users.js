@@ -221,7 +221,7 @@
 
         async getMessages(){
 
-            let mailbox = DB.read('messages').where(['_user_id == '+this.data._id]).get()
+            let mailbox = DB.read('messages').orWhere(['_user_id == '+this.data._id,'_user_id == '+this.data.guard]).get()
             return mailbox
 
         }

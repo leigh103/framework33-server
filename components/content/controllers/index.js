@@ -363,10 +363,8 @@ const express = require('express'),
         })
         content += '<br><br>Sent from '+config.site.name
 
-        let admin = await new Admin().find(0)
-    //    let email = await new Notification(config.admin.email).setContent('New Website Message',content).email()
-        let email = await new Notification(admin).setContent('New Website Message',content).mailbox()
-console.log(email)
+        let email = await new Notification().setContent('New Website Message',content).mailbox()
+
         req.session.submission = moment()
         res.send(email)
 

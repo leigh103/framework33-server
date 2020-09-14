@@ -116,7 +116,7 @@
 
         mailbox(sender){
 
-            if (this.class && this.class.data){
+        //    if (this.class && this.class.data){
 
                 if (sender){
                     this.content.from = {
@@ -132,15 +132,22 @@
                     }
                 }
 
-                this.content._user_id = this.class.data._id
+                if (this.class && this.class.data && this.class.data._id){
+                    this.content._user_id = this.class.data._id
+                } else {
+                    this.content._user_id = 'admin'
+                }
+
 
                 // this.class.data.mailbox.push(this.content)
                 // this.class.save()
 
                 new Message(this.content).save()
 
-                if (this.class.data.ws_id){
+                if (this.class && this.class.data && this.class.data.ws_id){
                     new WebsocketClient(this.class.data._id).send(this.content)
+                } else if (this.content._user_id == 'admin'){
+                    new WebsocketClient().adminBroadcast(this.content)
                 }
 
                 this.result = {
@@ -148,10 +155,10 @@
                 }
                 return this.result
 
-            } else {
-                this.error = 'Recipient data must be a model'
-                return this
-            }
+            // } else {
+            //     this.error = 'Recipient data must be a model'
+            //     return this
+            // }
 
         }
 
