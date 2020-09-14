@@ -503,6 +503,29 @@ textarea.invalid,
 select.invalid {
   border: 2px solid #de4848 !important;
 }
+input[type=checkbox] {
+  position: relative;
+  width: 2.5rem;
+  margin-bottom: 1rem;
+}
+input[type=checkbox]:after {
+  content: '';
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  top: -0.7rem;
+  border-radius: 0.25rem;
+  left: 0;
+  background-color: #fff;
+  color: #1dc7d5;
+  font-size: 1.25rem;
+}
+input[type=checkbox]:checked:after {
+  content: '\2713';
+}
 body:not(.dashboard):not(.fullscreen) .page {
   min-height: calc(100vh - 14rem);
 }

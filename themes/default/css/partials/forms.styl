@@ -37,3 +37,32 @@ div[contenteditable=true]:hover {
 input.invalid, textarea.invalid, select.invalid {
     border: 2px solid #de4848 !important
 }
+
+input[type=checkbox] {
+
+    position: relative;
+    width: 2.5rem;
+    margin-bottom: 1rem;
+
+    &:after {
+        content:'';
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        top: -0.7rem;
+        border-radius: 0.25rem;
+        left: 0;
+        background-color: white;
+        color: $text-primary;
+        font-size: 1.25rem;
+    }
+
+    &:checked {
+        &:after {
+            content:'\2713';
+        }
+    }
+}
