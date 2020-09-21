@@ -1,20 +1,24 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <div class="grid col-2 header">
+    <div class="grid col-2 col-s-1 header">
         <div class="flex flex-middle-left flex-column">
             <h3 class="text-weight-600"><%- title %></h3>
             <p class="transparent-2" app-show="<%- table %>">This table contains <span app-bind="<%- table %>.length"></span> items</p>
         </div>
-        <div class="flex flex-middle-right">
-            <div class="flex-1 flex">
+        <div class="flex flex-middle-right flex-column-s">
+            <div class="flex-1 flex w-s-100">
                 <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
                 <input type="text" class="" onkeyup="scope.searchApi('<%- table %>',this.value)">
             </div>
-            <button class="flex-none btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
+            <button class="flex-none btn highlight hidden-s" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
         </div>
     </div>
 
     <%- include(basedir+'/components/dashboard/views/partials/table.ejs') %>
+
+    <div class="fixed bottom left w-100 p-2">
+        <button class="btn highlight hidden-m hidden" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
+    </div>
 
     <div id="context" class="context dropdown text-left" style="display: none">
         <div class="link" app-click="editItem('<%- table %>',context)">

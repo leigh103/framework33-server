@@ -2,14 +2,17 @@
 
     <body class="bg-white dashboard">
 
-        <div class="side-nav bg-33-dream text-black">
-            <%- include partials/side_nav.ejs %>
-        </div>
+        <%- include partials/side_nav.ejs %>
+
         <div class="page">
 
             <div class="notification" app-show="view.notification.msg" app-click="view.notification = {}" anim="{'enter':'slide-left','exit':'slide-left'}" app-class="view.notification.type">
                 <div app-bind="view.notification.msg" class="text pr-2">This is a message</div>
                 <div class="icon"><i class="fas" app-class="view.notification.icon"></i></div>
+            </div>
+
+            <div class="burger colspan-1 flex flex-middle-left" onclick="toggleMenu('.page')">
+                <i class="fas fa-bars"></i>
             </div>
 
             <%- body -%>

@@ -96,7 +96,13 @@
         }
 
         @media $small {
-            display: none;
+
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+
         }
 
         .header {
@@ -198,9 +204,30 @@
         text-align: left;
         z-index: 2;
 
+        @media $small {
+            
+            flex: 0 0 100vw;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+            transform: translateX(0);
+
+            &.open {
+                transform: translateX(83vw);
+            }
+
+            .burger {
+                padding-bottom: 1rem;
+            }
+
+        }
+
         .header {
             height: 10rem;
-            align-items: start
+
+            @media $small {
+                height: auto;
+                align-items: flex-end;
+            }
         }
 
         &-full {

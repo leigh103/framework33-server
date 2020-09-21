@@ -173,8 +173,8 @@ function eraseCookie(name) {
     document.cookie = name+'=; Max-Age=-99999999;';
 }
 
-function toggleMenu(){
-    var mega_menu = document.querySelector('.mega-menu')
+function toggleMenu(menu){
+    var mega_menu = document.querySelector(menu)
     if (mega_menu && mega_menu.classList.contains('open')){
         mega_menu.classList.remove('open')
     } else if (mega_menu) {

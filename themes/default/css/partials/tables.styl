@@ -1,5 +1,22 @@
 .table {
 
+    &-wrap {
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+
+    @media $small {
+        white-space: nowrap;
+        table-layout: auto;
+        width: auto;
+
+        &-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+    }
+
     .table-header {
         font-weight: 500;
 

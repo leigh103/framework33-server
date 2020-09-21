@@ -75,32 +75,39 @@
 }
 
 .mega-menu {
-    position: fixed;
-    text-align: left;
-    top:0;
-    left:0;
-    display: block;
-    background-color: $bg-primary;
-    transition: transform 0.3s ease;
-    transform: translateX(-100vw);
-    height: 100vh;
-    width: 100vw;
-    padding: 2.5rem;
 
-    z-index: 700;
+    display: none;
 
-    div.link {
+    @media $small {
         display: block;
-        margin-bottom: 2rem;
+        position: fixed;
+        text-align: left;
+        top:0;
+        left:0;
+        background-color: $bg-primary;
+        transition: transform 0.3s ease;
+        transform: translateX(-100vw);
+        height: 100vh;
+        width: 100vw;
+        padding: 2.5rem;
 
-        a, .btn {
+        z-index: 700;
+
+        div.link {
             display: block;
-            font-size: 1.25rem !important;
+            margin-bottom: 2rem;
+
+            a, .btn {
+                display: block;
+                font-size: 1.25rem !important;
+            }
+        }
+
+        &.open {
+            transform: translateX(0);
         }
     }
 
-    &.open {
-        transform: translateX(0);
-    }
+
 
 }

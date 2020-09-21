@@ -2,8 +2,8 @@
 
     <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
 
-        <div class="grid col-2 pb-1">
-            <div>
+        <div class="grid col-5 pb-1">
+            <div class="colspan-4">
                 <h4 class="text-light capitalise">
                     <span app-show="new._id">Edit <%- view.functions.parseName(table, true) %></span>
                     <span app-hide="new._id">Add New <%- view.functions.parseName(table, true) %></span>
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div class="grid pb-2 gap-1 col-2" style="align-items: start;">
+        <div class="grid pb-2 gap-1 col-2 col-s-1" style="align-items: start;">
 
             <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
 
