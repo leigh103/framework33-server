@@ -344,12 +344,14 @@
         scope.parseDate = function(date, format){
 
             if (!date.match(/Z$/)){
-                return ''
+                date = moment()
+            } else {
+                date = moment(date)
             }
             if (format == 'ago'){
-                return moment(date).fromNow()
+                return date.fromNow()
             } else {
-                return moment(date).format(format)
+                return date.format(format)
             }
 
         }
