@@ -4,6 +4,8 @@
 
         extend.content = function(){
 
+            console.log(scope.window)
+
             scope.view.content = {
                 blocks:[]
             }
@@ -50,14 +52,14 @@
 
             scope.getContent = function(key){
 
-                if (localStorage.getItem('content')){
-
-                    let content = JSON.parse(localStorage.getItem('content'))
-                    console.log(content)
-                    scope.view.content.blocks = content.blocks
-                    scope.view.content = content
-
-                } else {
+                // if (localStorage.getItem('content')){
+                //
+                //     let content = JSON.parse(localStorage.getItem('content'))
+                //     console.log(content)
+                //     scope.view.content.blocks = content.blocks
+                //     scope.view.content = content
+                //
+                // } else {
 
                     scope.get('content',key).then((content)=>{
 
@@ -67,8 +69,8 @@
                     }).catch((err)=>{
                         scope.notify(err,5,'error')
                     })
-
-                }
+                //
+                // }
 
             }
 
@@ -303,7 +305,7 @@
 
                 scope.saveContent = function(){
 
-                    scope.clearLocal(true).then(()=>{
+                    scope.updateCE().then(()=>{
 
                         let payload = scope.view.content
 
@@ -317,13 +319,19 @@
                         }
 
                         scope.post('content', payload).then((content)=>{
-                            scope.notify('Saved!')
+
+                            if (scope.window.path_obj.pop() == 'new'){
+                                window.location.href = 'edit/'+content._key
+                            } else {
+                                scope.notify('Saved!')
+                            }
+
                         }).catch((err)=>{
                             scope.notify(err,5,'error')
                         })
 
                     }).catch((err)=>{
-                        scope.notify('Not saved: '+err,'error')
+                       scope.notify('Not saved: '+err,'error')
                     })
 
                 }

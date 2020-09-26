@@ -32,7 +32,7 @@
 
             let exists = this.createCollection(collection)
 
-            let new_key = lowDb.get(collection).size().value()
+            let new_key = Date.now()
 
             data._id = collection+'/'+new_key
             data._key = new_key

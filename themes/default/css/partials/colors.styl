@@ -25,12 +25,21 @@ a {
 }
 
 .text {
+    &-light-grey {
+        color: $bg-light-grey
+    }
     &-primary {
         color: $color-primary;
     }
 
     &-secondary {
         color: $color-secondary;
+    }
+    &-black {
+        color: $color-black;
+    }
+    &-white {
+        color: $color-white;
     }
 }
 
@@ -39,11 +48,37 @@ a {
         background-color: $bg-light-grey
     }
     &-primary {
-        background-color: $color-primary;
+        background-color: $bg-primary;
     }
 
     &-secondary {
-        background-color: $color-secondary;
+        background-color: $bg-secondary;
+    }
+    &-black {
+        background-color: $bg-black;
+    }
+    &-text-dark {
+        position: relative;
+        &:before {
+            background-color: rgba(60,60,60,0.3);
+            content:'';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+
+
+        }
+        & > * {
+            position: relative;
+            z-index: 2
+        }
+    }
+    &-white {
+        background-color: $bg-white;
     }
 }
 

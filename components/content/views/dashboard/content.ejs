@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <div class="table" app-init="get('<%- table %>?type=<%- content_type %>')">
+    <div class="table" app-init="get('<%- table %>?type=<%- content_type %>','','content')">
         <div class="row table-header">
             <% fields.forEach((item)=>{ %>
                 <div class="cell middle <%- item.type.toLowerCase() %>"><%- view.functions.parseName(item.name) %></div>
@@ -21,25 +21,25 @@
             <div class="cell middle action"></div>
         </div>
 
-        <div class="row" app-for="<%- view.functions.depluralise(table) %> in <%- table %>">
+        <div class="row" app-for="article in <%- table %>">
             <% fields.forEach((item)=>{ %>
 
                 <% if (item.name == 'title'){ %>
-                    <div class="cell middle <%- item.type.toLowerCase() %>"><a app-click="goto('content/<%- content_type %>',<%- view.functions.depluralise(table) %>._key)" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></a></div>
+                    <div class="cell middle <%- item.type.toLowerCase() %>"><a app-click="gotoEditor('<%- content_type %>',article._id)" app-bind="article.<%- item.name %>"></a></div>
                 <% } else if (item.input_type == 'image'){ %>
-                    <div class="cell middle <%- item.type.toLowerCase() %>"><img src="/images/Profile_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
+                    <div class="cell middle <%- item.type.toLowerCase() %>"><img src="/images/Profile_Placeholder.svg" app-src="article.<%- item.name %>" class="<%- item.name %>"></div>
                 <% } else if (item.input_type == 'object'){ %>
-                    <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>.length"></div>
+                    <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="article.<%- item.name %>.length"></div>
                 <% } else if (item.input_type == 'date'){ %>
-                    <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY')"></div>
+                    <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="parseDate(article.<%- item.name %>,'ddd Do MMM YYYY')"></div>
                 <% } else { %>
-                    <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></div>
+                    <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="article.<%- item.name %>"></div>
                 <% } %>
 
             <% }) %>
 
-            <div class="cell middle text-right" app-attr="{id:'cell-'+<%- view.functions.depluralise(table) %>._key}">
-                <div class="context-link btn bg-33-white text-secondary" app-click="toggleContext('context',<%- view.functions.depluralise(table) %>)">
+            <div class="cell middle text-right" app-attr="{id:'cell-'+article._key}">
+                <div class="context-link btn bg-33-white text-secondary" app-click="toggleContext('context',article)">
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>

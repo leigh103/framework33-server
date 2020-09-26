@@ -4,35 +4,12 @@
         scope.extend = {}
 
         scope.view = {
-            question: {
-                question:'',
-                image:''
-            },
-            score: {
-                correct:[],
-                incorrect:[]
-            },
-            notification:{}
+            notification:{},
         }
 
-        scope.wsSend = function(question){
-
-            let payload = {
-                question: scope.view.question
-            }
-
-            if (question){
-                payload = {
-                   question: question
-               }
-            }
-
-            http('post','/',payload).then((data)=>{
-
-            }).catch((err)=>{
-                alert(err)
-            })
-
+        scope.window = {
+            path: window.location.pathname,
+            path_obj: window.location.pathname.replace(/^\//,'').split('/')
         }
 
         scope.notify = function(msg, type, duration, icon){
@@ -343,6 +320,9 @@
 
         scope.parseDate = function(date, format){
 
+            if (!date){
+                return
+            }
             if (!date.match(/Z$/)){
                 date = moment()
             } else {

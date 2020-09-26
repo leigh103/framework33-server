@@ -34,11 +34,20 @@ a:hover {
 .mega-menu .btn:hover {
   color: #1398a3;
 }
+.text-light-grey {
+  color: #f8f8f8;
+}
 .text-primary {
   color: #1dc7d5;
 }
 .text-secondary {
   color: #1398a3;
+}
+.text-black {
+  color: #444;
+}
+.text-white {
+  color: #fff;
 }
 .bg-light-grey {
   background-color: #f8f8f8;
@@ -48,6 +57,30 @@ a:hover {
 }
 .bg-secondary {
   background-color: #1398a3;
+}
+.bg-black {
+  background-color: #444;
+}
+.bg-text-dark {
+  position: relative;
+}
+.bg-text-dark:before {
+  background-color: rgba(60,60,60,0.3);
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.bg-text-dark > * {
+  position: relative;
+  z-index: 2;
+}
+.bg-white {
+  background-color: #fff;
 }
 .btn:hover {
   color: #fff;
@@ -859,8 +892,8 @@ ul li::before {
   background-color: #ff8c8d;
 }
 .notification.success {
-  color: #33424b;
-  background-color: #f8f8f8;
+  color: #fff;
+  background-color: #1dc7d5;
 }
 .notification-bar {
   background-color: #fff;
@@ -993,4 +1026,10 @@ h6 {
 html,
 body {
   font-family: 'Montserrat', sans-serif;
+}
+.text-dropshadow {
+  text-shadow: 0.15em 0.15em 0px #82888c;
+}
+.text-overlay {
+  text-shadow: 0px 0px 8rem #000;
 }

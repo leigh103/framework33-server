@@ -21,7 +21,8 @@
                     {name:'type',input_type:'text',placeholder:'Content Type', type:'string', required:true},
                     {name:'tags',input_type:'text',placeholder:'Tags', type:'string', required:false},
                     {name:'status',input_type:'select',options:[{text:'Draft',value:'draft'},{text:'Published',value:'published'}],placeholder:'Status', type:'string', required:true},
-                    {name:'publish_date',input_type:'date',placeholder:'Publish Date', type:'date', required:false}
+                    {name:'publish_date',input_type:'date',placeholder:'Publish Date', type:'date', required:false},
+                    {name:'hide_top_nav',input_type:'checkbox',placeholder:'Hide site nav', type:'boolean', required:false}
                 ]
             }
 

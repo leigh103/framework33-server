@@ -134,10 +134,10 @@
 
                     type = 'insertHTML'
 
-                    if (data.match(/base64/)){
+                    if (data && data.match(/base64/)){
 
                         scope.uploadImage(data,false,'content',sup_data).then((img_url)=>{
-
+console.log(img_url, img_node)
                             if (typeof img_node == 'object'){
 
                                 let new_img = document.createElement("img")
