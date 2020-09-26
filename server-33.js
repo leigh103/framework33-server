@@ -373,7 +373,7 @@ const express = require('express'),
             app.locals.view = global.view
 
             app.use('*',(req, res) => {
-                res.redirect(301, config.site.url+config.site.not_found_redirect)
+                res.redirect(404, config.site.url+config.site.not_found_redirect)
                 // res.status(404).send({
                 //     error:404,
                 //     message:'Page not found'
