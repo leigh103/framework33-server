@@ -678,6 +678,24 @@ ul li::before {
   border-width: 2px 2px 0 0;
   transform: rotate(45deg);
 }
+.logo {
+  display: block;
+  height: 2rem;
+  width: auto;
+}
+.logo.inline {
+  display: inline;
+  height: 1em;
+}
+.logo.lg {
+  height: 2.5rem;
+}
+.logo.xl {
+  height: 3rem;
+}
+.logo.xxl {
+  height: 3.5rem;
+}
 .modal {
   background-color: rgba(0,0,0,0.5);
   z-index: 500;
