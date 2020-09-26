@@ -60,7 +60,7 @@
 
             this.content = {
                 subject: subject,
-                text: text,
+                text: text.replace(/\<br\>/g,'\n').replace(/(<([^>]+)>)/gi, ""),
                 html: text,
                 date: moment().toISOString()
             }
@@ -87,6 +87,7 @@
             }
 
             this.content.to = this.to.tel
+            this.content.text
             this.result = provider.sms.send(this.content)
 
             return this.result
