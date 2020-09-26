@@ -357,16 +357,24 @@ const express = require('express'),
         //     return false
         // }
 
-        let content = 'You have a new message submitted via the website.<br><br>'
+        let content = 'You have a new message submitted via the website.<br><br>',
+            contact
+
         req.body.map((field)=>{
             content += '<b>'+field.name.replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase())+'</b>: '+field.value+'<br>'
         })
         content += '<br><br>Sent from '+config.site.name
 
-        let email = await new Notification().setContent('New Website Message',content).mailbox()
+        if (config.site.form_settings && config.site.form_settings.method && config.site.form_settings.method == 'mailbox'){
+            contact = await new Notification().setContent('New Website Message',content).mailbox()
+        } else if (config.site.form_settings && config.site.form_settings.method && config.site.form_settings.method == 'sms'){
+            contact = await new Notification(config.site.form_settings.to).setContent('New Website Message',content).sms()
+        } else {
+            contact = await new Notification(config.site.form_settings.to).setContent('New Website Message',content).email()
+        }
 
         req.session.submission = moment()
-        res.send(email)
+        res.send(contact)
 
     })
 

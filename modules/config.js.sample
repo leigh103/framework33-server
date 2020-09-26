@@ -58,7 +58,12 @@
             name: '',
             logo: '/images/logo.svg',
             theme: 'default',
-            theme_path: global.basedir+'/themes/default'
+            theme_path: global.basedir+'/themes/default',
+            not_found_redirect:'/',
+    		form_settings: {
+    			method:'email',
+    			to:'lee@reformedreality.com'
+    		}
         },
 
         tax_amount: 1.20,

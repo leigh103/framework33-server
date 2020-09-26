@@ -372,6 +372,14 @@ const express = require('express'),
             global.renderTheme()
             app.locals.view = global.view
 
+            app.use('*',(req, res) => {
+                res.redirect(301, config.site.url+config.site.not_found_redirect)
+                // res.status(404).send({
+                //     error:404,
+                //     message:'Page not found'
+                // })
+            })
+
             watch(['./components'], { recursive: true }, function(evt, name) {
 
                 if (config.site.mode == 'production'){
