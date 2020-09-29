@@ -174,6 +174,12 @@ const express = require('express'),
 
     routes.get('/:category/:sub_category?/:product?', async (req, res, next) => {
 
+        if (req.params.category == view.ecommerce.cart_name){
+            console.log(req.params.category,view.ecommerce.cart_name)
+            next()
+            return
+        }
+
         data.cart = await new Cart().init(req)
 
         res.locals.functions = functions

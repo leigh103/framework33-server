@@ -10,11 +10,14 @@
             this.settings = {
                 collection: 'cart',
                 fields: [
-                    {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
-                    {name:'email',input_type:'email',placeholder:'Email Address', type:'email', required:false},
-                    {name:'tel',input_type:'number',placeholder:'Moile Number', type:'tel', required:false},
-                    {name:'notification_method',input_type:'select',options:[{text:'SMS Text',value:'sms'},{text:'Email',value:'email'}],placeholder:'Select preferred notification method', type:'string', required:false},
                     {name:'items', type:'object', required:false},
+                    {name:'customer', type:'object', required:false, subitems:[
+                        {name:'title',input_type:'select',options:[{text:'Mr',value:'mr'},{text:'Mrs',value:'mrs'},{text:'Miss',value:'miss'},{text:'Ms',value:'ms'},{text:'Dr',value:'dr'}],placeholder:'Title', type:'string', required:false},
+                        {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
+                        {name:'email',input_type:'email',placeholder:'Email Address', type:'email', required:false},
+                        {name:'tel',input_type:'number',placeholder:'Mobile Number', type:'tel', required:false},
+                        {name:'notification_method',input_type:'select',options:[{text:'SMS Text',value:'sms'},{text:'Email',value:'email'}],placeholder:'Select preferred notification method', type:'string', required:false}
+                    ]},
                     {name:'billing_address', type:'object', required:false, subitems:[
                         {name:'address_line1',input_type:'text',placeholder:'Address Line 1', type:'string', required:true},
                         {name:'address_line2',input_type:'text',placeholder:'Address Line 2', type:'string', required:false},
@@ -127,7 +130,7 @@
             if (typeof global[item_data.type] == 'function'){
 
                 let item = await new global[item_data.type]().find(item_data.item_key)
-                item = item.get()
+                item = item.getForCart()
 
                 if (typeof item.stock != 'undefined' && item.stock == 0){
                     this.error = 'Item is out of stock'

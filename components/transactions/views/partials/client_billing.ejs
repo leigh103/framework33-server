@@ -14,7 +14,7 @@
                 <option value="Ms">Ms</option>
             </select>
 
-            <input type="text" placeholder="Your Name *" class="flex-2 underline" id="name" name="name" autocomplete="name" app-model="cart.name">
+            <input type="text" placeholder="Your Name *" class="flex-2 underline" id="name" name="name" autocomplete="name" app-model="cart.customer.name">
 
         </div>
 
@@ -30,12 +30,12 @@
         <label class="block mt-2">Select preferred notification method:</label>
         <div class="flex">
 
-            <a class="btn flex-1" app-class="{'bg-primary':cart.notification_method == 'sms'}" app-click="cart.notification_method = 'sms'">SMS / Text</a>
-            <a class="btn flex-1" app-class="{'bg-primary':cart.notification_method == 'email'}" app-click="cart.notification_method = 'email'">Email</a>
+            <a class="btn flex-1" app-class="{'bg-primary':cart.customer.notification_method == 'sms'}" app-click="cart.customer.notification_method = 'sms'">SMS / Text</a>
+            <a class="btn flex-1" app-class="{'bg-primary':cart.customer.notification_method == 'email'}" app-click="cart.customer.notification_method = 'email'">Email</a>
         </div>
 
-        <input type="number" app-show="cart.notification_method == 'sms'" placeholder="Mobile Number *" class="underline" name="tel" app-model="cart.tel" autocomplete="tel">
-        <input type="text" app-show="cart.notification_method == 'email'" placeholder="Email Address *" class="underline" name="email" app-model="cart.email" autocomplete="email">
+        <input type="number" app-show="cart.customer.notification_method == 'sms'" placeholder="Mobile Number *" class="underline" name="tel" app-model="cart.customer.tel" autocomplete="tel">
+        <input type="text" app-show="cart.customer.notification_method == 'email'" placeholder="Email Address *" class="underline" name="email" app-model="cart.customer.email" autocomplete="email">
 
     </form>
 

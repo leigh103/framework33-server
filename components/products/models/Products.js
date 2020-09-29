@@ -10,7 +10,7 @@
             this.settings = {
                 collection: 'products',
                 fields: [
-                    {name:'image_1',input_type:'image',placeholder:'Image', type:'image', required:false},
+                    {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
                     {name:'gallery',input_type:'img_array',placeholder:'Gallery', type:'object', required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'brand',input_type:'text',placeholder:'Brand', type:'string', required:false},

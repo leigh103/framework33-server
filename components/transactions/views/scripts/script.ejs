@@ -82,7 +82,7 @@
 
                 scope.checkout = function(){
 
-                    if (!scope.cart.name){
+                    if (!scope.cart.customer.name){
                         scope.notify('Please add your name','error',5,'fa-exclamation-circle')
                         return false
                     }
@@ -97,12 +97,12 @@
                         return false
                     }
 
-                    if (!scope.cart.notification_method){
+                    if (!scope.cart.customer.notification_method){
                         scope.notify('Please select your preferred notification method','error',5,'fa-exclamation-circle')
                         return false
                     }
 
-                    if (!scope.cart.tel && !scope.cart.email){
+                    if (!scope.cart.customer.tel && !scope.cart.customer.email){
                         scope.notify('Please add your mobile contact number, or email address','error',5,'fa-exclamation-circle')
                         return false
                     }

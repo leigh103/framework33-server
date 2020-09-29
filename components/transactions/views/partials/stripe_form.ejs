@@ -22,15 +22,15 @@
             <div id="card-errors" role="alert" class="mb-2 text-33-red"><%- error %></div>
         <% } %>
     </div>
-    <% if (typeof user == "object"){ %>
-        <% if (typeof user.full_name != "undefined"){ %>
-            <input type="hidden" value="<%- user.full_name %>" id="customer_name">
+    <% if (typeof cart.customer == "object"){ %>
+        <% if (typeof cart.customer.name != "undefined"){ %>
+            <input type="hidden" value="<%- cart.customer.name %>" id="customer_name">
         <% } %>
-        <% if (typeof user.email != "undefined"){ %>
-            <input type="hidden" value="<%- user.email %>" id="customer_email">
+        <% if (typeof cart.customer.email != "undefined"){ %>
+            <input type="hidden" value="<%- cart.customer.email %>" id="customer_email">
         <% } %>
-        <% if (typeof user.tel != "undefined"){ %>
-            <input type="hidden" value="<%- user.tel %>" id="customer_tel">
+        <% if (typeof cart.customer.tel != "undefined"){ %>
+            <input type="hidden" value="<%- cart.customer.tel %>" id="customer_tel">
         <% } %>
     <% } %>
     <% if (typeof intent.client_secret != "undefined"){ %>

@@ -114,22 +114,18 @@ var express = require('express'),
     })
 
 
-    routes.get('/stripe/success', (req, res) => {
+    routes.get('/stripe/success', async (req, res) => {
 
         let data = {
             title:"Stripe Checkout",
             stripe_id: config.stripe_publishable_key
         }
 
-        if (req.session && req.session.user){
-            user:req.session.user
-        } else {
-            user:{}
-        }
+        data.cart = await new Cart().init(req)
 
         if (req.session.cart_id && req.session.intent){ // if customer is paying for a cart
 
-            stripe.paymentIntents.retrieve(req.session.intent,(err, paymentIntent)=>{
+            stripe.paymentIntents.retrieve(req.session.intent,async (err, paymentIntent) => {
 
                 if (err){
 
@@ -137,17 +133,15 @@ var express = require('express'),
                     data.error = err
                     res.render(settings.views+'/checkout.ejs',data)
 
-                } else if (paymentIntent.status == 'succeeded') {
+                } else if (paymentIntent.status == 'succeeded'){
 
+                    req.session.intent = false
+                    req.session.cart_id = false
 
+                    data.transaction = await new Transaction(data.cart).save()
+                    res.render(settings.views+'/success.ejs',data)
 
-                        req.session.intent = false
-                        req.session.cart_id = false
-
-                        res.render(settings.views+'/gateways/stripe.ejs',data)
-
-
-                } else if (paymentIntent.status == 'canceled') {
+                } else if (paymentIntent.status == 'canceled'){
 
                     data.type = '400'
                     data.error = 'Your transaction has been canceled'
@@ -164,8 +158,10 @@ var express = require('express'),
             })
 
         } else {
+
             data.type = '404'
             res.render(settings.views+'/gateways/stripe.ejs',data)
+
         }
 
     })
@@ -181,29 +177,18 @@ var express = require('express'),
 
         data.cart = await new Cart().init(req)
 
-        if (req.session && req.session.user){
-            data.user = req.session.user
-        } else {
-            data.user = {}
-        }
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: (parseFloat(data.cart.total)*100).toFixed(0),
+            currency: 'gbp',
+            payment_method_types: ['card'],
+            setup_future_usage: 'off_session'
+        })
 
-        (async () => {
+        data.intent = paymentIntent
+        data.stripe_id = config.stripe_publishable_key
+        req.session.intent = paymentIntent.id
 
-            const paymentIntent = await stripe.paymentIntents.create({
-                amount: (parseFloat(data.cart.total)*100).toFixed(0),
-                currency: 'gbp',
-                payment_method_types: ['card'],
-                setup_future_usage: 'off_session',
-
-            });
-
-            data.intent = paymentIntent
-            data.stripe_id = config.stripe_publishable_key
-            req.session.intent = paymentIntent.id
-
-            res.render(settings.views+'/gateways/stripe.ejs', data)
-
-        })();
+        res.render(settings.views+'/gateways/stripe.ejs', data)
 
     })
 

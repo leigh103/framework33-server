@@ -367,6 +367,20 @@
             return this.data[0]
         }
 
+        getForCart(){
+
+            return {
+                price: this.data.price,
+                image: this.data.image,
+                name: this.data.name,
+                slug: this.data.slug,
+                stock: this.data.stock,
+                activated: this.data.activated,
+                items_per_customer: this.data.items_per_customer
+            }
+
+        }
+
         async getTemplate(){
 
             let fields = {},

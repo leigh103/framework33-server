@@ -11,7 +11,7 @@
     <div class="contain grid col-2 col-s-1 gap-2 text-left pt-2">
 
         <div>
-            <img src="<%- product.image_1 %>" app-src="view.gallery_image" class="product-image">
+            <img src="<%- product.image %>" app-src="view.gallery_image" class="product-image">
             <div class="overflow-x" style="height: 5rem">
                 <% if (typeof product.gallery != 'undefined'){ %>
                     <% product.gallery.forEach((image)=>{ %>
