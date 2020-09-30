@@ -19,7 +19,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "glob": "^7.1.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lowdb": "^1.0.0",
     "moment": "^2.24.0",
     "nexmo": "^2.6.0",
