@@ -646,6 +646,12 @@ figure {
     padding: 0 2rem;
   }
 }
+@media (min-width: 851px) and (max-width: 1180px) {
+  section {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
 .list-item {
   display: flex;
   flex-direction: row;

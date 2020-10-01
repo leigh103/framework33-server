@@ -8,11 +8,11 @@
 
         return new Promise((resolve, reject) => {
 
-            if (!msg.From){
+            if (!msg.from){
                 if (config.email.from_address){
-                    msg.From = config.email.from_address
+                    msg.from = config.email.from_address
                 } else {
-                    msg.From = config.admin.email
+                    msg.from = config.admin.email
                 }
             }
 
