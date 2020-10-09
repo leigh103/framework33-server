@@ -56,6 +56,34 @@
 
         }
 
+        all(data) {
+
+            if (typeof data == 'string'){
+                this.data = DB.read(this.settings.collection).orderBy(data,'asc').get()
+            } else if (typeof data == 'object'){
+                this.data = DB.read(this.settings.collection).where(data).get() //.omit(['password','password_reset']).get()
+            } else {
+                this.data = DB.read(this.settings.collection).get() //.omit(['password','password_reset']).get()
+            }
+
+            this.data.map((item, i)=>{
+                let category = DB.read('product_categories').where(['_key == '+item.category]).first(),
+                    re = new RegExp(category.slug,'i'),
+                    sub_category
+
+                if (typeof item.sub_category != 'undefined'){
+                    item.url = '/'+category.slug+'/'+category.sub_categories[item.sub_category].slug+'/'+item.slug
+                } else {
+                    item.url = '/'+category.slug+'/'+item.slug
+                }
+
+                return item
+            })
+
+            return this
+
+        }
+
         search(search) {
 
             if (search.str.length < 3){

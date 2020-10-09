@@ -163,7 +163,7 @@
                         if (typeof initCarousels == 'function'){
                             setTimeout(function(){
                                 initCarousels()
-                            },500)
+                            },1000)
                         }
 
                         resolve(data)
