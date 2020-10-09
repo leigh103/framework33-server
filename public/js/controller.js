@@ -160,6 +160,12 @@
                             scope[collection] = data
                         }
 
+                        if (typeof initCarousels == 'function'){
+                            setTimeout(function(){
+                                initCarousels()
+                            },500)
+                        }
+
                         resolve(data)
 
                     }).catch((err) => {
