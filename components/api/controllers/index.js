@@ -210,7 +210,7 @@ var express = require('express'),
 
         } else {
 
-            let result = db.read(req.params.collection).where(['_key == '+req.params.id]).first()
+            let result = DB.read(req.params.collection).where(['_key == '+req.params.id]).first()
             res.json(result)
 
         }

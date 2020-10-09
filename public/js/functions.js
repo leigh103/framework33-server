@@ -151,6 +151,132 @@ if (notification_els){
     }
 }
 
+let carousel_els = document.getElementsByClassName('carousel')
+var carousels = {}
+if (carousel_els){
+
+    for (var i in carousel_els){
+        if (carousel_els[i] && typeof carousel_els[i].querySelector == 'function'){
+
+            let carousel_id = 'carousel-'+i
+            carousels[carousel_id] = {}
+            carousels[carousel_id].el = carousel_els[i]
+            carousel_els[i].setAttribute('id',carousel_id)
+
+            let slides_el = carousel_els[i].querySelector('.slides')
+
+            carousels[carousel_id].slides = slides_el
+
+            if (slides_el){
+
+                carousel_els[i].setAttribute('data-slide-width',slides_el.offsetWidth)
+
+                let slides = slides_el.querySelectorAll('.slide'),
+                    dots = carousel_els[i].querySelector('.dots')
+
+                if (slides){
+                    carousels[carousel_id].slides_count = slides.length
+                    carousel_els[i].setAttribute('data-slide-count',slides.length)
+                    carousel_els[i].setAttribute('data-current-slide','0')
+                }
+
+                if (dots){
+                    for (let i=0;i<slides.length;i++){
+                        let dot = document.createElement('div')
+                        dot.classList.add('dot')
+                        if (i == 0){
+                            dot.classList.add('selected')
+                        }
+                        dot.setAttribute('onclick','chgSlide(this,'+i+')')
+                        dots.appendChild(dot)
+                    }
+                }
+
+            }
+
+            if (carousel_els[i].hasAttribute('data-auto-slide')){
+                let auto_slide = carousel_els[i].getAttribute('data-auto-slide')
+
+                carousels[carousel_id].interval = setInterval(function(){
+                    if (!carousels[carousel_id].slide){
+                        carousels[carousel_id].slide = 0
+                    }
+                    carousels[carousel_id].slide++
+                    if (carousels[carousel_id].slide >= carousels[carousel_id].slides_count){
+                        carousels[carousel_id].slide = 0
+                    }
+
+                    chgSlide(carousels[carousel_id].slides,carousels[carousel_id].slide)
+                },auto_slide*1000)
+            }
+
+        }
+    }
+}
+
+function chgSlide(evnt,slide){
+
+    let carousel = evnt.parentElement
+
+    if (carousel.classList.contains('dots')){
+
+        carousel = carousel.parentElement
+    }
+
+    if (!evnt.classList.contains('slides')){
+        let carousel_id = carousel.getAttribute('id')
+        clearInterval(carousels[carousel_id].interval)
+    }
+
+    let slide_width = carousel.getAttribute('data-slide-width'),
+        slides = carousel.querySelector('.slides'),
+        slide_count = carousel.getAttribute('data-slide-count'),
+        current_slide = carousel.getAttribute('data-current-slide'),
+        slide_position,
+        dots = carousel.querySelectorAll('.dots .dot')
+
+    if (slide == 'prev'){
+
+        current_slide--
+        if (current_slide < 0){
+            slide_position = -Math.abs(slide_width*(slide_count-1))
+            current_slide = slide_count-1
+        } else {
+            slide_position = -Math.abs(slide_width*current_slide)
+        }
+
+    } else if (slide == 'next'){
+
+        current_slide++
+        if (current_slide >= slide_count){
+            slide_position = 0
+            current_slide = 0
+        } else {
+            slide_position = -Math.abs(slide_width*current_slide)
+        }
+
+    } else {
+        current_slide = slide
+        slide_position = -Math.abs(slide_width*current_slide)
+    }
+
+    for (let i=0;i<slides.children.length;i++){
+        slides.children[i].style.left = slide_position+'px'
+    }
+
+    carousel.setAttribute('data-current-slide',current_slide)
+
+    for (let i=0;i<dots.length;i++){
+        if (i == current_slide){
+            dots[i].classList.add('selected')
+        } else {
+            dots[i].classList.remove('selected')
+        }
+
+    }
+
+}
+
 
 function setCookie(name,value,days) {
     var expires = "";
