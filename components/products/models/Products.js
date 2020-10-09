@@ -71,7 +71,7 @@
                     re = new RegExp(category.slug,'i'),
                     sub_category
 
-                if (typeof item.sub_category != 'undefined'){
+                if (typeof item.sub_category != 'undefined' && typeof category.sub_categories == 'object' && category.sub_categories[item.sub_category]){
                     item.url = '/'+category.slug+'/'+category.sub_categories[item.sub_category].slug+'/'+item.slug
                 } else {
                     item.url = '/'+category.slug+'/'+item.slug
