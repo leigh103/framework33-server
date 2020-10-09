@@ -1,13 +1,13 @@
-<section class="<% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Carousel" app-block-description="This is a carousel block">
+<section class="vh-70 <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Carousel" app-block-description="This is a carousel block">
 
 
-        <div class="contain carousel" data-auto-slide="5">
+        <div class="carousel light align-middle" data-auto-slide="5">
 
-            <div class="arrow arrow-left dark" onclick="chgSlide(this,'prev')"></div>
+            <div class="arrow arrow-left" onclick="chgSlide(this,'prev')"></div>
 
             <div class="slides">
 
-                <div class="slide text-33-white">
+                <div class="slide text-33-white" style="background-image:url('https://braintrustinteractive.s3.amazonaws.com/wp-content/uploads/background-city-blur.jpg')">
                     <div class="contain <%- data.container_classes %>"  app-input="none" app-field="container" app-styling="container_class">
 
                         <h2>Test Slide One</h2>
@@ -22,12 +22,19 @@
                     <div class="contain <%- data.container_classes %>">
 
                         <h2>Test Slide Two</h2>
+
                         <p>I can’t speak highly enough of Bury Music. My daughter spent many Saturdays over the best part of 8 or 9 years making great music and lifelong friends.</p>
+                        <p>I can’t speak highly enough of Bury Music. My daughter spent many Saturdays over the best part of 8 or 9 years making great music and lifelong friends.
+                        I can’t speak highly enough of Bury Music. My daughter spent many Saturdays over the best part of 8 or 9 years making great music and lifelong friends.
+                        I can’t speak highly enough of Bury Music. My daughter spent many Saturdays over the best part of 8 or 9 years making great music and lifelong friends.</p>
+                        <p>I can’t speak highly enough of Bury Music. My daughter spent many Saturdays over the best part of 8 or 9 years making great music and lifelong friends.
+                        I can’t speak highly enough of Bury Music. My daughter spent many Saturdays over the best part of 8 or 9 years making great music and lifelong friends.
+                        I can’t speak highly enough of Bury Music. My daughter spent many Saturdays over the best part of 8 or 9 years making great music and lifelong friends.</p>
 
                     </div>
                 </div>
 
-                <div class="slide text-33-white">
+                <div class="slide text-33-white" style="background-image:url(https://tecpartners.co.uk/wp-content/uploads/2016/11/bigstock-City-lights-blur-background-L-101001821-amended.jpg)">
                     <div class="contain <%- data.container_classes %>">
 
                         <h2>Test Slide Three</h2>
@@ -39,8 +46,8 @@
                 </div>
             </div>
 
-            <div class="arrow arrow-right dark" onclick="chgSlide(this,'next')"></div>
-            <!-- <div class="dots"></div> -->
+            <div class="arrow arrow-right" onclick="chgSlide(this,'next')"></div>
+            <div class="dots"></div>
 
         </div>
 

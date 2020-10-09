@@ -1,4 +1,6 @@
-$carousel-arrow-width = 3rem
+$carousel-arrow-width = 2rem
+$carousel-arrow-thickness = 1px
+$carousel-dot-size = 0.5rem
 
 .carousel {
 
@@ -10,12 +12,13 @@ $carousel-arrow-width = 3rem
     overflow: visible;
 
     .slides {
+
         font-size: 0;
         flex: 1;
         display: flex;
         flex-direction: row;
         white-space: nowrap;
-        align-self:stretch;
+        height: 100%;
         overflow: hidden;
 
         .slide {
@@ -30,6 +33,7 @@ $carousel-arrow-width = 3rem
             padding-bottom: 2rem;
             background-size: cover;
             background-position: center;
+
         }
     }
 
@@ -47,14 +51,14 @@ $carousel-arrow-width = 3rem
 
         &-left {
 
-            left: 1.4rem;
+            left: ($carousel-arrow-width)rem;
 
             &:after {
 
                 display: block;
                 content: '';
-                border: 1px solid #999;
-                border-width: 0 0 1px 1px ;
+                border: $carousel-arrow-thickness solid #999;
+                border-width: 0 0 $carousel-arrow-thickness $carousel-arrow-thickness;
                 width: $carousel-arrow-width;
                 height: $carousel-arrow-width;
                 transform: rotate(45deg);
@@ -67,22 +71,20 @@ $carousel-arrow-width = 3rem
                     display: none;
                 }
 
-
             }
-
 
         }
 
         &-right {
 
-            right:1rem;
+            right: ($carousel-arrow-width)rem;
 
             &:after {
 
                 display: block;
                 content: '';
-                border: 1px solid #999;
-                border-width: 1px 1px 0 0 ;
+                border: $carousel-arrow-thickness solid #999;
+                border-width: $carousel-arrow-thickness $carousel-arrow-thickness 0 0 ;
                 width: $carousel-arrow-width;
                 height: $carousel-arrow-width;
                 transform: rotate(45deg);
@@ -109,12 +111,16 @@ $carousel-arrow-width = 3rem
         text-align: center;
         margin-top: 3rem;
 
+        @media $small {
+
+        }
+
         .dot {
             display: inline-block;
             vertical-align: middle;
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid #999;
+            width: $carousel-dot-size;
+            height: $carousel-dot-size;
+            border: $carousel-arrow-thickness solid #999;
             border-radius: 50%;
             margin: 0 1rem;
 
@@ -122,6 +128,79 @@ $carousel-arrow-width = 3rem
                 background-color: #999;
             }
         }
+    }
+
+    &.light {
+
+        .slides .slide {
+            color: $color-white;
+        }
+
+        .arrow-left, .arrow-right {
+            &:after {
+                border-color: $color-white;
+            }
+        }
+
+        .dots .dot {
+            border: $carousel-arrow-thickness solid $color-white;
+
+            &.selected {
+                background-color: $color-white;
+            }
+        }
+
+    }
+
+    &.dark {
+
+        .slides .slide {
+            color: $color-dark-grey;
+        }
+
+        .arrow-left, .arrow-right {
+            &:after {
+                border-color: $color-dark-grey;
+            }
+        }
+
+        .dots .dot {
+            border: $carousel-arrow-thickness solid $color-dark-grey;
+
+            &.selected {
+                background-color: $color-dark-grey;
+            }
+        }
+
+    }
+
+    &.contain {
+
+        .arrow-left {
+            left: -($carousel-arrow-width*2)rem;
+        }
+        .arrow-right {
+            right: -($carousel-arrow-width*2)rem;
+        }
+
+        .dots {
+
+            @media $small {
+                width: calc(100% - 4rem)
+            }
+
+        }
+
+    }
+
+    &.align-middle {
+
+        .slides .slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
     }
 
 }

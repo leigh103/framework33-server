@@ -153,8 +153,8 @@ if (notification_els){
 
 var carousels = {}
 
-function initCarousels(){
-console.log('here')
+function initCarousels(init){
+
     let carousel_els = document.getElementsByClassName('carousel')
 
     if (carousel_els){
@@ -199,11 +199,23 @@ console.log('here')
 
                 }
 
-                if (carousel_els[i].hasAttribute('data-auto-slide')){
+                if (carousel_els[i].hasAttribute('data-auto-slide') && init === true){
 
                     let time = carousel_els[i].getAttribute('data-auto-slide')
 
-                    autoSlide(carousel_id, time)
+                    carousels[carousel_id].interval = setInterval(function(){
+
+                        if (!carousels[carousel_id].slide){
+                            carousels[carousel_id].slide = 0
+                        }
+                        carousels[carousel_id].slide++
+                        if (carousels[carousel_id].slide >= carousels[carousel_id].slides_count){
+                            carousels[carousel_id].slide = 0
+                        }
+
+                        chgSlide(carousels[carousel_id].slides,carousels[carousel_id].slide)
+
+                    }, time*1000)
 
                 }
 
@@ -221,28 +233,9 @@ window.onresize = function(){
     afterResize = setTimeout(initCarousels, 500);
 }
 
-initCarousels()
+initCarousels(true)
 
-function autoSlide(carousel_id, time){
 
-    if (carousels[carousel_id].interval){
-        clearInterval(carousels[carousel_id].interval)
-    } else {
-        carousels[carousel_id].interval = setInterval(function(){
-
-            if (!carousels[carousel_id].slide){
-                carousels[carousel_id].slide = 0
-            }
-            carousels[carousel_id].slide++
-            if (carousels[carousel_id].slide >= carousels[carousel_id].slides_count){
-                carousels[carousel_id].slide = 0
-            }
-
-            chgSlide(carousels[carousel_id].slides,carousels[carousel_id].slide)
-
-        }, time*1000)
-    }
-}
 
 function chgSlide(evnt,slide){
 

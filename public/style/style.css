@@ -21,7 +21,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 3rem;
+  min-height: 2rem;
   overflow: visible;
 }
 .carousel .slides {
@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: row;
   white-space: nowrap;
-  align-self: stretch;
+  height: 100%;
   overflow: hidden;
 }
 .carousel .slides .slide {
@@ -58,15 +58,15 @@
   z-index: 50;
 }
 .carousel .arrow-left {
-  left: 1.4rem;
+  left: 2rem;
 }
 .carousel .arrow-left:after {
   display: block;
   content: '';
   border: 1px solid #999;
   border-width: 0 0 1px 1px;
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
   transform: rotate(45deg);
 }
 @media only screen and (max-width: 851px) {
@@ -80,15 +80,15 @@
   }
 }
 .carousel .arrow-right {
-  right: 1rem;
+  right: 2rem;
 }
 .carousel .arrow-right:after {
   display: block;
   content: '';
   border: 1px solid #999;
   border-width: 1px 1px 0 0;
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
   transform: rotate(45deg);
 }
 @media only screen and (max-width: 851px) {
@@ -112,14 +112,56 @@
 .carousel .dots .dot {
   display: inline-block;
   vertical-align: middle;
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid #999;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1px solid #999;
   border-radius: 50%;
   margin: 0 1rem;
 }
 .carousel .dots .dot.selected {
   background-color: #999;
+}
+.carousel.light .slides .slide {
+  color: #fff;
+}
+.carousel.light .arrow-left:after,
+.carousel.light .arrow-right:after {
+  border-color: #fff;
+}
+.carousel.light .dots .dot {
+  border: 1px solid #fff;
+}
+.carousel.light .dots .dot.selected {
+  background-color: #fff;
+}
+.carousel.dark .slides .slide {
+  color: #33424b;
+}
+.carousel.dark .arrow-left:after,
+.carousel.dark .arrow-right:after {
+  border-color: #33424b;
+}
+.carousel.dark .dots .dot {
+  border: 1px solid #33424b;
+}
+.carousel.dark .dots .dot.selected {
+  background-color: #33424b;
+}
+.carousel.contain .arrow-left {
+  left: -4rem;
+}
+.carousel.contain .arrow-right {
+  right: -4rem;
+}
+@media only screen and (max-width: 851px) {
+  .carousel.contain .dots {
+    width: calc(100% - 4rem);
+  }
+}
+.carousel.align-middle .slides .slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 a {
   color: #1398a3;
