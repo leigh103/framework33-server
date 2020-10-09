@@ -2,94 +2,101 @@ $carousel-arrow-width = 3rem
 
 .carousel {
 
-    display: flex;
-    flex-direction: row;
-    flex-flow: row wrap;
+    display: block;
     position: relative;
     width: 100%;
     height: 100%;
     min-height: $carousel-arrow-width;
-    margin: auto;
-    overflow-x: visible;
-    overflow-y: hidden;
-    padding: 0 $carousel-arrow-width;
+    overflow: visible;
 
     .slides {
         font-size: 0;
         flex: 1;
-        display: block;
+        display: flex;
+        flex-direction: row;
         white-space: nowrap;
-        height: 100%;
-        overflow: scroll;
+        align-self:stretch;
+        overflow: hidden;
 
         .slide {
             transition: left 1s ease;
             position: relative;
             font-size: 1rem;
-            display: inline-block;
-            vertical-align: middle;
-            width: 100%;
-            height: 100%;
+            display: block;
+            flex: 0 0 100%;
+            align-self:stretch;
             left: 0;
             white-space: normal;
+            padding-bottom: 2rem;
+            background-size: cover;
+            background-position: center;
         }
     }
 
-
     .arrow {
-        flex: none;
+
+        position: absolute;
+        height: 100%;
+        top:0;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: $carousel-arrow-width;
-        width: $carousel-arrow-width;
+        align-self:stretch;
         cursor: pointer;
         z-index:50;
 
         &-left {
-            left: 0;
+
+            left: 1.4rem;
 
             &:after {
+
                 display: block;
                 content: '';
-                border: 1px solid #fff;
+                border: 1px solid #999;
                 border-width: 0 0 1px 1px ;
-                width: 60%;
-                height: 60%;
+                width: $carousel-arrow-width;
+                height: $carousel-arrow-width;
                 transform: rotate(45deg);
 
-            }
-
-            &.dark {
-
-                &:after {
-                    border-color: #222;
+                @media $small {
+                    display: none;
                 }
+
+                @media $medium {
+                    display: none;
+                }
+
+
             }
 
 
         }
 
         &-right {
-            right: 0;
+
+            right:1rem;
 
             &:after {
+
                 display: block;
                 content: '';
-                border: 1px solid #fff;
+                border: 1px solid #999;
                 border-width: 1px 1px 0 0 ;
-                width: 60%;
-                height: 60%;
+                width: $carousel-arrow-width;
+                height: $carousel-arrow-width;
                 transform: rotate(45deg);
 
-            }
-
-            &.dark {
-
-                &:after {
-                    border-color: #222;
+                @media $small {
+                    display: none;
                 }
+
+                @media $medium {
+                    display: none;
+                }
+
             }
+
         }
 
     }
@@ -97,19 +104,22 @@ $carousel-arrow-width = 3rem
     .dots {
         flex: none;
         width: 100%;
+        position: absolute;
+        bottom: 1.6rem;
         text-align: center;
+        margin-top: 3rem;
 
         .dot {
             display: inline-block;
             vertical-align: middle;
             width: 1rem;
             height: 1rem;
-            border: 2px solid grey;
+            border: 2px solid #999;
             border-radius: 50%;
             margin: 0 1rem;
 
             &.selected {
-                background-color: grey;
+                background-color: #999;
             }
         }
     }
