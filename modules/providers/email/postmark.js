@@ -51,9 +51,9 @@
                 subject = notificationTemplate.complete_registration.subject
 
                 msg = {
-                    "Subject": subject,
-                    "TextBody": content,
-                    "HtmlBody": content,
+                    "subject": subject,
+                    "text": content,
+                    "html": content,
                     "TemplateModel": {
                         "company_name":config.site.name,
                         "action_url": config.site.url+'/login/'+data.guard+'/'+data.timestamp
@@ -70,9 +70,9 @@
                 subject = notificationTemplate.activate_account.subject
 
                 msg = {
-                    "Subject": subject,
-                    "TextBody": content,
-                    "HtmlBody": content,
+                    "subject": subject,
+                    "text": content,
+                    "html": content,
                     "TemplateModel": {
                         "company_name":config.site.name,
                         "action_url": config.site.url+'/login/activate/'+data.timestamp
@@ -90,9 +90,9 @@
                 subject = notificationTemplate.password_reset.subject
 
                 msg = {
-                    "Subject": subject,
-                    "TextBody": content,
-                    "HtmlBody": content,
+                    "subject": subject,
+                    "text": content,
+                    "html": content,
                     "TemplateModel": {
                         "company_name":config.site.name,
                         "action_url": config.site.url+'/login/'+data.guard+'/'+data.timestamp
