@@ -16,21 +16,43 @@
                 }
             }
 
-            postmark.sendEmail({
+            let payload = {
                 "From": msg.from,
                 "To": msg.to,
                 "Subject": msg.subject,
                 "TextBody": msg.text,
                 "HtmlBody": msg.html
-            }, function(error, email_res) {
-                if(error) {
-                    log('Mail error: '+JSON.stringify(error))
-                    reject(error)
-                    return
-                }
-                resolve(email_res)
-            })
+            }
 
+            if (msg.TemplateAlias && msg.TemplateModel){
+                payload.TemplateAlias = msg.TemplateAlias
+                payload.TemplateModel = msg.TemplateModel
+
+                delete payload.HtmlBody
+                delete payload.TextBody
+                delete payload.Subject
+
+                postmark.sendEmailWithTemplate(payload, function(error, email_res) {
+                    if(error) {
+                        log('Mail error: '+JSON.stringify(error))
+                        reject(error)
+                        return
+                    }
+                    resolve(email_res)
+                })
+
+            } else {
+
+                postmark.sendEmail(payload, function(error, email_res) {
+                    if(error) {
+                        log('Mail error: '+JSON.stringify(error))
+                        reject(error)
+                        return
+                    }
+                    resolve(email_res)
+                })
+
+            }
 
         })
 
@@ -104,7 +126,7 @@
         }
 
         if (config.email && config.email.templates && config.email.templates[0]){
-            msg.TemplateId = config.email.templates[0]
+            msg.TemplateAlias = config.email.templates[0]
         }
 
         return msg

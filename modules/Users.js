@@ -205,7 +205,12 @@
 
                 this.data.timestamp = timestamp
 
-                let email = new Notification(this.data).useEmailTemplate(notification_type).email()
+                try {
+                    let email = new Notification(this.data).useEmailTemplate(notification_type).email()
+                } catch (error) {
+                    this.error = error
+                }
+
 
                 delete this.data.timestamp
 
