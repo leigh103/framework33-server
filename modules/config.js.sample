@@ -30,8 +30,8 @@
                 'content',
                 'dashboard',
                 'default_routes',
-                'products',
-                'transactions'
+                //'products',
+                //'transactions'
             ]
         },
 

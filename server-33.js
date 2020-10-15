@@ -403,6 +403,7 @@ const express = require('express'),
 
     const install = async () => {
 
+        global.basedir = __dirname
         let config_setup = require(__dirname + '/modules/config.js.sample')
 
         console.log('')
