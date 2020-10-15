@@ -58,9 +58,11 @@ const express = require('express'),
         app.set('view engine', 'ejs')
         app.set('trust proxy', 1)
         app.use(cors());
-
         app.use(sessionParser);
 
+        if (global.config.site.self_serve === true){
+            app.use(express.static('public'))
+        }
 
     // start http and ws
 
@@ -416,7 +418,7 @@ const express = require('express'),
         config_setup.http.port = await prompt('HTTP port (8033): ')
         config_setup.websocket.url = await prompt('Websocket URL (eg, wss://localhost/ws): ')
         config_setup.websocket.port = await prompt('Websocket Port (6430): ')
-        config_setup.email.api_key = await prompt('Sendgrid API key: ')
+        config_setup.email.api_key = await prompt('Email API key: ')
         config_setup.email.from_address = await prompt('Send email notifications from: ')
 
         let config_file = 'var config = '+JSON.stringify(config_setup, null, "\t")+'\nmodule.exports = config'
