@@ -1,6 +1,7 @@
 <section class="py-2 <%- styling.background.class %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="hero" app-block-description="This is a hero block">
 
     <div class="contain <%- data.container_classes %>"  app-input="none" app-field="container" app-styling="container_class">
+        <img class="<%- data.logo_classes %>" app-input="text" app-field="logo" app-styling="logo_class" src="<%- data.logo %>">
         <h1 class="<%- data.h1_classes %>" app-input="text" app-field="h1" app-styling="h1_class" anim="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.h1 %></h1>
         <h4 class="<%- data.h4_classes %>" app-styling="h4_class" anim="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1s'}" app-input="text" app-field="h4"><%- data.h4 %></h4>
         <div class="text-light" anim="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1.3s'}" app-input="textarea" app-field="link"><%- data.link %></div>

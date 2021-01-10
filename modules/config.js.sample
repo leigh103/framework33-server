@@ -60,6 +60,7 @@
             theme: 'default',
             theme_path: global.basedir+'/themes/default',
             not_found_redirect:'/',
+            meta_description: '',
     		form_settings: {
     			method:'email',
     			to:'lee@reformedreality.com'

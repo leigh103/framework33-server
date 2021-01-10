@@ -16,8 +16,6 @@
 
             return new Promise(function(resolve, reject){
 
-                scope.view.modal = false
-
                 if (scope.view.notification.timer){
                     clearTimeout(scope.view.notification.timer)
                 }

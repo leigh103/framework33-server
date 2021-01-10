@@ -23,7 +23,11 @@
 
         <%- body -%>
 
-        <%- include partials/footer.ejs %>
+        <% if (typeof content != 'undefined' && content.hide_top_nav && content.hide_top_nav === true) { %>
+
+        <% } else { %>
+            <%- include partials/footer.ejs %>
+        <% } %>
 
         <%- include partials/scripts.ejs %>
 

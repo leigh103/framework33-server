@@ -33,7 +33,9 @@ const express = require('express'),
 
         global.log = require('./modules/functions/log')
         global.moment = require('moment')
-        global.websocket_clients = {}
+        global.websocket = {}
+        global.websocket.clients = {}
+        global.websocket.data = {}
         global.component = {}
 
 
@@ -84,15 +86,26 @@ const express = require('express'),
 
             if (ws.upgradeReq.headers && typeof ws.upgradeReq.headers.cookie == 'string'){
 
-                let cookies = cookie.parse(ws.upgradeReq.headers.cookie)
-                let user = await new Admin().find({ws_id:cookies['connect.sid']})
+                let cookies = cookie.parse(ws.upgradeReq.headers.cookie),
+                    sid = cookies['connect.sid']
 
-                if (user.data && user.data._id){
-                    new WebsocketClient(user.data._id, ws).save()
-                    ws.send('connected to session')
+                if (global.websocket.clients && global.websocket.clients[sid]){
+
+                    if (global.websocket.data && global.websocket.data[sid]){
+
+                        ws.send(JSON.stringify(global.websocket.data[sid]))
+
+                        if (!global.websocket.data[sid]._persist){
+                            delete global.websocket.data[sid]
+                        }
+
+                    } else {
+                        ws.send('already connected')
+                    }
+
                 } else {
-                    new WebsocketClient(Date.now(), ws).save()
-                    ws.send('connected, no session')
+                    new WebsocketClient(sid,ws).save()
+                    ws.send('connected')
                 }
 
             } else {

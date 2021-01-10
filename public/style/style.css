@@ -489,9 +489,6 @@ a:hover {
     padding-bottom: 1rem;
   }
 }
-.dashboard .page .header {
-  height: 10rem;
-}
 @media only screen and (max-width: 851px) {
   .dashboard .page .header {
     height: auto;
@@ -950,15 +947,6 @@ ul li::before {
     grid-column: 1/span 3;
   }
 }
-.nav .burger {
-  display: none;
-  cursor: pointer;
-}
-@media only screen and (max-width: 851px) {
-  .nav .burger {
-    display: flex;
-  }
-}
 .nav div.link {
   position: relative;
   display: inline-block;
@@ -994,6 +982,15 @@ ul li::before {
 }
 .nav .subitems a {
   display: block;
+}
+.burger {
+  display: none;
+  cursor: pointer;
+}
+@media only screen and (max-width: 851px) {
+  .burger {
+    display: flex;
+  }
 }
 .mega-menu {
   display: none;

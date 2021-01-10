@@ -8,7 +8,7 @@
         dont_track: ["/login"],
         meta:{
             title: config.site.name,
-            description:"A NodeJS based backend and frontend platform",
+            description:config.site.meta_description,
             url: config.site.url,
             logo: config.site.logo
         },
@@ -173,7 +173,12 @@
 
             stripStyle:(input) => {
                 return input.replace(/style=\"|'(.*?)\"|'/g,'')
+            },
+
+            stripTags:(input) => {
+                return input.replace(/<\/?[^>]+(>|$)/g, "")
             }
+
         }
     }
 

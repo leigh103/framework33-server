@@ -16,6 +16,18 @@
 
         <div class="spacer"></div>
 
+    <% } else if (editor_button_type == "blog") { %>
+
+        <button class="transparent">H1</button>
+        <button app-click="exec('formatBlock','<h2>')">H2</button>
+        <button app-click="exec('formatBlock','<h3>')">H3</button>
+        <button app-click="exec('formatBlock','<h4>')">H4</button>
+        <button app-click="exec('formatBlock','<p>')"><i class="fas fa-paragraph"></i></button>
+        <button app-click="exec('formatBlock','<blockquote>')"><i class="fas fa-quote-left"></i></button>
+        <button app-click="exec('removeFormat')"><i class="fas fa-remove-format"></i></button>
+
+        <div class="spacer"></div>
+
     <% } else { %>
 
         <button app-click="exec('removeFormat')"><i class="fas fa-remove-format"></i></button>
