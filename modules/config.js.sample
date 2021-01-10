@@ -107,7 +107,21 @@
         },
 
         stripe_secret_key: '',
-        stripe_publishable_key: ''
+        stripe_publishable_key: '',
+
+        hacp: {
+            host: {
+                api_key:'',
+                hostname:'',
+                websocket:{
+                    hostname:''
+                }
+            },
+            weather: {
+                api_key:'',
+                location:''
+            }
+        }
 
     }
 
