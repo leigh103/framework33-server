@@ -13,7 +13,8 @@
         <div>
             <img src="<%- product.image %>" app-src="view.gallery_image" class="product-image">
             <div class="overflow-x" style="height: 5rem">
-                <% if (typeof product.gallery != 'undefined'){ %>
+                <% if (Array.isArray(product.gallery) && product.gallery.length > 0){ %>
+                    <img src="<%- product.image %>" class="inline-block h-100 clickable" onclick="scope.view.gallery_image = '<%- product.image %>'">
                     <% product.gallery.forEach((image)=>{ %>
                         <img src="<%- image.value %>" class="inline-block h-100 clickable" onclick="scope.view.gallery_image = '<%- image.value %>'">
                     <% }) %>

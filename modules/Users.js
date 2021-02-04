@@ -211,7 +211,6 @@
                     this.error = error
                 }
 
-
                 delete this.data.timestamp
 
                 return this.data

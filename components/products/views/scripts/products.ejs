@@ -6,17 +6,9 @@
 
         scope.view.upload_text = "Upload Image"
 
-        watch['new'] = function(data){
-            if (data.category >= 0){
-                scope.get('product_categories/'+data.category).then((category)=>{
-                    scope.sub_categories = category.sub_categories
-                })
-            }
-
-        }
-
         watch['new.category'] = function(data){
             scope.get('product_categories/'+data).then((category)=>{
+                scope.new.sub_category = ''
                 scope.sub_categories = category.sub_categories
             })
         }
@@ -36,7 +28,22 @@
 
                 if (scope.new.content){
                     document.getElementById('product_content').innerHTML = scope.new.content
-                } 
+                }
+
+                if (scope.new.category){
+                    let sub_cat = scope.new.sub_category+''
+                    scope.get('product_categories/'+scope.new.category).then((category)=>{
+                        scope.sub_categories = category.sub_categories
+                        setTimeout(function(){
+                            scope.new.sub_category = sub_cat
+                        },100)
+
+                    })
+                }
+
+                if (!scope.new.gallery){
+                    scope.new.gallery = []
+                }
 
                 if (!no_modal){
                     scope.view.modal = 'show_product_edit'

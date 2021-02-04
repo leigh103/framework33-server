@@ -57,8 +57,8 @@
                 <div class="grid pb-2 gap-2 col-2" style="align-items: start;">
 
                     <div class="rowspan-5 flex flex-column flex-middle-left">
-                        <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="new.image_1" class="object-fit"></label>
-                        <input id="image_1" type="file" app-model="new.image_1">
+                        <label for="image" class="clickable"><img src="/images/Product_Placeholder.svg" app-src="new.image" class="object-fit"></label>
+                        <input id="image" type="file" app-model="new.image">
                     </div>
 
                     <div class="flex flex-column flex-middle-left">
@@ -90,18 +90,19 @@
                         <label>Category</label>
                         <select app-model="new.category">
 
-                            <% var option_data = view.functions.getOptionData('product_categories') %>
-                            <% option_data.forEach((option)=>{ %>
-                                <option value="<%- option._key %>"><%- option.name %></option>
-                            <% }) %>
+                            <% if (typeof option_data == 'object' && option_data.length > 0){ %>
+                                <% option_data.forEach((option)=>{ %>
+                                    <option value="<%- option._key %>"><%- option.name %></option>
+                                <% }) %>
+                            <% } %>
 
                         </select>
                     </div>
 
                     <div class="flex flex-column flex-middle-left">
-                        <label>Sub Category</label>
+                        <label>Sub Category <span app-bind="new.sub_category"></span></label>
                         <select app-model="new.sub_category">
-                            <option value="" selected disabled>Please select...</option>
+                            <option value="" selected>None</option>
                             <option app-for="sub_category in sub_categories" app-value="sub_category._key" app-bind="sub_category.name"></option>
                         </select>
                     </div>
@@ -131,7 +132,7 @@
 
                 <div class="flex flex-row mb-1">
                     <label for="new_image" class="btn bg-33-blue"><span app-bind="view.upload_text"></span> <i class="fas fa-image ml-1"></i></label>
-                    <input type="file" app-model="new.gallery_new" app-change="upload(new.gallery_new,new.gallery,'new.gallery_new')" id="new_image" nane="new_image" placeholder="Add new Image">
+                    <input type="file" app-model="new.gallery_new" app-change="uploadImg(new.gallery_new,new.gallery,'new.gallery_new')" id="new_image" nane="new_image" placeholder="Add new Image">
                 </div>
 
                 <div class="grid pb-2 gap-1 col-5" style="align-items: start;">

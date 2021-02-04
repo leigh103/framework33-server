@@ -105,7 +105,7 @@
                 return moment(date).format(format)
             },
 
-            getOptionData:(table)=>{
+            getOptionData: async (table)=>{
 
                 table = parseClassName(table)
 

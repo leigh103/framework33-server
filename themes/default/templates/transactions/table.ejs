@@ -1,0 +1,65 @@
+<% layout(config.site.theme+'/dashboard.ejs') -%>
+
+    <div class="grid col-2 col-s-1 header">
+        <div class="flex flex-left-top flex-column">
+            <h3 class="text-weight-600 capitalise"><% if (status){ %><%- status %> <% } %><%- title %></h3>
+            <p class="transparent-2" app-show="<%- table %>">This table contains <span app-bind="<%- table %>.length"></span> items</p>
+        </div>
+        <div class="flex flex-middle-right flex-column-s">
+            <div class="flex-1 flex w-s-100">
+                <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
+                <input type="text" class="" onkeyup="scope.searchApi('<%- table %>',this.value)">
+            </div>
+            <button class="flex-none btn highlight hidden-s" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <div class="table" app-init="get('<%- table %><% if (query){ %><%- query %><% } %>')">
+            <div class="row table-header">
+                <div class="cell middle">Reference</div>
+                <div class="cell middle">Customer</div>
+                <div class="cell middle">Created</div>
+                <div class="cell middle">Items</div>
+                <div class="cell middle">Total</div>
+
+                <div class="cell middle action"></div>
+            </div>
+
+            <% var table_name =  view.functions.depluralise(table) %>
+
+            <div class="row" app-for="<%- view.functions.depluralise(table) %> in <%- table %>">
+
+
+                <div class="cell middle reference string" app-bind="<%- table_name %>.reference"></div>
+                <div class="cell middle customer string" app-bind="<%- table_name %>.customer.name"></div>
+                <div class="cell middle _created date" app-bind="parseDate(<%- table_name %>._created,'ddd Do MMM h:mma')"></div>
+                <div class="cell middle items string" app-bind="<%- table_name %>.items.length"></div>
+                <div class="cell middle total string" app-bind="parseCurrency(<%- table_name %>.total)"></div>
+
+                <div class="cell middle text-right" app-attr="{id:'cell-'+<%- table_name %>._key}">
+
+                    <div class="context-link btn bg-33-white text-secondary" app-click="toggleContext('context',<%- view.functions.depluralise(table) %>)">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom left w-100 p-2">
+        <button class="btn highlight hidden-m hidden" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
+    </div>
+
+    <div id="context" class="context dropdown text-left" style="display: none">
+        <div class="link" app-click="editItem('<%- table %>',context)">
+            <i class="fas fa-pen-alt"></i>
+            Edit
+        </div>
+        <div class="link" app-click="deleteItem('<%- table %>',context)">
+            <i class="fas fa-trash"></i>
+            Delete
+        </div>
+    </div>

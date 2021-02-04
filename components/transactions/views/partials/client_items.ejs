@@ -10,7 +10,7 @@
 
     <div>
         <div class="grid col-4 gap-1 my-2" app-for="item in cart.items">
-            <div class="colspan-2 text-weight-700"><a href="" app-bind="item.name"></a></div>
+            <div class="colspan-2 text-weight-700"><a app-attr="{'href':item.slug}" app-bind="item.name"></a></div>
             <div class="text-center" app-bind="item.quantity"></div>
             <div class="text-right text-weight-700">£<span app-bind="item.price"></span></div>
         </div>

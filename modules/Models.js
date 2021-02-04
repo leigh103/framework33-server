@@ -65,31 +65,31 @@
 
             if (typeof data == 'string'){
                 this.data = DB.read(this.settings.collection).orderBy(data,'asc').get()
-                return this
             } else if (typeof data == 'object'){
                 this.data = DB.read(this.settings.collection).where(data).get() //.omit(['password','password_reset']).get()
-                return this
             } else {
                 this.data = DB.read(this.settings.collection).get() //.omit(['password','password_reset']).get()
-                return this
             }
+            return this
 
         }
 
         sort(field,dir){
 
-            if (!dir || dir == 'asc'){
-                this.data.sort((a, b) => {
-                    if (a[field] && b[field]){
-                        -a[field].localeCompare(b[field])
-                    }
-                })
-            } else {
-                this.data.sort((a, b) => {
-                    if (a[field] && b[field]){
-                        a[field].localeCompare(b[field])
-                    }
-                })
+            if (Array.isArray(this.data) && this.data.length > 0){
+                if (!dir || dir == 'asc'){
+                    this.data.sort((a, b) => {
+                        if (a[field] && b[field]){
+                            -a[field].localeCompare(b[field])
+                        }
+                    })
+                } else {
+                    this.data.sort((a, b) => {
+                        if (a[field] && b[field]){
+                            a[field].localeCompare(b[field])
+                        }
+                    })
+                }
             }
 
             return this
@@ -111,14 +111,20 @@
 
                 if (fields[key]){
 
-                    if (fields[key].type == 'object' && fields[key].subitems && fields[key].subitems.length > 0){
+                    if (fields[key].type == 'object' && fields[key].subitems && fields[key].subitems.length > 0 || fields[key].type == 'array' && fields[key].subitems && fields[key].subitems.length > 0){
 
                         fields[key].subitems.map((subfield)=>{
                             subfields[subfield.name] = subfield
                         })
 
-                        for (let [subkey, subvalue] of Object.entries(this.data[key])) {
-                            this.data[key][subkey] = await this.validateField(subfields[subkey], subkey, subvalue)
+                        for (let subidx of this.data[key]) {
+                            for (let [subkey, subvalue] of Object.entries(subidx)) {
+                                
+                                if (!subkey.match(/^_/)){
+                                    subidx[subkey] = await this.validateField(subfields[subkey], subkey, subvalue)
+                                }
+
+                            }
                         }
 
                     } else {
@@ -153,9 +159,14 @@
                         return value
                     }
 
-                } else if (field.type == 'integer' && value.match(/\d/) || field.type == 'number' && value.match(/\d/)){
+                } else if (field.type == 'integer' || field.type == 'number'){
 
-                    return value.replace(/\D/g, '')
+                    if (isNaN(value)){
+                        return value.replace(/\D/g, '')
+                    } else {
+                        return value
+                    }
+
 
                 } else if (field.type == 'date'){
 
@@ -172,9 +183,17 @@
 
                 } else if (field.type == 'float' && parseFloat(value)){
 
-                    return parseFloat(value)
+                    return parseFloat(value.replace(/\D/g, ''))
 
                 } else if (field.type == 'slug' && typeof value == 'string'){
+
+                    if (!value){
+                        if (this.data.name){
+                            value = this.data.name
+                        } else if (this.data.title){
+                            value = this.data.title
+                        }
+                    }
 
                     return value.replace(/\s/g,'-').replace(/['",./\\()\[\]*&^%$£@!]/g,'').toLowerCase()
 
@@ -184,7 +203,15 @@
 
                 } else if (field.type == 'price' && parseFloat(value).toFixed(2)){
 
-                    return parseFloat(value).toFixed(2)
+                    if (typeof value == 'string'){
+                        value = parseFloat(value)
+                    }
+
+                    if (Number(value) === value && value % 1 !== 0){
+                        return value*100
+                    } else {
+                        return value
+                    }
 
                 } else if (field.type == 'discount'){
 
@@ -281,8 +308,9 @@
                 } else if (field.type == 'image'){
 
                     if (value.match(/base64/)){
-
-                        return await new Image(value,key,this.settings.collection).save()
+                        let img = await new Image(value,key,this.settings.collection).save()
+console.log('uploading', img)
+                        return img
 
                     } else if (!value.match(/(jpg|jpeg|tiff|psd|png|gif|svg|bmp)$/)){
 
@@ -327,7 +355,7 @@
             }
 
             if (this.preSave && typeof this.preSave == 'function'){
-                await this.preSave()
+                await this.preSave(update_data)
             }
 
             await this.validate()
@@ -339,7 +367,7 @@
             }
 
             if (this.postSave && typeof this.postSave == 'function'){
-                await this.postSave()
+                await this.postSave(update_data)
             }
 
             return this
@@ -365,20 +393,6 @@
 
         first(){
             return this.data[0]
-        }
-
-        getForCart(){
-
-            return {
-                price: this.data.price,
-                image: this.data.image,
-                name: this.data.name,
-                slug: this.data.slug,
-                stock: this.data.stock,
-                activated: this.data.activated,
-                items_per_customer: this.data.items_per_customer
-            }
-
         }
 
         async getTemplate(){

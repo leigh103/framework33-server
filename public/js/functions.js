@@ -144,6 +144,7 @@ if (notification_els){
     for (var i in notification_els){
         if (notification_els[i] && typeof notification_els[i].addEventListener == 'function'){
             notification_els[i].addEventListener('click', function(e){
+                scope.view.notification = {}
                 this.classList.remove('in-view')
                 this.classList.add('exit-view')
             })

@@ -340,6 +340,14 @@
 
         }
 
+        scope.parseCurrency = function(input){
+
+            if (!isNaN){
+                input = parseInt(input).toFixed(2)
+            }
+            return '£'+input/100
+        }
+
         scope.truncate = function(input){
 
             return input.replace(/<br><br>/,'<br>').substring(0,100)

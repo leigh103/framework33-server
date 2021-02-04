@@ -1,0 +1,7 @@
+<a class="block" href="<% if (typeof parent_category == 'object'){ %>/<%- parent_category.slug %><% } %>/<%- category.slug %>/<%- product.slug %>">
+
+    <img src="<%- product.image %>">
+    <h2 class="h6"><%- product.name %></h2>
+    <h3 class="h6 text-weight-600">£<%- product.price %></h3>
+
+</a>

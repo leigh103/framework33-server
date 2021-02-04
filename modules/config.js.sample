@@ -5,6 +5,7 @@
         modules:{
             db: {
                 module:'lowDB',
+                host:'',
                 name: '',
                 username: '',
                 password: ''

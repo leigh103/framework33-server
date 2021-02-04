@@ -106,6 +106,40 @@
 
         }
 
+        slug(product_data){
+
+            return new Promise(async (resolve, reject) => {
+
+                let slug = '/'
+
+                if (typeof product_data.category != 'undefined'){
+
+                    await this.find(product_data.category)
+
+                    if (this.data.slug){
+                        slug += this.data.slug+'/'
+                    }
+
+                    if (typeof product_data.sub_category != 'undefined' && this.data.sub_categories.length > 0){
+                        slug += this.data.sub_categories[product_data.sub_category].slug+'/'
+                    }
+
+                } else {
+
+                    await this.find(product_data)
+
+                    if (this.data.slug){
+                        slug += this.data.slug+'/'
+                    }
+
+                }
+
+                resolve(slug)
+
+            })
+
+        }
+
 
     }
 

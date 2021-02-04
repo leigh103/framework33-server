@@ -2,11 +2,11 @@
 
     extend.products = function(){
 
-        watch['view.gallery_image'] = function(data, old){
-            console.log(data, old)
-        }
-
-        scope.view.gallery_image = false
+        <% if (typeof product == 'object' && typeof product.image != 'undefined'){ %>
+            scope.view.gallery_image = '<%- product.image %>'
+        <% } else { %>
+            scope.view.gallery_image = '/images/Product_Placeholder.svg'
+        <% } %>
         scope.view.add_item = {
             quantity: 1,
             _key:''

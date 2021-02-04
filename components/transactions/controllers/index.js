@@ -17,11 +17,11 @@ const express = require('express'),
             side_nav: [
                 {link:'Transactions',slug: '/dashboard/transactions', weight:1, subitems:[
                     {link:'New',slug: '/dashboard/transactions/new', weight:1},
-                    {link:'Paid',slug: '/dashboard/transactions/open', weight:2},
-                    {link:'Processing',slug: '/dashboard/transactions/open', weight:3},
-                    {link:'Shipped',slug: '/dashboard/transactions/open', weight:4},
-                    {link:'Refunded',slug: '/dashboard/transactions/open', weight:5},
-                    {link:'Deleted',slug: '/dashboard/transactions/open', weight:6},
+                    {link:'Paid',slug: '/dashboard/transactions/paid', weight:2},
+                    {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
+                    {link:'Shipped',slug: '/dashboard/transactions/shipped', weight:4},
+                    {link:'Refunded',slug: '/dashboard/transactions/refunded', weight:5},
+                    {link:'Deleted',slug: '/dashboard/transactions/deleted', weight:6},
                     {link:'Settings',slug: '/dashboard/transactions/settings', weight:7}
                 ]}
             ],
@@ -94,10 +94,13 @@ const express = require('express'),
 
         data.title = 'Transactions'
         data.table = 'transactions'
+        data.status = req.params.status
+        view.current_sub_view = data.status
+        data.query = '?status='+req.params.status
 
-        data.fields = new Transaction().settings.fields
+        data.fields = new Transactions().settings.fields
 
-        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        res.render(config.site.theme_path+'/templates/transactions/table.ejs',data)
 
     })
 

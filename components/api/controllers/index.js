@@ -184,7 +184,7 @@ var express = require('express'),
                         result = await model[method]()
                     }
                 } else {
-                    result = model.data
+                    result = await Promise.resolve(model.data)
                 }
 
                 result = await functions.sanitizeOutput(result)

@@ -40,8 +40,8 @@
 
         async init(){
 
-            let transaction_settings = await this.find(['_key == 0'])
-            if (transaction_settings && transaction_settings.data && Object.keys(this.data).length > 1){
+            let transaction_settings = await this.find(['_key == 0']).get()
+            if (transaction_settings && Object.keys(this.data).length > 1){
 
                 global.view.transactions = transaction_settings.data
                 log('Loaded transaction settings')

@@ -23,7 +23,7 @@
                 "TextBody": msg.text,
                 "HtmlBody": msg.html
             }
-
+console.log(payload, msg)
             if (msg.TemplateAlias && msg.TemplateModel){
                 payload.TemplateAlias = msg.TemplateAlias
                 payload.TemplateModel = msg.TemplateModel
@@ -61,7 +61,7 @@
     const templates = (template, data) => {
 
         let hash = DB.hash('email-'+Date()),
-            msg,
+            msg = {},
             content,
             subject
 
@@ -128,7 +128,7 @@
         if (config.email && config.email.templates && config.email.templates[0]){
             msg.TemplateAlias = config.email.templates[0]
         }
-
+console.log('parsed', data, msg)
         return msg
     }
 

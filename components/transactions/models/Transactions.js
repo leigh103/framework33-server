@@ -95,13 +95,24 @@
 
         }
 
-        async postSave(){
+        async postSave(status){
 
             let save = false
 
-            if (!this.data.status){
+            if (!this.data.status && !status){
                 this.data.status = this.statuses[0].value
                 save = true
+            // } else if (status){
+            //
+            //     let status_check = this.statuses.findIndex((sts)=>{
+            //         return sts.value == status.toLowerCase().replace(/\s/g,'_')
+            //     })
+            //
+            //     if (status_check >= 0){
+            //         this.data.status = status
+            //         save = true
+            //     }
+
             }
 
             if (this.data.reference && !this.data.barcode){

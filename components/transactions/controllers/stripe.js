@@ -8,7 +8,6 @@
 
 var express = require('express'),
     routes = express.Router(),
-    stripe = require('stripe')(config.stripe_secret_key),
 
     settings = {
         default_route: 'checkout',
@@ -137,8 +136,8 @@ var express = require('express'),
 
                     req.session.intent = false
                     req.session.cart_id = false
-
-                    data.transaction = await new Transaction(data.cart).save()
+                    data.cart.status = 'paid'
+                    data.transaction = await new Transactions(data.cart).save()
                     res.render(settings.views+'/success.ejs',data)
 
                 } else if (paymentIntent.status == 'canceled'){

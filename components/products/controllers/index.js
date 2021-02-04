@@ -147,6 +147,7 @@ const express = require('express'),
         data.title = 'Products'
         data.table = 'products'
 
+        data.option_data = await view.functions.getOptionData('product_categories')
         data.fields = new Products().settings.fields
 
         res.render(settings.views+'/dashboard/products.ejs',data)
@@ -162,8 +163,8 @@ const express = require('express'),
             if (data.shop.description){
                 data.meta.description = data.shop.description.substring(0,160)
             }
-            data.categories = await new ProductCategories().all()
-            data.categories = data.categories.data
+            data.categories = await new ProductCategories().all().get()
+
             res.render(config.site.theme_path+'/templates/products/categories.ejs',data)
 
         } else {
@@ -224,7 +225,12 @@ const express = require('express'),
 
                 if (data.category && data.category.sub_categories && data.category.sub_categories.length > 0){
                     data.sub_category = data.category.sub_categories.find((sub_category,i)=>{
-                        return sub_category.slug == req.params.sub_category
+                        if (sub_category != null){
+                            return sub_category.slug == req.params.sub_category
+                        } else {
+                            return false
+                        }
+
                     })
                 } else {
                     data.sub_category = false
@@ -238,8 +244,8 @@ const express = require('express'),
                     if (data.sub_category.description){
                         data.meta.description = data.sub_category.description.substring(0,160)
                     }
-                    data.products = await new Products().all(['category like '+data.parent_category._key, 'sub_category like '+data.sub_category._key])
-                    data.products = data.products.data
+                    data.products = await new Products().all(['category like '+data.parent_category._key, 'sub_category like '+data.sub_category._key]).get()
+
                     res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
                 } else { // check if it's a product
@@ -271,8 +277,8 @@ const express = require('express'),
                 if (data.category.description){
                     data.meta.description = data.category.description.substring(0,160)
                 }
-                data.products = await new Products().all(['category like '+data.category._key,'sub_category NOT EXISTS'])
-                data.products = data.products.data
+                data.products = await new Products().all(['category like '+data.category._key,'sub_category NOT EXISTS']).get()
+                // data.products = data.products.data
                 res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
             }

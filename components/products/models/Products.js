@@ -21,7 +21,7 @@
                     {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', required:false},
                     {name:'price',input_type:'text',placeholder:'Price',type:'price',required: true},
                     {name:'adjustment',input_type:'text',placeholder:'Adjustment',type:'discount',required: false},
-                    {name:'attributes',input_type:'array',placeholder:'Attributes',type:'object',required: false},
+                    {name:'attributes',input_type:'array',option_data:'product_attributes',placeholder:'Attributes',type:'object',required: false},
                     {name:'customisation',input_type:'array',placeholder:'Customisation',type:'object',required: false},
                     {name:'activated',input_type:'select',options:[{text:'Yes',value:true},{text:'No',value:false}], type:'boolean', required:false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false},
@@ -66,19 +66,22 @@
                 this.data = DB.read(this.settings.collection).get() //.omit(['password','password_reset']).get()
             }
 
-            this.data.map((item, i)=>{
-                let category = DB.read('product_categories').where(['_key == '+item.category]).first(),
-                    re = new RegExp(category.slug,'i'),
-                    sub_category
+            if (Array.isArray(this.data)){
+                this.data.map((item, i)=>{
+                    let category = DB.read('product_categories').where(['_key == '+item.category]).first(),
+                        re = new RegExp(category.slug,'i'),
+                        sub_category
 
-                if (typeof item.sub_category != 'undefined' && typeof category.sub_categories == 'object' && category.sub_categories[item.sub_category]){
-                    item.url = '/'+category.slug+'/'+category.sub_categories[item.sub_category].slug+'/'+item.slug
-                } else {
-                    item.url = '/'+category.slug+'/'+item.slug
-                }
+                    if (typeof item.sub_category != 'undefined' && typeof category.sub_categories == 'object' && category.sub_categories[item.sub_category]){
+                        item.url = '/'+category.slug+'/'+category.sub_categories[item.sub_category].slug+'/'+item.slug
+                    } else {
+                        item.url = '/'+category.slug+'/'+item.slug
+                    }
 
-                return item
-            })
+                    return item
+                })
+            }
+
 
             return this
 
@@ -102,6 +105,27 @@
                 return this.data
 
             }
+
+        }
+
+        makeCartResource(){
+
+            return new Promise( async (resolve, reject) => {
+
+                let category_slug = await new ProductCategories().slug(this.data)
+
+                resolve({
+                    _key: this.data._key,
+                    price: this.data.price,
+                    image: this.data.image,
+                    name: this.data.name,
+                    slug: category_slug+this.data.slug,
+                    stock: this.data.stock,
+                    activated: this.data.activated,
+                    items_per_customer: this.data.items_per_customer
+                })
+
+            })
 
         }
 

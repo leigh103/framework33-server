@@ -59,6 +59,7 @@
 
             scope.newObj = function(type){
                 scope.new = {}
+                scope.new.new_array = {}
                 scope.view.modal = 'show_edit'
             }
 
@@ -67,6 +68,7 @@
                 return new Promise(function(resolve, reject) {
                     scope.new = {}
                     scope.new.new_array = {}
+                    scope.view.modal = false
                     resolve()
                 });
 
@@ -104,6 +106,9 @@
                 //    obj.content = contented.getData()
                 }
 
+                delete obj._key
+                delete obj._id
+console.log(obj)
                 scope.post(collection, obj).then((data)=>{
                     scope.resetNew()
                     scope.notify('Added')
@@ -122,7 +127,7 @@
                 if (typeof obj.content != 'undefined'){
                 //    obj.content = contented.getData()
                 }
-
+console.log(obj)
                 scope.post(collection, obj).then((data)=>{
                     scope.resetNew()
                     scope.notify('Updated')
@@ -165,22 +170,32 @@
 
             scope.push = function(obj,item,input){
 
+                let obj_string = ''
+
                 if (typeof obj == 'string'){
-                    _.set(scope,obj,[])
+                    obj_string = obj+''
                     obj = _.get(scope,obj)
                 }
 
+                if (!obj || obj == null){
+                    _.set(scope,obj_string,[])
+                    obj = _.get(scope,obj_string)
+                }
+
                 if (input){
+
                     if (typeof item == 'string'){
                         item = {
-                            _key:obj.length,
+                            _key: Date.now(),
                             value: item.replace(/"/g,'')
                         }
+                    } else if (typeof item == 'object'){
+                        item._key = Date.now()
                     }
 
                     obj.push(item)
-                    console.log(obj)
                     _.set(scope,input,'')
+
                 } else {
                     obj.push(item)
                 }

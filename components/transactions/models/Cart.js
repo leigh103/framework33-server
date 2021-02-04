@@ -130,7 +130,7 @@
             if (typeof global[item_data.type] == 'function'){
 
                 let item = await new global[item_data.type]().find(item_data.item_key)
-                item = item.getForCart()
+                item = await item.makeCartResource()
 
                 if (typeof item.stock != 'undefined' && item.stock == 0){
                     this.error = 'Item is out of stock'
