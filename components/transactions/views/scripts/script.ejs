@@ -40,6 +40,7 @@
                     scope.post('cart/add-item',payload).then((cart)=>{
                         scope.notify('Item Added! <a href="/<%- view.ecommerce.cart_name.toLowerCase() %>">View <%- view.ecommerce.cart_name %></a>')
                     }).catch((err)=>{
+                        console.log(err)
                         scope.notify(err,'error',5,'fa-exclamation-circle')
                     })
 
@@ -58,6 +59,7 @@
 
                     scope.post('cart/remove-item',payload).then((cart)=>{
                         scope.cart = cart
+                        view.update('cart')
                         scope.notify('Item Removed')
                     }).catch((err)=>{
                         scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -73,6 +75,7 @@
 
                     scope.post('cart/empty',payload).then((cart)=>{
                         scope.cart = cart
+                        view.update('cart')
                         scope.notify('Cart Emptied')
                     }).catch((err)=>{
                         scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -112,6 +115,8 @@
                     scope.put('cart',<%- cart._key %>,scope.cart).then((cart)=>{
                         scope.cart = cart
                         scope.view.page = 'shipping'
+                        view.update('cart')
+                        view.update('view.page')
                         scope.notify('Cart Updated')
                     }).catch((err)=>{
                         scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -122,6 +127,7 @@
                 scope.payment = function(){
 
                     scope.view.page = 'gateways'
+                    view.update('view.page')
 
                 }
 

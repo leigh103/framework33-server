@@ -249,7 +249,11 @@ const express = require('express'),
 
                 global[model_class_name] = require(model)
 
-                DB.createCollection(new global[model_class_name]().settings.collection)
+                let model_class = new global[model_class_name]()
+
+                if (model_class.settings && model_class.settings.collection){
+                    DB.createCollection(model_class.settings.collection)
+                }
 
             })
 

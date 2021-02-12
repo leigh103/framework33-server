@@ -86,7 +86,6 @@
                 this.data.items = []
                 this.data._user_id = req.cookies['connect.sid']
                 await this.setReference().save()
-                req.session.cart_id = this.data._key
                 return this.data
 
             } else {

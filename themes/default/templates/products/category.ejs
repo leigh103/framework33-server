@@ -35,7 +35,7 @@
 
                     <% if (sub_category != null && typeof sub_category.slug == 'string'){ %>
 
-                        <a href="/<%- category.slug %>/<%- sub_category.slug %>" class="block bg-33-light-grey rounded flex overflow-hidden shadow" anim="{'enter':'move-up'}">
+                        <a href="/<%- category.slug %>/<%- sub_category.slug %>" class="bg-33-light-grey rounded flex-row overflow-hidden shadow" anim="{'enter':'move-up'}">
 
                             <div class="flex-1">
                                 <img src="<%- sub_category.image %>" class="object-fit">
@@ -69,7 +69,7 @@
 
         </div>
 
-        <div class="contain mt-6">
+        <div class="contain mt-6 text-center">
             <a class="h6 lh2 block" href="/<%- shop.slug %>">View All Categories</a>
         </div>
 

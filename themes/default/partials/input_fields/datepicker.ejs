@@ -30,7 +30,7 @@
 
                 <div class="grid col-7 colspan-12">
                     <div app-for="date_<%- datepicker_name %> in view.dates" class="cell clickable">
-                        <span app-bind="date_<%- datepicker_name %>.date" app-class="datepickerClass(date_<%- datepicker_name %>,'<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %>')" app-click="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %> = date_<%- datepicker_name %>.iso"></span>
+                        <span app-bind="date_<%- datepicker_name %>.date" app-click="<% if (typeof datepicker_obj != 'undefined'){ %><%- datepicker_obj %>.<% } %><%- datepicker_name %> = date_<%- datepicker_name %>.iso"></span>
                     </div>
                 </div>
 

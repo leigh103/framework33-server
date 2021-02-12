@@ -13,43 +13,32 @@
             })
         }
 
-        scope.editProduct = function(collection, obj, no_modal){
+        scope.editProduct = function(collection){
 
             contextCloseAll()
 
-            scope.resetNew().then(()=>{
-            //    console.log(collection, obj)
+            if (scope.view.key >= 0){
+                scope.new = scope[collection][scope.view.key]
+            } else {
+                scope.new = {}
+            }
 
-                if (typeof obj == 'string'){
-                    scope.new._key = obj
-                } else {
-                    scope.new = JSON.parse(JSON.stringify(obj))
-                }
 
-                if (scope.new.content){
-                    document.getElementById('product_content').innerHTML = scope.new.content
-                }
+            if (scope.new.category){
+                let sub_cat = scope.new.sub_category+''
+                scope.get('product_categories/'+scope.new.category).then((category)=>{
+                    scope.sub_categories = category.sub_categories
+                    view.update('sub_categories')
+                    scope.new.sub_category = sub_cat
+                })
+            }
 
-                if (scope.new.category){
-                    let sub_cat = scope.new.sub_category+''
-                    scope.get('product_categories/'+scope.new.category).then((category)=>{
-                        scope.sub_categories = category.sub_categories
-                        setTimeout(function(){
-                            scope.new.sub_category = sub_cat
-                        },100)
+            if (!scope.new.gallery){
+                scope.new.gallery = []
+            }
 
-                    })
-                }
-
-                if (!scope.new.gallery){
-                    scope.new.gallery = []
-                }
-
-                if (!no_modal){
-                    scope.view.modal = 'show_product_edit'
-                }
-
-            })
+            scope.openModal('show_product_edit')
+            view.update('new')
 
         }
 
@@ -62,12 +51,17 @@
             }
 
             scope.view.upload_text = 'Uploading...'
+            view.update('view.upload_text')
 
-            http('post','/api/image/save',payload).then((data) => {
+            http.post('/api/image',payload).then((data) => {
+
                 if (obj){
-                    scope.push(obj,data, input)
+                    scope.push(obj,data)
+                    scope.saveItem('<%- table %>',scope.new, true)
+                    view.update(obj)
                 }
                 scope.view.upload_text = 'Upload Image'
+                view.update('view.upload_text')
             }).catch((err)=>{
                 scope.notify(err,'error')
             })

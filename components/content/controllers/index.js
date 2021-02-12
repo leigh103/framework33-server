@@ -315,7 +315,7 @@ const express = require('express'),
 
             if (content.data.length == 0 || content.error){ // if it's not a content type, check for page content
 
-                let article = await new Content().find(['slug == '+slug,'type == page'])
+                let article = await new Content().find(['slug == '+slug,'type == pages'])
 
                 if (article.data.length == 0 || article.error){
 

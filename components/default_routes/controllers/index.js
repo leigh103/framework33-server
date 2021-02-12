@@ -34,6 +34,7 @@ var express = require('express'),
     routes.use('default_routes/static', express.static(__dirname + '/static'))
 
     routes.get('*',(req, res, next)=>{
+        console.log('here')
         view.current_view = 'home'
         next()
     })

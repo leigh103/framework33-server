@@ -32,6 +32,9 @@
                     },
                     put: {
                         save:['admin']
+                    },
+                    post: {
+                        save:['admin']
                     }
                 }
             }
@@ -40,15 +43,17 @@
 
         async init(){
 
-            let transaction_settings = await this.find(['_key == 0']).get()
-            if (transaction_settings && Object.keys(this.data).length > 1){
+            let transaction_settings = await DB.read('transaction_settings').where(['_key == 0']).first() //await this.find(['_key == 0']).get()
 
-                global.view.transactions = transaction_settings.data
+            if (typeof transaction_settings == 'object' && transaction_settings._key){
+
+                global.view.transactions = transaction_settings
                 log('Loaded transaction settings')
 
             } else {
 
                 let new_transaction_settings = await this.getTemplate()
+                new_transaction_settings.data._key = "0"
                 global.view.transactions = await DB.create(this.settings.collection,new_transaction_settings.data).first()
                 global.view.transactions = new_transaction_settings.data
                 global.view.transactions.payment_methods = []

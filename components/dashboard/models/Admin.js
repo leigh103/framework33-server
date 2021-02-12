@@ -14,9 +14,9 @@
                     {name:'full_name',input_type:'text',placeholder:'Full name', type:'name', required:true},
                     {name:'password',input_type:'hidden', type:'password', required:false},
                     {name:'email',input_type:'email',placeholder:'Email address', type:'email', required:true},
-                    {name:'tel',input_type:'text',placeholder:'Telephone Number', type:'tel', required:false},
-                    {name:'activated',input_type:'select',options:[{text:'Yes',value:true},{text:'No',value:false}], type:'boolean', required:false},
-                    {name:'blocked',input_type:'select',options:[{text:'Yes',value:true},{text:'No',value:false}], type:'boolean', required:false}
+                    {name:'tel',input_type:'tel',placeholder:'Telephone Number', type:'tel', required:false},
+                    {name:'activated',input_type:'checkbox', type:'boolean', required:false},
+                    {name:'blocked',input_type:'checkbox', type:'boolean', required:false}
                 ]
             }
 

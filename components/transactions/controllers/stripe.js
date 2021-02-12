@@ -8,6 +8,7 @@
 
 var express = require('express'),
     routes = express.Router(),
+    stripe = require('stripe')(config.stripe_secret_key),
 
     settings = {
         default_route: 'checkout',

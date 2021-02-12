@@ -1,13 +1,25 @@
 .notification {
 
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    padding: 1rem;
     color: $text-black;
     background-color: $color-light-grey;
     border-radius: $border-radius;
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow;
     top: auto;
+    left: auto;
     bottom: 1rem;
+    right: 1rem;
+    cursor: pointer;
+
+    & > div {
+        flex: 1;
+    }
 
     .icon {
+        flex: 0 0 1rem;
         display:flex;
         align-items: flex-end;
         justify-content: center;

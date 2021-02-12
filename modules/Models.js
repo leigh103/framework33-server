@@ -117,15 +117,18 @@
                             subfields[subfield.name] = subfield
                         })
 
-                        for (let subidx of this.data[key]) {
-                            for (let [subkey, subvalue] of Object.entries(subidx)) {
-                                
-                                if (!subkey.match(/^_/)){
-                                    subidx[subkey] = await this.validateField(subfields[subkey], subkey, subvalue)
-                                }
+                        if (Array.isArray(this.data[key])){
+                            for (let subidx of this.data[key]) {
+                                for (let [subkey, subvalue] of Object.entries(subidx)) {
 
+                                    if (!subkey.match(/^_/)){
+                                        subidx[subkey] = await this.validateField(subfields[subkey], subkey, subvalue)
+                                    }
+
+                                }
                             }
                         }
+
 
                     } else {
 
@@ -309,7 +312,6 @@
 
                     if (value.match(/base64/)){
                         let img = await new Image(value,key,this.settings.collection).save()
-console.log('uploading', img)
                         return img
 
                     } else if (!value.match(/(jpg|jpeg|tiff|psd|png|gif|svg|bmp)$/)){
@@ -357,13 +359,19 @@ console.log('uploading', img)
             if (this.preSave && typeof this.preSave == 'function'){
                 await this.preSave(update_data)
             }
+            try {
+                await this.validate()
+            }
 
-            await this.validate()
+            catch(err){
+                this.error = "Error validating fields: "+err
+            }
 
             if (this.data._id){
                 this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
             } else {
-                this.data = await DB.create(this.settings.collection,this.data).first()
+                this.data = await DB.create(this.settings.collection,this.data)
+                console.log('save', this.data)
             }
 
             if (this.postSave && typeof this.postSave == 'function'){

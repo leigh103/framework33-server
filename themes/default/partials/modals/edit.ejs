@@ -1,34 +1,18 @@
-<div class="modal" app-show="view.modal == 'show_edit'" anim="{'enter':'fade-in'}">
+<modal-auto app-show="view.modal == 'show_edit'" data-title="Add / Edit <%- view.functions.parseName(table, true) %>">
 
-    <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}" style="min-width: 50vw">
+    <div class="grid pb-2 gap-1 col-2 col-s-1" style="align-items: start;">
 
-        <div class="grid col-5 pb-1">
-            <div class="colspan-4">
-                <h4 class="text-light capitalise">
-                    <span app-show="new._id">Edit <%- view.functions.parseName(table, true) %></span>
-                    <span app-hide="new._id">Add New <%- view.functions.parseName(table, true) %></span>
-                </h4>
-            </div>
-            <div class="text-right">
-                <h4 class="text-light clickable" onclick="modalCloseAll()">&times;</h4>
-            </div>
-        </div>
-
-        <div class="grid pb-2 gap-1 col-2 col-s-1" style="align-items: start;">
-
-            <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
-
-        </div>
-
-        <div class="text-right">
-            <button class="btn highlight capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
-                <span>Save <%- view.functions.parseName(table,true) %></span>
-            </button>
-            <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
-                <span>Add <%- view.functions.parseName(table,true) %></span>
-            </button>
-        </div>
+        <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
 
     </div>
 
-</div>
+    <div class="flex flex-middle-right">
+        <button class="btn highlight capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
+            <span>Save <%- view.functions.parseName(table,true) %></span>
+        </button>
+        <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
+            <span>Add <%- view.functions.parseName(table,true) %></span>
+        </button>
+    </div>
+
+</modal-auto>

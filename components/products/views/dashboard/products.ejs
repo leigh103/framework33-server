@@ -17,164 +17,148 @@
     <%- include(basedir+'/components/dashboard/views/partials/table.ejs') %>
 
     <div id="context" class="context dropdown text-left" style="display: none">
-        <div class="link" app-click="editProduct('<%- table %>',context)">
+        <div class="link" app-click="editProduct('<%- table %>')">
             <i class="fas fa-pen-alt"></i>
             Edit
         </div>
-        <div class="link" app-click="deleteItem('<%- table %>',context)">
+        <div class="link" app-click="deleteItem('<%- table %>')">
             <i class="fas fa-trash"></i>
             Delete
         </div>
     </div>
 
 
-    <div class="modal" app-show="view.modal == 'show_product_edit'" anim="{'enter':'fade-in'}">
+    <modal-auto app-show="view.modal == 'show_product_edit'" data-title="Product" class="modal-auto-large">
 
-        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}" style="width:85vw; max-width:85vw; height:85vh">
+        <div class="tabs mb-2" app-init="view.tab = 'details'">
+            <a app-click="view.tab = 'details'" app-class="{'active':view.tab == 'details'}">Details</a>
+            <a app-click="view.tab = 'gallery'" app-class="{'active':view.tab == 'gallery'}">Gallery</a>
+            <a app-click="view.tab = 'prices'" app-class="{'active':view.tab == 'prices'}">Prices</a>
+            <a app-click="view.tab = 'attributes'" app-class="{'active':view.tab == 'attributes'}">Attributes</a>
+            <a app-click="view.tab = 'customisation'" app-class="{'active':view.tab == 'customisation'}">Customisation</a>
+        </div>
 
-            <div class="grid col-2 pb-1">
-                <div>
-                    <h4 class="text-light capitalise">
-                        <span app-show="new._id">Edit Product</span>
-                        <span app-hide="new._id">Add New <%- view.functions.depluralise(table) %></span>
-                    </h4>
+        <div app-show="view.tab == 'details'">
+
+            <div class="grid pb-2 gap-2 col-3" style="align-items: start;">
+
+                <div class="rowspan-7 flex flex-column flex-middle-left">
+                    <label for="image" class="clickable"><img src="/images/Product_Placeholder.svg" app-src="new.image" class="object-fit"></label>
+                    <input id="image" type="file" app-model="new.image">
                 </div>
-                <div class="text-right">
-                    <h4 class="text-light clickable" onclick="modalCloseAll()">&times;</h4>
+
+                <div class="colspan-2 flex flex-column flex-middle-left">
+                    <label>Name</label>
+                    <input type="text" app-model="new.name" placeholder="Add a product name">
                 </div>
-            </div>
 
-            <div class="tabs mb-2" app-init="view.tab = 'details'">
-                <a app-click="view.tab = 'details'" app-class="{'active':view.tab == 'details'}">Details</a>
-                <a app-click="view.tab = 'gallery'" app-class="{'active':view.tab == 'gallery'}">Gallery</a>
-                <a app-click="view.tab = 'prices'" app-class="{'active':view.tab == 'prices'}">Prices</a>
-                <a app-click="view.tab = 'attributes'" app-class="{'active':view.tab == 'attributes'}">Attributes</a>
-                <a app-click="view.tab = 'customisation'" app-class="{'active':view.tab == 'customisation'}">Customisation</a>
-            </div>
+                <div class="flex flex-column flex-middle-left">
+                    <label>Brand</label>
+                    <input type="text" app-model="new.brand" placeholder="Product Brand">
+                </div>
 
-            <div app-show="view.tab == 'details'">
+                <div class="flex flex-column flex-middle-left">
+                    <label>Barcode</label>
+                    <input type="text" app-model="new.barcode" placeholder="Product Barcode number">
+                </div>
 
-                <div class="grid pb-2 gap-2 col-2" style="align-items: start;">
+                <div class="flex flex-column flex-middle-left">
+                    <label>Slug</label>
+                    <input type="text" app-model="new.slug" placeholder="Add a URL">
+                </div>
 
-                    <div class="rowspan-5 flex flex-column flex-middle-left">
-                        <label for="image" class="clickable"><img src="/images/Product_Placeholder.svg" app-src="new.image" class="object-fit"></label>
-                        <input id="image" type="file" app-model="new.image">
-                    </div>
+                <div class="flex flex-column flex-middle-left">
+                    <label>Stock</label>
+                    <input type="number" app-model="new.stock" placeholder="Stock number">
+                </div>
 
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Name</label>
-                        <input type="text" app-model="new.name" placeholder="Add a product name">
-                    </div>
+                <div class="flex flex-column flex-middle-left">
+                    <label>Category</label>
+                    <select app-model="new.category">
 
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Brand</label>
-                        <input type="text" app-model="new.brand" placeholder="Product Brand">
-                    </div>
+                        <% if (typeof option_data == 'object' && option_data.length > 0){ %>
+                            <% option_data.forEach((option)=>{ %>
+                                <option value="<%- option._key %>"><%- option.name %></option>
+                            <% }) %>
+                        <% } %>
 
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Barcode</label>
-                        <input type="text" app-model="new.barcode" placeholder="Product Barcode number">
-                    </div>
+                    </select>
+                </div>
 
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Slug</label>
-                        <input type="text" app-model="new.slug" placeholder="Add a URL">
-                    </div>
-
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Stock</label>
-                        <input type="number" app-model="new.stock" placeholder="Stock number">
-                    </div>
-
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Category</label>
-                        <select app-model="new.category">
-
-                            <% if (typeof option_data == 'object' && option_data.length > 0){ %>
-                                <% option_data.forEach((option)=>{ %>
-                                    <option value="<%- option._key %>"><%- option.name %></option>
-                                <% }) %>
-                            <% } %>
-
-                        </select>
-                    </div>
-
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Sub Category <span app-bind="new.sub_category"></span></label>
-                        <select app-model="new.sub_category">
-                            <option value="" selected>None</option>
-                            <option app-for="sub_category in sub_categories" app-value="sub_category._key" app-bind="sub_category.name"></option>
-                        </select>
-                    </div>
+                <div class="flex flex-column flex-middle-left">
+                    <label>Sub Category <span app-bind="new.sub_category"></span></label>
+                    <select app-model="new.sub_category">
+                        <option value="" selected>None</option>
+                        <option app-for="sub_category in sub_categories" app-value="sub_category._key" app-bind="sub_category.name"></option>
+                    </select>
+                </div>
 
 
-                    <div class="colspan-2 rowspan-2 flex flex-column flex-middle-left">
-                        <label>Descripton</label>
-                        <textarea app-model="new.description" placeholder="Add a description"></textarea>
-                    </div>
+                <div class="colspan-2 rowspan-2 flex flex-column flex-middle-left">
+                    <label>Descripton</label>
+                    <textarea app-model="new.description" placeholder="Add a description"></textarea>
+                </div>
 
-                    <div class="colspan-2 rowspan-2">
-                        <div class="grid col-2">
-                            <label>Content</label>
-                            <div class="text-right">
-                                <label><input type="checkbox" app-model="new.content_before_details" class="mr-05">Show content before product details</label>
-                            </div>
+                <div class="colspan-3 rowspan-2">
+                    <div class="grid col-2">
+                        <label>Content</label>
+                        <div class="text-right">
+                            <label><input type="checkbox" app-model="new.content_before_details" class="mr-05">Show content before product details</label>
                         </div>
-                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs') %>
-                        <div id="product_content" class="large resize contenteditable" app-model="new.content" contenteditable="true"></div>
                     </div>
-
+                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs') %>
+                    <div id="product_content" class="large resize contenteditable" app-model="new.content" contenteditable="true"></div>
                 </div>
 
-            </div>
-
-            <div app-show="view.tab == 'gallery'">
-
-                <div class="flex flex-row mb-1">
-                    <label for="new_image" class="btn bg-33-blue"><span app-bind="view.upload_text"></span> <i class="fas fa-image ml-1"></i></label>
-                    <input type="file" app-model="new.gallery_new" app-change="uploadImg(new.gallery_new,new.gallery,'new.gallery_new')" id="new_image" nane="new_image" placeholder="Add new Image">
-                </div>
-
-                <div class="grid pb-2 gap-1 col-5" style="align-items: start;">
-                    <div class="h-100 w-100" app-for="image in new.gallery">
-                        <img app-src="image.value" app-click="splice(new.gallery,image)" class="object-fit">
-                    </div>
-                </div>
-
-            </div>
-
-            <div app-show="view.tab == 'prices'">
-
-                <div class="grid pb-2 gap-1 col-4" style="align-items: start;">
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Price</label>
-                        <input type="text" app-model="new.price" placeholder="Item Price">
-                    </div>
-                    <div class="flex flex-column flex-middle-left">
-                        <label>Adjustment</label>
-                        <input type="text" app-model="new.adjustment" placeholder="Discount">
-                    </div>
-                </div>
-
-            </div>
-
-            <div app-show="view.tab == 'attributes'">
-
-            </div>
-
-            <div app-show="view.tab == 'customisation'">
-
-            </div>
-
-            <div class="text-right">
-                <button class="btn highlight capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
-                    <span>Save <%- view.functions.depluralise(table) %></span>
-                </button>
-                <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
-                    <span>Add <%- view.functions.depluralise(table) %></span>
-                </button>
             </div>
 
         </div>
 
-    </div>
+        <div app-show="view.tab == 'gallery'">
+
+            <div class="flex flex-row mb-1">
+                <label for="new_image" class="btn bg-33-blue"><span app-bind="view.upload_text"></span> <i class="fas fa-image ml-1"></i></label>
+                <input type="file" app-model="new.gallery_new" app-change="uploadImg(new.gallery_new,'new.gallery','new.gallery_new')" id="new_image" nane="new_image" placeholder="Add new Image">
+            </div>
+
+            <div class="grid pb-2 gap-1 col-5" style="align-items: start;">
+                <div class="h-100 w-100" app-for="image in new.gallery">
+                    <img app-src="image.value" app-click="splice(new.gallery,image)" class="object-fit">
+                </div>
+            </div>
+
+        </div>
+
+        <div app-show="view.tab == 'prices'">
+
+            <div class="grid pb-2 gap-1 col-4" style="align-items: start;">
+                <div class="flex flex-column flex-middle-left">
+                    <label>Price</label>
+                    <input type="text" app-model="new.price" placeholder="Item Price">
+                </div>
+                <div class="flex flex-column flex-middle-left">
+                    <label>Adjustment</label>
+                    <input type="text" app-model="new.adjustment" placeholder="Discount">
+                </div>
+            </div>
+
+        </div>
+
+        <div app-show="view.tab == 'attributes'">
+
+        </div>
+
+        <div app-show="view.tab == 'customisation'">
+
+        </div>
+
+        <div class="text-right">
+            <button class="btn highlight capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
+                <span>Save <%- view.functions.depluralise(table) %></span>
+            </button>
+            <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
+                <span>Add <%- view.functions.depluralise(table) %></span>
+            </button>
+        </div>
+
+    </modal-auto>

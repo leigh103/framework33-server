@@ -44,19 +44,30 @@
 
         }
 
-        create(collection, data){
+        async create(collection, data){
 
             let exists = this.createCollection(collection)
 
             data._created = moment().toISOString()
 
-            let col = adb.collection(collection)
-            col.save(data)
+            let col = adb.collection(collection),
+                saved
 
-            this.result = []
-            this.result.push(data)
+            try {
+                saved = await col.save(data)
+            }
 
-            return this
+            catch(e){
+                log('Error saving to DB')
+                log(e)
+                return false
+            }
+
+            data._key = saved._key
+            data._id = saved._id
+
+            this.result = data
+            return this.result
 
         }
 

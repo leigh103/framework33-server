@@ -143,6 +143,7 @@ const express = require('express'),
                 if (auth_data && auth_data.error){
                     res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:req.body.guard,error:auth_data.error})
                 } else if (auth_data && auth_data._id){
+    
                     req.session.user = auth_data
                     if (req.cookies && req.cookies['connect.sid']){
                         req.session.user.ws_id = req.cookies['connect.sid']

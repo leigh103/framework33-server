@@ -15,7 +15,7 @@
 
         <% if (item.input_type == 'image'){ %>
 
-            <div class="rowspan-5 flex flex-column flex-middle-left">
+            <div class="rowspan-7 flex flex-column flex-middle-left">
                 <label><%- view.functions.parseName(item.name) %></label>
                 <label for="image_<%- i %>" class="clickable"><img src="/images/Profile_Placeholder.svg" app-hide="new.<%- item.name %>"><img app-show="new.<%- item.name %>" app-src="new.<%- item.name %>" class="<%- item.name %>"></label>
                 <input id="image_<%- i %>" type="file" app-model="new.<%- item.name %>">

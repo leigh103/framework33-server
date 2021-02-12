@@ -4,8 +4,6 @@
 
         extend.content = function(){
 
-            console.log(scope.window)
-
             scope.view.content = {
                 blocks:[]
             }
@@ -63,8 +61,8 @@
 
                     scope.get('content',key).then((content)=>{
 
-                        scope.view.content.blocks = content.blocks
                         scope.view.content = content
+                        view.update('view.content')
 
                     }).catch((err)=>{
                         scope.notify(err,5,'error')
@@ -123,6 +121,8 @@
                         scope.view.editor = block.editor
                         scope.view.blocks = true
                         scope.view.add = false
+
+                        view.update('view')
 
                         setTimeout(function(){
 
@@ -190,6 +190,7 @@
             scope.deleteBlock = function(index){
 
                 scope.view.content.blocks.splice(index, 1)
+                view.update('view.content.blocks')
 
             }
 
@@ -205,12 +206,15 @@
                     scope.view.modal = false
                 }
 
+                view.update('view')
+
             }
 
             scope.closeBlocks = function(){
 
                 scope.view.selected_block = false
                 scope.view.editor = {}
+                view.update('view')
 
             }
 
@@ -219,6 +223,7 @@
                 scope.view.blocks = false
                 scope.view.selected_block = false
                 scope.view.editor = {}
+                view.update('view')
 
             }
 
@@ -246,8 +251,9 @@
 
                             let ce_style = window.getComputedStyle(ce_divs[i])
                             if (ce_divs[i] && ce_style.display == 'block'){
-                                let el_prop = ce_divs[i].getAttribute('app-index').replace(/__([0-9]+)__/g,'[$1].').replace(/__/g,'.')
-                                _.set(scope,el_prop,scope.convertEntities(ce_divs[i].innerHTML))
+
+                                evaluate.setValue(ce_divs[i]._app.keys[0], scope.convertEntities(ce_divs[i].innerHTML))
+
                             }
 
                             if (i == ce_divs.length-1){
@@ -303,7 +309,11 @@
 
             <% if (typeof content_type != 'undefined'){ %>
 
+
                 scope.saveContent = function(){
+
+
+                                    console.log(scope.view.content)
 
                     scope.updateCE().then(()=>{
 

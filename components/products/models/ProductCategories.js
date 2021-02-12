@@ -120,7 +120,7 @@
                         slug += this.data.slug+'/'
                     }
 
-                    if (typeof product_data.sub_category != 'undefined' && this.data.sub_categories.length > 0){
+                    if (product_data.sub_category.match(/^\d+$/) && this.data.sub_categories.length > 0 && this.data.sub_categories[product_data.sub_category]){
                         slug += this.data.sub_categories[product_data.sub_category].slug+'/'
                     }
 

@@ -20,9 +20,9 @@
                 delete this.data.password_conf
             }
 
-            let existing = await new User().find(['email == '+this.data.email])
+            let existing = await new User().find(['email == '+this.data.email]).sanitize()
 
-            if (existing.data && existing.data.email && this.data.email == existing.data.email){
+            if (existing && existing.email && this.email == existing.email){
 
                 if (config.users.email_activation === true && !this.data.activated){
                     existing.sendReset()
@@ -50,6 +50,20 @@
                 return this
 
             }
+
+        }
+
+        async sanitize(){
+
+            let fields = ['_key','_id','full_name','email','tel','activated','guard','avatar']
+
+            for (var [key,val] of Object.entries(this.data)){
+                if (fields.indexOf(key) === -1){
+                    delete this.data[key]
+                }
+            }
+
+            return this
 
         }
 
@@ -92,16 +106,19 @@
 
                 this.sendReset()
                 this.error = 'Email address and/or password incorrect. Please check your email for confirmation'
+                await this.sanitize()
                 return this
 
             } else if (this.data.activated == true && this.data.password == attempt.password && this.data.email == attempt.email){
 
                 this.data.guard = this.settings.collection
+                await this.sanitize()
                 return this.data
 
             } else {
 
                 this.error = 'Email address and/or password incorrect'
+                await this.sanitize()
                 return this
 
             }

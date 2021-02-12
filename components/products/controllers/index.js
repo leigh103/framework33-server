@@ -154,22 +154,16 @@ const express = require('express'),
 
     })
 
-    routes.get('/:shop_slug', async (req, res, next) => {
+    routes.get('/'+view.ecommerce.shop.slug, async (req, res, next) => {
 
-        if (req.params.shop_slug == view.ecommerce.shop.slug){
-
-            data.shop = view.ecommerce.shop
-            data.meta.title = config.site.name+' | '+view.ecommerce.shop.name
-            if (data.shop.description){
-                data.meta.description = data.shop.description.substring(0,160)
-            }
-            data.categories = await new ProductCategories().all().get()
-
-            res.render(config.site.theme_path+'/templates/products/categories.ejs',data)
-
-        } else {
-            next()
+        data.shop = view.ecommerce.shop
+        data.meta.title = config.site.name+' | '+view.ecommerce.shop.name
+        if (data.shop.description){
+            data.meta.description = data.shop.description.substring(0,160)
         }
+        data.categories = await new ProductCategories().all().get()
+
+        res.render(config.site.theme_path+'/templates/products/categories.ejs',data)
 
     })
 
@@ -182,6 +176,7 @@ const express = require('express'),
         }
 
         data.cart = await new Cart().init(req)
+        req.session.cart_id = data.cart._key
 
         res.locals.functions = functions
 

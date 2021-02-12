@@ -3,31 +3,43 @@
 
         extend.dashboard = function(){
 
+            scope.toggleContext = function(type, key){
 
-            scope.toggleContext = function(type, data){
+                let el = document.getElementById(type),
+                    target = this.target
 
-                let el = document.getElementById(type)
+                if (target && !target._app){
+
+                    target = target.parentNode
+                }
 
                 if (el && el.style && el.style.display != 'none'){
                     el.style.display = 'none'
-                    scope.context = {}
                 } else {
                     contextCloseAll()
                 }
 
                 el.style.display = 'block'
-                let top = scope._clicked_element.y,
-                    left = scope._clicked_element.x
+
+                let target_pos = target.getBoundingClientRect()
+
+                let top = target_pos.top,
+                    left = target_pos.left
 
                 if (left+el.offsetWidth > window.innerWidth){
-                    left = scope._clicked_element.x - el.offsetWidth + scope._clicked_element.width
+                    left = left - el.offsetWidth + target.offsetWidth
                 }
 
-                top = top+scope._clicked_element.height
+                top = top+target.offsetHeight
 
                 el.style.top = top+'px'
                 el.style.left = left+'px'
-                scope.context = data
+
+                if (typeof key == 'number'){
+                    scope.view.key = key
+                } else if (typeof key == 'undefined'){
+                    scope.view.key = 0
+                }
 
             }
 
@@ -74,43 +86,28 @@
 
             }
 
-            scope.editItem = function(collection, obj, no_modal){
+            scope.editItem = function(collection, key, no_modal){
 
                 contextCloseAll()
 
-                scope.resetNew().then(()=>{
-                //    console.log(collection, obj)
+                scope.new = scope[collection][scope.view.key]
 
-                    if (typeof obj == 'string'){
-                        scope.new._key = obj
-                    } else {
-                        scope.new = JSON.parse(JSON.stringify(obj))
-                    }
+                if (!no_modal){
+                    scope.openModal('show_edit')
+                }
 
-                    if (scope.new.content){
-                        console.log(scope.new.content)
-                    //    contented.setData( scope.new.content )
-                    }
-
-                    if (!no_modal){
-                        scope.view.modal = 'show_edit'
-                    }
-
-                })
+                view.update('new')
 
             }
 
             scope.addItem = function(collection, obj){
 
-                if (typeof obj.content != 'undefined'){
-                //    obj.content = contented.getData()
-                }
-
                 delete obj._key
                 delete obj._id
-console.log(obj)
+
                 scope.post(collection, obj).then((data)=>{
-                    scope.resetNew()
+                    view.update(collection)
+                    scope.closeModal()
                     scope.notify('Added')
                 }).catch((err)=>{
                     scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -118,7 +115,7 @@ console.log(obj)
 
             }
 
-            scope.saveItem = function(collection, obj){
+            scope.saveItem = function(collection, obj, keep_open){
 
             //    const editordata = editor.getData()
 
@@ -127,10 +124,16 @@ console.log(obj)
                 if (typeof obj.content != 'undefined'){
                 //    obj.content = contented.getData()
                 }
-console.log(obj)
+
                 scope.post(collection, obj).then((data)=>{
-                    scope.resetNew()
+
+                    view.update(collection)
+                    if (!keep_open){
+                        scope.closeModal()
+                    }
+
                     scope.notify('Updated')
+
                 }).catch((err)=>{
                     scope.notify(err,'error',5,'fa-exclamation-circle')
                 })
@@ -149,21 +152,25 @@ console.log(obj)
 
             }
 
-            scope.deleteItem = function(collection, obj){
+            scope.deleteItem = function(collection){
 
                 if (scope.view.modal && scope.view.modal == 'delete_confirm'){
 
                     contextCloseAll()
 
-                    scope.delete(collection,obj._key).then(()=>{
-                        scope.resetNew()
+                    let key = scope[collection][scope.view.key]._key
+                    scope.closeModal()
+                    console.log(collection, key, scope.view.key)
+                    scope.delete(collection,key).then(()=>{
+                        view.update(collection)
                         scope.notify('Deleted')
                     }).catch((err)=>{
+                        console.log(err)
                         scope.notify(err,'error',5,'fa-exclamation-circle')
                     })
 
                 } else {
-                    scope.view.modal = 'delete_confirm'
+                    scope.openModal('delete_confirm')
                 }
 
             }
@@ -174,30 +181,32 @@ console.log(obj)
 
                 if (typeof obj == 'string'){
                     obj_string = obj+''
-                    obj = _.get(scope,obj)
+                    obj = evaluate.getValue(obj)
                 }
 
                 if (!obj || obj == null){
-                    _.set(scope,obj_string,[])
-                    obj = _.get(scope,obj_string)
+                    evaluate.setValue(obj_string,[])
+                    obj = evaluate.getValue(obj_string)
+                }
+
+                if (typeof item == 'string'){
+                    item = {
+                        _key: Date.now(),
+                        value: item.replace(/"/g,'')
+                    }
+                } else if (typeof item == 'object'){
+                    item._key = Date.now()
                 }
 
                 if (input){
 
-                    if (typeof item == 'string'){
-                        item = {
-                            _key: Date.now(),
-                            value: item.replace(/"/g,'')
-                        }
-                    } else if (typeof item == 'object'){
-                        item._key = Date.now()
-                    }
-
                     obj.push(item)
-                    _.set(scope,input,'')
+                    evaluate.setValue(input,'')
+                    view.update(obj_string)
 
                 } else {
                     obj.push(item)
+                    view.update(obj_string)
                 }
 
             }
@@ -242,6 +251,16 @@ console.log(obj)
                     })
                 },500)
 
+            }
+
+            scope.openModal = function(modal){
+                scope.view.modal = modal
+                view.update('view.modal')
+            }
+
+            scope.closeModal = function(){
+                scope.view.modal = false
+                view.update('view.modal')
             }
 
             socketConnect("<%- view.websocket.url %>")
