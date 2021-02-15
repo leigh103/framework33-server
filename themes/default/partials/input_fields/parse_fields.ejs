@@ -157,7 +157,7 @@
                 </div>
 
                 <div class="text-right mb-2" app-hide="view.new_<%- item.name %>">
-                    <button class="btn bg-33-blue text-33-white" app-click="view.new_<%- item.name %> = !view.new_<%- item.name %>">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
+                    <button class="btn bg-33-blue text-33-white" app-click="view.new_<%- item.name %> = true">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
                 </div>
 
                 <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1" app-show="view.new_<%- item.name %>">
@@ -217,6 +217,14 @@
 
                                 </select>
 
+                            </div>
+
+                        <% } else if (item.input_type){ %>
+
+                            <div class="">
+                                <%- max_characters %>
+                                <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
+                                <input type="<%- item.input_type %>" app-model="new.<%- item.name %>" placeholder="<%- item.placeholder %>">
                             </div>
 
                         <% } %>

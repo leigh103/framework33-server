@@ -96,9 +96,10 @@
             api_secret:'',
             from_address: '',
             admin_to: '',
-            templates:[
-                ''
-            ]
+            templates:{
+                password_reset:'password-reset',
+                general:'general'
+            }
         },
 
         sms:{

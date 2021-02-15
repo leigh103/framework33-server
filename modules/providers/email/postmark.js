@@ -23,8 +23,9 @@
                 "TextBody": msg.text,
                 "HtmlBody": msg.html
             }
-console.log(payload, msg)
+
             if (msg.TemplateAlias && msg.TemplateModel){
+
                 payload.TemplateAlias = msg.TemplateAlias
                 payload.TemplateModel = msg.TemplateModel
 
@@ -104,31 +105,38 @@ console.log(payload, msg)
 
             }
 
-        } else if (template == 'password_reset'){
+        } else if (template == 'password-reset'){
 
             if (data && data.timestamp && data.guard){
 
-                content = notificationTemplate.password_reset.content
-                subject = notificationTemplate.password_reset.subject
+                if (!data.subject){
+                    data.subject = 'Password Reset'
+                }
 
                 msg = {
-                    "subject": subject,
-                    "text": content,
-                    "html": content,
+                    "subject": data.subject,
+                    "text": data.content,
+                    "html": data.content,
                     "TemplateModel": {
+                        "subject": data.subject,
+                        "content": data.content,
                         "company_name":config.site.name,
-                        "action_url": config.site.url+'/login/'+data.guard+'/'+data.timestamp
-                    }
+                        "button":{
+                            "url": config.site.url+'/login/'+data.guard+'/'+data.timestamp,
+                            "text":"Reset Password"
+                        },
+                        "link":{
+                            "url": config.site.url+'/login/'+data.guard+'/'+data.timestamp
+                        }
+                    },
+                    "TemplateAlias":"password-reset"
                 }
 
             }
 
         }
 
-        if (config.email && config.email.templates && config.email.templates[0]){
-            msg.TemplateAlias = config.email.templates[0]
-        }
-console.log('parsed', data, msg)
+// console.log('parsed', data, msg)
         return msg
     }
 

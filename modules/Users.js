@@ -223,8 +223,11 @@
                 this.data.timestamp = timestamp
 
                 try {
-                    let email = new Notification(this.data).useEmailTemplate(notification_type).email()
+                //    let email = new Notification(this.data).useEmailTemplate(notification_type).email()
+
+                    await new global.Events('password_reset').trigger(this.data)
                 } catch (error) {
+                    console.log(error)
                     this.error = error
                 }
 

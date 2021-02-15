@@ -371,7 +371,6 @@
                 this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
             } else {
                 this.data = await DB.create(this.settings.collection,this.data)
-                console.log('save', this.data)
             }
 
             if (this.postSave && typeof this.postSave == 'function'){

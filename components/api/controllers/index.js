@@ -257,16 +257,13 @@ var express = require('express'),
                 }
 
                 if (result.error){
-                    console.log('api 1')
                     res.status(500).send(result.error)
                 } else if (result.data) {
-                    console.log('api 2')
                     res.json(result.data)
                 } else if (result){
                     console.log(result)
                     res.json(result)
                 } else {
-                    console.log('api 4')
                     res.status(405).json(settings.not_allowed)
                 }
 

@@ -19,6 +19,10 @@ const send = (content)=>{
                 return
             }
 
+            if (content.to.match(/^0/)){
+                content.to = content.to.replace(/^0/,'+44')
+            }
+
             twilio_c.messages.create({
                 body: content.text,
                 to: content.to,  // Text this number

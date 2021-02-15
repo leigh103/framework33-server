@@ -72,7 +72,8 @@
             scope.newObj = function(type){
                 scope.new = {}
                 scope.new.new_array = {}
-                scope.view.modal = 'show_edit'
+                view.update('new')
+                scope.openModal('show_edit')
             }
 
             scope.resetNew = function(){
