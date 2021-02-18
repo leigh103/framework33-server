@@ -34,7 +34,6 @@ var express = require('express'),
     routes.use('default_routes/static', express.static(__dirname + '/static'))
 
     routes.get('*',(req, res, next)=>{
-        console.log('here')
         view.current_view = 'home'
         next()
     })
@@ -53,6 +52,21 @@ var express = require('express'),
             let admin = await new Admin().find(0)
             let email = await new Notification(admin.data).setContent('This is a test','This is a test email, sent from '+config.site.name).email()
             res.send(email)
+        } else {
+            res.redirect('/login/admin')
+        }
+
+    })
+
+    routes.get('/testevent', async (req,res) => {
+
+        if (getGuard(req) == 'admin'){
+            let transaction = await new Transactions().find('16780453')
+console.log(transaction.data)
+            if (transaction.data){
+                new global.Events('send_receipt').trigger(transaction.data)
+            }
+            res.send('ok')
         } else {
             res.redirect('/login/admin')
         }

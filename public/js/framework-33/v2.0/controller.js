@@ -348,8 +348,11 @@
 
             if (!isNaN){
                 input = parseInt(input).toFixed(2)
+                return '£'+input/100
+            } else {
+                return '£0.00'
             }
-            return '£'+input/100
+
         }
 
         scope.truncate = function(input){

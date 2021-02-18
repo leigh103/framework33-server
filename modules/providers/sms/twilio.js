@@ -8,7 +8,7 @@ const Twilio = require('twilio'),
           twilio_c = false
       }
 
-const send = (content)=>{
+const send = (to, msg)=>{
 
         return new Promise(function(resolve, reject) {
 
@@ -19,13 +19,13 @@ const send = (content)=>{
                 return
             }
 
-            if (content.to.match(/^0/)){
-                content.to = content.to.replace(/^0/,'+44')
+            if (to.match(/^0/)){
+                to = to.replace(/^0/,'+44')
             }
 
             twilio_c.messages.create({
-                body: content.text,
-                to: content.to,  // Text this number
+                body: msg.text,
+                to: to,  // Text this number
                 from: config.sms.from // From a valid Twilio number
             })
             .then((message) => {resolve(message)})
@@ -35,16 +35,14 @@ const send = (content)=>{
 
     }
 
-const templates = (template, data) => {
+const templates = (data) => {
 
-    let msg
+    let msg = {
+        text: data.content
+    }
 
-    if (template = 'complete_registration'){
-
-        msg = {
-            text: notificationTemplate.complete_registration.content
-        }
-
+    if (data.subject){
+        msg.text = data.subject+'. '+msg.text
     }
 
     return msg

@@ -1,0 +1,76 @@
+<% layout(config.site.theme+'/dashboard.ejs') -%>
+
+    <div class="grid col-2 header">
+        <div class="flex flex-middle-left flex-column">
+            <h3 class="text-weight-600"><%- title %></h3>
+            <p class="transparent-2" app-show="<%- table %>">This table contains <span app-bind="<%- table %>.length"></span> item(s)</p>
+            <% if (status == 'paid'){ %><button class="bg-secondary flex-1" app-click="printAll()">Print Selected</button><% } %>
+            <% if (status == 'processing'){ %><button class="bg-secondary flex-1" app-click="shipAll()">Mark as Shipped</button><% } %>
+        </div>
+        <div class="flex flex-middle-right">
+            <div class="flex-1 flex">
+                <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
+                <input type="text" class="" onkeyup="scope.searchApi('<%- table %>',this.value)">
+            </div>
+            <button class="flex-none btn highlight" app-click="editTransacton()">New <%- view.functions.parseName(table,true) %></button>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <div class="table" app-init="get('<%- table %><% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
+            <div class="row table-header">
+                <div class="cell middle action" style="width: 1rem"><input type="checkbox" app-click="selectAll()"></div>
+                <div class="cell middle action" style="width: 2rem">Reference</div>
+                <div class="cell middle action">Customer</div>
+                <div class="cell middle action" style="width: 1rem">Items</div>
+                <div class="cell middle action" style="width: 2rem"></div>
+            </div>
+
+            <div class="row" app-for="transaction in transactions" app-class="{'transparent':transaction.status != '<%- status %>'}">
+
+                <div class="cell middle action"><input type="checkbox" app-model="transaction.selected"></div>
+                <div class="cell middle" app-bind="transaction.reference"></div>
+                <div class="cell middle name">
+                    <div app-bind="transaction.customer.name" class="text-bold"></div>
+                    <div app-bind="transaction.customer.email"></div>
+                    <div app-bind="transaction.customer.tel"></div>
+                </div>
+                <div class="cell middle items" app-bind="transaction.items.length"></div>
+                <div class="cell middle text-right" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">
+
+                        <div class="flex-none context-link btn bg-33-white text-secondary" app-click="toggleContext('context',$index)">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="context" class="context dropdown text-left" style="display: none">
+        <div class="link" app-click="editTransacton()">
+            <i class="fas fa-pen-alt"></i>
+            Edit
+        </div>
+        <div class="link" app-click="deleteItem('<%- table %>')">
+            <i class="fas fa-trash"></i>
+            Delete
+        </div>
+    </div>
+
+
+    <modal-auto app-show="view.modal == 'show_transaction'" data-title="Transaction" class="modal-auto-large">
+
+
+        <div class="text-right">
+            <button class="btn highlight capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
+                <span>Save <%- view.functions.depluralise(table) %></span>
+            </button>
+            <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
+                <span>Add <%- view.functions.depluralise(table) %></span>
+            </button>
+        </div>
+
+    </modal-auto>

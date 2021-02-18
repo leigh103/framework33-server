@@ -61,6 +61,32 @@
 
         }
 
+        async findAll(keys){
+
+                if (typeof keys == 'string' && keys.match(',')){
+
+                    keys = keys.split(',')
+
+                } else if (!Array.isArray(keys)){
+                    let err = 'Models: unable to findAll: '+typeof keys+' passed as argument, list array required'
+                    log(err)
+                    this.error = err
+                    this.data = []
+                    return this
+                }
+
+                keys = keys.map((key)=>{
+                    return this.settings.collection+'/'+key
+                })
+
+                this.data = await DB.read(this.settings.collection)
+                                    .whereMultiple(keys)
+                                    .first()
+
+                return this.data
+
+        }
+
         all(data) {
 
             if (typeof data == 'string'){
@@ -369,6 +395,8 @@
 
             if (this.data._id){
                 this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
+            } else if (this.data._key){
+                this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).update(this.data).first()
             } else {
                 this.data = await DB.create(this.settings.collection,this.data)
             }

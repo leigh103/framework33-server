@@ -7,27 +7,30 @@
 
     class Notification {
 
-        constructor(to){
+        constructor(recipient){
 
             this.class = false
 
-            if (typeof to == 'object'){
+            if (typeof recipient == 'object'){ // find relevant data to process the notification
 
-                if (to.data){ // if user model is provided
-                    this.to = to.data
-                    this.class = to
+                if (recipient.data){ // if user model is provided
+                    this.recipient = recipient.data
+                    this.class = recipient
+                } else if (recipient.method && recipient.to){
+                    this.recipient = {}
+                    this.recipient[recipient.method] = recipient.to
                 } else { // if user data is provided
-                    this.to = to
+                    this.recipient = recipient
                 }
 
-            } else if (typeof to == 'string' && to.match(/@/)){ // if email address is provided
-                this.to = {}
-                this.to.email = to
-            } else if (typeof to == 'string' && to.match(/^(07|\+447|\+4407)/)){ // if tel is provided
-                this.to = {}
-                this.to.tel = to.replace(/\s/g,'').replace(/^\+4407/,'+447')
+            } else if (typeof recipient == 'string' && recipient.match(/@/)){ // if email address is provided
+                this.recipient = {}
+                this.recipient.email = recipient
+            } else if (typeof recipient == 'string' && recipient.match(/^(07|\+447|\+4407)/)){ // if tel is provided
+                this.recipient = {}
+                this.recipient.tel = recipient.replace(/\s/g,'').replace(/^\+4407/,'+447')
             } else { // else meh...
-                this.to = to
+                this.recipient = recipient
             }
 
             this.content = {}
@@ -36,19 +39,16 @@
 
         }
 
-        useEmailTemplate(template){
+        useEmailTemplate(template_data){
 
-            this.content = provider.email.templates(template, this.to)
-            if (!this.content){
-                this.error = "Insufficient template data"
-            }
+            this.content = provider.email.templates(template_data)
             return this
 
         }
 
         useSMSTemplate(template){
 
-            this.content = provider.sms.templates(template, this.to)
+            this.content = provider.sms.templates(template, this.recipient)
             if (!this.content){
                 this.error = "Insufficient template data"
             }
@@ -70,11 +70,15 @@
 
         sms(){
 
-            if (this.to && this.to.tel && !this.to.tel.match(/^(07|\+447|\+4407)/)){
+            if (this.recipient && this.recipient.sms){
+                this.recipient.tel = this.recipient.sms
+            }
+
+            if (this.recipient && this.recipient.tel && !this.recipient.tel.match(/^(07|\+447|\+4407)/)){
                 this.error = 'Invalid mobile number'
             }
 
-            if (!this.to || !this.to.tel){
+            if (!this.recipient || !this.recipient.tel){
                 this.error = 'No recipient specified'
             }
 
@@ -86,9 +90,7 @@
                 return this
             }
 
-            this.content.to = this.to.tel
-            this.content.text
-            this.result = provider.sms.send(this.content)
+            this.result = provider.sms.send(this.recipient.tel, this.content)
 
             return this.result
 
@@ -96,7 +98,7 @@
 
         email(){
 
-            if (!this.to || !this.to.email){
+            if (!this.recipient || !this.recipient.email){
                 this.error = 'No recipient specified'
             }
 
@@ -108,8 +110,7 @@
                 return this
             }
 
-            this.content.to = this.to.email
-            this.result = provider.email.send(this.content)
+            this.result = provider.email.send(this.recipient.email, this.content)
 
             return this.result
 

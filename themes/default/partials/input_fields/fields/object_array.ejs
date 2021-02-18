@@ -1,0 +1,178 @@
+<% var obj = item.name.toLowerCase(); var colspan = 2; %>
+
+
+
+<div class="colspan-2">
+    <label><%- view.functions.parseName(item.name) %></label>
+    <div class="mb-2 w-100">
+
+        <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1" app-for="<%- obj %> in new.<%- item.name %>">
+
+            <% item.subitems.forEach((subitem,i)=>{ %>
+
+                <% if (subitem.colspan){ colspan = subitem.colspan } %>
+
+                <% if (subitem.input_type == 'text'){ %>
+
+                    <div class="colspan-<%- colspan %>">
+                        <%- max_characters %>
+                        <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
+                        <input type="text" app-model="<%- obj %>.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>">
+                    </div>
+
+                <% } else if (subitem.input_type == 'checkbox'){ %>
+
+                    <div class="">
+                        <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
+                        <input type="checkbox" app-model="<%- obj %>.<%- subitem.name %>">
+                    </div>
+
+                <% } else if (subitem.input_type == 'textarea'){ %>
+
+                    <div class="colspan-4">
+                        <%- max_characters %>
+                        <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
+                        <textarea app-model="<%- obj %>.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>"></textarea>
+                    </div>
+
+                <% } else if (subitem.input_type == 'contenteditable'){ %>
+
+                    <div class="colspan-4">
+                        <label><%- view.functions.parseName(subitem.name) %></label>
+                        <div class="large resize contenteditable" app-model="<%- obj %>.<%- subitem.name %>"></div>
+                    </div>
+
+                <% } else if (subitem.input_type == 'image'){ %>
+
+                    <div class="rowspan-4">
+                        <label><%- view.functions.parseName(subitem.name) %></label>
+                        <label app-attr="{'for':'sub_image_'+{{index}}}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="<%- obj %>.<%- subitem.name %>" class="<%- subitem.name %>"></label>
+                        <input app-attr="{'id':'sub_image_'+{{index}}}" type="file" app-model="<%- obj %>.<%- subitem.name %>">
+                    </div>
+
+                <% } else if (subitem.input_type == 'select'){ %>
+
+                    <div class="colspan-<%- colspan %>">
+
+                        <label><%- view.functions.parseName(subitem.name) %></label>
+
+                        <select app-model="<%- obj %>.<%- subitem.name %>">
+
+                            <% if (subitem.options){ %>
+                                <% subitem.options.forEach((option)=>{ %>
+                                    <option value="<%- option.value %>"><%- option.text %></option>
+                                <% }) %>
+                            <% } %>
+                            <% if (subitem.option_data){ %>
+                                <% var option_data = view.functions.getOptionData(subitem.option_data) %>
+                                <% option_data.forEach((option)=>{ %>
+                                    <option value="<%- option._key %>"><%- option.name %></option>
+                                <% }) %>
+                            <% } %>
+
+                        </select>
+
+                    </div>
+
+                <% } %>
+
+            <% }) %>
+
+        </div>
+
+    </div>
+
+    <div class="text-right mb-2" app-hide="view.new_<%- item.name %>">
+        <button class="btn bg-33-blue text-33-white" app-click="view.new_<%- item.name %> = true">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
+    </div>
+
+    <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1" app-show="view.new_<%- item.name %>">
+
+        <% item.subitems.forEach((subitem,i)=>{ %>
+
+            <% if (subitem.input_type == 'text'){ %>
+
+                <div class="colspan-<%- colspan %>">
+                    <%- max_characters %>
+                    <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
+                    <input type="text" app-model="new.new_array.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>">
+                </div>
+
+            <% } else if (subitem.input_type == 'checkbox'){ %>
+
+                <div class="">
+                    <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
+                    <input type="checkbox" app-model="new.new_array.<%- subitem.name %>">
+                </div>
+
+            <% } else if (subitem.input_type == 'textarea'){ %>
+
+                <div class="colspan-4">
+                    <%- max_characters %>
+                    <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
+                    <textarea app-model="new.new_array.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>"></textarea>
+                </div>
+
+            <% } else if (subitem.input_type == 'contenteditable'){ %>
+
+                <div class="colspan-4">
+                    <label><%- view.functions.parseName(subitem.name) %></label>
+                    <div class="large resize contenteditable" app-model="new.new_array.<%- subitem.name %>"></div>
+                </div>
+
+            <% } else if (subitem.input_type == 'image'){ %>
+
+                <div class="rowspan-4">
+                    <label><%- view.functions.parseName(subitem.name) %></label>
+                    <label app-attr="{'for':'sub_image_'+{{index}}}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="new.new_array.<%- subitem.name %>" class="<%- subitem.name %>"></label>
+                    <input app-attr="{'id':'sub_image_'+{{index}}}" type="file" app-model="new.new_array.<%- subitem.name %>">
+                </div>
+
+            <% } else if (subitem.input_type == 'select'){ %>
+
+                <div class="colspan-<%- colspan %>">
+
+                    <label><%- view.functions.parseName(subitem.name) %></label>
+
+                    <select app-model="new.new_array.<%- subitem.name %>">
+
+                        <% if (subitem.options){ %>
+                            <% subitem.options.forEach((option)=>{ %>
+                                <option value="<%- option.value %>"><%- option.text %></option>
+                            <% }) %>
+                        <% } %>
+                        <% if (subitem.option_data){ %>
+                            <% var option_data = view.functions.getOptionData(subitem.option_data) %>
+                            <% option_data.forEach((option)=>{ %>
+                                <option value="<%- option._key %>"><%- option.name %></option>
+                            <% }) %>
+                        <% } %>
+
+                    </select>
+
+                </div>
+
+            <% } else if (item.input_type){ %>
+
+                <div class="">
+                    <%- max_characters %>
+                    <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
+                    <input type="<%- item.input_type %>" app-model="new.<%- item.name %>" placeholder="<%- item.placeholder %>">
+                </div>
+
+            <% } %>
+
+        <% }) %>
+
+        <div class="colspan-5 text-right">
+
+
+
+            <a class="inline-block mr-1" app-click="view.new_<%- item.name %> = !view.new_<%- item.name %>">Cancel <i class="ml-1 fas fa-times"></i></a> <button class="btn bg-33-blue text-33-white" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
+        </div>
+
+    </div>
+
+
+
+</div>

@@ -12,13 +12,19 @@
                 fields: [
                     {name:'stripe_enabled',input_type:'select',options:[{text:'Enabled',value:true},{text:'Disabled',value:false}],placeholder:'Enable Stripe', type:'boolean', required:false},
                     {name:'stripe_public_key',input_type:'text',placeholder:'Stripe Public Key', type:'string', required:false},
-                    {name:'stripe_button_text',input_type:'text',placeholder:'Stripe Button Text', type:'string', required:false, margin_bottom:true},
+                    {name:'stripe_button_text',input_type:'text',placeholder:'Stripe Button Text', type:'string', required:false},
                     {name:'paypal_enabled',input_type:'select',options:[{text:'Enabled',value:true},{text:'Disabled',value:false}],placeholder:'Enable PayPal', type:'boolean', required:false},
                     {name:'paypal_url',input_type:'text',placeholder:'PayPal URL', type:'string', required:false},
-                    {name:'paypal_button_text',input_type:'text',placeholder:'PayPal Button Text', type:'string', required:false, margin_bottom:true},
+                    {name:'paypal_button_text',input_type:'text',placeholder:'PayPal Button Text', type:'string', required:false},
                     {name:'worldpay_enabled',input_type:'select',options:[{text:'Enabled',value:true},{text:'Disabled',value:false}],placeholder:'Enable Worldpay', type:'boolean', required:false},
                     {name:'worldpay_url',input_type:'text',placeholder:'Worldpay URL', type:'string', required:false},
-                    {name:'worldpay_button_text',input_type:'text',placeholder:'Worldpay Button Text', type:'string', required:false, margin_bottom:true}
+                    {name:'worldpay_button_text',input_type:'text',placeholder:'Worldpay Button Text', type:'string', required:false},
+                    {name:'delivery_options',input_type:'array',placeholder:'Delivery Options', type:'array', required:false, subitems:[
+                        {name:'enabled',input_type:'checkbox',placeholder:'Enabled', type:'boolean', required:false},
+                        {name:'name',input_type:'text',placeholder:'Option Name', type:'string', required:true},
+                        {name:'price',input_type:'text',placeholder:'Delivery Price', type:'price', required:true},
+                        {name:'postcode_match',input_type:'text',placeholder:'Postcode Match', type:'string', required:false, colspan: 5}
+                    ]},
                 ]
             }
 

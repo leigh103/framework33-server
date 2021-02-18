@@ -1,0 +1,144 @@
+<script>
+
+    extend.transactions = function(){
+
+        scope.editTransacton = function(){
+
+            contextCloseAll()
+
+            if (scope.view.key >= 0){
+                scope.new = scope.transactions[scope.view.key]
+            } else {
+                scope.new = {}
+            }
+
+            scope.openModal('show_transaction')
+            view.update('new')
+
+        }
+
+        scope.setStatus = function(key, status){
+
+            let idx = scope.transactions.findIndex((item)=>{
+                return item._key == key
+            })
+
+            let payload = {
+                _key: key,
+                status: status
+            }
+
+            scope.post('transactions', payload).then(()=>{
+
+                scope.transactions[idx].status = status
+                scope.notify('Saved')
+                view.update('transactions['+idx+']')
+
+            }).catch((err)=>{
+                console.log(err)
+                scope.notify('Unable to save status','error')
+            })
+
+        }
+
+        scope.selectAll = function(){
+
+            scope.transactions = scope.transactions.map((transaction) => {
+                transaction.selected = !transaction.selected
+                return transaction
+            })
+
+            view.update('transactions')
+
+        }
+
+        scope.print = function(key){
+
+            let idx = scope.transactions.findIndex((item)=>{
+                return item._key == key
+            })
+
+            let payload = {
+                _key: key,
+                status: 'processing'
+            }
+
+            scope.post('transactions', payload).then(()=>{
+
+                window.location.href = '/dashboard/transactions/print/'+key
+
+            }).catch((err)=>{
+                console.log(err)
+                scope.notify('Unable to save status','error')
+            })
+
+
+        }
+
+        scope.printAll = function(){
+
+            let keys = []
+            scope.transactions.map((transaction) => {
+
+                if (transaction.selected){
+                    console.log(transaction)
+                    keys.push(transaction._key)
+                }
+                return transaction
+            })
+
+            if (keys){
+
+                let payload = {
+                    ids: keys,
+                    status: 'processing'
+                }
+
+                scope.post('/dashboard/transactions/update', payload).then(()=>{
+                    window.location.href = '/dashboard/transactions/print/'+keys.join(',')
+                }).catch((err)=>{
+                    console.log(err)
+                    scope.notify(err,'error')
+                })
+            } else {
+                scope.notify('Please select at least 1 transaction to print')
+            }
+
+
+        }
+
+        scope.shipAll = function(){
+
+            let keys = []
+            scope.transactions.map((transaction) => {
+
+                if (transaction.selected){
+                    keys.push(transaction._key)
+                    transaction.status = 'shipped'
+                }
+                return transaction
+            })
+
+            if (keys){
+
+                let payload = {
+                    ids: keys,
+                    status: 'shipped'
+                }
+
+                scope.post('/dashboard/transactions/update', payload).then(()=>{
+                    view.update('transactions')
+                }).catch((err)=>{
+                    console.log(err)
+                    scope.notify(err,'error')
+                })
+            } else {
+                scope.notify('Please select at least 1 transaction to mark as shipped')
+            }
+
+
+        }
+
+    }
+
+</script>

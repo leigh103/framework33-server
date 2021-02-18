@@ -21,7 +21,8 @@
                 fields: [
                     // {name:'status',input_field:'select',options:this.statuses, type:'string', required:false},
                     // {name:'barcode',input_field:'_key',placeholder:'Barcode', type:'barcode', required:false},
-                    {name:'items', type:'object', required:false},
+                    {name:'reference', type:'string', required:true},
+                    {name:'items', type:'array', required:false},
                     {name:'customer', type:'object', required:false, subitems:[
                         {name:'title',input_type:'select',options:[{text:'Mr',value:'mr'},{text:'Mrs',value:'mrs'},{text:'Miss',value:'miss'},{text:'Ms',value:'ms'},{text:'Dr',value:'dr'}],placeholder:'Title', type:'string', required:false},
                         {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
@@ -43,6 +44,7 @@
                         {name:'address_level2',input_type:'text',placeholder:'City', type:'string', required:true},
                         {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'postcode', required:true}
                     ]},
+                    {name:'status', input_type: 'select', options:this.statuses, type:'string', required:true},
                     {name:'_user_id', type:'string', required:true}
                 ]
             }
@@ -60,7 +62,8 @@
                         find:['admin','self']
                     },
                     post: {
-                        save:['admin']
+                        save:['admin'],
+                        updateStatus:['admin']
                     },
                     put: {
                         save:['admin']
@@ -148,6 +151,47 @@
                 return this.data
 
             }
+
+        }
+
+        async updateStatus(status, ids){
+
+            if (typeof ids == 'string' && ids.match(/,/)){
+                ids = ids.split(',')
+            } else if (typeof ids == 'string'){
+                let ids_array = []
+                ids_array.push(ids)
+                ids = ids_array
+            }
+
+            for (let id of ids){
+
+                let payload = {status:status}
+                let transaction = await DB.read(this.settings.collection).where(['_key == '+id]).update(payload).first() // update the transaction with the status
+
+                if (transaction[status]){ // if the status has already been appiied
+
+                } else { // if this is the first time the status is being applied, update the timestamp and trigger the notification
+                    payload[status] = moment().toISOString()
+
+                    try {
+                        await DB.read(this.settings.collection).where(['_key == '+id]).update(payload).first()
+                    }
+                    catch(err){
+                        log(err)
+                    }
+
+                    try {
+                        await new Events('order_'+status).trigger(transaction)
+                    }
+                    catch(err){
+                        log(err)
+                    }
+                }
+
+            }
+
+            return ids
 
         }
 

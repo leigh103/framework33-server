@@ -1,0 +1,15 @@
+<% var obj = item.name.toLowerCase() %>
+
+<div class="colspan-2">
+    <label><%- view.functions.parseName(item.name) %></label>
+    <div class="mb-2 grid col-4 gap-1" app-show="new.<%- item.name %>">
+        <div class="flex flex-row" app-for="<%- obj %> in new.<%- item.name %>">
+            <input type="text" app-model="<%- obj %>.value" placeholder="<%- item.placeholder %>">
+            <button class="btn bg-33-white text-33-red" app-click="splice(new.<%- item.name %>,<%- obj %>.value)"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+    <div class="flex flex-row">
+        <input type="text" app-model="new.<%- item.name %>_new" placeholder="Add new <%- view.functions.depluralise(item.name) %>">
+        <button class="btn bg-33-blue text-33-white" app-click="push('new.<%- item.name %>',new.<%- item.name %>_new,'new.<%- item.name %>_new')"><i class="fas fa-plus"></i></button>
+    </div>
+</div>

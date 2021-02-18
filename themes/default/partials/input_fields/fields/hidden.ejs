@@ -1,0 +1,5 @@
+<% var value; %>
+<% if (item.value == 'user_id'){ %>
+    <% value = user._id %>
+<% } %>
+<input type="hidden" app-model="new.<%- item.name %>" value="<%- value %>">

@@ -139,7 +139,16 @@ var express = require('express'),
                     req.session.cart_id = false
                     data.cart.status = 'paid'
                     data.transaction = await new Transactions(data.cart).save()
-                    res.render(settings.views+'/success.ejs',data)
+
+                    if (data.transaction.data){
+                        new global.Events('send_receipt').trigger(data.transaction.data)
+                        res.render(settings.views+'/success.ejs',data)
+                    } else {
+                        data.type = '400'
+                        data.error = 'There has been an issue processing your transaction'
+                        res.render(settings.views+'/gateways/stripe.ejs',data)
+                    }
+
 
                 } else if (paymentIntent.status == 'canceled'){
 

@@ -23,6 +23,7 @@
                         {name:'method',input_type:'select', options:[{text:'Mailbox',value:'mailbox'},{text:'Email',value:'email'},{text:'SMS',value:'sms'}] , type:'string', required:true},
                         {name:'to',input_type:'text',placeholder:'method', type:'string', required:true},
                         {name:'enabled',input_type:'checkbox', type:'boolean', required:false},
+                        {name:'subject',input_type:'text',placeholder:'Subject', type:'string', required:false},
                         {name:'content',input_type:'textarea',placeholder:'Content', type:'string', required:false},
                     ]},
                 ]
@@ -114,14 +115,9 @@
 
                         if (action.enabled === true){
 
-                            // if (action.method == 'sms' || action.method == 'email'){
-                            //     recipient = await evnts.findRecipient(action.method, data)
-                            //
-                            //     if (!recipient && action.to){
-                            //         recipient = action.to
-                            //     }
-                            // }
-
+                            if (typeof data == 'object' && data.customer && data.customer.notification_method){ // override action settings if customer has specified the notification method
+                                action.method = data.customer.notification_method
+                            }
 
                             if (action.to){
                                 action.to = await this.findRecipient(action, data)
@@ -130,8 +126,8 @@
                             if (action.subject){
                                 action.subject = await this.parseMoustache(action.subject, data)
                             }
-                            if (action.text){
-                                action.text = await this.parseMoustache(action.text, data)
+                            if (action.content){
+                                action.content = await this.parseMoustache(action.content, data)
                             }
                             if (action.button_text){
                                 action.button_text = await this.parseMoustache(action.button_text, data)
@@ -150,11 +146,11 @@
                             action = Object.assign(action, data)
 
                             if (action.method == 'email'){
-                                new Notification(action).useEmailTemplate(config.email.templates.password_reset).email()
+                                new Notification(action).useEmailTemplate(action).email()
                             }
 
                             if (action.method == 'sms'){
-                                new Notification(action).setContent('',action.content).sms()
+                                new Notification(action).useSMSTemplate(action).sms()
                             }
 
                             if (action.method == 'mailbox'){
@@ -179,33 +175,36 @@
 
             return new Promise( async (resolve, reject) => {
 
+                if (typeof data != 'object'){
+                    resolve(action.to)
+                    return
+                }
+
                 let result
 
                 if (Array.isArray(data)){
 
 
-
                 } else if (typeof data == 'object'){
 
-                    if (data.customer_id){
+                    if (typeof data.customer == 'object'){
 
-                    //    result = await customers.find(data.customer_id,'{recipient:c.'+action.method+'}')
-                    //    resolve(result.recipient)
-                    resolve()
+                        if (data.customer.notification_method == 'email'){
+                            resolve(data.customer.email)
+                        } else if (data.customer.notification_method == 'sms'){
+                            resolve(data.customer.tel)
+                        }
 
-                    }
+                    } else if (action.method == 'email'){
 
-                    if (action.method == 'email'){
-console.log(action)
                         if (action.to && action.to.match(/@/)){
                             resolve(action.to)
                         } else if (data.email){
                             resolve(data.email)
                         }
 
-                    }
+                    } else if (action.method == 'sms' && data.tel){
 
-                    if (action.method == 'sms' && data.tel){
                         if (action.to && !action.to.match(/^{{/)){
                             resolve(action.to)
                         } else if (data.tel){

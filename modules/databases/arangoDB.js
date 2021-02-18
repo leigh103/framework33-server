@@ -189,6 +189,13 @@
 
         }
 
+        whereMultiple(keys) {
+
+            this.query = 'RETURN DOCUMENT('+JSON.stringify(keys)+')'
+            return this
+
+        }
+
         orWhere(filters) {
 
             this.query += 'FILTER '
@@ -332,8 +339,9 @@
 
             } else {
 
-                this.query += 'RETURN '+this.query_key
-
+                if (!this.query.match(/^RETURN/)){
+                    this.query += 'RETURN '+this.query_key
+                }
                 try {
                     let result = await adb.query(this.query)
                     this.result = result._result
@@ -359,7 +367,9 @@
 
             } else if (typeof this.query == 'string') {
 
-                this.query += 'RETURN '+this.query_key
+                if (!this.query.match(/^RETURN/)){
+                    this.query += 'RETURN '+this.query_key
+                }
 
                 try {
 

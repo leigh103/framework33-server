@@ -22,7 +22,7 @@ const express = require('express'),
                 ]}
             ],
             nav: [
-                {link:'Shop',slug: view.ecommerce.shop.slug, weight:1}
+                {link:'Shop',slug: "/"+view.ecommerce.shop.slug, weight:1}
             ]
         }
     },

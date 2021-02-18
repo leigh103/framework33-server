@@ -3,6 +3,16 @@
 
         extend.dashboard = function(){
 
+            scope.view.heading = ''
+            scope.view.form = {
+                inputs: [],
+                details: {
+                    name: '',
+                    url:'',
+                    button_text:''
+                }
+            }
+
             scope.toggleContext = function(type, key){
 
                 let el = document.getElementById(type),
@@ -178,6 +188,10 @@
 
             scope.push = function(obj,item,input){
 
+                if (!item){
+                    return false
+                }
+
                 let obj_string = ''
 
                 if (typeof obj == 'string'){
@@ -214,13 +228,13 @@
 
             scope.splice = function(obj,item){
 
+console.log(this)
                 if (obj && obj.length > 0){
-                    let idx = obj.findIndex((itm,i)=>{
-                        return itm == item
+                    obj = obj.filter((itm,i)=>{
+                        return itm.value != item
                     })
-                    if (idx >= 0){
-                        obj.splice(idx,1)
-                    }
+
+                //    evaluate.setValue(this._params[0], obj)
                 }
 
             }
@@ -262,6 +276,281 @@
             scope.closeModal = function(){
                 scope.view.modal = false
                 view.update('view.modal')
+            }
+
+            var savedrange = null;
+
+            function getSelection(){
+                var savedRange;
+                if (window.getSelection && window.getSelection().rangeCount > 0){
+                    savedRange = window.getSelection().getRangeAt(0).cloneRange();
+                } else if (document.selection){
+                    savedRange = document.selection.createRange();
+                }
+                return savedRange;
+            }
+
+            function setCaret(selection) {
+
+                var range = document.createRange()
+                var sel = window.getSelection()
+
+                range.setStart(selection.startContainer, selection.startOffset)
+                range.setEnd(selection.startContainer, selection.endOffset)
+
+                sel.removeAllRanges()
+                sel.addRange(range)
+
+            }
+
+            scope.insertTab = function(e) {
+                if (e.keyCode != 9) return // tab key
+                document.execCommand('insertHTML', false, '&#009')
+                e.preventDefault();
+            }
+
+            scope.exec = function(type, data, idx){
+
+                let sup_data, img_node
+
+                if (type.match(/createLink|insertImage|insertIcon/)){ // functions that need input
+
+                    scope.view.exec = {}
+                    scope.view.exec.input_el = idx
+
+                    scope.view.exec.selection = getSelection()
+
+                    scope.view.modal = 'show_input'
+
+                    if (type.match(/createLinkButton/)){
+                        scope.view.exec.title = 'Insert URL'
+                        scope.view.exec.input = 'Add link URL'
+                        scope.view.exec.input_2 = 'Add link text'
+                        scope.view.exec.type = type
+                        scope.view.exec.data = data
+                    } else if (type.match(/createLink/)){
+                        scope.view.exec.title = 'Insert URL'
+                        scope.view.exec.input = 'Add link URL'
+                        scope.view.exec.type = type
+                        scope.view.exec.data = data
+                    } else if (type.match(/insertImage/)){
+                        scope.view.exec.title = 'Insert URL or Upload Image'
+                        scope.view.exec.input = 'Add image URL'
+                        scope.view.exec.input_2 = 'Image name / ALT tag (required)'
+                        scope.view.exec.image = true
+                        scope.view.exec.type = type
+                        scope.view.exec.data = data
+                    } else if (type.match(/insertIcon/)){
+                        scope.view.exec.title = 'Font Awesome or Upload Icon'
+                        scope.view.exec.input = 'Add Font Awesome class, eg. fa-chevron-right'
+                        scope.view.exec.image = true
+                        scope.view.exec.type = type
+                        scope.view.exec.data = data
+                    }
+
+                    return
+
+                } else if (type.match(/insertForm/)){
+
+                    scope.view.exec = {}
+                    scope.view.exec.input_el = idx
+
+                    scope.view.exec.selection = getSelection()
+
+                    scope.view.modal = 'show_form_builder'
+                    return
+
+                } else if (type == 'exec'){
+
+                    if (type.match(/insertImage/) && !scope.view.text_input_2){
+                        scope.notify('Please set an image name. This is used for the image alt tag, and is important for SEO','error')
+                        return false
+                    }
+
+                    scope.view.modal = false
+                    type = scope.view.exec.type
+
+                    if (scope.view.exec.selection){
+                        setCaret(scope.view.exec.selection)
+                    } else if (typeof scope.view.exec.image == 'object'){
+                        img_node = scope.view.exec.image
+                    }
+
+                    if (scope.view.text_input){
+                        data = scope.view.text_input
+                    } else if (scope.view.image_url){
+                        data = scope.view.image_url
+                    } else {
+                        data = scope.view.exec.data
+                    }
+
+                    if (scope.view.text_input_2){
+                        sup_data = scope.view.text_input_2
+                    }
+
+                    delete scope.view.exec
+                    scope.view.text_input = ''
+                    scope.view.image_url = ''
+
+                }
+
+                if (type.match(/insertImage/)){
+
+                    type = 'insertHTML'
+
+                    if (data && data.match(/base64/)){
+
+                        scope.uploadImage(data,false,'content',sup_data).then((img_url)=>{
+
+                            if (typeof img_node == 'object'){
+
+                                let new_img = document.createElement("img")
+                                new_img.setAttribute('src', img_url)
+                                new_img.setAttribute('alt', sup_data)
+
+                                img_node.target.parentNode.replaceChild(new_img, img_node.target)
+                                scope.updateCE()
+
+                            } else {
+                                data = '<img src="'+img_url+'" alt="'+sup_data+'" class="w-100">'
+                                document.execCommand(type,false,data)
+                            }
+
+                        }).catch((err)=>{
+                            scope.notify(err,'error')
+                        })
+
+                    } else {
+
+                        if (typeof img_node == 'object'){
+
+                            let new_img = document.createElement("img")
+                            new_img.setAttribute('src', data)
+                            new_img.setAttribute('alt', sup_data)
+
+                            img_node.target.parentNode.replaceChild(new_img, img_node.target)
+                            scope.updateCE()
+
+                        } else {
+                            data = '<img src="'+data+'" alt="'+sup_data+'" class="w-100">'
+                            document.execCommand(type,false,data)
+                        }
+
+                    }
+
+                    scope.view.text_input_2 = ''
+
+                } else {
+
+                    if (type.match(/insertIcon/)){
+                        type = 'insertHTML'
+
+                        if (data.match(/^fa/)){
+                            data = '<i class="fas '+data+'"></i>'
+                        } else {
+                            data = '<img src="'+data+'" class="icon">'
+                        }
+
+                    }
+
+                    if (type.match(/createLinkButton/)){
+                        type = 'insertHTML'
+                        data = '<a class="btn highlight" href="'+data+'">'+scope.view.text_input_2+'</a>'
+                        scope.view.text_input_2 = ''
+                    }
+
+                    // if (type == 'formatBlock'){
+                    //     let selection = window.getSelection()
+                    //     console.log(selection.toString())
+                    //     selection = scope.stripTags(selection)
+                    //     console.log(selection)
+                    //     type = 'insertHTML'
+                    //     data = '<'+data+'>'+selection+'</'+data+'>'
+                    // }
+
+                    // if (type == 'align'){
+                    //     let selection = window.getSelection()
+                    //     selection = scope.stripTags(selection)
+                    //     type = 'insertHTML'
+                    //     data = '<p class="text-'+data+'">'+selection+'</p>'
+                    // }
+
+                    document.execCommand(type,false,data)
+
+                }
+
+
+
+
+            }
+
+            scope.stripTags = function(str){
+                let div = document.createElement("div")
+                div.innerHTML = str.toString()
+                return div.innerText
+            }
+
+            scope.addInput = function(){
+
+                let payload = {
+                    type:'text',
+                    label: ''
+                }
+
+                scope.view.form.inputs.push(payload)
+
+            }
+
+            scope.insertForm = function(){
+
+                setCaret(scope.view.exec.selection)
+
+                let form_name = scope.view.form.details.name.replace(/\s/g,'-').replace(/\'|\"|\,|\./g,'').toLowerCase()
+
+                let form = '<form id="'+form_name+'" action="'+scope.view.form.details.url+'" method="post">'
+
+                scope.view.form.inputs.map((input)=>{
+
+                    if (!input.type.match(/checkbox/i)){
+                        form += '<div class="mb-1"><label>'+input.label+'</label>'
+                    } else {
+                        form += '<div class="mb-1">'
+                    }
+
+                    let required = ''
+
+                    if (input.required === true){
+                        required = ' required="true"'
+                    }
+
+                    if (input.type.match(/textarea/i)){
+                        form += '<textarea id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+form_name+'"'+required+'></textarea></div>'
+                    } else if (input.type.match(/checkbox/i)){
+                        form += '<label class="checkbox"><input type="'+input.type+'" id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+form_name+'"'+required+'><p>'+input.label+'</p></label></div>'
+                    } else {
+                        form += '<input type="'+input.type+'" id="form-'+input.label.replace(/\s/g,'-').toLowerCase()+'" class="form-'+form_name+'"'+required+'></div>'
+                    }
+
+                })
+
+                if (!scope.view.form.details.button_text){
+                    scope.view.form.details.button_text = 'Submit'
+                }
+
+                form += '<div class="text-right"><button class="btn highlight" app-click="submitForm(\''+form_name+'\')">'+scope.view.form.details.button_text+'</div></form>'
+
+                document.execCommand('insertHTML',false,form)
+
+                scope.view.modal = false
+                scope.view.form = {
+                    inputs: [],
+                    details: {
+                        name: '',
+                        url:'',
+                        button_text:''
+                    }
+                }
+
             }
 
             socketConnect("<%- view.websocket.url %>")

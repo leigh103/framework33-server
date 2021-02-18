@@ -1,0 +1,24 @@
+<div class="relative layer-2">
+    <label><%- view.functions.parseName(item.name) %></label>
+    <div class="tag-wrap bg-33-white p-1 w-100" app-click="view.dropdown<%- item.name %> = !view.dropdown<%- item.name %>">
+        <div class="tag">
+        </div>
+    </div>
+    <div class="context absolute w-100 shadow bg-33-white layer-2" app-show="view.dropdown<%- item.name %>" anim="{'enter':'move-down','exit':'move-up'}">
+        <% if (item.options){ %>
+            <% if (Array.isArray(item.options)){ %>
+                <% item.options.forEach((option)=>{ %>
+                    <div class="p-05 clickable" app-click="push(new.<%- item.name %>,'<%- option.value %>')"><%- option.text %></div>
+                <% }) %>
+            <% } %>
+        <% } %>
+        <% if (item.option_data){ %>
+            <% var option_data = view.functions.getOptionData(item.option_data) %>
+            <% if (Array.isArray(option_data)){ %>
+                <% option_data.forEach((option)=>{ %>
+                    <div class="p-05 clickable" app-click="push(new.<%- item.name %>,'<%- option._key %>')"><%- option.name %></div>
+                <% }) %>
+            <% } %>
+        <% } %>
+    </div>
+</div>

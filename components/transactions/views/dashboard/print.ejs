@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title><%= view.meta.title %></title>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link href="/font-awesome/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
+    <link href="/style/framework33.css?v=1.0.13" rel="stylesheet">
+    <link href="/style/style.css?v=1.0.11" rel="stylesheet">
+
+    <style>
+
+        body {
+            padding: 10vh 10vw
+        }
+
+        table, table tr, table tr td {
+            text-align: right;
+            padding: 0;
+            vertical-align: top;
+        }
+
+        table tr td:first-child {
+            text-align: left
+        }
+        h1,h2,h3,h4 {font-weight: 500}
+
+        img.barcode {display:inline-block;max-width: 100px}
+
+        @media print {
+            html, body, main, header, footer, .container {
+                background: transparent !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+                position: relative !important;
+                text-indent: 0 !important;
+                clear: both !important;
+                width: auto !important;
+                height: auto !important;
+                border: none !important;
+                overflow: visible;
+                margin: 0 auto 0.5% auto !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                padding: 0 !important;
+                text-align: left !important;
+                max-width: none !important;
+                min-width: auto !important;
+                min-height: auto !important;
+                max-height: auto !important;
+                direction: ltr !important;
+            }
+
+                /** Seitenränder einstellen */
+                @page { margin: 2cm !important}
+
+                /* Font auf 16px/13pt setzen, Background auf Weiß und Schrift auf Schwarz setzen.*/
+                /* Das spart Tinte */
+                body {
+                    font-family: Arial, Helvetica;
+                line-height: 1.3;
+                background: #fff !important;
+                color: #000;
+                }
+
+                .page {
+                    width:100%;
+                      height:100%;
+                      page-break-after:always
+                }
+
+                h1 {
+                font-size: 24pt;
+                }
+
+                h2, h3, h4 {
+                font-size: 14pt;
+                }
+
+                /* Alle Seitenumbrüche definieren */
+                a {
+                    page-break-inside:avoid
+                }
+                blockquote {
+                    page-break-inside: avoid;
+                }
+                h1, h2, h3, h4, h5, h6 { page-break-after:avoid;
+                     page-break-inside:avoid }
+                img { page-break-inside:avoid;
+                     page-break-after:avoid; }
+                table, pre { page-break-inside:avoid }
+                ul, ol, dl  { page-break-before:avoid }
+
+                /* Linkfarbe und Linkverhalten darstellen */
+                a:link, a:visited, a {
+                background: transparent;
+                color: #520;
+                font-weight: bold;
+                text-decoration: underline;
+                text-align: left;
+                }
+
+                a {
+                    page-break-inside:avoid
+                }
+
+                a[href^=http]:after {
+                      content:" <" attr(href) "> ";
+                }
+
+                $a:after > img {
+                   content: "";
+                }
+
+                article a[href^="#"]:after {
+                   content: "";
+                }
+
+                a:not(:local-link):after {
+                   content:" <" attr(href) "> ";
+                }
+
+                /**
+                 * Eingebundene Videos verschwinden lassen und den Whitespace der iframes auf null reduzieren.
+                 */
+                .entry iframe, ins {
+                    display: none;
+                    width: 0 !important;
+                    height: 0 !important;
+                    overflow: hidden !important;
+                    line-height: 0pt !important;
+                    white-space: nowrap;
+                }
+                .embed-youtube, .embed-responsive {
+                  position: absolute;
+                  height: 0;
+                  overflow: hidden;
+                }
+
+                /* Unnötige Elemente ausblenden für den Druck */
+
+                #header-widgets, nav, aside.mashsb-container,
+                .sidebar, .mashshare-top, .mashshare-bottom,
+                .content-ads, .make-comment, .author-bio,
+                .heading, .related-posts, #decomments-form-add-comment,
+                #breadcrumbs, #footer, .post-byline, .meta-single,
+                .site-title img, .post-tags, .readability
+                {
+                display: none;
+                }
+
+                /* Benutzerdefinierte Nachrichten vor und nach dem Inhalt einfügen */
+                .entry:after {
+                content: "";
+                color: #999 !important;
+                font-size: 1em;
+                padding-top: 30px;
+                }
+                #header:before {
+                content: "";
+                color: #777 !important;
+                font-size: 1em;
+                padding-top: 30px;
+                text-align: center !important;
+                }
+
+                /* Wichtige Elemente definieren */
+                p, address, li, dt, dd, blockquote {
+                font-size: 100%
+                }
+
+                /* Zeichensatz fuer Code Beispiele */
+                code, pre { font-family: "Courier New", Courier, mono}
+
+                ul, ol {
+                list-style: square; margin-left: 18pt;
+                margin-bottom: 20pt;
+                }
+
+                li {
+                line-height: 1.6em;
+                }
+        }
+    </style>
+
+</head>
+
+    <body id="print">
+
+<% if (typeof transactions == 'object' && transactions.length > 0){ %>
+<% transactions.forEach((transaction,i) =>{ %>
+
+        <div class="page">
+            <div style="text-align: left;">
+                <table>
+                    <tr>
+                        <td>
+                            <h3>Order: <%- transaction.reference %></h3>
+                            <h4><%- transaction.customer.name %></h4>
+                            <% if (transaction.customer.email){ %><h4><%- transaction.customer.email %></h4><% } %>
+                            <% if (transaction.customer.tel){ %><h4><%- transaction.customer.tel %></h4><% } %>
+                        </td>
+                        <td style="text-align: right">
+                            <img src="<%- transaction.barcode %>" class="barcode">
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            <div>Transaction ID: <%- transaction._key %></div>
+                            <div>Transaction Date: <%- view.functions.parseDate(transaction._created,'dddd Do MMM YYYY [at] h:mma') %></div>
+                        </td>
+                        <td>
+
+                            <% if (transaction.shipping_address.address_level1){ %>
+                                <h4>Billed To:</h4>
+                                <% if (transaction.billing_address.address_line1){ %><%- transaction.billing_address.address_line1 %><br><% } %>
+                                <% if (transaction.billing_address.address_line2){ %><%- transaction.billing_address.address_line2 %><br><% } %>
+                                <% if (transaction.billing_address.address_level1){ %><%- transaction.billing_address.address_level1 %><br><% } %>
+                                <% if (transaction.billing_address.address_level2){ %><%- transaction.billing_address.address_level2 %><br><% } %>
+                                <% if (transaction.billing_address.postal_code){ %><%- transaction.billing_address.postal_code %><br><% } %>
+                            <% } %>
+                        </td>
+                        <td>
+                            <h4>Post To:</h4>
+                            <% if (transaction.shipping_address || !transaction.shipping_address.address_level1){ %>
+
+                                <% if (transaction.billing_address.address_line1){ %><%- transaction.billing_address.address_line1 %><br><% } %>
+                                <% if (transaction.billing_address.address_line2){ %><%- transaction.billing_address.address_line2 %><br><% } %>
+                                <% if (transaction.billing_address.address_level1){ %><%- transaction.billing_address.address_level1 %><br><% } %>
+                                <% if (transaction.billing_address.address_level2){ %><%- transaction.billing_address.address_level2 %><br><% } %>
+                                <% if (transaction.billing_address.postal_code){ %><%- transaction.billing_address.postal_code %><br><% } %>
+                            <% } else { %>
+                                <% if (transaction.shipping_address.address_line1){ %><%- transaction.shipping_address.address_line1 %><br><% } %>
+                                <% if (transaction.shipping_address.address_line2){ %><%- transaction.shipping_address.address_line2 %><br><% } %>
+                                <% if (transaction.shipping_address.address_level1){ %><%- transaction.shipping_address.address_level1 %><br><% } %>
+                                <% if (transaction.shipping_address.address_level2){ %><%- transaction.shipping_address.address_level2 %><br><% } %>
+                                <% if (transaction.shipping_address.postal_code){ %><%- transaction.shipping_address.postal_code %><br><% } %>
+                            <% } %>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="py-3" style="text-align: left;">
+
+                    <div class="table" style="text-align: left;display:table">
+                        <div class="row table-header" style="text-align: left;display: table-row">
+                            <div class="cell middle" style="display: table-cell">Item</div>
+                            <div class="cell middle text-center" style="display: table-cell;width: 6em">Qty</div>
+                            <div class="cell middle text-right" style="display: table-cell;width: 7em">Price</div>
+                        </div>
+                        <% if (transaction.items){ %>
+
+                            <% transaction.items.forEach((item)=>{ %>
+                                <div class="row" style="width:100%;display: table-row">
+                                    <div class="cell middle" style="display: table-cell"><%- item.name %></div>
+                                    <div class="cell middle text-center" style="display: table-cell"><%- item.quantity %></div>
+                                    <div class="cell middle text-right" style="display: table-cell">£<%- (item.price/100).toFixed(2) %></div>
+                                </div>
+
+                                <% if (item.refund_value){ %>
+
+                                    <div class="row" style="width:100%;display: table-row">
+                                        <div class="cell middle" style="display: table-cell"></div>
+                                        <div class="cell middle text-center" style="display: table-cell">Refunded</div>
+                                        <div class="cell middle text-right" style="display: table-cell">£<%- item.refund_value.toFixed(2) %></div>
+                                    </div>
+
+                                <% } %>
+                            <% }) %>
+                        <% } %>
+                    </div>
+
+                </div>
+
+
+                <div class="table" style="text-align: left;display: table">
+                    <div class="row" style="display: table-row">
+                        <div class="cell" style="display: table-cell">
+
+                        </div>
+
+                        <div class="cell" style="display: table-cell; text-align: right">
+                            <div class="table">
+                                <div class="row">
+                                    <div class="cell">
+                                        <p>Sub Total</p>
+                                        <p>VAT</p>
+                                        <% if (transaction.refund_value){ %>
+                                            <p>Refunded <% if (transaction.refund_method){ %>via <%- transaction.refund_method %><% } %><% if (transaction.refund_time){ %> on <%- moment(transaction.refund_time).format('DD/MM/YY HH:mm') %><% } %></p>
+                                        <% } %>
+                                        <h3>TOTAL</h3>
+                                    </div>
+                                    <div class="cell">
+                                        <p>£<%- (transaction.sub_total/100).toFixed(2) %></p>
+                                        <p>£<%- (transaction.tax/100).toFixed(2) %></p>
+                                        <% if (transaction.refund_value){ %>
+                                            <p>£<%- transaction.refund_value.toFixed(2) %></p>
+                                        <% } %>
+                                        <h3>£<%- (transaction.item_total/100).toFixed(2) %></h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    <% }) %>
+
+        <script>
+            window.print();
+         </script>
+
+    <% } else { %>
+        <h3>Nothing to display</h3>
+        <a href="/dashboard/transactions/paid">< Back</a>
+    <% } %>
+
+ </body>
+</html>

@@ -4,7 +4,7 @@
 
     const postmark = new Pstmk.ServerClient(config.email.api_key)
 
-    const send = (msg) => {
+    const send = (to, msg) => {
 
         return new Promise((resolve, reject) => {
 
@@ -18,7 +18,7 @@
 
             let payload = {
                 "From": msg.from,
-                "To": msg.to,
+                "To": to,
                 "Subject": msg.subject,
                 "TextBody": msg.text,
                 "HtmlBody": msg.html
@@ -59,53 +59,16 @@
 
     }
 
-    const templates = (template, data) => {
-
-        let hash = DB.hash('email-'+Date()),
-            msg = {},
-            content,
-            subject
-
-        if (template == 'complete_registration'){
-
-            if (data && data.timestamp && data.guard){
-
-                content = notificationTemplate.complete_registration.content
-                subject = notificationTemplate.complete_registration.subject
-
-                msg = {
-                    "subject": subject,
-                    "text": content,
-                    "html": content,
-                    "TemplateModel": {
-                        "company_name":config.site.name,
-                        "action_url": config.site.url+'/login/'+data.guard+'/'+data.timestamp
-                    }
-                }
-
-            }
-
-        } else if (template == 'activate_account'){
-
-            if (data && data.timestamp){
-
-                content = notificationTemplate.activate_account.content
-                subject = notificationTemplate.activate_account.subject
-
-                msg = {
-                    "subject": subject,
-                    "text": content,
-                    "html": content,
-                    "TemplateModel": {
-                        "company_name":config.site.name,
-                        "action_url": config.site.url+'/login/activate/'+data.timestamp
-                    }
-                }
+    const templates = (data) => {
 
 
-            }
+        if (typeof data != 'object'){
+            return ''
+        }
 
-        } else if (template == 'password-reset'){
+        let msg = {}
+
+        if (data.template && data.template == 'password-reset'){
 
             if (data && data.timestamp && data.guard){
 
@@ -134,9 +97,39 @@
 
             }
 
+        } else {
+
+            if (!data.subject){
+                data.subject = config.site.name
+            }
+
+            msg = {
+                "subject": data.subject,
+                "text": data.content,
+                "html": data.content,
+                "TemplateModel": {
+                    "subject": data.subject,
+                    "content": data.content,
+                    "company_name":config.site.name
+                },
+                "TemplateAlias":"general"
+            }
+
+            if (data.items && data.total && data.sub_total){
+                msg.TemplateModel.transactions = {
+                    items: data.items,
+                    sub_total: data.sub_total,
+                    tax: data.tax,
+                    total: data.total
+                }
+            }
+
+            if (data.link){
+                msg.TemplateModel.link = data.link
+            }
+
         }
 
-// console.log('parsed', data, msg)
         return msg
     }
 

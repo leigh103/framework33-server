@@ -261,7 +261,6 @@ var express = require('express'),
                 } else if (result.data) {
                     res.json(result.data)
                 } else if (result){
-                    console.log(result)
                     res.json(result)
                 } else {
                     res.status(405).json(settings.not_allowed)

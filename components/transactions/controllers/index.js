@@ -70,6 +70,34 @@ const express = require('express'),
 
     })
 
+    routes.post('/dashboard/transactions/update', async(req, res) => {
+
+        if (!req.body.ids || !req.body.status){
+            res.status(301).send('Please speficy a list of IDs and/or a status')
+        } else {
+            let ids = await new Transactions().updateStatus(req.body.status, req.body.ids)
+            res.json(ids)
+        }
+
+    })
+
+    routes.get('/dashboard/transactions/print/:ids', async(req, res) => {
+
+        if (req.params.ids.match(/,/)){
+            data.ids = req.params.ids.split(',')
+
+        } else {
+            data.ids = []
+            data.ids.push(req.params.ids)
+        }
+
+        data.transactions = await new Transactions().findAll(data.ids)
+
+
+        res.render(settings.views+'/dashboard/print.ejs',data)
+
+    })
+
     routes.get('/dashboard/transactions/settings', async(req, res) => {
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
@@ -88,19 +116,28 @@ const express = require('express'),
 
     routes.get('/dashboard/transactions/:status', async(req, res) => {
 
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
 
         view.current_view = 'transactions'
 
-        data.title = 'Transactions'
-        data.table = 'transactions'
-        data.status = req.params.status
-        view.current_sub_view = data.status
-        data.query = '?status='+req.params.status
+        if (req.params.status == 'new'){
+            data.title = 'Transactions'
+            data.table = 'cart'
+            view.current_sub_view = data.status
+            data.status = req.params.status
+            data.query = false
+            data.fields = new Cart().settings.fields
+        } else {
+            data.title = 'Transactions'
+            data.table = 'transactions'
+            data.status = req.params.status
+            view.current_sub_view = data.status
+            data.query = '?status='+req.params.status
 
-        data.fields = new Transactions().settings.fields
+            data.fields = new Transactions().settings.fields
+        }
 
-        res.render(config.site.theme_path+'/templates/transactions/table.ejs',data)
+        res.render(settings.views+'/dashboard/transactions.ejs',data)
 
     })
 
