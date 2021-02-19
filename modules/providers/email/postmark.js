@@ -125,7 +125,13 @@
             }
 
             if (data.link){
-                msg.TemplateModel.link = data.link
+                msg.TemplateModel.link = {
+                    url: data.link
+                }
+                msg.TemplateModel.button = {
+                    url: data.link,
+                    text: data.link_text
+                }
             }
 
         }

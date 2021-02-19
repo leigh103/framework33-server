@@ -131,25 +131,53 @@ var express = require('express'),
             method = parseCamelCase(req.params.function)
         }
 
+        if (req.params.id == 'search'){
+            method = 'search'
+        }
+
         let query,
             sort = {
                 dir: 'desc',
                 field: '_updated'
-            }
+            },
+            start = 0,
+            end = 999,
+            not_field = false
 
         if (Object.keys(req.query).length > 0){
             query = []
             for (let [key, value] of Object.entries(req.query)) {
+
+                not_field = false
+
                 if (key == 'sort'){
                     sort.field = value
+                    not_field = true
                 }
                 if (key == 'asc'){
                     sort.dir = 'asc'
+                    not_field = true
                 }
                 if (key == 'desc'){
                     sort.dir = 'desc'
+                    not_field = true
                 }
-                query.push(key+' == '+value)
+                if (key == 'limit'){
+                    end = value
+                    not_field = true
+                }
+                if (key == 'start'){
+                    start = value
+                    not_field = true
+                }
+                if (key == 'end'){
+                    end = value
+                    not_field = true
+                }
+                if (!not_field){
+                    query.push(key+' == '+value)
+                }
+
             }
         }
 
@@ -157,7 +185,10 @@ var express = require('express'),
 
             let model
 
-            if (req.params.id){
+
+            if (method == 'search'){
+                model = await new global[model_class_name]().search(req.query.str)
+            } else if (req.params.id){
                 model = await new global[model_class_name]().find(req.params.id)
             } else {
                 method = 'all'
@@ -165,7 +196,7 @@ var express = require('express'),
 
                 if (model.all){ // if the class exists and the all function exists
 
-                    model.all(query).sort(sort.field,sort.dir)
+                    model.all(query, start, end).sort(sort.field,sort.dir)
                 } else { // else fail
                     res.json(settings.not_found)
                     return false

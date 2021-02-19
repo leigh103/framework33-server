@@ -8,12 +8,12 @@
             super(data)
 
             this.statuses = [
-                {text:'New',value:'new'},
-                {text:'Paid',value:'paid'},
-                {text:'Processing',value:'processing'},
-                {text:'Shipped',value:'shipped'},
-                {text:'Refunded',value:'refunded'},
-                {text:'Deleted',value:'deleted'}
+                {text:'New',value:'new',icon:'cart-plus'},
+                {text:'Paid',value:'paid',icon:'clipboard-check'},
+                {text:'Processing',value:'processing',icon:'box-open'},
+                {text:'Shipped',value:'shipped',icon:'mail-bulk'},
+                {text:'Completed',value:'completed',icon:'check-circle'},
+                {text:'Deleted',value:'deleted',icon:'trash-alt'}
             ]
 
             this.settings = {
@@ -134,21 +134,25 @@
 
         }
 
-        search(search) {
+        async search(str) {
 
-            if (search.str.length < 3){
+            if (str.length < 3){
 
                 this.data = DB.read(this.settings.collection).limit(30).get()
-                return this.data
+                return this
 
             } else {
 
                 let filter = []
 
-                filter.push('name like '+search.str)
+                filter.push('reference like '+str)
+                filter.push('customer.name like '+str)
+                filter.push('customer.email like '+str)
+                filter.push('customer.tel like '+str)
 
-                this.data = DB.read(this.settings.collection).orWhere(filter).get()
-                return this.data
+                this.data = await DB.read(this.settings.collection).orWhere(filter).get()
+
+                return this
 
             }
 

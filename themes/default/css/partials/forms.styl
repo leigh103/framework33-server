@@ -79,6 +79,12 @@ input[type=checkbox] {
         font-size: 1.25rem;
     }
 
+    &.border {
+        &:after {
+            border: 0.01rem solid $color-mid-light-grey;
+        }
+    }
+
     &:checked {
         &:after {
             content:'\2713';

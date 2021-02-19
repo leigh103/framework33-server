@@ -87,14 +87,22 @@
 
         }
 
-        all(data) {
+        all(data, start, end) {
+            
+            if (!start){
+                start = 0
+            }
+
+            if (!end){
+                end = 999
+            }
 
             if (typeof data == 'string'){
-                this.data = DB.read(this.settings.collection).orderBy(data,'asc').get()
+                this.data = DB.read(this.settings.collection).orderBy(data,'asc').limit(start, end).get()
             } else if (typeof data == 'object'){
-                this.data = DB.read(this.settings.collection).where(data).get() //.omit(['password','password_reset']).get()
+                this.data = DB.read(this.settings.collection).where(data).limit(start, end).get() //.omit(['password','password_reset']).get()
             } else {
-                this.data = DB.read(this.settings.collection).get() //.omit(['password','password_reset']).get()
+                this.data = DB.read(this.settings.collection).limit(start, end).get() //.omit(['password','password_reset']).get()
             }
             return this
 

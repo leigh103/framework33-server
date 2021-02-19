@@ -20,7 +20,7 @@ const express = require('express'),
                     {link:'Paid',slug: '/dashboard/transactions/paid', weight:2},
                     {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
                     {link:'Shipped',slug: '/dashboard/transactions/shipped', weight:4},
-                    {link:'Refunded',slug: '/dashboard/transactions/refunded', weight:5},
+                    {link:'Completed',slug: '/dashboard/transactions/completed', weight:5},
                     {link:'Deleted',slug: '/dashboard/transactions/deleted', weight:6},
                     {link:'Settings',slug: '/dashboard/transactions/settings', weight:7}
                 ]}
@@ -120,6 +120,8 @@ const express = require('express'),
 
         view.current_view = 'transactions'
 
+        data.statuses = new Transactions().statuses
+
         if (req.params.status == 'new'){
             data.title = 'Transactions'
             data.table = 'cart'
@@ -135,6 +137,10 @@ const express = require('express'),
             data.query = '?status='+req.params.status
 
             data.fields = new Transactions().settings.fields
+        }
+
+        if (data.status == 'completed' || data.status == 'deleted'){
+            data.query += '&limit=60'
         }
 
         res.render(settings.views+'/dashboard/transactions.ejs',data)

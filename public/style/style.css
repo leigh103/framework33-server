@@ -236,7 +236,7 @@ a:hover {
 .bg-white {
   background-color: #fff;
 }
-.btn:hover {
+.btn:not(.bg-33-white):hover {
   color: #fff;
 }
 .btn.highlight {
@@ -283,7 +283,9 @@ a:hover {
   border-bottom: 1px solid #e8e8e8;
   margin: 0.4rem 0;
 }
-.context.dropdown i {
+.context.dropdown i,
+.context.dropdown .icon {
+  width: 1em;
   margin-right: 0.5em;
   color: #1dc7d5;
 }
@@ -762,6 +764,9 @@ input[type=checkbox]:after {
   color: #1dc7d5;
   font-size: 1.25rem;
 }
+input[type=checkbox].border:after {
+  border: 0.01rem solid #d2d6d9;
+}
 input[type=checkbox]:checked:after {
   content: '\2713';
 }
@@ -1008,6 +1013,7 @@ modal-auto > section section.body {
   bottom: 1rem;
   right: 1rem;
   cursor: pointer;
+  z-index: 999;
 }
 .notification > div {
   flex: 1;

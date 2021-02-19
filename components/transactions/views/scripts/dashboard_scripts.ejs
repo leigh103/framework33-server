@@ -75,69 +75,105 @@
 
         }
 
+        scope.updateAll = function(status){
+
+            contextCloseAll()
+
+            let keys = []
+            scope.transactions.map((transaction) => {
+
+                if (transaction.selected){
+                    transaction.status = status
+                    transaction.selected = false
+                    keys.push(transaction._key)
+                }
+                return transaction
+            })
+
+            if (keys.length > 0){
+
+                let payload = {
+                    ids: keys,
+                    status: status
+                }
+
+                scope.post('/dashboard/transactions/update', payload).then(()=>{
+
+                    if (status == 'processing'){
+                        window.location.href = '/dashboard/transactions/print/'+keys.join(',')
+                    } else {
+                        view.update('transactions')
+                    }
+
+                }).catch((err)=>{
+                    console.log(err)
+                    scope.notify(err,'error')
+                })
+            } else {
+                scope.notify('Please select at least 1 transaction', 'error')
+            }
+
+
+        }
+
         scope.printAll = function(){
 
             let keys = []
             scope.transactions.map((transaction) => {
 
                 if (transaction.selected){
-                    console.log(transaction)
                     keys.push(transaction._key)
                 }
                 return transaction
             })
 
-            if (keys){
+            if (keys.length > 0){
 
                 let payload = {
                     ids: keys,
                     status: 'processing'
                 }
 
-                scope.post('/dashboard/transactions/update', payload).then(()=>{
-                    window.location.href = '/dashboard/transactions/print/'+keys.join(',')
-                }).catch((err)=>{
-                    console.log(err)
-                    scope.notify(err,'error')
-                })
+                window.location.href = '/dashboard/transactions/print/'+keys.join(',')
+
             } else {
                 scope.notify('Please select at least 1 transaction to print')
             }
 
 
         }
-
-        scope.shipAll = function(){
-
-            let keys = []
-            scope.transactions.map((transaction) => {
-
-                if (transaction.selected){
-                    keys.push(transaction._key)
-                    transaction.status = 'shipped'
-                }
-                return transaction
-            })
-
-            if (keys){
-
-                let payload = {
-                    ids: keys,
-                    status: 'shipped'
-                }
-
-                scope.post('/dashboard/transactions/update', payload).then(()=>{
-                    view.update('transactions')
-                }).catch((err)=>{
-                    console.log(err)
-                    scope.notify(err,'error')
-                })
-            } else {
-                scope.notify('Please select at least 1 transaction to mark as shipped')
-            }
-
-
-        }
+        //
+        // scope.shipAll = function(){
+        //
+        //     let keys = []
+        //     scope.transactions.map((transaction) => {
+        //
+        //         if (transaction.selected){
+        //             keys.push(transaction._key)
+        //             transaction.status = 'shipped'
+        //         }
+        //         return transaction
+        //     })
+        //
+        //     if (keys.length > 0){
+        //
+        //         let payload = {
+        //             ids: keys,
+        //             status: 'shipped'
+        //         }
+        //
+        //         scope.post('/dashboard/transactions/update', payload).then(()=>{
+        //             view.update('transactions')
+        //         }).catch((err)=>{
+        //             console.log(err)
+        //             scope.notify(err,'error')
+        //         })
+        //     } else {
+        //         scope.notify('Please select at least 1 transaction to mark as shipped')
+        //     }
+        //
+        //
+        // }
 
     }
 

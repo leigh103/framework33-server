@@ -53,25 +53,28 @@
 
             }
 
-            scope.searchApi = function(collection, str, prefix){
+            scope.search = function(collection){
 
                 clearTimeout(scope.view.typing)
+
+                let str = this.target.value
+
                 scope.view.typing = setTimeout(function(){
 
                     let url = '/api/'+collection+'/search?str='+str.toLowerCase()
 
-                    http(url)
+                    http.get(url)
                         .then((data) => {
-                            scope[collection] = JSON.parse(data)
 
-                            if (prefix){
-                                scope.view[prefix+'_search_results'] = true
-                            } else {
-                                scope.view.search_results = true
+                            scope[collection] = JSON.parse(data)
+                            view.update(collection)
+
+                            if (scope[collection].length == 0){
+                                scope.notify('Nothing found','error',5,'fa-search')
                             }
 
-                            // console.log(scope[collection])
                         }).catch((err) => {
+                            console.log(err)
                             scope.notify(err, 'error')
                         })
 
@@ -227,14 +230,13 @@
             }
 
             scope.splice = function(obj,item){
-
-console.log(this)
+console.log(obj, item)
                 if (obj && obj.length > 0){
                     obj = obj.filter((itm,i)=>{
                         return itm.value != item
                     })
-
-                //    evaluate.setValue(this._params[0], obj)
+console.log(this._params)
+                    evaluate.setValue(this._params[0], obj)
                 }
 
             }

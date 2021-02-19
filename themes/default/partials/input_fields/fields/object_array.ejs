@@ -8,6 +8,10 @@
 
         <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1" app-for="<%- obj %> in new.<%- item.name %>">
 
+            <div class="colspan-5 text-right">
+                <a app-click="splice('new.<%- item.name %>', <%- obj %>)"><i class="fas fa-times"></i></a>
+            </div>
+
             <% item.subitems.forEach((subitem,i)=>{ %>
 
                 <% if (subitem.colspan){ colspan = subitem.colspan } %>
@@ -46,8 +50,8 @@
 
                     <div class="rowspan-4">
                         <label><%- view.functions.parseName(subitem.name) %></label>
-                        <label app-attr="{'for':'sub_image_'+{{index}}}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="<%- obj %>.<%- subitem.name %>" class="<%- subitem.name %>"></label>
-                        <input app-attr="{'id':'sub_image_'+{{index}}}" type="file" app-model="<%- obj %>.<%- subitem.name %>">
+                        <label app-attr="{'for':'sub_image_'+$index}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="<%- obj %>.<%- subitem.name %>" class="<%- subitem.name %>"></label>
+                        <input app-attr="{'id':'sub_image_'+$index}" type="file" app-model="<%- obj %>.<%- subitem.name %>">
                     </div>
 
                 <% } else if (subitem.input_type == 'select'){ %>
@@ -124,8 +128,8 @@
 
                 <div class="rowspan-4">
                     <label><%- view.functions.parseName(subitem.name) %></label>
-                    <label app-attr="{'for':'sub_image_'+{{index}}}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="new.new_array.<%- subitem.name %>" class="<%- subitem.name %>"></label>
-                    <input app-attr="{'id':'sub_image_'+{{index}}}" type="file" app-model="new.new_array.<%- subitem.name %>">
+                    <label app-attr="{'for':'sub_image_'+$index}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="new.new_array.<%- subitem.name %>" class="<%- subitem.name %>"></label>
+                    <input app-attr="{'id':'sub_image_'+$index}" type="file" app-model="new.new_array.<%- subitem.name %>">
                 </div>
 
             <% } else if (subitem.input_type == 'select'){ %>
