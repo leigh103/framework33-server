@@ -48,7 +48,9 @@ const express = require('express'),
 
     let data = {
         include_styles: [settings.views+'/styles/style.ejs'],
-        cart_name: view.functions.capitalise(cart_name)
+        cart_name: view.functions.capitalise(cart_name),
+        model: new Transactions().settings,
+        query: ''
     }
 
     routes.get('*', (req, res, next) => {
@@ -129,6 +131,7 @@ const express = require('express'),
             data.status = req.params.status
             data.query = false
             data.fields = new Cart().settings.fields
+            data.search_fields = new Cart().settings.search_fields
         } else {
             data.title = 'Transactions'
             data.table = 'transactions'
@@ -136,7 +139,8 @@ const express = require('express'),
             view.current_sub_view = data.status
             data.query = '?status='+req.params.status
 
-            data.fields = new Transactions().settings.fields
+            data.fields = data.model.fields
+            data.search_fields = data.model.search_fields
         }
 
         if (data.status == 'completed' || data.status == 'deleted'){

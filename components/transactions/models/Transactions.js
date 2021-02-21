@@ -21,11 +21,11 @@
                 fields: [
                     // {name:'status',input_field:'select',options:this.statuses, type:'string', required:false},
                     // {name:'barcode',input_field:'_key',placeholder:'Barcode', type:'barcode', required:false},
-                    {name:'reference', type:'string', required:true},
+                    {name:'reference', type:'string', input_type:'text',required:true},
                     {name:'items', type:'array', required:false},
                     {name:'customer', type:'object', required:false, subitems:[
                         {name:'title',input_type:'select',options:[{text:'Mr',value:'mr'},{text:'Mrs',value:'mrs'},{text:'Miss',value:'miss'},{text:'Ms',value:'ms'},{text:'Dr',value:'dr'}],placeholder:'Title', type:'string', required:false},
-                        {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
+                        {name:'full_name',input_type:'text',placeholder:'Name', type:'string', required:true},
                         {name:'email',input_type:'email',placeholder:'Email Address', type:'email', required:false},
                         {name:'tel',input_type:'number',placeholder:'Mobile Number', type:'tel', required:false},
                         {name:'notification_method',input_type:'select',options:[{text:'SMS Text',value:'sms'},{text:'Email',value:'email'}],placeholder:'Select preferred notification method', type:'string', required:false}
@@ -46,7 +46,8 @@
                     ]},
                     {name:'status', input_type: 'select', options:this.statuses, type:'string', required:true},
                     {name:'_user_id', type:'string', required:true}
-                ]
+                ],
+                search_fields:['customer.name','reference','customer.email','customer.tel','billing_address.postal_code','shipping_address.postal_code']
             }
 
             this.routes = {
@@ -78,23 +79,37 @@
 
         async preSave(){
 
-            if (this.data._id && this.data._id.match(/^cart/)){ // if saving cart data, ie a new transaction
+            return new Promise( async (resolve, reject) => {
 
-                let transaction_data = this.data
-                this.settings.collection = 'cart'
-                await this.delete()
-                this.settings.collection = 'transactions'
+                if (this.data._id && this.data._id.match(/^cart/)){ // if saving cart data, ie a new transaction
 
-                this.data = transaction_data
+                    let transaction_data = this.data
+                    this.settings.collection = 'cart'
+                    await this.delete()
+                    this.settings.collection = 'transactions'
 
-                // await new Cart().find(this.data._key).delete()
+                    this.data = transaction_data
 
-                delete this.data._id
-                delete this.data._key
-                delete this.data._created
-                delete this.data.guard
+                    // await new Cart().find(this.data._key).delete()
 
-            }
+                    delete this.data._id
+                    delete this.data._key
+                    delete this.data._created
+                    delete this.data.guard
+
+                    resolve()
+
+                } else if (this.data.status && !this.data.status.match(/completed/)) {
+
+                    resolve()
+
+                } else {
+                    reject()
+                }
+
+            })
+
+
 
         }
 
@@ -102,20 +117,19 @@
 
             let save = false
 
+            if (typeof this.data.customer == 'object' && this.data.customer.email && !this.data.customer._key && this.data.status == 'paid'){
+
+                this.data.customer.billing_address = this.data.billing_address
+                this.data.customer.shipping_address = this.data.shipping_address
+                let user = await new User(this.data.customer).findOrSave()
+                this.data.customer._key = user.data._key
+                save = true
+
+            }
+
             if (!this.data.status && !status){
                 this.data.status = this.statuses[0].value
                 save = true
-            // } else if (status){
-            //
-            //     let status_check = this.statuses.findIndex((sts)=>{
-            //         return sts.value == status.toLowerCase().replace(/\s/g,'_')
-            //     })
-            //
-            //     if (status_check >= 0){
-            //         this.data.status = status
-            //         save = true
-            //     }
-
             }
 
             if (this.data.reference && !this.data.barcode){
@@ -134,31 +148,7 @@
 
         }
 
-        async search(str) {
-
-            if (str.length < 3){
-
-                this.data = DB.read(this.settings.collection).limit(30).get()
-                return this
-
-            } else {
-
-                let filter = []
-
-                filter.push('reference like '+str)
-                filter.push('customer.name like '+str)
-                filter.push('customer.email like '+str)
-                filter.push('customer.tel like '+str)
-
-                this.data = await DB.read(this.settings.collection).orWhere(filter).get()
-
-                return this
-
-            }
-
-        }
-
-        async updateStatus(status, ids){
+        async updateStatus(new_status, ids){
 
             if (typeof ids == 'string' && ids.match(/,/)){
                 ids = ids.split(',')
@@ -170,13 +160,18 @@
 
             for (let id of ids){
 
-                let payload = {status:status}
+                let payload = {status:new_status}
                 let transaction = await DB.read(this.settings.collection).where(['_key == '+id]).update(payload).first() // update the transaction with the status
 
-                if (transaction[status]){ // if the status has already been appiied
+                if (transaction.status_logs[new_status]){ // if the status has already been appiied
 
                 } else { // if this is the first time the status is being applied, update the timestamp and trigger the notification
-                    payload[status] = moment().toISOString()
+
+                    if (!payload.status_logs){
+                        payload.status_logs = {}
+                    }
+
+                    payload.status_logs[new_status] = moment().toISOString()
 
                     try {
                         await DB.read(this.settings.collection).where(['_key == '+id]).update(payload).first()
@@ -186,7 +181,7 @@
                     }
 
                     try {
-                        await new Events('order_'+status).trigger(transaction)
+                        await new Events('order_'+new_status).trigger(transaction)
                     }
                     catch(err){
                         log(err)

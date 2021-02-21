@@ -151,6 +151,12 @@
             //
             // }
 
+            if (typeof data != 'object'){
+                return this
+            }
+
+            data._updated = moment().toISOString()
+
             this.query += 'UPDATE '+this.query_key+' WITH '+JSON.stringify(data)+' IN '+this.collection+' '
 
             return this
@@ -159,19 +165,35 @@
 
         where(filters){
 
-            this.query += 'FILTER '
+            if (typeof filters == 'object' && filters.length > 0){
+                this.query += 'FILTER '
+            }
 
             filters.map((filter) => {
 
-                let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists)\s*["|']*([^'"]*)["|']*/i)
+                let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists|has value)\s*["|']*([^'"]*)["|']*/i)
 
                 if (op[3]){
 
-                    if (op[2] == 'like'){
-                        this.query += 'LOWER('+this.query_key+'.'+op[1]+') =~ "'+op[3]+'"'
+                    if (op[3].match(/^true|false$/i)){
+
                     } else {
-                        this.query += this.query_key+'.'+op[1]+' '+op[2]+' "'+op[3]+'"'
+                        op[3] = '"'+op[3]+'"'
                     }
+
+                    if (op[2] == 'like'){
+                        this.query += 'LOWER('+this.query_key+'.'+op[1]+') =~ '+op[3]
+                    } else {
+                        this.query += this.query_key+'.'+op[1]+' '+op[2]+' '+op[3]
+                    }
+
+                } else if (op[2].match(/^has value/i)){
+
+                    this.query += 'LENGTH('+this.query_key+'.'+op[1]+') > 0'
+
+                } else if (op[2].match(/^exists/i)){
+
+                    this.query += 'HAS('+this.query_key+', "'+op[1]+'")'
 
                 } else if (op[2].match(/^not exists/i)){
 
@@ -202,19 +224,35 @@
 
         orWhere(filters) {
 
-            this.query += 'FILTER '
+            if (typeof filters == 'object' && filters.length > 0){
+                this.query += 'FILTER '
+            }
 
             filters.map((filter) => {
 
-                let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists)\s*["|']*([^'"]*)["|']*/i)
+                let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists|has value)\s*["|']*([^'"]*)["|']*/i)
 
                 if (op[3]){
 
-                    if (op[2] == 'like'){
-                        this.query += 'LOWER('+this.query_key+'.'+op[1]+') =~ "'+op[3]+'"'
+                    if (op[3].match(/^true|false$/i)){
+
                     } else {
-                        this.query += this.query_key+'.'+op[1]+' '+op[2]+' "'+op[3]+'"'
+                        op[3] = '"'+op[3]+'"'
                     }
+
+                    if (op[2] == 'like'){
+                        this.query += 'LOWER('+this.query_key+'.'+op[1]+') =~ '+op[3]
+                    } else {
+                        this.query += this.query_key+'.'+op[1]+' '+op[2]+' '+op[3]
+                    }
+
+                } else if (op[2].match(/^has value/i)){
+
+                    this.query += 'LENGTH('+this.query_key+'.'+op[1]+') > 0'
+
+                } else if (op[2].match(/^exists/i)){
+
+                    this.query += 'HAS('+this.query_key+', "'+op[1]+'")'
 
                 } else if (op[2].match(/^not exists/i)){
 
@@ -250,7 +288,7 @@
 
         orderBy(field, direction) {
 
-            this.query += 'SORT '+field+', '+direction+' '
+            this.query += 'SORT '+this.query_key+'.'+field+' '+direction+' '
 
             return this
 
@@ -350,6 +388,10 @@
                 if (!this.query.match(/^RETURN/)){
                     this.query += 'RETURN '+this.query_key
                 }
+
+                this.query = this.query.replace(/FILTER RETURN/,'RETURN')
+
+                // console.log(this.query)
                 try {
                     let result = await adb.query(this.query)
                     this.result = result._result
@@ -367,7 +409,7 @@
 
         }
 
-        async first(){
+        async new(){
 
             if (this.result && this.result.length > 0){
 
@@ -376,9 +418,11 @@
             } else if (typeof this.query == 'string') {
 
                 if (!this.query.match(/^RETURN/)){
-                    this.query += 'RETURN '+this.query_key
+                    this.query += 'RETURN NEW'
                 }
 
+                this.query = this.query.replace(/FILTER RETURN/,'RETURN')
+//    console.log(this.query)
                 try {
 
                     let result = await adb.query(this.query)
@@ -406,7 +450,48 @@
 
             }
 
+        }
 
+        async first(){
+
+            if (this.result && this.result.length > 0){
+
+                return this.result[0]
+
+            } else if (typeof this.query == 'string') {
+
+                if (!this.query.match(/^RETURN/)){
+                    this.query += 'RETURN '+this.query_key
+                }
+
+                this.query = this.query.replace(/FILTER RETURN/,'RETURN')
+//    console.log(this.query)
+                try {
+
+                    let result = await adb.query(this.query)
+                    if (result._result && result._result.length > 0){
+                        this.result = result._result[0]
+                    } else {
+                        this.result = {}
+                    }
+
+                }
+
+                catch(e){
+                    console.error('AQL Query:', this.query)
+                    console.error('Arango Error:', e.response.body)
+                    this.result = {}
+                }
+
+                this.query = ''
+                return this.result
+
+            } else {
+
+                this.result = {}
+                return this.result
+
+            }
 
         }
 

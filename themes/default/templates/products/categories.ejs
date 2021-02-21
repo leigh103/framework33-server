@@ -1,8 +1,8 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
 
-<section class="vh-90 relative flex flex-middle flex-column bg-33-light-grey bg-cover pt-3"<% if (shop.image){ %> style="background-image: url('<%- shop.image %>')"<% } %>>
-    <div class="background bg-33-dark-grey transparent-1"></div>
+<section class="vh-40 relative flex flex-middle flex-column bg-text-dark bg-cover"<% if (shop.image){ %> style="background-image: url('<%- shop.image %>')"<% } %>>
+
     <h1 class="text-33-white mb-1" anim="{'enter':'fade-in','duration':'3s'}"><%- shop.name %></h1>
     <% if (shop.sub_title){ %>
         <div class="contain">
@@ -34,8 +34,8 @@
             <% categories.forEach((category,i)=>{ %>
 
                 <% if (typeof category.slug != 'undefined'){ %>
-                <a href="/<%- category.slug %>" class="block bg-cover rounded flex overflow-hidden shadow flex flex-middle flex-column p-8 px-m-3 py-m-6 px-s-3 py-s-6" anim="{'enter':'move-up'}" style="background-image:url('<%- category.image %>')">
-                    <div class="background bg-33-dark-grey transparent-1"></div>
+                <a href="/<%- category.slug %>" class="block bg-text-dark bg-cover rounded flex overflow-hidden shadow flex flex-middle flex-column p-8 px-m-3 py-m-6 px-s-3 py-s-6" anim="{'enter':'move-up'}" style="background-image:url('<%- category.image %>')">
+
                     <h2 class=" text-weight-500 text-33-white"><%- category.name %></h2>
                     <p class=" text-33-white"><%- category.sub_title %></p>
 

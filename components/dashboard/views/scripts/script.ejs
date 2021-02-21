@@ -59,26 +59,48 @@
 
                 let str = this.target.value
 
-                scope.view.typing = setTimeout(function(){
+                if (str.length > 2){
 
-                    let url = '/api/'+collection+'/search?str='+str.toLowerCase()
+                    scope.view.typing = setTimeout(function(){
 
-                    http.get(url)
-                        .then((data) => {
+                        let url = '/api/'+collection+'/search?str='+str.toLowerCase()
 
-                            scope[collection] = JSON.parse(data)
-                            view.update(collection)
+                        http.get(url)
+                            .then((data) => {
 
-                            if (scope[collection].length == 0){
-                                scope.notify('Nothing found','error',5,'fa-search')
-                            }
+                                scope[collection] = JSON.parse(data)
+                                view.update(collection)
 
-                        }).catch((err) => {
-                            console.log(err)
-                            scope.notify(err, 'error')
-                        })
+                                if (scope[collection].length == 0){
+                                    scope.notify('Nothing found','error',5,'fa-search')
+                                }
 
-                },500)
+                            }).catch((err) => {
+                                console.log(err)
+                                scope.notify(err, 'error')
+                            })
+
+                    },500)
+
+                } else {
+
+                    <% if (typeof table != 'undefined'){ %>
+
+                        scope.view.typing = setTimeout(function(){
+
+                            scope.get('<%- table %><% if (typeof query != 'undefined'){ %><%- query %><% } %>').then((data)=>{
+                                scope[collection] = data
+                                view.update(collection)
+                            }).catch((err) => {
+                                console.log(err)
+                                scope.notify(err, 'error')
+                            })
+
+                        },500)
+
+                    <% } %>
+                }
+
 
             }
 
@@ -133,6 +155,10 @@
 
             //    const editordata = editor.getData()
 
+                if (scope.view.key){
+                    scope[collection][scope.view.key] = obj
+                }
+
                 scope.notify('Saving...')
 
                 if (typeof obj.content != 'undefined'){
@@ -140,8 +166,9 @@
                 }
 
                 scope.post(collection, obj).then((data)=>{
-
-                    view.update(collection)
+                    console.log(collection, data, scope.view.key)
+                    scope[collection][scope.view.key] = data
+                    view.update(collection+'['+scope.view.key+']')
                     if (!keep_open){
                         scope.closeModal()
                     }

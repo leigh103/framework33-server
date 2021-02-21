@@ -85,7 +85,12 @@
 
                 scope.checkout = function(){
 
-                    if (!scope.cart.customer.name){
+                    if (scope.cart.items.length < 1){
+                        scope.notify('Please add at least 1 item to checkout','error',5,'fa-exclamation-circle')
+                        return false
+                    }
+
+                    if (!scope.cart.customer.full_name){
                         scope.notify('Please add your name','error',5,'fa-exclamation-circle')
                         return false
                     }

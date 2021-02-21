@@ -1,4 +1,4 @@
-<div class="pr-2 pt-7 pt-s-2">
+<div class="pr-2 pt-7 hidden-s">
 
     <h1 class="h4 text-weight-500">Shopping <%- view.ecommerce.cart_name %></h1>
 
@@ -27,4 +27,12 @@
         </div>
     </div>
 
+</div>
+
+<div class="hidden block-s">
+    <h1 class="h4 text-weight-500">Shopping <%- view.ecommerce.cart_name %></h1>
+    <div class="grid col-2 gap-1 mt-1">
+        <div><span app-bind="cart.items.length"></span> items</div>
+        <div app-bind="parseCurrency(cart.total)" class="text-right"></div>
+    </div>
 </div>

@@ -67,11 +67,16 @@
 
             },
 
-            truncate:(input, words) => {
-                if (!words){
-                    words = 10
+            truncate:(input, length, chars) => {
+                if (!length){
+                    length = 10
                 }
-                return input.split(" ").splice(0,words).join(" ")
+                if (chars){
+                    return input.substring(0,length-3)+'...'
+                } else {
+                    return input.split(" ").splice(0,length).join(" ")
+                }
+
             },
 
             parseName:(input, depluralise)=>{
@@ -159,6 +164,47 @@
 
             },
 
+            getMeta:(data) => {
+
+                let meta = {}
+
+                if (data.name){
+                    meta.title = config.site.name+' | '+data.name
+                }
+
+                if (data.title){
+                    meta.title = config.site.name+' | '+data.title
+                }
+
+                if (data.description){
+                    if (data.description.length > 160){
+                        meta.description = view.functions.truncate(data.description, 160, true)
+                    } else {
+                        meta.description = data.description
+                    }
+
+                }
+
+                if (data.url){
+                    if (data.url.match(/^http/)){
+                        meta.url = data.url
+                    } else {
+                        meta.url = config.site.url+data.url
+                    }
+                }
+
+                if (data.image){
+                    meta.image = config.site.url+data.image
+                }
+
+                if (data._updated){
+                    meta.updated_time = moment(data._updated).unix()
+                }
+
+                return meta
+
+            },
+
             parseTime:(time)=>{
 
                 time = time.toString().split("")
@@ -171,13 +217,59 @@
 
             },
 
+            parseCurrency:(price)=>{
+                if (!isNaN(price)){
+                    price = price/100
+                    return '£'+price.toFixed(2)
+                } else {
+                    return '£0.00'
+                }
+            },
+
+            parseURL:(url)=>{
+                return url.replace(/\//g,'%2F').replace(/\s/g,'%20')
+            },
+
             stripStyle:(input) => {
                 return input.replace(/style=\"|'(.*?)\"|'/g,'')
             },
 
             stripTags:(input) => {
                 return input.replace(/<\/?[^>]+(>|$)/g, "")
-            }
+            },
+
+            parseSearchFields:(fields)=>{
+
+                let output = ''
+                fields.map((field,i)=>{
+
+                    if (field.match(/\./)){
+                        field = field.split('.').pop()
+                    }
+
+                    if (field == 'tel'){
+                        field = 'mobile number'
+                    }
+
+                    if (field == 'postal_code'){
+                        field = 'postcode'
+                    }
+
+                    if (field == 'full_name'){
+                        field = 'name'
+                    }
+
+                    if (i == fields.length-1){
+                        output += 'or '+field
+                    } else if (i == fields.length-2){
+                        output += field+' '
+                    } else {
+                        output += field+', '
+                    }
+
+                })
+                return output.toLowerCase()
+            },
 
         }
     }

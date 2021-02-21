@@ -20,11 +20,12 @@
                 delete this.data.password_conf
             }
 
-            let existing = await new User().find(['email == '+this.data.email]).sanitize()
+            let existing = await new User().find(['email == '+this.data.email])
 
-            if (existing && existing.email && this.email == existing.email){
+            if (existing && existing.data.email && this.data.email == existing.data.email){
 
-                if (config.users.email_activation === true && !this.data.activated){
+                existing.sanitize()
+                if (config.users.email_activation === true && !existing.data.activated){
                     existing.sendReset()
                 }
 
@@ -34,20 +35,26 @@
 
                 await this.passwordValidation()
 
-                if (this.error){
-                    return this
-                }
+                if (this.error){ // most likely a new guest account
 
-                await this.save()
-
-                if (config.users.email_activation === true){
-                    this.data.activated = false
                     this.sendReset()
-                } else {
-                    this.data.activated = true
-                }
+                    await this.save()
+                    return this
 
-                return this
+                } else {
+
+                    await this.save()
+
+                    if (config.users.email_activation === true){
+                        this.data.activated = false
+                        this.sendReset()
+                    } else {
+                        this.data.activated = true
+                    }
+
+                    return this
+
+                }
 
             }
 
@@ -55,7 +62,7 @@
 
         async sanitize(){
 
-            let fields = ['_key','_id','full_name','email','tel','activated','guard','avatar']
+            let fields = ['_key','_id','title','full_name','email','tel','activated','guard','avatar','shipping_address','billing_address']
 
             for (var [key,val] of Object.entries(this.data)){
                 if (fields.indexOf(key) === -1){
@@ -68,28 +75,6 @@
         }
 
         async preSave(){
-
-        }
-
-        search(search) {
-
-            if (search.str.length < 3){
-
-                this.data = DB.read(this.settings.collection).limit(30).get()
-                return this.data
-
-            } else {
-
-                let filter = []
-
-                filter.push('full_name like '+search.str)
-                filter.push('email like '+search.str)
-                filter.push('full_name like '+search.str)
-
-                this.data = DB.read(this.settings.collection).orWhere(filter).get()
-                return this.data
-
-            }
 
         }
 

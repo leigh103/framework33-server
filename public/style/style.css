@@ -191,6 +191,10 @@ a:hover {
 .text-primary {
   color: #1dc7d5;
 }
+.text-error,
+.text-red {
+  color: #d51d22;
+}
 .text-secondary {
   color: #1398a3;
 }
@@ -219,7 +223,7 @@ a:hover {
   position: relative;
 }
 .bg-text-dark:before {
-  background-color: rgba(60,60,60,0.3);
+  background-color: rgba(30,30,30,0.4);
   content: '';
   display: block;
   position: absolute;
@@ -412,6 +416,11 @@ a:hover {
   height: 13.4rem;
   padding: 3.2rem 3rem 0 3rem;
 }
+@media (min-width: 851px) and (max-width: 1180px) {
+  .dashboard .side-nav .header {
+    padding: 3.2rem 1rem;
+  }
+}
 .dashboard .side-nav .logo {
   display: flex;
   align-items: center;
@@ -442,6 +451,11 @@ a:hover {
   padding: 0 3rem;
   cursor: pointer;
 }
+@media (min-width: 851px) and (max-width: 1180px) {
+  .dashboard .side-nav .link a {
+    padding: 0 1rem;
+  }
+}
 .dashboard .side-nav .link a:hover {
   background-color: rgba(255,255,255,0.5);
 }
@@ -458,6 +472,11 @@ a:hover {
   padding: 0 2rem 0 4rem;
   cursor: pointer;
   font-size: 0.9em;
+}
+@media (min-width: 851px) and (max-width: 1180px) {
+  .dashboard .side-nav .link .subitems a {
+    padding: 0 2rem;
+  }
 }
 .dashboard .side-nav .link .subitems a:hover,
 .dashboard .side-nav .link .subitems a.active {
@@ -694,7 +713,7 @@ label {
   font-size: 0.8rem;
   color: #33424b;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 label.checkbox {
   display: flex;
@@ -772,6 +791,20 @@ input[type=checkbox]:checked:after {
 }
 input[type=checkbox].invalid:after {
   border: 2px solid #de4848 !important;
+}
+.icon {
+  display: inline-block;
+  height: 1rem;
+  width: auto;
+}
+.icon.lg {
+  height: 1.5rem;
+}
+.icon.xl {
+  height: 2rem;
+}
+.icon.xxl {
+  height: 2.5rem;
 }
 body:not(.dashboard):not(.fullscreen) .page {
   min-height: calc(100vh - 14rem);
@@ -1094,6 +1127,9 @@ modal-auto > section section.body {
 .table .cell.image {
   width: 4rem;
 }
+.table .cell.title.select {
+  width: 4rem;
+}
 .table .cell.boolean,
 .table .cell.integer,
 .table .cell.action {
@@ -1105,7 +1141,8 @@ modal-auto > section section.body {
 .table .cell.img_array,
 .table .cell.object,
 .table .cell.array,
-.table .cell.multiselect {
+.table .cell.multiselect,
+.table .cell.barcode {
   display: none;
 }
 @media only screen and (max-width: 851px) {

@@ -23,7 +23,8 @@
                     {name:'status',input_type:'select',options:[{text:'Draft',value:'draft'},{text:'Published',value:'published'}],placeholder:'Status', type:'string', required:true},
                     {name:'publish_date',input_type:'date',placeholder:'Publish Date', type:'date', required:false},
                     {name:'hide_top_nav',input_type:'checkbox',placeholder:'Hide site nav', type:'boolean', required:false}
-                ]
+                ],
+                search_fields:['title','slug','type','tags','status']
             }
 
             this.routes = {

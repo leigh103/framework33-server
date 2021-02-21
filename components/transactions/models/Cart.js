@@ -33,7 +33,8 @@
                         {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'postcode', required:true}
                     ]},
                     {name:'_user_id', type:'string', required:true}
-                ]
+                ],
+                search_fields:['reference','customer.name','customer.email','customer.tel','billing_address.postal_code','shipping_address.postal_code']
             }
 
             this.routes = {
@@ -78,6 +79,31 @@
             if (req && req.session && req.session.cart_id){
 
                 await this.find(req.session.cart_id)
+                return this.data
+
+            } else if (req && req.session && req.session.user && req.session.user._id){
+
+                this.data = {}
+                this.data.items = []
+                this.data._user_id = req.session.user._id
+                this.data.customer = {
+                    full_name: req.session.user.full_name,
+                    email: req.session.user.email
+                }
+
+                if (req.session.user.tel){
+                    this.data.customer.tel = req.session.user.tel
+                }
+
+                if (req.session.user.billing_address){
+                    this.data.billing_address = req.session.user.billing_address
+                }
+
+                if (req.session.user.shipping_address){
+                    this.data.shipping_address = req.session.user.shipping_address
+                }
+
+                await this.setReference().save()
                 return this.data
 
             } else if (req && req.cookies && req.cookies['connect.sid']){
@@ -237,7 +263,7 @@
             this.data.total = 0
 
             await this.calcItems()
-            this.data.item_total = parseFloat(this.data.total).toFixed(2)
+            this.data.item_total = parseInt(this.data.total).toFixed(2)
             await this.calcDiscounts()
             await this.calcTax()
 
@@ -277,9 +303,9 @@
                     }
 
                     if (item.price){
-
+console.log('price',item.price)
                         if (item.adjustment){
-
+console.log('adjust',item.adjustment)
                             if (item.original_price){
                                 item.price = item.original_price
                             }
@@ -290,30 +316,30 @@
 
                                 item.adjustment_value = item.adjustment.replace(/%/,'')
                                 item.adjustment_value = (item.price/100)*item.adjustment_value
-                                item.original_price = parseFloat(item.price).toFixed(2)
-                                item.price = parseFloat(item.price)+parseFloat(item.adjustment_value)
+                                item.original_price = parseInt(item.price).toFixed(2)
+                                item.price = parseInt(item.price)+parseInt(item.adjustment_value)
 
                             } else {
 
-                                item.original_price = parseFloat(item.price).toFixed(2)
-                                item.price = parseFloat(item.price)+parseFloat(item.adjustment)
+                                item.original_price = parseInt(item.price).toFixed(2)
+                                item.price = parseInt(item.price)+parseInt(item.adjustment)
 
                             }
 
                         }
 
-                        item.price = parseFloat(item.price).toFixed(2)
+                        item.price = parseInt(item.price).toFixed(2)
 
                         if (item.quantity>1){
-                            this.data.total = parseFloat(this.data.total)+(parseFloat(item.price)*parseInt(item.quantity))
+                            this.data.total = parseInt(this.data.total)+(parseInt(item.price)*parseInt(item.quantity))
                         } else {
                             item.quantity = 1
-                            this.data.total = parseFloat(this.data.total)+parseFloat(item.price)
+                            this.data.total = parseInt(this.data.total)+parseInt(item.price)
                         }
 
                         if (item.type != 'vouchers' && item.type != 'account'){
-                            item.sub_total = parseFloat(item.price)/config.tax_amount
-                            item.tax = parseFloat(item.price)-parseFloat(item.sub_total)
+                            item.sub_total = parseInt(item.price)/config.tax_amount
+                            item.tax = parseInt(item.price)-parseInt(item.sub_total)
                             item.tax = (item.tax*parseInt(item.quantity)).toFixed(2)
                             item.sub_total = (item.sub_total*parseInt(item.quantity)).toFixed(2)
                         }
@@ -333,20 +359,20 @@
             for (let item of this.data.items) {
 
                 if (item.price){
-                //    cart.total += parseFloat(item.price)
+                //    cart.total += parseInt(item.price)
                 }
                 if (item.tax){
-                    this.data.tax += parseFloat(item.tax)
+                    this.data.tax += parseInt(item.tax)
                 }
                 if (item.sub_total){
-                    this.data.sub_total += parseFloat(item.sub_total)
+                    this.data.sub_total += parseInt(item.sub_total)
                 }
 
             }
 
-            this.data.sub_total = parseFloat(this.data.sub_total).toFixed(2)
-            this.data.tax = parseFloat(this.data.tax).toFixed(2)
-            this.data.total = parseFloat(this.data.total).toFixed(2)
+            this.data.sub_total = parseInt(this.data.sub_total).toFixed(2)
+            this.data.tax = parseInt(this.data.tax).toFixed(2)
+            this.data.total = parseInt(this.data.total).toFixed(2)
 
             return this
 
@@ -354,7 +380,7 @@
 
         async calcDiscounts(){
 
-            console.log('calcDiscounts')
+            // console.log('calcDiscounts')
 
             await this.applyOfferCode()
             await this.applyVouchers()
@@ -384,7 +410,7 @@
 
         async applyOfferCode() {
 
-            console.log('applyOffer')
+            // console.log('applyOffer')
             return this
 
             // return new Promise(async (resolve, reject) => {
@@ -402,14 +428,14 @@
             //             }
             //
             //             if (cart.offer_code_data.method == 'percent_off'){
-            //                 item_discount = item.original_price * (parseFloat(cart.offer_code_data.value)/100)
+            //                 item_discount = item.original_price * (parseInt(cart.offer_code_data.value)/100)
             //             } else if (cart.offer_code_data.method == 'fixed_off'){
-            //                 item_discount = item.original_price - parseFloat(cart.offer_code_data.value)
+            //                 item_discount = item.original_price - parseInt(cart.offer_code_data.value)
             //             }
             //
             //             cart.payment.discount = cart.payment.discount+item_discount
             //
-            //             item.price = parseFloat(item.original_price) - item_discount
+            //             item.price = parseInt(item.original_price) - item_discount
             //             item.price = item.price.toFixed(2)
             //
             //         }
@@ -426,7 +452,7 @@
             //                 item.price = item.original_price
             //             }
             //             if (item.price){
-            //                 item.price = parseFloat(item.price).toFixed(2)
+            //                 item.price = parseInt(item.price).toFixed(2)
             //             }
             //
             //         }
@@ -440,7 +466,7 @@
 
         async applyVouchers() {
 
-            console.log('applyVouchers')
+            // console.log('applyVouchers')
             return this
 
             // return new Promise(function(resolve, reject) {
@@ -448,7 +474,7 @@
             //     if (cart.vouchers && cart.vouchers.length > 0){
             //
             //         cart.payment.vouchers = cart.vouchers.reduce((total,a)=>{
-            //             return total + parseFloat(a.value)
+            //             return total + parseInt(a.value)
             //         },0)
             //
             //         cart.vouchers_total = cart.payment.vouchers
@@ -474,14 +500,14 @@
 
         async applyAccountBalance() {
 
-            console.log('applyAccountBalance')
+            // console.log('applyAccountBalance')
             return this
 
             // return new Promise(function(resolve, reject) {
             //
             //     if (cart.account_balance){
             //
-            //         cart.payment.account = parseFloat(cart.account_balance)
+            //         cart.payment.account = parseInt(cart.account_balance)
             //
             //         cart.total = cart.total - cart.payment.account
             //

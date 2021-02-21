@@ -13,7 +13,7 @@ extend.stripe = function(){
     var style = {
       base: {
         // Add your base input styles here. For example:
-        fontSize: '16px',
+        fontSize: '14px',
         color: '#32325d',
       },
     };

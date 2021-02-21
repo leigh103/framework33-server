@@ -23,11 +23,12 @@
                     {name:'adjustment',input_type:'text',placeholder:'Adjustment',type:'discount',required: false},
                     {name:'attributes',input_type:'array',option_data:'product_attributes',placeholder:'Attributes',type:'object',required: false},
                     {name:'customisation',input_type:'array',placeholder:'Customisation',type:'object',required: false},
-                    {name:'activated',input_type:'select',options:[{text:'Yes',value:true},{text:'No',value:false}], type:'boolean', required:false},
-                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false},
+                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', truncate:160, required:false},
                     {name:'content_before_details',input_type:'checkbox',placeholder:'Show content before product details', type:'boolean', required:false, table_hide: true},
-                    {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:false}
-                ]
+                    {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:false},
+                    {name:'activated',input_type:'checkbox',type:'boolean',required: false},
+                ],
+                search_fields:['name','brand', 'barcode']
             }
 
             this.routes = {
@@ -56,14 +57,22 @@
 
         }
 
-        all(data) {
+        all(data, start, end) {
+
+            if (!start){
+                start = 0
+            }
+
+            if (!end){
+                end = 999
+            }
 
             if (typeof data == 'string'){
-                this.data = DB.read(this.settings.collection).orderBy(data,'asc').get()
-            } else if (typeof data == 'object'){
-                this.data = DB.read(this.settings.collection).where(data).get() //.omit(['password','password_reset']).get()
+                this.data = DB.read(this.settings.collection).orderBy(data,'asc').orderBy('_updated','DESC').limit(start, end).get()
+            } else if (typeof data == 'object' && data.length > 0){
+                this.data = DB.read(this.settings.collection).where(data).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
             } else {
-                this.data = DB.read(this.settings.collection).get() //.omit(['password','password_reset']).get()
+                this.data = DB.read(this.settings.collection).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
             }
 
             if (Array.isArray(this.data)){
@@ -84,27 +93,6 @@
 
 
             return this
-
-        }
-
-        search(search) {
-
-            if (search.str.length < 3){
-
-                this.data = DB.read(this.settings.collection).limit(30).get()
-                return this.data
-
-            } else {
-
-                let filter = []
-
-                filter.push('name like '+search.str)
-                filter.push('category like '+search.str)
-
-                this.data = DB.read(this.settings.collection).orWhere(filter).get()
-                return this.data
-
-            }
 
         }
 

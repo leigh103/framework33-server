@@ -51,26 +51,6 @@
 
         }
 
-        search(search) {
-
-            if (search.str.length < 3){
-
-                this.data = DB.read(this.settings.collection).limit(30).get()
-                return this.data
-
-            } else {
-
-                let filter = []
-
-                filter.push('name like '+search.str)
-
-                this.data = DB.read(this.settings.collection).orWhere(filter).get()
-                return this.data
-
-            }
-
-        }
-
         async postSave(){
 
             await this.makeMenus()

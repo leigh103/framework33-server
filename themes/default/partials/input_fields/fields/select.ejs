@@ -7,7 +7,7 @@
             <% }) %>
         <% } %>
         <% if (item.option_data){ %>
-            <% var option_data = view.functions.getOptionData(item.option_data) %>
+            <% var option_data = [] //view.functions.getOptionData(item.option_data) %>
             <% if (Array.isArray(option_data)){ %>
                 <% option_data.forEach((option)=>{ %>
                     <option value="<%- option._key %>"><%- option.name %></option>

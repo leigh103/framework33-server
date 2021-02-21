@@ -39,7 +39,9 @@ var express = require('express'),
                     guard = 'guest'
                 }
 
-                if (model && model.data && model.data._id && model.data._id == user_id || model && model.data && model.data._user_id && model.data._user_id == user_id || model && model.data && model.data._user_id && model.data._user_id == guard){
+                if (model && model.data && model.data._id && model.data._id == user_id ||
+                    model && model.data && model.data._user_id && model.data._user_id == user_id ||
+                    model && model.data && model.data._user_id && model.data._user_id == guard){
                     self = true
                 }
 
@@ -175,7 +177,13 @@ var express = require('express'),
                     not_field = true
                 }
                 if (!not_field){
-                    query.push(key+' == '+value)
+
+                    if (value == 'has_value'){
+                        query.push(key+' has value')
+                    } else {
+                        query.push(key+' == '+value)
+                    }
+
                 }
 
             }
@@ -184,7 +192,6 @@ var express = require('express'),
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
             let model
-
 
             if (method == 'search'){
                 model = await new global[model_class_name]().search(req.query.str)
@@ -196,7 +203,7 @@ var express = require('express'),
 
                 if (model.all){ // if the class exists and the all function exists
 
-                    model.all(query, start, end).sort(sort.field,sort.dir)
+                    model.all(query, start, end)
                 } else { // else fail
                     res.json(settings.not_found)
                     return false

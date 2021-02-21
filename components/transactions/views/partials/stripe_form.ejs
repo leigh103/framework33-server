@@ -2,8 +2,8 @@
 <div class="hidden" id="stripe-id" data-stripe-id="<%- stripe_id %>"></div>
 <form action="/charge" method="post" id="payment-form" class="stripe">
     <div class="form-row">
-        <label for="card-element">
-            <img src="/images/payment_icons.png">
+        <label for="card-element" class="w-40 margin-auto mb-2">
+            <img src="/images/payment_icons.png" class="">
         </label>
 
         <% if (typeof methods != "undefined"){ %>
@@ -13,7 +13,14 @@
                 <% } %>
             </div>
         <% } %>
-        <div id="card-element" class="">
+
+        <input type="text" class="underline" value="<% if (typeof cart.customer == "object" && cart.customer.full_name){ %><%- cart.customer.full_name %><% } %>" id="customer_name" placeholder="Name on card">
+
+        <input type="text" class="underline" value="<% if (typeof cart.customer == "object" && cart.customer.email){ %><%- cart.customer.email %><% } %>" id="customer_email" placeholder="Email address">
+
+        <input type="text" class="underline" value="<% if (typeof cart.customer == "object" && cart.customer.tel){ %><%- cart.customer.tel %><% } %>" id="customer_tel" placeholder="Phone number">
+
+        <div id="card-element" class="mt-2">
         <!-- A Stripe Element will be inserted here. -->
         </div>
 
@@ -22,20 +29,12 @@
             <div id="card-errors" role="alert" class="mb-2 text-33-red"><%- error %></div>
         <% } %>
     </div>
-    <% if (typeof cart.customer == "object"){ %>
-        <% if (typeof cart.customer.name != "undefined"){ %>
-            <input type="hidden" value="<%- cart.customer.name %>" id="customer_name">
-        <% } %>
-        <% if (typeof cart.customer.email != "undefined"){ %>
-            <input type="hidden" value="<%- cart.customer.email %>" id="customer_email">
-        <% } %>
-        <% if (typeof cart.customer.tel != "undefined"){ %>
-            <input type="hidden" value="<%- cart.customer.tel %>" id="customer_tel">
-        <% } %>
-    <% } %>
+
+
+
     <% if (typeof intent.client_secret != "undefined"){ %>
     <input type="hidden" value="<%- intent.client_secret %>" id="client_secret">
 
-    <button class="btn highlight" id="pay-now">Pay Now</button>
+    <button class="btn bg-secondary w-100 thick" id="pay-now">Pay Now</button>
     <% } %>
 </form>

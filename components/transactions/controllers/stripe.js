@@ -120,6 +120,12 @@ var express = require('express'),
             title:"Stripe Checkout",
             stripe_id: config.stripe_publishable_key
         }
+        
+        if (req.session && req.session.user && req.session.user.guard){
+            data.user = req.session.user
+        } else {
+            data.user = {}
+        }
 
         data.cart = await new Cart().init(req)
 
@@ -138,6 +144,9 @@ var express = require('express'),
                     req.session.intent = false
                     req.session.cart_id = false
                     data.cart.status = 'paid'
+                    data.cart.status_logs = {
+                        paid: moment().toISOString()
+                    }
                     data.transaction = await new Transactions(data.cart).save()
 
                     if (data.transaction.data){
@@ -181,23 +190,39 @@ var express = require('express'),
         res.locals.functions = functions
 
         let data = {
-            title:"Stripe Checkout"
+            title:"Stripe Checkout",
+            include_scripts: [settings.views+'/scripts/script.ejs'],
+            include_styles: [settings.views+'/styles/stripe.ejs']
         }
 
         data.cart = await new Cart().init(req)
 
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: (parseFloat(data.cart.total)*100).toFixed(0),
-            currency: 'gbp',
-            payment_method_types: ['card'],
-            setup_future_usage: 'off_session'
-        })
+        if (data.cart && data.cart.items && data.cart.items.length > 0 && parseInt(data.cart.total) > 0){
 
-        data.intent = paymentIntent
-        data.stripe_id = config.stripe_publishable_key
-        req.session.intent = paymentIntent.id
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: (parseFloat(data.cart.total)*100).toFixed(0),
+                currency: 'gbp',
+                payment_method_types: ['card'],
+                setup_future_usage: 'off_session'
+            })
 
-        res.render(settings.views+'/gateways/stripe.ejs', data)
+            data.intent = paymentIntent
+            data.stripe_id = config.stripe_publishable_key
+            req.session.intent = paymentIntent.id
+
+            res.render(settings.views+'/gateways/stripe.ejs', data)
+
+        } else {
+
+            data.stripe_id = ''
+            data.intent = {}
+            data.type = '400'
+            data.error = 'Please add items before submitting payment'
+            res.render(settings.views+'/gateways/stripe.ejs',data)
+
+        }
+
+
 
     })
 

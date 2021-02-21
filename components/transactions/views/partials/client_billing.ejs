@@ -3,7 +3,7 @@
     <h2 class="h4 text-weight-500">Your Details</h2>
 
     <form autocomplete="on" style="margin-top: -0.3rem">
-        <div class="flex mt-4">
+        <div class="flex mt-4 mt-s-1">
 
             <select class="flex-1 underline">
                 <option selected disabled value="">Title...</option>
@@ -14,7 +14,7 @@
                 <option value="Ms">Ms</option>
             </select>
 
-            <input type="text" placeholder="Your Name *" class="flex-2 underline" id="name" name="name" autocomplete="name" app-model="cart.customer.name">
+            <input type="text" placeholder="Your Name *" class="flex-2 underline" id="name" name="name" autocomplete="name" app-model="cart.customer.full_name">
 
         </div>
 
@@ -39,6 +39,6 @@
 
     </form>
 
-    <button class="btn bg-33-green thick w-100 mt-5 text-weight-700" app-click="checkout()">Checkout <i class="fas fa-chevron-right ml-1"></i></button>
+    <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700" app-click="checkout()">Checkout <i class="fas fa-chevron-right ml-1"></i></button>
 
 </div>

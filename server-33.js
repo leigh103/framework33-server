@@ -146,6 +146,8 @@ const express = require('express'),
 
                 config.components.load.forEach((file, index) => {
 
+                    addModels(file)
+
                     let name = file.replace(/\.\w+$/,'')
                     controllers = file+'/controllers'
 
@@ -171,8 +173,6 @@ const express = require('express'),
                             })
 
                         }
-
-                        addModels(file)
 
                     }
                     catch (e) { // gracefully error if component doesn't load

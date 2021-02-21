@@ -4,16 +4,6 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no" />
-    <title>
-        <% if (typeof meta != 'undefined'){ %>
-            <%= meta.title %>
-        <% } else { %>
-            <%= view.meta.title %>
-            <% if (typeof title != 'undefined'){ %>
-                 | <%= title %>
-            <% } %>
-        <% } %>
-    </title>
 
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
@@ -29,16 +19,41 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/manifest.json">
+
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <meta name="twitter:card" content="summary" />
 
-    <meta name="description" content="<% if (typeof meta != 'undefined'){ %><%= meta.description %><% } else { %><%= view.meta.description %><% if (typeof title != 'undefined'){ %>. <%= title %><% } %><% } %>">
+    <% if (typeof meta == 'object'){ %>
+
+        <% if (meta.title){ %>
+            <meta property="og:title" content="<%= meta.title %>">
+            <title><%= meta.title %></title>
+        <% } %>
+        <% if (meta.image){ %><meta property="og:image" content="<%= meta.image %>"><% } %>
+        <% if (meta.url){ %><meta property="og:url" content="<%= meta.url %>"><% } %>
+        <% if (meta.updated_time){ %><meta property="og:updated_time" content="<%= meta.updated_time %>"><% } %>
+        <% if (meta.description){ %>
+            <meta property="og:description" content="<%= meta.description %>">
+            <meta name="description" content="<%= meta.description %>">
+        <% } %>
+
+    <% } else if (typeof view.meta == 'object'){ %>
+
+        <title><%= view.meta.title %></title>
+        <meta name="description" content="<%= view.meta.description %>">
+
+        <meta property="og:title" content="<%= view.meta.title %>">
+        <meta property="og:description" content="<%= view.meta.description %>">
+        <meta property="og:image" content="<%= view.meta.logo %>">
+
+    <% } %>
 
     <script src="https://kit.fontawesome.com/e7faa1906b.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <link href="/style/framework-33/v2.0/framework33.css?v=3.0.26" rel="stylesheet">
-    <link href="/style/style.css?v=1613759215225" rel="stylesheet">
+    <link href="/style/framework-33/v2.0/framework33.css?v=3.0.33" rel="stylesheet">
+    <link href="/style/style.css?v=1613935861003" rel="stylesheet">
 
     <% if (typeof stripe_id != 'undefined'){ %>
         <script src="https://js.stripe.com/v3/"></script>

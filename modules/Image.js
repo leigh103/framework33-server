@@ -65,7 +65,7 @@
         }
 
         async save(){
-
+console.log('uploading image')
             if (!fs.existsSync(this.path_check)){
                 await fs.mkdirSync(this.path_check);
             }

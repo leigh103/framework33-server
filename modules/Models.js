@@ -88,7 +88,7 @@
         }
 
         all(data, start, end) {
-            
+
             if (!start){
                 start = 0
             }
@@ -98,12 +98,13 @@
             }
 
             if (typeof data == 'string'){
-                this.data = DB.read(this.settings.collection).orderBy(data,'asc').limit(start, end).get()
-            } else if (typeof data == 'object'){
-                this.data = DB.read(this.settings.collection).where(data).limit(start, end).get() //.omit(['password','password_reset']).get()
+                this.data = DB.read(this.settings.collection).orderBy(data,'asc').orderBy('_updated','DESC').limit(start, end).get()
+            } else if (typeof data == 'object' && data.length > 0){
+                this.data = DB.read(this.settings.collection).where(data).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
             } else {
-                this.data = DB.read(this.settings.collection).limit(start, end).get() //.omit(['password','password_reset']).get()
+                this.data = DB.read(this.settings.collection).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
             }
+
             return this
 
         }
@@ -111,6 +112,7 @@
         sort(field,dir){
 
             if (Array.isArray(this.data) && this.data.length > 0){
+                console.log(field,dir)
                 if (!dir || dir == 'asc'){
                     this.data.sort((a, b) => {
                         if (a[field] && b[field]){
@@ -119,7 +121,9 @@
                     })
                 } else {
                     this.data.sort((a, b) => {
+                        console.log(a[field])
                         if (a[field] && b[field]){
+
                             a[field].localeCompare(b[field])
                         }
                     })
@@ -257,6 +261,8 @@
                     } else if (value){
                         this.error = 'Invalid adjustment value. Should be a positive or negative number, or a positive or negative percentage'
                         return ''
+                    } else {
+                        return ''
                     }
 
                 } else if (field.type == 'user_id' && typeof value == 'string' && value.match(/^(.*)\/[0-9]+$/) || field.type == 'user_id' && typeof value == 'string' && config.users.guards.indexOf(value) >= 0){
@@ -391,7 +397,15 @@
             }
 
             if (this.preSave && typeof this.preSave == 'function'){
-                await this.preSave(update_data)
+                try{
+                    await this.preSave(update_data)
+                }
+
+                catch(err){
+                    log(err)
+                    return false
+                }
+
             }
             try {
                 await this.validate()
@@ -402,9 +416,9 @@
             }
 
             if (this.data._id){
-                this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).first()
+                this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).new()
             } else if (this.data._key){
-                this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).update(this.data).first()
+                this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).update(this.data).new()
             } else {
                 this.data = await DB.create(this.settings.collection,this.data)
             }
@@ -414,6 +428,33 @@
             }
 
             return this
+
+        }
+
+        search(str) {
+
+            if (str.length < 3){
+
+                this.data = []// DB.read(this.settings.collection).limit(30).get()
+                return this
+
+            } else {
+
+                let filter = []
+
+                if (this.settings.search_fields){
+                    for (var field of this.settings.search_fields){
+                        filter.push(field+' like '+str)
+                    }
+
+                } else {
+                    filter.push('name like '+str.toLowerCase())
+                }
+
+                this.data = DB.read(this.settings.collection).orWhere(filter).get()
+                return this
+
+            }
 
         }
 

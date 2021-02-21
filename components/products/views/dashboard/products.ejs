@@ -8,7 +8,7 @@
         <div class="flex flex-middle-right">
             <div class="flex-1 flex">
                 <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
-                <input type="text" class="" onkeyup="scope.searchApi('<%- table %>',this.value)">
+                <input type="text" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
             </div>
             <button class="flex-none btn highlight" app-click="editProduct('<%- table %>','')">New <%- view.functions.parseName(table,true) %></button>
         </div>
@@ -52,6 +52,11 @@
                     <input type="text" app-model="new.name" placeholder="Add a product name">
                 </div>
 
+                <div class="colspan-2 flex flex-column flex-middle-left">
+                    <label><input type="checkbox" app-model="new.activated"> Activated</label>
+
+                </div>
+
                 <div class="flex flex-column flex-middle-left">
                     <label>Brand</label>
                     <input type="text" app-model="new.brand" placeholder="Product Brand">
@@ -86,16 +91,19 @@
                 </div>
 
                 <div class="flex flex-column flex-middle-left">
-                    <label>Sub Category <span app-bind="new.sub_category"></span></label>
+                    <label>Sub Category</label>
                     <select app-model="new.sub_category">
                         <option value="" selected>None</option>
-                        <option app-for="sub_category in sub_categories" app-value="sub_category._key" app-bind="sub_category.name"></option>
+                        <option app-for="sub_category in sub_categories" app-attr="{'value':sub_category._key}" app-bind="sub_category.name"></option>
                     </select>
                 </div>
 
 
                 <div class="colspan-2 rowspan-2 flex flex-column flex-middle-left">
-                    <label>Descripton</label>
+                    <div class="grid col-3 flex-none w-100">
+                        <div class="colspan-2"><label>Descripton</label></div>
+                        <div class="text-right text-small pr-1"><span app-bind="new.description.length" app-class="{'text-error':new.description.length > 160}"></span>/160 chars</div>
+                    </div>
                     <textarea app-model="new.description" placeholder="Add a description"></textarea>
                 </div>
 
@@ -106,7 +114,7 @@
                             <label><input type="checkbox" app-model="new.content_before_details" class="mr-05">Show content before product details</label>
                         </div>
                     </div>
-                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs') %>
+                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:'blog'}) %>
                     <div id="product_content" class="large resize contenteditable" app-model="new.content" contenteditable="true"></div>
                 </div>
 
@@ -145,7 +153,6 @@
         </div>
 
         <div app-show="view.tab == 'attributes'">
-
         </div>
 
         <div app-show="view.tab == 'customisation'">

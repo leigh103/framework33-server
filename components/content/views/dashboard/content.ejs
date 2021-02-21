@@ -7,7 +7,7 @@
         <div class="flex flex-middle-right">
             <div class="flex-1 flex">
                 <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
-                <input type="text" class="" onkeyup="scope.searchApi('<%- table %>',this.value)">
+                <input type="text" class="" app-change="search('<%- table %>')">
             </div>
             <a class="flex-none btn highlight" href="/dashboard/content/<%- content_type %>/new">New <%- view.functions.parseName(content_type,true) %></a>
         </div>

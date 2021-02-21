@@ -2,7 +2,7 @@
 
     <h2 class="h4 text-weight-500">Shipping Address</h2>
 
-    <form autocomplete="on" style="margin-top: -0.3rem" class="mt-4">
+    <form autocomplete="on" style="margin-top: -0.3rem" class="mt-4 mt-s-1">
 
         <input type="text" placeholder="Address Line 1 *" class="underline" name="address_line1" app-model="cart.shipping_address.address_line1">
         <input type="text" placeholder="Address Line 2" class="underline" name="address_line2" app-model="cart.shipping_address.address_line2">
@@ -15,7 +15,7 @@
 
     </form>
 
-    <button class="btn bg-33-green thick w-100 mt-5 text-weight-700" app-click="payment()">Payment <i class="fas fa-chevron-right ml-1"></i></button>
-    <a class="block mt-5 text-left" app-click="view.page = 'billing'"><i class="fas fa-chevron-left mr-1"></i>Your Details</a>
+    <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700" app-click="payment()">Payment <i class="fas fa-chevron-right ml-1"></i></button>
+    <a class="btn bg-none mt-5 mt-s-1 text-left text-secondary w-100" app-click="view.page = 'billing'"><i class="fas fa-chevron-left mr-1"></i>Your Details</a>
 
 </div>

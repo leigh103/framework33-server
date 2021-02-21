@@ -14,11 +14,7 @@ const express = require('express'),
         views: 'events/views',
         menu: {
             side_nav: [
-                {link:'Events',slug: '/dashboard/events', weight:1, subitems:[
-                    {link:'Customers',slug: '/dashboard/events/customers', weight:1},
-                    {link:'Admins',slug: '/dashboard/events/admins', weight:2},
-                    {link:'Misc',slug: '/dashboard/events/misc', weight:3}
-                ]}
+                {link:'Events',slug: '/dashboard/events', weight:8}
             ]
         }
     },
@@ -39,7 +35,8 @@ const express = require('express'),
 
     let data = {
         meta: {},
-        include_styles: ['dashboard/views/styles/dashboard-style.ejs']
+        include_styles: ['dashboard/views/styles/dashboard-style.ejs'],
+        model: new Events().settings
     }
 
     routes.get('*', (req, res, next) => {
@@ -64,7 +61,8 @@ const express = require('express'),
         data.title = 'Events'
         data.table = 'events'
 
-        data.fields = new Events().settings.fields
+        data.fields = data.model.fields
+        data.search_fields = data.model.search_fields
 
         res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
@@ -83,7 +81,8 @@ const express = require('express'),
         data.title = 'Events'
         data.table = 'events'
 
-        data.fields = new Events().settings.fields
+        data.fields = data.model.fields
+        data.search_fields = data.model.search_fields
 
         res.render(basedir+'/components/dashboard/views/table.ejs',data)
 

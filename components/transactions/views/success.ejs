@@ -6,7 +6,12 @@
 
         <section class="grid col-2 col-s-1 gap-2 h-100">
 
-            <%- JSON.stringify(transaction.data) %>
+            <% if (typeof transaction == 'object' && transaction.data){ %>
+                <div class="mt-5 mt-s-1">
+                    <h1>Order: <%- transaction.data.reference %></h1>
+                    <p>Thanks very much for placing your order with us today! We'll process it as soon as we can and let you know once it's been dispatched</p>
+                </div>
+            <% } %>
 
         </section>
     </div>

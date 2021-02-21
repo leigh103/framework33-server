@@ -32,7 +32,8 @@ const express = require('express'),
 // routes
 
     let data = {
-        include_scripts: [settings.views+'/scripts/script.ejs']
+        include_scripts: [settings.views+'/scripts/script.ejs'],
+        model: new User().settings
     }
 
     routes.get('*', (req, res, next) => {
@@ -51,7 +52,8 @@ const express = require('express'),
         data.title = 'Users'
         data.table = 'user'
 
-        data.fields = new User().settings.fields
+        data.fields = data.model.fields
+        data.search_fields = data.model.search_fields
 
         res.render(settings.views+'/table.ejs',data)
 

@@ -15,10 +15,11 @@ const express = require('express'),
         menu: {
             side_nav: [
                 {link:'Products',slug: '/dashboard/products', weight:1, subitems:[
-                    {link:'All Products',slug: '/dashboard/products', weight:1},
-                    {link:'Categories',slug: '/dashboard/products/categories', weight:2},
-                    {link:'Attributes',slug: '/dashboard/products/attributes', weight:3},
-                    {link:'Settings',slug: '/dashboard/products/settings', weight:4}
+                    {link:'All',slug: '/dashboard/products', weight:1},
+                    {link:'Inactive',slug: '/dashboard/products/inactive', weight:5},
+                    {link:'Sale Items',slug: '/dashboard/products/sale', weight:6},
+                    {link:'Categories',slug: '/dashboard/products/categories', weight:3},
+                    {link:'Attributes',slug: '/dashboard/products/attributes', weight:4}
                 ]}
             ],
             nav: [
@@ -35,23 +36,31 @@ const express = require('express'),
 
         getPrice: (price, adjustment) => {
 
+            price = price/100
+
             if (adjustment){
 
                 if (adjustment.match(/%/)){
 
                     adjustment_value = adjustment.replace(/%/,'')
                     adjustment_value = (price/100)*adjustment_value
-                    return (parseFloat(price)+parseFloat(adjustment_value)).toFixed(2)
+                    return (price+parseFloat(adjustment_value)).toFixed(2)
 
                 } else {
 
-                    return (parseFloat(price)+parseFloat(adjustment)).toFixed(2)
+                    return (price+parseFloat(adjustment)).toFixed(2)
 
                 }
 
             } else {
                 return price
             }
+
+        },
+
+        getSlug: async (product) => {
+
+            return await new ProductCategories().slug(product)
 
         }
 
@@ -64,7 +73,8 @@ const express = require('express'),
     let data = {
         shop: view.ecommerce.shop,
         meta: {},
-        include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs']
+        include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
+        model: new Products().settings
     }
 
     routes.get('*', (req, res, next) => {
@@ -84,14 +94,15 @@ const express = require('express'),
 
         view.current_view = 'products'
         view.current_sub_view = 'categories'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
 
+        data.query = ''
         data.title = 'Product Categories'
         data.table = 'product_categories'
 
         data.fields = new ProductCategories().settings.fields
 
-        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        res.render(settings.views+'/dashboard/product_categories.ejs',data)
 
     })
 
@@ -103,8 +114,9 @@ const express = require('express'),
 
         view.current_view = 'products'
         view.current_sub_view = 'attributes'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
 
+        data.query = ''
         data.title = 'Product Attributes'
         data.table = 'product_attributes'
 
@@ -122,8 +134,9 @@ const express = require('express'),
 
         view.current_view = 'products'
         view.current_sub_view = 'settings'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
 
+        data.query = ''
         data.title = 'Product Settings'
         data.table = 'product_settings'
 
@@ -134,23 +147,41 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/products/:key?', async(req, res) => {
+    routes.get('/dashboard/products/:cat?', async(req, res) => {
 
         data.meta = {
             title: config.site.name+' | Products'
         }
 
         view.current_view = 'products'
-        view.current_sub_view = 'all products'
+        view.current_sub_view = 'all'
         data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
 
         data.title = 'Products'
         data.table = 'products'
 
+        data.query = '?limit=30'
+
+        if (req.params.cat){
+
+            if (req.params.cat == 'inactive'){
+                view.current_sub_view = 'inactive'
+                data.query += '&activated=false'
+            } else if (req.params.cat == 'sale'){
+                view.current_sub_view = 'sale'
+                data.query += '&adjustment=has_value'
+            } else {
+                data.query += '&category=%27'+req.params.cat+'%27'
+            }
+
+        }
+
         data.option_data = await view.functions.getOptionData('product_categories')
-        data.fields = new Products().settings.fields
+        data.fields = data.model.fields
+        data.search_fields = data.model.search_fields
 
         res.render(settings.views+'/dashboard/products.ejs',data)
+        //res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
     })
 
@@ -199,16 +230,15 @@ const express = require('express'),
                 })
 
                 data.slug = req.params.product
-                data.product = await new Products().find(['slug == '+data.slug])
+
+                data.product = await new Products().find(['slug == '+data.slug, 'activated == true'])
                 data.product = data.product.get()
 
                 if (data.product){
 
-                    data.meta.title = config.site.name+' | '+data.product.name
+                    data.product.url = config.site.url+'/'+req.params.category+'/'+req.params.sub_category+'/'+req.params.product
 
-                    if (data.product.description){
-                        data.meta.description = data.product.description.substring(0,160)
-                    }
+                    data.meta = view.functions.getMeta(data.product)
 
                     res.render(config.site.theme_path+'/templates/products/product.ejs',data)
 
@@ -239,23 +269,22 @@ const express = require('express'),
                     if (data.sub_category.description){
                         data.meta.description = data.sub_category.description.substring(0,160)
                     }
-                    data.products = await new Products().all(['category like '+data.parent_category._key, 'sub_category like '+data.sub_category._key]).get()
+                    data.products = await new Products().all(['category like '+data.parent_category._key, 'sub_category like '+data.sub_category._key, 'activated == true']).get()
 
                     res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
                 } else { // check if it's a product
 
                     data.slug = req.params.sub_category
-                    data.product = await new Products().find(['slug == '+data.slug])
+
+                    data.product = await new Products().find(['slug == '+data.slug, 'activated == true'])
                     data.product = data.product.get()
 
                     if (data.product){
 
-                        data.meta.title = config.site.name+' | '+data.product.name
+                        data.product.url = config.site.url+'/'+req.params.category+'/'+req.params.sub_category
 
-                        if (data.product.description){
-                            data.meta.description = data.product.description.substring(0,160)
-                        }
+                        data.meta = view.functions.getMeta(data.product)
 
                         res.render(config.site.theme_path+'/templates/products/product.ejs',data)
 
@@ -272,7 +301,7 @@ const express = require('express'),
                 if (data.category.description){
                     data.meta.description = data.category.description.substring(0,160)
                 }
-                data.products = await new Products().all(['category like '+data.category._key,'sub_category NOT EXISTS']).get()
+                data.products = await new Products().all(['category like '+data.category._key,'sub_category NOT EXISTS', 'activated == true']).get()
                 // data.products = data.products.data
                 res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 

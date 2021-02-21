@@ -26,7 +26,8 @@
                         {name:'subject',input_type:'text',placeholder:'Subject', type:'string', required:false},
                         {name:'content',input_type:'textarea',placeholder:'Content', type:'string', required:false},
                     ]},
-                ]
+                ],
+                search_fields:['name','trigger','description']
             }
 
             this.routes = {

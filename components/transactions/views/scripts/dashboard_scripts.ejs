@@ -2,18 +2,26 @@
 
     extend.transactions = function(){
 
-        scope.editTransacton = function(){
+        scope.editTransacton = function(idx){
 
             contextCloseAll()
 
-            if (scope.view.key >= 0){
-                scope.new = scope.transactions[scope.view.key]
+            if (!idx){
+                idx = 0
+            }
+
+            if (idx >= 0){
+                scope.new = scope.transactions[idx]
             } else {
                 scope.new = {}
             }
 
             scope.openModal('show_transaction')
             view.update('new')
+            view.update('new.customer')
+            view.update('new.status_logs')
+            view.update('new.billing_address')
+            view.update('new.shipping_address')
 
         }
 
