@@ -4,9 +4,25 @@
 
     const postmark = new Pstmk.ServerClient(config.email.api_key)
 
+    var last_send = {
+        to: '',
+        date: Date.now(),
+        count:0
+    }
+
     const send = (to, msg) => {
 
-        return new Promise((resolve, reject) => {
+        return new Promise( async (resolve, reject) => {
+
+            try {
+                await throttle(to)
+            }
+
+            catch(err){
+                log(err)
+                reject(err)
+                return
+            }
 
             if (!msg.from){
                 if (config.email.from_address){
@@ -33,29 +49,85 @@
                 delete payload.TextBody
                 delete payload.Subject
 
-                postmark.sendEmailWithTemplate(payload, function(error, email_res) {
+                postmark.sendEmailWithTemplate(payload, async (error, email_res) => {
                     if(error) {
                         log('Mail error: '+JSON.stringify(error))
+                        let user = await new User().find({email: payload.To})
+                        if (user.data && user.data.email){
+                            user.notificationFailure('email', payload.To)
+                        }
                         reject(error)
                         return
                     }
                     resolve(email_res)
                 })
+
+                resolve()
 
             } else {
 
-                postmark.sendEmail(payload, function(error, email_res) {
+                postmark.sendEmail(payload, async (error, email_res) => {
                     if(error) {
                         log('Mail error: '+JSON.stringify(error))
+                        let user = await new User().find({email: payload.To})
+                        if (user.data && user.data.email){
+                            user.notificationFailure('email', payload.To)
+                        }
                         reject(error)
                         return
                     }
                     resolve(email_res)
                 })
+                resolve()
 
             }
 
         })
+
+    }
+
+    const throttle = (to) => {
+
+        return new Promise( async (resolve, reject) => {
+
+            if (last_send.to == to){
+
+                if (Date.now() - last_send.date < 500 && last_send.count > 5){
+                    last_send.to = to
+                    last_send.date = Date.now()
+                    last_send.count++
+
+                    if (last_send.count == 10){
+                        let payload = {
+                            "From": config.email.from_address,
+                            "To": config.admin.email,
+                            "Subject": "Recursive events firing on "+config.site.name,
+                            "TextBody": "Over 10 events have fired to the same recipient within a very short space of time. The notifications are being blocked, but the loop is still going. Please log onto the server to stop it.",
+                            "HtmlBody": "Over 10 events have fired to the same recipient within a very short space of time. The notifications are being blocked, but the loop is still going. Please log onto the server to stop it."
+                        }
+                        postmark.sendEmail(payload, async (error, email_res) => {})
+
+                    }
+
+                    log('Mail error: Notification throttled - too many requests')
+                    reject('Too many requests')
+                    return
+
+                }
+
+                last_send.count++
+
+            } else {
+                last_send.count = 0
+            }
+
+            last_send.to = to
+            last_send.date = Date.now()
+
+            resolve()
+
+        })
+
 
     }
 

@@ -147,21 +147,49 @@
                             action = Object.assign(action, data)
 
                             if (action.method == 'email'){
-                                new Notification(action).useEmailTemplate(action).email()
+
+                                try{
+                                    new Notification(action).useEmailTemplate(action).email()
+                                    resolve(this.evnt+' triggered')
+                                }
+                                catch(err){
+                                    log(err)
+                                    reject(this.evnt+' not triggered')
+                                }
+
                             }
 
                             if (action.method == 'sms'){
-                                new Notification(action).useSMSTemplate(action).sms()
+
+                                try{
+                                    new Notification(action).useSMSTemplate(action).sms()
+                                    resolve(this.evnt+' triggered')
+                                }
+                                catch(err){
+                                    log(err)
+                                    reject(this.evnt+' not triggered')
+                                }
+
+
                             }
 
                             if (action.method == 'mailbox'){
-                                new Notification().setContent(action.name,action.content).mailbox()
+
+                                try{
+                                    new Notification().setContent(action.name,action.content).mailbox()
+                                    resolve(this.evnt+' triggered')
+                                }
+                                catch(err){
+                                    log(err)
+                                    reject(this.evnt+' not triggered')
+                                }
+
                             }
 
                         }
                     }
 
-                    resolve(this.evnt+' triggered')
+
 
                 } else {
                     reject('No evnt found: '+this.evnt)

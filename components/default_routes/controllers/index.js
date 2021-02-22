@@ -49,8 +49,7 @@ var express = require('express'),
     routes.get('/testemail', async (req,res) => {
 
         if (getGuard(req) == 'admin'){
-            let admin = await new Admin().find(0)
-            let email = await new Notification(admin.data).setContent('This is a test','This is a test email, sent from '+config.site.name).email()
+            let email = await new Notification('lee@reformedreality.com').setContent('This is a test','This is a test email, sent from '+config.site.name).email()
             res.send(email)
         } else {
             res.redirect('/login/admin')

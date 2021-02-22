@@ -230,9 +230,10 @@ const express = require('express'),
 
         data.meta = {
             title: config.site.name+' | Content',
-            include_scripts: ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs'],
-            include_styles: [settings.views+'/dashboard/styles/style.ejs']
         }
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs',settings.views+'/dashboard/styles/style.ejs']
+        data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
 
         if (req.params.edit == 'new' || req.params.key || req.params.key == '0'){
 

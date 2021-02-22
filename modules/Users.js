@@ -24,12 +24,11 @@
 
             if (existing && existing.data.email && this.data.email == existing.data.email){
 
-                existing.sanitize()
                 if (config.users.email_activation === true && !existing.data.activated){
                     existing.sendReset()
                 }
 
-                return this
+                return existing // don't return 'this' here, it causes recursion 
 
             } else {
 
@@ -57,6 +56,18 @@
                 }
 
             }
+
+        }
+
+        async notificationFailure(type, to){
+
+            if (!this.data.notification_failures){
+                this.data.notification_failures = []
+            }
+
+            this.data.notification_failures.push({type:type, sent_to: to, date:moment().toISOString()})
+            this.save()
+            return this
 
         }
 

@@ -27,20 +27,20 @@
 
                 <% if (item.name == 'title'){ %>
                     <div class="cell middle <%- item.type.toLowerCase() %>"><a app-click="gotoEditor('<%- content_type %>',article._id)" app-bind="article.<%- item.name %>"></a></div>
-                <% } else if (item.input_type == 'image'){ %>
+                <% } else if (item.input_type == 'image' && item.name == 'thumbnail'){ %>
                     <div class="cell middle <%- item.type.toLowerCase() %>"><img src="/images/Profile_Placeholder.svg" app-src="article.<%- item.name %>" class="<%- item.name %>"></div>
                 <% } else if (item.input_type == 'object'){ %>
                     <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="article.<%- item.name %>.length"></div>
                 <% } else if (item.input_type == 'date'){ %>
                     <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="parseDate(article.<%- item.name %>,'ddd Do MMM YYYY')"></div>
-                <% } else { %>
+                <% } else if (item.input_type && !item.input_type.match(/image/)){ %>
                     <div class="cell middle <%- item.type.toLowerCase() %>" app-bind="article.<%- item.name %>"></div>
                 <% } %>
 
             <% }) %>
 
-            <div class="cell middle text-right" app-attr="{id:'cell-'+article._key}">
-                <div class="context-link btn bg-33-white text-secondary" app-click="toggleContext('context',article)">
+            <div class="cell middle text-right" app-attr="{'id':'cell-'+article._key}">
+                <div class="context-link btn bg-33-white text-secondary" app-click="toggleContext('context',$index)">
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
