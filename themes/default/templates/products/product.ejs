@@ -37,10 +37,10 @@
                     <% if (product.adjustment){ %>
                         <br>
                         <span class="h6 strikethrough text-33-blue"><%- view.functions.parseCurrency(product.price) %></span>
-                        <% if (product.adjustment.match(/%/)){ %>
+                        <% if (typeof product.adjustment == 'string' && product.adjustment.match(/%/)){ %>
                             <span class="p text-right text-33-blue"><%- Math.abs(product.adjustment.replace(/%/g,'')) %>% off</span>
                         <% } else { %>
-                            <span class="p text-right text-33-blue">£<%- Math.abs(product.adjustment) %> off!</span>
+                            <span class="p text-right text-33-blue">£<%- Math.abs(product.adjustment/100).toFixed(2) %> off!</span>
                         <% } %>
                     <% } %>
                 </h2>
@@ -52,10 +52,10 @@
             <% } %>
 
             <div class="flex my-2">
-                <div class="flex flex-1">
-                    <button class="flex-1 btn bg-33-white text-33-grey" app-click="quantity('minus')"><i class="fas fa-minus"></i></button>
-                    <input type="text" class="flex-1 shadow text-center" app-model="view.add_item.quantity">
-                    <button class="flex-1 btn bg-33-white text-33-grey" app-click="quantity('add')"><i class="fas fa-plus"></i></button>
+                <div class="flex flex-1 border">
+                    <button class="flex-1 btn bg-none text-33-grey" app-click="quantity('minus')"><i class="fas fa-minus"></i></button>
+                    <input type="text" class="flex-1 bg-none text-center" app-model="view.add_item.quantity">
+                    <button class="flex-1 btn bg-none text-33-grey" app-click="quantity('add')"><i class="fas fa-plus"></i></button>
                 </div>
                 <% if (product.stock){ %>
                     <button class="flex-1 btn bg-33-blue" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Add to <%- view.functions.capitalise(view.ecommerce.cart_name) %></button>

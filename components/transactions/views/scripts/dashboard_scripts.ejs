@@ -25,6 +25,36 @@
 
         }
 
+        scope.checkTracking = function(idx){
+
+            if (!idx){
+                idx = 0
+            }
+            if (this.target.value.match(/^[A-Za-z]{2}[0-9]+GB$/)){
+                scope.transactions[idx].shipping_method = 'royal_mail'
+            } else if (this.target.value.match(/^0[0-9]{10,14}[a-zA-Z]?$/)){
+                scope.transactions[idx].shipping_method = 'dpd'
+            }
+
+            view.update('transactions['+idx+']')
+
+        }
+
+        scope.addTracking = function(transaction){
+
+            if (!transaction.shipping_method){
+                scope.notify('Please specify which courier the shipping is with','error',10,'fas fa-question')
+                return false
+            }
+
+            scope.post('transactions/save', transaction).then((data)=>{
+                scope.notify('Tracking Added')
+            }).catch((err)=>{
+                scope.notify(err,'error')
+            })
+
+        }
+
         scope.setStatus = function(key, status){
 
             let idx = scope.transactions.findIndex((item)=>{
@@ -60,26 +90,18 @@
 
         }
 
-        scope.print = function(key){
+        scope.updateSingle = function(status){
 
-            let idx = scope.transactions.findIndex((item)=>{
-                return item._key == key
+            scope.transactions = scope.transactions.map((transaction) => {
+                delete transaction.selected
+                return transaction
             })
 
-            let payload = {
-                _key: key,
-                status: 'processing'
+            if (scope.new){
+                scope.new.selected = true
             }
-
-            scope.post('transactions', payload).then(()=>{
-
-                window.location.href = '/dashboard/transactions/print/'+key
-
-            }).catch((err)=>{
-                console.log(err)
-                scope.notify('Unable to save status','error')
-            })
-
+            scope.updateAll(status)
+            scope.openModal(false)
 
         }
 
@@ -92,7 +114,7 @@
 
                 if (transaction.selected){
                     transaction.status = status
-                    transaction.selected = false
+                    delete transaction.selected
                     keys.push(transaction._key)
                 }
                 return transaction
@@ -131,6 +153,7 @@
 
                 if (transaction.selected){
                     keys.push(transaction._key)
+                    delete transaction.selected
                 }
                 return transaction
             })

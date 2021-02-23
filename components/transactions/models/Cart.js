@@ -303,32 +303,39 @@
                     }
 
                     if (item.price){
-console.log('price',item.price)
+
+                        item.price = parseInt(item.price)
+
+                        if (!item.price || item.price < 0){
+                            continue
+                        }
+
                         if (item.adjustment){
-console.log('adjust',item.adjustment)
+
                             if (item.original_price){
                                 item.price = item.original_price
                             }
 
-                            item.adjustment = item.adjustment.replace(/\$|\£|\#|p/,'')
+                            if (typeof item.adjustment == 'string' && item.adjustment.match(/%/)){
 
-                            if (item.adjustment.match(/%/)){
+                                item.adjustment = item.adjustment.replace(/\$|\£|\#|p/,'')
 
-                                item.adjustment_value = item.adjustment.replace(/%/,'')
+                                item.adjustment_value = parseFloat(item.adjustment.replace(/%/,''))
                                 item.adjustment_value = (item.price/100)*item.adjustment_value
-                                item.original_price = parseInt(item.price).toFixed(2)
-                                item.price = parseInt(item.price)+parseInt(item.adjustment_value)
+                                item.original_price = item.price
+                                item.price = item.price+item.adjustment_value
 
                             } else {
 
-                                item.original_price = parseInt(item.price).toFixed(2)
-                                item.price = parseInt(item.price)+parseInt(item.adjustment)
+                                item.original_price = item.price
+                                item.adjustment_value = item.adjustment
+                                item.price = item.price+item.adjustment
 
                             }
 
                         }
 
-                        item.price = parseInt(item.price).toFixed(2)
+                        item.price = parseInt(item.price)
 
                         if (item.quantity>1){
                             this.data.total = parseInt(this.data.total)+(parseInt(item.price)*parseInt(item.quantity))
@@ -342,6 +349,7 @@ console.log('adjust',item.adjustment)
                             item.tax = parseInt(item.price)-parseInt(item.sub_total)
                             item.tax = (item.tax*parseInt(item.quantity)).toFixed(2)
                             item.sub_total = (item.sub_total*parseInt(item.quantity)).toFixed(2)
+                            item.total = parseInt(item.price)*item.quantity
                         }
 
                     }

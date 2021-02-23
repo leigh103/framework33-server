@@ -3,7 +3,7 @@
     <div class="grid col-2 header">
         <div class="flex flex-middle-left flex-column">
             <h3 class="text-weight-600"><%- title %></h3>
-            <p class="transparent-2" app-show="<%- table %>">This table contains <span app-bind="<%- table %>.length"></span> item(s)</p>
+            <p class="transparent-2">This table contains <span app-bind="<%- table %>.length"></span> item(s)</p>
         </div>
         <div class="flex flex-middle-right">
             <div class="flex-1 flex">
@@ -47,9 +47,14 @@
                     <input id="image" type="file" app-model="new.image">
                 </div>
 
-                <div class="colspan-2 flex flex-column flex-middle-left">
+                <div class="flex flex-column flex-middle-left">
                     <label>Name</label>
                     <input type="text" app-model="new.name" placeholder="Add a product name">
+                </div>
+
+                <div class="flex flex-column flex-middle-left">
+                    <label>Slug</label>
+                    <input type="text" app-model="new.slug" placeholder="Add a URL">
                 </div>
 
                 <div class="colspan-2 flex flex-column flex-middle-left">
@@ -65,16 +70,6 @@
                 <div class="flex flex-column flex-middle-left">
                     <label>Barcode</label>
                     <input type="text" app-model="new.barcode" placeholder="Product Barcode number">
-                </div>
-
-                <div class="flex flex-column flex-middle-left">
-                    <label>Slug</label>
-                    <input type="text" app-model="new.slug" placeholder="Add a URL">
-                </div>
-
-                <div class="flex flex-column flex-middle-left">
-                    <label>Stock</label>
-                    <input type="number" app-model="new.stock" placeholder="Stock number">
                 </div>
 
                 <div class="flex flex-column flex-middle-left">
@@ -147,6 +142,16 @@
                 <div class="flex flex-column flex-middle-left">
                     <label>Adjustment</label>
                     <input type="text" app-model="new.adjustment" placeholder="Discount">
+                </div>
+
+                <div class="flex flex-column flex-middle-left">
+                    <label>Stock</label>
+                    <input type="number" app-model="new.stock" placeholder="Stock number">
+                </div>
+
+                <div class="flex flex-column flex-middle-left">
+                    <label>Items per customer</label>
+                    <input type="number" app-model="new.items_per_customer" placeholder="Items per customer">
                 </div>
             </div>
 

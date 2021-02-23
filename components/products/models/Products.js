@@ -19,6 +19,7 @@
                     {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},
                     {name:'variants',input_type:'multiselect',option_data:'products', type:'string', required:false},
                     {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', required:false},
+                    {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', type:'number', required:false},
                     {name:'price',input_type:'text',placeholder:'Price',type:'price',required: true},
                     {name:'adjustment',input_type:'text',placeholder:'Adjustment',type:'discount',required: false},
                     {name:'attributes',input_type:'array',option_data:'product_attributes',placeholder:'Attributes',type:'object',required: false},
@@ -110,6 +111,7 @@
                     slug: category_slug+this.data.slug,
                     stock: this.data.stock,
                     activated: this.data.activated,
+                    adjustment: this.data.adjustment,
                     items_per_customer: this.data.items_per_customer
                 })
 

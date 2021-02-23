@@ -45,6 +45,10 @@
                 scope.new.price = (scope.new.price/100).toFixed(2)
             }
 
+            if (typeof scope.new.adjustment == 'number'){
+                scope.new.adjustment = (scope.new.adjustment/100).toFixed(2)
+            }
+
             scope.openModal('show_product_edit')
             view.update('new')
 

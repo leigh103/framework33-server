@@ -36,19 +36,19 @@ const express = require('express'),
 
         getPrice: (price, adjustment) => {
 
-            price = price/100
+            let adjustment_value
 
             if (adjustment){
 
-                if (adjustment.match(/%/)){
+                if (typeof adjustment == 'string' && adjustment.match(/%/)){
 
                     adjustment_value = adjustment.replace(/%/,'')
                     adjustment_value = (price/100)*adjustment_value
-                    return (price+parseFloat(adjustment_value)).toFixed(2)
+                    return ((price+parseFloat(adjustment_value))/100).toFixed(2)
 
                 } else {
 
-                    return (price+parseFloat(adjustment)).toFixed(2)
+                    return ((price+parseInt(adjustment))/100).toFixed(2)
 
                 }
 

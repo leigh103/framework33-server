@@ -99,7 +99,7 @@
             },
 
             parseSnake:(input)=>{
-                return input.replace(/\s/g,'_').toLowerCase
+                return input.replace(/\s/g,'_').toLowerCase()
             },
 
             capitalise:(str, lower = false) => {

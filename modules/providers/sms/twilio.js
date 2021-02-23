@@ -16,7 +16,7 @@
 
     const send = (to, msg)=>{
 
-            return new Promise(function(resolve, reject) {
+            return new Promise(async(resolve, reject) => {
 
                 try {
                     await throttle(to)

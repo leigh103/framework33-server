@@ -124,6 +124,8 @@ const express = require('express'),
 
         data.statuses = new Transactions().statuses
 
+        data.status_count = await DB.read('transactions').where(['status != completed','status != deleted']).collect('status')
+
         if (req.params.status == 'new'){
             data.title = 'Transactions'
             data.table = 'cart'

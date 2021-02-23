@@ -256,8 +256,11 @@
 
                 } else if (field.type == 'discount'){
 
-                    if (value && value.match(/^-*[0-9]{1,3}%*$/)){
+                    if (value && value.match(/^-?[0-9]{1,2}%$/)){
                         return value
+                    } else if (value && value.match(/^-?[0-9]+(.[0-9]{2})?$/)){
+                        console.log(parseFloat(value)*100)
+                        return parseFloat(value)*100
                     } else if (value){
                         this.error = 'Invalid adjustment value. Should be a positive or negative number, or a positive or negative percentage'
                         return ''

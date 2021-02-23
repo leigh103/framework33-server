@@ -512,6 +512,28 @@
 
         }
 
+        async collect(field){
+
+            if (!this.query.match(/^RETURN/)){
+                this.query += 'COLLECT field = '+this.query_key+'.'+field+' INTO group RETURN {field, count:COUNT(group)}'
+            }
+
+            // console.log(this.query)
+            try {
+                let result = await adb.query(this.query)
+                this.result = result._result
+            }
+
+            catch(e){
+                console.error('AQL Query:', this.query)
+                console.error('Arango Error:', e.response.body)
+                this.result = []
+            }
+
+            return  await this.result
+
+        }
+
         hash(str){
             let hash = sha2_256(str)
             return "$$$"+hash+"$$$"

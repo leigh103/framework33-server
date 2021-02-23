@@ -178,21 +178,27 @@
             msg = {
                 "subject": data.subject,
                 "text": data.content,
-                "html": data.content,
+                "html": data.content.replace(/\r\n|\r|\n/g,"<br />"),
                 "TemplateModel": {
                     "subject": data.subject,
-                    "content": data.content,
+                    "content": data.content.replace(/\r\n|\r|\n/g,"<br />"),
                     "company_name":config.site.name
                 },
                 "TemplateAlias":"general"
             }
 
             if (data.items && data.total && data.sub_total){
+
+                data.items = data.items.map((item)=>{
+                    item.price = (item.price/100).toFixed(2)
+                    return item
+                })
+
                 msg.TemplateModel.transactions = {
                     items: data.items,
-                    sub_total: data.sub_total,
-                    tax: data.tax,
-                    total: data.total
+                    sub_total: (data.sub_total/100).toFixed(2),
+                    tax: (data.tax/100).toFixed(2),
+                    total: (data.total/100).toFixed(2)
                 }
             }
 

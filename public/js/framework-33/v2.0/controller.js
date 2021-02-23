@@ -355,6 +355,25 @@
 
         }
 
+        scope.parseAdjustment = function(input){
+
+            if (typeof input == 'string' && input.match(/%/)){
+                return input
+            } else if (typeof input == 'number'){
+                input = input/100
+                if (input < 0){
+                    input = Math.abs(input)
+                    return '-£'+input.toFixed(2)
+                } else {
+                    return '£'+input.toFixed(2)
+                }
+
+            } else {
+                return ''
+            }
+
+        }
+
         scope.truncate = function(input){
 
             return input.replace(/<br><br>/,'<br>').substring(0,100)

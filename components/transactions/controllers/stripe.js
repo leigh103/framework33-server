@@ -120,7 +120,7 @@ var express = require('express'),
             title:"Stripe Checkout",
             stripe_id: config.stripe_publishable_key
         }
-        
+
         if (req.session && req.session.user && req.session.user.guard){
             data.user = req.session.user
         } else {
@@ -200,7 +200,7 @@ var express = require('express'),
         if (data.cart && data.cart.items && data.cart.items.length > 0 && parseInt(data.cart.total) > 0){
 
             const paymentIntent = await stripe.paymentIntents.create({
-                amount: (parseFloat(data.cart.total)*100).toFixed(0),
+                amount: parseInt(data.cart.total),
                 currency: 'gbp',
                 payment_method_types: ['card'],
                 setup_future_usage: 'off_session'

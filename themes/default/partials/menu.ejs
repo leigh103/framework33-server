@@ -12,12 +12,12 @@
                 typeof user == 'undefined' && menu[i].authenticated == false
             ){ %>
                 <% if (menu[i].icon){ %><div class="icon"><%= menu[i].icon %></div><% } %>
-                <a <% if (typeof menu[i].subitems != 'undefined'){ %>app-click="view.sub_<%- i %> = !view.sub_<%- i %>"<% } else { %> href="<%= menu[i].slug %>"<% } %> class="<% if (view.current_view == menu[i].link.toLowerCase()){ %>active<% } %>"><%= menu[i].link %></a>
+                <a id="menu-<%- view.functions.parseSnake(menu[i].link) %>" <% if (typeof menu[i].subitems != 'undefined'){ %>app-click="view.sub_<%- i %> = !view.sub_<%- i %>"<% } else { %> href="<%= menu[i].slug %>"<% } %> class="<% if (view.current_view == menu[i].link.toLowerCase()){ %>active<% } %>"><%= menu[i].link %></a>
             <% } %>
             <% if (typeof menu[i].subitems != 'undefined'){ %>
                 <div class="subitems <% if (view.current_view == menu[i].link.toLowerCase()){ %>in-view"<% } else { %>" app-show="view.sub_<%- i %>"<% } %> anim="{'enter':'move-down','exit':'move-up'}">
                     <% for (var ii in menu[i].subitems){ %>
-                        <a href="<%= menu[i].subitems[ii].slug %>" class="subitem <% if (view.current_sub_view == menu[i].subitems[ii].link.toLowerCase()){ %>active<% } %>">
+                        <a  id="menu-<%- view.functions.parseSnake(menu[i].subitems[ii].link) %>"href="<%= menu[i].subitems[ii].slug %>" class="subitem <% if (view.current_sub_view == menu[i].subitems[ii].link.toLowerCase()){ %>active<% } %>">
                             <% if (menu[i].subitems[ii].icon){ %><div class="icon"><%= menu[i].subitems[ii].icon %></div><% } %>
                             <%= menu[i].subitems[ii].link %>
                         </a>

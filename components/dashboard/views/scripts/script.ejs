@@ -13,6 +13,24 @@
                 }
             }
 
+            scope.view.input_check = ''
+
+            <% if (typeof status_count == 'object'){ %>
+
+                scope.view.status_count = <%- JSON.stringify(status_count) %>
+
+                scope.view.status_count.map((status)=>{
+
+                    let menu_link = document.querySelector('.side-nav a#menu-'+status.field)
+
+                    if (menu_link){
+                        menu_link.innerHTML = menu_link.innerHTML+'<div class="count">'+status.count+'</div>'
+                    }
+
+                })
+
+            <% } %>
+
             scope.toggleContext = function(type, key){
 
                 let el = document.getElementById(type),
@@ -56,6 +74,7 @@
             scope.search = function(collection){
 
                 clearTimeout(scope.view.typing)
+                clearTimeout(scope.view.input_check)
 
                 let str = this.target.value
 
@@ -73,6 +92,16 @@
 
                                 if (scope[collection].length == 0){
                                     scope.notify('Nothing found','error',5,'fa-search')
+                                } else if (scope[collection].length == 1){
+
+                                    scope.view.input_check = setTimeout(function(){
+                                        let first_input = document.querySelector('.table input[type=text]')
+
+                                        if (first_input){
+                                            first_input.focus()
+                                        }
+                                    },500)
+
                                 }
 
                             }).catch((err) => {
@@ -257,12 +286,12 @@
             }
 
             scope.splice = function(obj,item){
-console.log(obj, item)
+
                 if (obj && obj.length > 0){
                     obj = obj.filter((itm,i)=>{
                         return itm.value != item
                     })
-console.log(this._params)
+
                     evaluate.setValue(this._params[0], obj)
                 }
 

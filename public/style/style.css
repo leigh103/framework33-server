@@ -463,6 +463,20 @@ a:hover {
   background-color: #f8f8f8;
   border-left: 3px solid #1dc7d5;
 }
+.dashboard .side-nav .link a div.count {
+  position: absolute;
+  right: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  font-size: 0.7rem;
+  background-color: #1398a3;
+  color: #fff;
+  border-radius: 50%;
+  margin-left: 1rem;
+}
 .dashboard .side-nav .link .subitems a {
   display: flex;
   align-items: center;
@@ -516,6 +530,9 @@ a:hover {
   .dashboard .page .burger {
     padding-bottom: 1rem;
   }
+}
+.dashboard .page .table-wrap .table .row:not(.table-header):hover .cell {
+  background-color: rgba(0,0,0,0.05);
 }
 @media only screen and (max-width: 851px) {
   .dashboard .page .header {
@@ -796,6 +813,7 @@ input[type=checkbox].invalid:after {
   display: inline-block;
   height: 1rem;
   width: auto;
+  vertical-align: middle;
 }
 .icon.lg {
   height: 1.5rem;
@@ -846,6 +864,11 @@ figure {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+.border {
+  -webkit-box-shadow: inset 0px 0px 0px 1px #d2d6d9;
+  -moz-box-shadow: inset 0px 0px 0px 1px #d2d6d9;
+  box-shadow: inset 0px 0px 0px 1px #d2d6d9;
 }
 .list-item {
   display: flex;

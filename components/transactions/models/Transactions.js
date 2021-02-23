@@ -163,9 +163,9 @@
                 let payload = {status:new_status}
                 let transaction = await DB.read(this.settings.collection).where(['_key == '+id]).update(payload).first() // update the transaction with the status
 
-                if (transaction.status_logs[new_status]){ // if the status has already been appiied
-
-                } else { // if this is the first time the status is being applied, update the timestamp and trigger the notification
+                if (typeof transaction == 'object' && transaction.status_logs && transaction.status_logs[new_status]){ // if the status has already been appiied
+                    continue
+                } else if (typeof transaction == 'object') { // if this is the first time the status is being applied, update the timestamp and trigger the notification
 
                     if (!payload.status_logs){
                         payload.status_logs = {}
@@ -186,6 +186,7 @@
                     catch(err){
                         log(err)
                     }
+
                 }
 
             }

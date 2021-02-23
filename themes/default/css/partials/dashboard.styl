@@ -169,6 +169,22 @@
                     background-color: $bg-light-grey;
                     border-left: 3px solid $color-primary;
                 }
+
+                div.count {
+                    position: absolute;
+                    right: 3rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 1.2rem;
+                    height: 1.2rem;
+                    font-size: 0.7rem;
+                    background-color: $bg-secondary;
+                    color: white;
+                    border-radius: 50%;
+                    margin-left: 1rem;
+                }
+
             }
 
             .subitems {
@@ -238,6 +254,10 @@
                 padding-bottom: 1rem;
             }
 
+        }
+
+        .table-wrap .table .row:not(.table-header):hover .cell {
+            background-color: rgba(0,0,0,0.05)
         }
 
         .header {
