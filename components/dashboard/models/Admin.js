@@ -62,7 +62,6 @@
                     }
                 }
             }
-
         }
 
         async delete(){
@@ -82,14 +81,13 @@
                 return this
             }
 
-
         }
 
         async setDefault() {
 
-            let admin_count = DB.count(this.settings.collection)
+            let admin_count = await DB.count(this.settings.collection)
 
-            if (!admin_count && config.admin.email || admin_count && admin_count.length < 1 && config.admin.email){
+            if (!admin_count && config.admin.email){
 
                 console.log('Creating new default admin')
                 let default_admin = {
@@ -100,14 +98,13 @@
                 }
 
                 await DB.create(this.settings.collection, default_admin)
-                new Users(default_admin).sendReset()
+                new Admin(default_admin).sendReset()
 
             } else if (!config.admin.email){
                 console.log('Please set admin email address in modules/config.js')
             }
 
         }
-
 
     }
 

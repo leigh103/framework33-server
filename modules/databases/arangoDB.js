@@ -318,7 +318,7 @@
         async count(collection){
 
 
-            this.query = 'RETURN LENGTH("'+this.collection+'")'
+            this.query = 'RETURN LENGTH('+collection+')'
 
             try {
                 let result = await adb.query(this.query)
@@ -331,7 +331,7 @@
                 this.result = []
             }
 
-            return this.result
+            return this.result[0]
 
         }
 
