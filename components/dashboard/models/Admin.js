@@ -89,7 +89,7 @@
 
             let admin_count = DB.count(this.settings.collection)
 
-            if (!admin_count && config.admin.email){
+            if (!admin_count && config.admin.email || admin_count && admin_count.length < 1 && config.admin.email){
 
                 console.log('Creating new default admin')
                 let default_admin = {
