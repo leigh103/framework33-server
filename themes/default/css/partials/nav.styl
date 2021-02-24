@@ -22,7 +22,7 @@
     }
 
     div.link {
-        position: relative;
+        // position: relative;
         display: inline-block;
         vertical-align: middle;
         height: 100%;
@@ -54,15 +54,39 @@
                 width: auto;
             }
         }
-    }
 
-    .subitems {
-        display: block;
-        position: absolute;
-        a {
-            display: block;
+        .subitems {
+            background-color: white;
+            display: block !important;
+            position: absolute;
+            text-align: left;
+            width:100vw;
+            left: 0;
+
+            height: auto;
+            max-height:0px;
+            overflow: hidden;
+
+            transition: all 0.5s ease;
+
+            &.in-view {
+                max-height:100vh;
+                opacity: 1;
+            }
+
+            .contain {
+                max-width:1140px;
+                padding: 1rem 0;
+            }
+
+            a {
+                display: block;
+                padding:0;
+                margin-bottom: 1rem;
+            }
         }
     }
+
 
 }
 

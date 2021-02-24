@@ -16,12 +16,14 @@
             <% } %>
             <% if (typeof menu[i].subitems != 'undefined'){ %>
                 <div class="subitems <% if (view.current_view == menu[i].link.toLowerCase()){ %>in-view"<% } else { %>" app-show="view.sub_<%- i %>"<% } %>>
-                    <% for (var ii in menu[i].subitems){ %>
-                        <a  id="menu-<%- view.functions.parseSnake(menu[i].subitems[ii].link) %>"href="<%= menu[i].subitems[ii].slug %>" class="subitem <% if (view.current_sub_view == menu[i].subitems[ii].link.toLowerCase()){ %>active<% } %>">
-                            <% if (menu[i].subitems[ii].icon){ %><div class="icon"><%= menu[i].subitems[ii].icon %></div><% } %>
-                            <%= menu[i].subitems[ii].link %>
-                        </a>
-                    <% } %>
+                    <div class="contain">
+                        <% for (var ii in menu[i].subitems){ %>
+                            <a  id="menu-<%- view.functions.parseSnake(menu[i].subitems[ii].link) %>"href="<%= menu[i].subitems[ii].slug %>" class="subitem <% if (view.current_sub_view == menu[i].subitems[ii].link.toLowerCase()){ %>active<% } %>">
+                                <% if (menu[i].subitems[ii].icon){ %><div class="icon"><%= menu[i].subitems[ii].icon %></div><% } %>
+                                <%= menu[i].subitems[ii].link %>
+                            </a>
+                        <% } %>
+                    </div>
                 </div>
             <% } %>
 

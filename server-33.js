@@ -259,80 +259,34 @@ const express = require('express'),
 
         }
 
-        global.addMenu = (obj) => {
+        global.addMenu = async (obj) => {
 
-            async.forEach(Object.keys(obj.menu),(item, callback )=>{
+            for (let [menu_pos, menu_items] of Object.entries(obj.menu)){
 
-                if (!global.view.menus[item]){
-                    global.view.menus[item] = []
+                if (!global.view.menus[menu_pos]){
+                    global.view.menus[menu_pos] = []
                 }
 
-                async.forEach(obj.menu[item],(itemkey, itemcallback)=>{
-
-                    let re = RegExp(obj.default_route)
-
-                    if (obj.default_route && obj.default_route != 'root' && !itemkey.slug.match(/\/\//) && !itemkey.slug.match(re)){
-                        itemkey.slug = '/'+obj.default_route+itemkey.slug
-                        itemkey.slug = itemkey.slug.replace(/\/$/,'')
-                    } else if (itemkey.slug.match(/\/\//)){
-                        itemkey.slug = itemkey.slug.replace(/^\//,'')
+                menu_items.map((item_data, i)=>{
+                    if (!item_data.weight){
+                        item_data.weight = 0
                     }
 
-                    if (!itemkey.weight){
-                        itemkey.weight = 0
-                    }
+                    let idx = global.view.menus[menu_pos].findIndex((item)=>{
+                        return item.slug == item_data.slug
+                    })
 
-                    obj.menu[item].sort((a, b) => a.weight - b.weight)
-
-                    global.view.menus[item].push(itemkey)
-
-                    global.view.menus[item].sort((a, b) => a.weight - b.weight)
-
-                    if (itemkey.subitems){
-
-                        async.forEach(itemkey.subitems,(subkey, subcallback)=>{
-
-                            let re = RegExp(obj.default_route)
-
-                            if (obj.default_route && obj.default_route != 'root' && !subkey.slug.match(/\/\//) && !subkey.slug.match(re)){
-                                subkey.slug = '/'+obj.default_route+subkey.slug
-                                subkey.slug = subkey.slug.replace(/\/$/,'')
-                            } else if (subkey.slug.match(/\/\//)){
-                                subkey.slug = subkey.slug.replace(/^\//,'')
-                            }
-
-                            if (!subkey.weight){
-                                subkey.weight = 0
-                            }
-
-                            itemkey.subitems.sort((a, b) => a.weight - b.weight)
-
-                            subcallback()
-
-                        }, (err, data)=>{
-
-
-                                itemcallback()
-
-
-                        })
-
+                    if (idx >= 0){
+                        global.view.menus[menu_pos][idx] = item_data
                     } else {
-
-                        itemcallback()
-
+                        global.view.menus[menu_pos].push(item_data)
                     }
-
-                }, (err, data)=>{
-
-                    callback()
 
                 })
 
+                global.view.menus[menu_pos].sort((a, b) => a.weight - b.weight)
 
-            }, (err, data)=>{
-            //    console.log(view.menus)
-            })
+            }
 
         }
 

@@ -984,7 +984,6 @@ modal-auto > section section.body {
   }
 }
 .nav div.link {
-  position: relative;
   display: inline-block;
   vertical-align: middle;
   height: 100%;
@@ -1012,12 +1011,30 @@ modal-auto > section section.body {
   height: 2rem;
   width: auto;
 }
-.nav .subitems {
-  display: block;
+.nav div.link .subitems {
+  background-color: #fff;
+  display: block !important;
   position: absolute;
+  text-align: left;
+  width: 100vw;
+  left: 0;
+  height: auto;
+  max-height: 0px;
+  overflow: hidden;
+  transition: all 0.5s ease;
 }
-.nav .subitems a {
+.nav div.link .subitems.in-view {
+  max-height: 100vh;
+  opacity: 1;
+}
+.nav div.link .subitems .contain {
+  max-width: 1140px;
+  padding: 1rem 0;
+}
+.nav div.link .subitems a {
   display: block;
+  padding: 0;
+  margin-bottom: 1rem;
 }
 .burger {
   display: none;

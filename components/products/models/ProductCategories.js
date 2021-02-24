@@ -64,22 +64,16 @@
                 menu_item
 
             menus.menu = {}
-            menus.menu.nav = []
+            menus.menu.nav = [
+                {link:'Categories', weight:1, subitems:[]}
+            ]
 
-            if (this.data.name){
+            await this.all()
+            this.data = await this.data
 
-                menu_item = {link:this.data.name, slug: '/'+this.data.slug, weight:view.menus.nav.length}
-                menus.menu.nav.push(menu_item)
-
-            } else {
-                this.data.map((category,i)=>{
-
-                    menu_item = {link:category.name, slug: '/'+category.slug, weight:i}
-                    menus.menu.nav.push(menu_item)
-
-                })
-
-            }
+            this.data.map((category,i)=>{
+                menus.menu.nav[0].subitems.push({link:category.name, slug: '/'+category.slug, weight:i})
+            })
 
             global.addMenu(menus)
             return this
@@ -123,6 +117,6 @@
 
     }
 
-    // new ProductCategories().all().makeMenus()
+    new ProductCategories().all().makeMenus()
 
     module.exports = ProductCategories
