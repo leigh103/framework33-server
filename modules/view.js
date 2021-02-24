@@ -12,6 +12,10 @@
             url: config.site.url,
             logo: config.site.logo
         },
+        contact: {
+            tel: config.site.tel,
+            email: config.site.form_settings.to
+        },
         ecommerce:{
             shop:{
                 name: 'Shop',
