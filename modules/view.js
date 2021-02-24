@@ -134,9 +134,9 @@
             getTimeOfDay:(date)=>{
 
                 if (!date){
-                    date = moment().format('HH')
+                    date = moment().format('H')
                 } else {
-                    date = moment(date).format('HH')
+                    date = moment(date).format('H')
                 }
 
                 if (date < 12){

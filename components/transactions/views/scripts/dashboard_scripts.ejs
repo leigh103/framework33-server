@@ -2,6 +2,8 @@
 
     extend.transactions = function(){
 
+        scope.view.selected = false
+
         scope.editTransacton = function(idx){
 
             contextCloseAll()
@@ -40,14 +42,41 @@
 
         }
 
+        scope.showActions = function(){
+
+            for (var i in scope.transactions){
+
+                if (scope.transactions[i].selected && scope.transactions[i].selected == true){
+                    scope.view.selected = true
+                    view.update('view.selected')
+                    break
+                } else if (i == scope.transactions.length -1){
+                    scope.view.selected = false
+                    view.update('view.selected')
+                }
+
+            }
+
+        }
+
         scope.addTracking = function(transaction){
+
+            let selected = false
 
             if (!transaction.shipping_method){
                 scope.notify('Please specify which courier the shipping is with','error',10,'fas fa-question')
                 return false
             }
 
+            if (transaction.selected === true){
+                transaction.selected = false
+                selected = true
+            }
+
             scope.post('transactions/save', transaction).then((data)=>{
+                if (selected === true){
+                    transaction.selected = true
+                }
                 scope.notify('Tracking Added')
             }).catch((err)=>{
                 scope.notify(err,'error')
@@ -81,11 +110,15 @@
 
         scope.selectAll = function(){
 
+            scope.view.all_selected = !scope.view.all_selected
+
             scope.transactions = scope.transactions.map((transaction) => {
                 transaction.selected = !transaction.selected
                 return transaction
             })
 
+            scope.showActions()
+            view.update('view.all_selected')
             view.update('transactions')
 
         }

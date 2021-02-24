@@ -1,19 +1,23 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <div class="grid col-2 col-s-1 header">
+    <div class="grid col-2 col-s-1">
         <div class="flex flex-left-top flex-column">
-            <h3 class="text-weight-600"><%- title %></h3>
-            <p class="transparent-2">This table contains <span app-bind="<%- table %>.length"></span> items</p>
+            <h1 class="h4 text-weight-600"><%- title %></h1>
+            <p class="transparent-2 mt-0">This table contains <span app-bind="<%- table %>.length"></span> items</p>
         </div>
-        <div class="flex flex-middle-right flex-column-s">
-            <% if (typeof search_fields == 'object'){ %>
-                <div class="flex-1 flex w-s-100">
-                    <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
-                    <input type="text" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
-                </div>
-            <% } %>
-            <button class="flex-none btn highlight hidden-s" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
+        <div class="flex flex-top-right flex-column-s">
+            <button class="flex-none btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
         </div>
+    </div>
+
+    <div class="flex my-1">
+
+        <% if (typeof search_fields == 'object'){ %>
+            <div class="flex-1 flex w-s-100 mb-s-2">
+                <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
+                <input type="text" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
+            </div>
+        <% } %>
     </div>
 
     <%- include(basedir+'/components/dashboard/views/partials/table.ejs') %>

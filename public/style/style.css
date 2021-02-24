@@ -210,6 +210,9 @@ a:hover {
 .bg-light-grey {
   background-color: #f8f8f8;
 }
+.bg-mid-grey {
+  background-color: #d2d6d9;
+}
 .bg-primary {
   background-color: #1dc7d5;
 }
@@ -239,9 +242,6 @@ a:hover {
 }
 .bg-white {
   background-color: #fff;
-}
-.btn:not(.bg-33-white):hover {
-  color: #fff;
 }
 .btn.highlight {
   background-color: #1dc7d5;
@@ -537,7 +537,6 @@ a:hover {
 @media only screen and (max-width: 851px) {
   .dashboard .page .header {
     height: auto;
-    align-items: flex-end;
   }
 }
 .dashboard .page-full {
@@ -779,6 +778,11 @@ input[disabled],
 select option[disabled] {
   color: #82888c;
 }
+input[type="text"].border,
+input[type="select"].border,
+input[type="password"].border {
+  border: 0.01rem solid #d2d6d9;
+}
 input[type=checkbox] {
   flex: none;
   position: relative;
@@ -793,7 +797,7 @@ input[type=checkbox]:after {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  top: -0.5rem;
+  top: -0.3rem;
   border-radius: 0.25rem;
   left: 0;
   background-color: #fff;
@@ -1121,6 +1125,11 @@ modal-auto > section section.body {
   font-size: 0.875rem;
   padding: 1rem;
 }
+.table.button-overlay {
+  position: absolute;
+  z-index: 3;
+  background-color: #f8f8f8;
+}
 .table-wrap {
   width: 100%;
   overflow-y: hidden;
@@ -1141,7 +1150,7 @@ modal-auto > section section.body {
   font-weight: 500;
 }
 .table .table-header .cell {
-  border-bottom: 1px solid #33424b;
+  border-bottom: 1px solid #d2d6d9;
 }
 .table .cell {
   font-size: 0.9rem;
@@ -1180,6 +1189,30 @@ modal-auto > section section.body {
   object-fit: cover;
   border-radius: 50%;
 }
+.table .cell .status {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0.2rem 1rem;
+  background-color: #82888c;
+  color: #fff;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+.table .cell .status.paid {
+  background-color: #1dd582;
+}
+.table .cell .status.processing {
+  background-color: #c1d51d;
+}
+.table .cell .status.shipped {
+  background-color: #d5701d;
+}
+.table .cell .status.completed {
+  background: none;
+  color: #33424b;
+  padding: 0;
+}
 .table.list-items {
   display: flex !important;
   flex-direction: column;
@@ -1204,11 +1237,16 @@ modal-auto > section section.body {
 }
 .tabs a {
   display: inline-block;
-  margin-right: 1rem;
-  padding-bottom: 0.5rem;
+  text-align: center;
+  padding: 0.5rem 0;
+  margin: 0 1.5rem 0 0;
+  vertical-align: middle;
 }
 .tabs a.active {
-  border-bottom: 2px solid;
+  border-bottom: 2px solid #1398a3;
+}
+.tabs.border-bottom {
+  border-bottom: 1px solid #d2d6d9;
 }
 h1,
 h2,

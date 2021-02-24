@@ -19,7 +19,7 @@
                     {name:'name',input_type:'text',placeholder:'evnt Name', type:'string', required:true},
                     {name:'trigger',input_type:'text',placeholder:'evnt trigger', type:'string', required:true},
                     {name:'description',input_type:'textarea',placeholder:'evnt Description', type:'string', required:true},
-                    {name:'actions',input_type:'array', type:'array', required:false, subitems:[
+                    {name:'actions',input_type:'array', type:'array', required:true, subitems:[
                         {name:'method',input_type:'select', options:[{text:'Mailbox',value:'mailbox'},{text:'Email',value:'email'},{text:'SMS',value:'sms'}] , type:'string', required:true},
                         {name:'to',input_type:'text',placeholder:'method', type:'string', required:true},
                         {name:'enabled',input_type:'checkbox', type:'boolean', required:false},

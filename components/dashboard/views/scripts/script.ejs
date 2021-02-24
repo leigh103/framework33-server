@@ -18,9 +18,11 @@
             <% if (typeof status_count == 'object'){ %>
 
                 scope.view.status_count = <%- JSON.stringify(status_count) %>
+                scope.view.status_count_obj = {}
 
                 scope.view.status_count.map((status)=>{
 
+                    scope.view.status_count_obj[status.field] = status.count
                     let menu_link = document.querySelector('.side-nav a#menu-'+status.field)
 
                     if (menu_link){

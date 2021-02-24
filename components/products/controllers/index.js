@@ -15,9 +15,9 @@ const express = require('express'),
         menu: {
             side_nav: [
                 {link:'Products',slug: '/dashboard/products', weight:1, subitems:[
-                    {link:'All',slug: '/dashboard/products', weight:1},
-                    {link:'Inactive',slug: '/dashboard/products/inactive', weight:5},
-                    {link:'Sale Items',slug: '/dashboard/products/sale', weight:6},
+                    // {link:'All',slug: '/dashboard/products', weight:1},
+                    // {link:'Inactive',slug: '/dashboard/products/inactive', weight:5},
+                    // {link:'Sale Items',slug: '/dashboard/products/sale', weight:6},
                     {link:'Categories',slug: '/dashboard/products/categories', weight:3},
                     {link:'Attributes',slug: '/dashboard/products/attributes', weight:4}
                 ]}

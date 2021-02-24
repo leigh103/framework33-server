@@ -1,5 +1,11 @@
 .table {
 
+    &.button-overlay {
+        position: absolute;
+        z-index:3;
+        background-color: $bg-light-grey;
+    }
+
     &-wrap {
         width: 100%;
         overflow-y: hidden;
@@ -21,7 +27,7 @@
         font-weight: 500;
 
         .cell {
-            border-bottom: 1px solid $color-dark-grey
+            border-bottom: 1px solid $color-mid-light-grey
         }
     }
 
@@ -58,6 +64,37 @@
                 border-radius: 50%;
             }
         }
+
+        .status {
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0.2rem 1rem;
+            background-color: $color-grey;
+            color: white;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            text-transform: capitalize;
+
+            &.paid {
+                background-color: $bg-paid;
+            }
+
+            &.processing {
+                background-color: $bg-processing;
+            }
+
+            &.shipped {
+                background-color: $bg-shipped;
+            }
+
+            &.completed {
+                background: none;
+                color: $text-black;
+                padding: 0
+            }
+
+        }
+
     }
 
     &.list-items {

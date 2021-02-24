@@ -15,13 +15,12 @@ const express = require('express'),
         views: 'transactions/views',
         menu: {
             side_nav: [
-                {link:'Transactions',slug: '/dashboard/transactions', weight:1, subitems:[
-                    {link:'New',slug: '/dashboard/transactions/new', weight:1},
-                    {link:'Paid',slug: '/dashboard/transactions/paid', weight:2},
-                    {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
-                    {link:'Shipped',slug: '/dashboard/transactions/shipped', weight:4},
-                    {link:'Completed',slug: '/dashboard/transactions/completed', weight:5},
-                    {link:'Deleted',slug: '/dashboard/transactions/deleted', weight:6},
+                {link:'Orders',slug: '/dashboard/transactions/paid', weight:1, subitems:[
+                    {link:'Incomplete Carts',slug: '/dashboard/transactions/new', weight:9},
+                    // {link:'New',slug: '/dashboard/transactions/paid', weight:2},
+                    // {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
+                    // {link:'Shipped',slug: '/dashboard/transactions/shipped', weight:4},
+                    {link:'Archive',slug: '/dashboard/transactions/completed', weight:5},
                     {link:'Settings',slug: '/dashboard/transactions/settings', weight:7}
                 ]}
             ],
@@ -104,7 +103,7 @@ const express = require('express'),
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
-        view.current_view = 'transactions'
+        view.current_view = 'orders'
         view.current_sub_view = 'settings'
 
         data.title = 'Transaction Settings'
@@ -120,7 +119,7 @@ const express = require('express'),
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
 
-        view.current_view = 'transactions'
+        view.current_view = 'orders'
 
         data.statuses = new Transactions().statuses
 
