@@ -21,9 +21,6 @@ const express = require('express'),
                     {link:'Categories',slug: '/dashboard/products/categories', weight:3},
                     {link:'Attributes',slug: '/dashboard/products/attributes', weight:4}
                 ]}
-            ],
-            nav: [
-                {link:'Shop',slug: "/"+view.ecommerce.shop.slug, weight:1}
             ]
         }
     },

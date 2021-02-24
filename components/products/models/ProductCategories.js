@@ -65,7 +65,7 @@
 
             menus.menu = {}
             menus.menu.nav = [
-                {link:'Categories', weight:1, subitems:[]}
+                {link:view.ecommerce.shop.name, weight:1, subitems:[]}
             ]
 
             await this.all()
