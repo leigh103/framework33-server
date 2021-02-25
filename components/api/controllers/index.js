@@ -203,7 +203,7 @@ var express = require('express'),
 
                 if (model.all){ // if the class exists and the all function exists
 
-                    model.all(query, start, end)
+                    await model.all(query, start, end)
                 } else { // else fail
                     res.json(settings.not_found)
                     return false

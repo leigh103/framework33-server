@@ -87,7 +87,7 @@
 
         }
 
-        all(data, start, end) {
+        async all(data, start, end) {
 
             if (!start){
                 start = 0
@@ -98,11 +98,11 @@
             }
 
             if (typeof data == 'string'){
-                this.data = DB.read(this.settings.collection).orderBy(data,'asc').orderBy('_updated','DESC').limit(start, end).get()
+                this.data = await DB.read(this.settings.collection).orderBy(data,'asc').orderBy('_updated','DESC').limit(start, end).get()
             } else if (typeof data == 'object' && data.length > 0){
-                this.data = DB.read(this.settings.collection).where(data).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
+                this.data = await DB.read(this.settings.collection).where(data).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
             } else {
-                this.data = DB.read(this.settings.collection).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
+                this.data = await DB.read(this.settings.collection).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
             }
 
             return this
@@ -248,7 +248,7 @@
                         value = parseFloat(value)
                     }
 
-                    if (Number(value) === value && value % 1 !== 0){
+                    if (Number(value) === value && value % 1 !== 0 || Number(value) === value){
                         return value*100
                     } else {
                         return value
@@ -259,7 +259,6 @@
                     if (value && value.match(/^-?[0-9]{1,2}%$/)){
                         return value
                     } else if (value && value.match(/^-?[0-9]+(.[0-9]{2})?$/)){
-                        console.log(parseFloat(value)*100)
                         return parseFloat(value)*100
                     } else if (value){
                         this.error = 'Invalid adjustment value. Should be a positive or negative number, or a positive or negative percentage'
@@ -462,6 +461,13 @@
         }
 
         async delete(){
+
+            if (typeof this.preDelete == 'function'){
+                await this.preDelete()
+                if (this.error){
+                    return this
+                }
+            }
 
             this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
 

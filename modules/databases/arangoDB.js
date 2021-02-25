@@ -403,7 +403,8 @@
                     this.result = []
                 }
 
-                return  await this.result
+
+                return this.result
 
             }
 

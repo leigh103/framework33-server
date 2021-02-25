@@ -58,6 +58,18 @@
 
         }
 
+        async preDelete(){
+
+            let products = await new Products().all(['category == '+this.data._key]).get()
+            if (Array.isArray(products) && products.length > 0){
+                this.error = 'Please remove all products from this category before deleting'
+                return this
+            } else {
+                return this
+            }
+
+        }
+
         async makeMenus(){
 
             let menus = {},
@@ -68,10 +80,10 @@
                 {link:view.ecommerce.shop.name, weight:1, subitems:[]}
             ]
 
-            await this.all()
-            this.data = await this.data
+            let cats = await new ProductCategories().all()
+            cats.data = await cats.data
 
-            this.data.map((category,i)=>{
+            cats.data.map((category,i)=>{
                 menus.menu.nav[0].subitems.push({link:category.name, slug: '/'+category.slug, weight:i})
             })
 
@@ -117,6 +129,10 @@
 
     }
 
-    new ProductCategories().all().makeMenus()
+    (async () => {
+        let cats = await new ProductCategories().all()
+        cats.makeMenus()
+    })
+
 
     module.exports = ProductCategories

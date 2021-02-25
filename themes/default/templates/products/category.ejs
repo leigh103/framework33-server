@@ -1,21 +1,17 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
 
-<section class="<% if (typeof parent_category == 'object'){ %>vh-30<% } else { %>vh-60<% } %> relative flex flex-middle flex-column bg-33-light-grey bg-cover pt-3" style="background-image: url('<%- category.image %>')">
-    <div class="background bg-33-transparent-dark-grey"></div>
-    <h1 class="text-33-white mb-1" anim="{'enter':'fade-in','duration':'3s'}"><%- category.name %></h1>
+<section class="category breadcrumbs">
     <div class="contain">
-        <div class="contain">
-            <h2 class="text-33-white" style="font-size: 1.2em" anim="{'enter':'move-down','delay':'0.5s','duration':'0.5s'}"><%- category.sub_title %></h2>
-        </div>
+        <h1 class=""><%- category.name %></h1>
     </div>
 </section>
 
-<section class="py-6">
+<section class="bg-cream-1 h-100">
 
     <div class="contain">
 
-        <div class="contain mb-6">
+        <div class="text-center">
 
             <% if (typeof parent_category == 'object'){ %>
                 <a class="h6 lh2 block <% if (category.description){ %>mb-3<% } %>" href="/<%- parent_category.slug %>">Back to <%- parent_category.name %></a>
@@ -23,29 +19,19 @@
                 <% var parent_category = '' %>
             <% } %>
             <% if (category.description){ %>
-                <p class="h6 lh2"><%- category.description %></p>
+                <p class="h6 lh2 pt-3"><%- category.description %></p>
             <% } %>
         </div>
 
         <% if (category.sub_categories){ %>
 
-            <div class="grid col-2 col-s-1 gap-2">
+            <div class="grid col-2 col-s-1 gap-2 pt-3">
 
                 <% category.sub_categories.forEach((sub_category,i)=>{ %>
 
                     <% if (sub_category != null && typeof sub_category.slug == 'string'){ %>
 
-                        <a href="/<%- category.slug %>/<%- sub_category.slug %>" class="bg-33-light-grey rounded flex-row overflow-hidden shadow" anim="{'enter':'move-up'}">
-
-                            <div class="flex-1">
-                                <img src="<%- sub_category.image %>" class="object-fit">
-                            </div>
-                            <div class="flex-1 p-2 text-left">
-                                <h2 class="h6 text-weight-500"><%- sub_category.name %></h2>
-                                <p><%- sub_category.sub_title %></p>
-                            </div>
-
-                        </a>
+                        <%- include('partials/category_thumb.ejs',{parent_category:category, category:sub_category}) %>
 
                     <% } %>
 
@@ -69,7 +55,7 @@
 
         </div>
 
-        <div class="contain mt-6 text-center">
+        <div class="contain my-6 text-center">
             <a class="h6 lh2 block" href="/<%- shop.slug %>">View All Categories</a>
         </div>
 

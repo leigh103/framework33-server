@@ -1,0 +1,178 @@
+.product {
+
+    &.single {
+
+        .layout {
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            @media $small {
+                display: block
+            }
+
+        }
+
+        .gallery {
+
+            height: "calc(100vh - %s)" % $top-nav-height;
+            position: relative;
+
+            @media $small {
+                height: 50vh
+            }
+
+            img.main-image {
+                height: 100%;
+                width: 100%
+                object-fit: cover;
+            }
+
+            .thumbs {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 5rem;
+                height: auto;
+
+                @media $small {
+                    background-color: white;
+                    position: relative;
+                    height: 5rem;
+                    width: 100vw;
+                    overflow-x: auto;
+                }
+
+                img {
+                    display: block;
+                    height: 5rem;
+                    width: 100%;
+                    object-fit: cover;
+
+                    @media $small {
+                        display: inline-block;
+                        width: 5rem;
+                        height: 100%;
+                    }
+                }
+            }
+
+        }
+
+        .details {
+
+            padding: 6rem 0 6rem 6rem;
+            display: flex;
+            flex-direction: column;
+
+            @media $medium {
+                padding: 2rem
+            }
+
+            @media $small {
+                margin-top: 5rem;
+                padding: 2rem
+            }
+
+            .breadcrumbs {
+
+                flex: 0 0 auto;
+                width: 100%;
+                font-size: 0.8rem;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 1rem;
+                margin-bottom: 2rem;
+
+                a {
+                    text-transform: uppercase;
+                    display: inline-block;
+                    margin: 0 1rem;
+
+                    font-weight: 600;
+
+                    &:first-child {
+                        margin-left: 0;
+                    }
+                }
+
+            }
+
+            .info {
+
+                flex: 1;
+
+                .title {
+                    font-size: 2rem;
+                    margin-bottom: 1rem;
+                }
+
+                .price {
+                    font-size: 1.25rem;
+                }
+
+                .previous-price, .discount {
+                    font-size: 0.875rem;
+                }
+
+                .previous-price {
+                    text-decoration: line-through;
+                }
+
+                .actions {
+
+                    margin-top: 2rem;
+                    display: flex;
+                    width: 50%;
+
+                    @media $small {
+                        width: 100%;
+                    }
+
+                    .quantity {
+                        flex: 0 0 3rem;
+                        display: flex;
+
+                        & > * {
+                            flex: 1;
+                        }
+
+                        .remove, .add {
+                            display: none;
+                        }
+
+                        .number {
+                            font-size: 1.1rem;
+                            padding: 0;
+                            text-align: center;
+                        }
+                    }
+
+                    .buy, .out-of-stock {
+                        flex: 1;
+                        margin-left: 1rem;
+                        border: 3px solid $color-primary;
+                        text-transform: uppercase;
+                        background: none;
+                        color: $color-primary;
+                    }
+
+                }
+
+            }
+
+
+            .sharing {
+
+                flex: 0 0 auto;
+                text-align: right;
+                border-top: 1px solid #ccc;
+                padding-top: 1em;
+                margin-top: 2rem;
+
+            }
+
+        }
+
+    }
+
+}

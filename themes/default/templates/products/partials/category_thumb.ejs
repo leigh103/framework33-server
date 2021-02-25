@@ -1,0 +1,11 @@
+<a href="/<% if (typeof parent_category != 'undefined'){ %><%- category.slug %>/<% } %><%- category.slug %>" class="category thumb">
+
+    <div class="thumbnail">
+        <img src="<%- category.image %>">
+    </div>
+    <div class="details">
+        <h2 class="h4 slab text-weight-500"><%- category.name %></h2>
+        <p><%- category.sub_title %></p>
+    </div>
+
+</a>

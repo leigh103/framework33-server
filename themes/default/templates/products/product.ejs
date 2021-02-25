@@ -1,83 +1,85 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
-<section class="page pb-4">
+<section class="page bg-cream-1 product single">
 
-    <% if (product.content_before_details && product.content_before_details===true){ %>
-        <div class="contain my-6 text-left">
-            <%- product.content %>
-        </div>
-    <% } %>
+    <div class="contain">
 
-    <div class="contain grid col-2 col-s-1 gap-2 text-left pt-2">
+        <div class="layout">
 
-        <div>
-            <img src="<%- product.image %>" app-src="view.gallery_image" class="product-image">
-            <div class="overflow-x" style="height: 5rem">
-                <% if (Array.isArray(product.gallery) && product.gallery.length > 0){ %>
-                    <img src="<%- product.image %>" class="inline-block h-100 clickable" app-click="view.gallery_image = '<%- product.image %>'">
-                    <% product.gallery.forEach((image)=>{ %>
-                        <img src="<%- image.value %>" class="inline-block h-100 clickable" app-click="view.gallery_image = '<%- image.value %>'">
-                    <% }) %>
-                <% } %>
+            <div class="gallery">
+                <img src="<%- product.image %>" app-src="view.gallery_image" class="main-image">
+                <div class="thumbs">
+                    <% if (Array.isArray(product.gallery) && product.gallery.length > 0){ %>
+                        <img src="<%- product.image %>" class="clickable" app-click="view.gallery_image = '<%- product.image %>'">
+                        <% product.gallery.forEach((image)=>{ %>
+                            <img src="<%- image.value %>" class="clickable" app-click="view.gallery_image = '<%- image.value %>'">
+                        <% }) %>
+                    <% } %>
+                </div>
             </div>
-        </div>
 
-        <div class="pt-2">
+            <div class="details">
 
-            <div class="">
-                <div class="text-small mb-2">
+                <div class="breadcrumbs">
+                    <a href="/<%- view.ecommerce.shop.slug %>">Products</a> /
                     <a class="" href="/<%- category.slug %>"><%- category.name %></a>
                     <% if (typeof sub_category == 'object'){ %>
                         / <a class="" href="/<%- category.slug %>/<%- sub_category.slug %>"><%- sub_category.name %></a>
                     <% } %>
                 </div>
-                <h1 class="h3 text-weight-600"><%- product.name %></h1>
-                <h2 class="h4 py-2 text-primary text-weight-600">
-                    £<%- functions.getPrice(product.price, product.adjustment) %>
-                    <% if (product.adjustment){ %>
-                        <br>
-                        <span class="h6 strikethrough text-33-blue"><%- view.functions.parseCurrency(product.price) %></span>
-                        <% if (typeof product.adjustment == 'string' && product.adjustment.match(/%/)){ %>
-                            <span class="p text-right text-33-blue"><%- Math.abs(product.adjustment.replace(/%/g,'')) %>% off</span>
-                        <% } else { %>
-                            <span class="p text-right text-33-blue">£<%- Math.abs(product.adjustment/100).toFixed(2) %> off!</span>
+
+                <div class="info">
+                    <h1 class="slab title"><%- product.name %></h1>
+                    <h2 class="price">
+                        £<%- functions.getPrice(product.price, product.adjustment) %>
+                        <% if (product.adjustment){ %>
+                            <br>
+                            <span class="previous-price"><%- view.functions.parseCurrency(product.price) %></span>
+                            <% if (typeof product.adjustment == 'string' && product.adjustment.match(/%/)){ %>
+                                <span class="discount"><%- Math.abs(product.adjustment.replace(/%/g,'')) %>% off</span>
+                            <% } else { %>
+                                <span class="discount">£<%- Math.abs(product.adjustment/100).toFixed(2) %> off!</span>
+                            <% } %>
                         <% } %>
+                    </h2>
+
+                    <% if (product.description){ %>
+                        <p><%- product.description %></p>
+                        <p>Give us a call on 01706 822828 or email us at info@chocolate-café.co.uk if you have a question about this product.</p>
+                        <p>Delivery information can be found <a href="/delivery">here</a></p>
                     <% } %>
-                </h2>
 
-            </div>
+                    <div class="actions">
+                        <div class="quantity">
+                            <button class="remove" app-click="quantity('minus')"><i class="fas fa-minus"></i></button>
+                            <input type="text" class="number" app-model="view.add_item.quantity">
+                            <button class="add" app-click="quantity('add')"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <% if (product.stock){ %>
+                            <button class="buy" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Buy Now</button>
+                        <% } else { %>
+                            <button class="out-of-stock">Out of stock</button>
+                        <% } %>
+                    </div>
 
-            <% if (product.description){ %>
-                <p><%- product.description %></p>
-            <% } %>
-
-            <div class="flex my-2">
-                <div class="flex flex-1 border">
-                    <button class="flex-1 btn bg-none text-33-grey" app-click="quantity('minus')"><i class="fas fa-minus"></i></button>
-                    <input type="text" class="flex-1 bg-none text-center" app-model="view.add_item.quantity">
-                    <button class="flex-1 btn bg-none text-33-grey" app-click="quantity('add')"><i class="fas fa-plus"></i></button>
                 </div>
-                <% if (product.stock){ %>
-                    <button class="flex-1 btn bg-33-blue" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Add to <%- view.functions.capitalise(view.ecommerce.cart_name) %></button>
-                <% } else { %>
-                    <button class="flex-1 btn bg-33-blue transparent" >Out of stock</button>
-                <% } %>
-            </div>
 
-            <div class="my-2">
-                <a href="https://www.facebook.com/sharer/sharer.php?u=<%- view.functions.parseURL(product.url) %>" class="facebook" target="_blank"><img src="/images/sharing/sm-Facebook.svg" class="icon xl mr-05"></a>
-                <a href="https://twitter.com/share?text=<%- view.functions.parseURL(product.name) %>&url=<%- view.functions.parseURL(product.url) %>" class="twitter" target="_blank"><img src="/images/sharing/sm-Twitter.svg" class="icon xl"></a>
+                <div class="sharing">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=<%- view.functions.parseURL(product.url) %>" class="facebook" target="_blank"><img src="/images/sharing/sm-Facebook.svg" class="icon xl mr-05"></a>
+                    <a href="https://twitter.com/share?text=<%- view.functions.parseURL(product.name) %>&url=<%- view.functions.parseURL(product.url) %>" class="twitter" target="_blank"><img src="/images/sharing/sm-Twitter.svg" class="icon xl"></a>
+
+                </div>
 
             </div>
 
         </div>
+
+        <% if (!product.content_before_details && product.content){ %>
+            <div class="contain my-6 text-left">
+                <%- product.content %>
+            </div>
+        <% } %>
 
     </div>
-
-    <% if (!product.content_before_details){ %>
-        <div class="contain my-6 text-left">
-            <%- product.content %>
-        </div>
-    <% } %>
 
 </section>

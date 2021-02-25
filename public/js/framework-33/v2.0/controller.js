@@ -208,6 +208,9 @@
                                 }
                             }
 
+                        } else {
+                            scope[collection] = {}
+                            scope[collection].push(data)
                         }
 
                         resolve(data)

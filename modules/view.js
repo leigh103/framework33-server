@@ -119,8 +119,8 @@
                 table = parseClassName(table)
 
                 if (table && global[table] && typeof global[table] == 'function'){
-                    let data = new global[table]().all().get()
-                    return data
+                    let data = await new global[table]().all()
+                    return data.data
                 } else {
                     return []
                 }
