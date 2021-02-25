@@ -129,10 +129,7 @@
 
     }
 
-    (async () => {
-        let cats = await new ProductCategories().all()
-        cats.makeMenus()
-    })
+    new ProductCategories().makeMenus()
 
 
     module.exports = ProductCategories
