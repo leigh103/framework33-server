@@ -207,7 +207,7 @@ var express = require('express'),
             })
 
             data.intent = paymentIntent
-            data.stripe_id = config.stripe_publishable_key
+            data.stripe_id = global.view.transactions.stripe_public_key
             req.session.intent = paymentIntent.id
 
             res.render(settings.views+'/gateways/stripe.ejs', data)

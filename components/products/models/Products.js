@@ -100,9 +100,9 @@
         async getRelated(){
 
             if (this.data && this.data.category && this.data.sub_category){
-                return await new Products().all(['category like '+this.data.category, 'sub_category like '+this.data.sub_category, '_key != '+this.data._key,'activated == true']).get()
+                return await new Products().all(['category like '+this.data.category, 'sub_category like '+this.data.sub_category, '_key != '+this.data._key,'activated == true']).limit(5).get()
             } else if (this.data && this.data.category){
-                return await new Products().all(['category like '+this.data.category, '_key != '+this.data._key, 'activated == true']).get()
+                return await new Products().all(['category like '+this.data.category, '_key != '+this.data._key, 'activated == true']).limit(5).get()
             } else {
                 return []
             }
