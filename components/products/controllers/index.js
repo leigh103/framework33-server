@@ -189,7 +189,8 @@ const express = require('express'),
         if (data.shop.description){
             data.meta.description = data.shop.description.substring(0,160)
         }
-        data.categories = await new ProductCategories().all().get()
+        data.categories = await new ProductCategories().all()
+        data.categories = data.categories.data
 
         res.render(config.site.theme_path+'/templates/products/categories.ejs',data)
 
