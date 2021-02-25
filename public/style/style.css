@@ -1322,6 +1322,22 @@ modal-auto > section section.body {
   padding-top: 1em;
   margin-top: 2rem;
 }
+.product.single .content {
+  background-color: #fff;
+  padding: 6rem;
+  text-align: center;
+}
+.product.single .content .tabs {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.product.single .content .content-text {
+  padding-top: 2rem;
+  max-width: 900px;
+  margin: auto;
+  text-align: left;
+}
 .table.button-overlay {
   position: absolute;
   z-index: 3;

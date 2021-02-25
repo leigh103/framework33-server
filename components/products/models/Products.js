@@ -97,6 +97,18 @@
 
         }
 
+        async getRelated(){
+
+            if (this.data && this.data.category && this.data.sub_category){
+                return await new Products().all(['category like '+this.data.category, 'sub_category like '+this.data.sub_category, '_key != '+this.data._key,'activated == true']).get()
+            } else if (this.data && this.data.category){
+                return await new Products().all(['category like '+this.data.category, '_key != '+this.data._key, 'activated == true']).get()
+            } else {
+                return []
+            }
+
+        }
+
         makeCartResource(){
 
             return new Promise( async (resolve, reject) => {
