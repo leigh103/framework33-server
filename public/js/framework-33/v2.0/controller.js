@@ -388,9 +388,9 @@
             let selected_date
 
             if (obj){
-                selected_date = _get(scope,obj)
+                selected_date = evaluate.getValue(scope,obj)
             } else {
-                selected_date = _get(scope,name)
+                selected_date = evaluate.getValue(scope,name)
             }
 
             if (selected_date && selected_date.match(/Z$/)){

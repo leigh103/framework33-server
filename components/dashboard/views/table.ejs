@@ -27,6 +27,20 @@
     </div>
 
     <div id="context" class="context dropdown text-left" style="display: none">
+
+        <% if (typeof context_menu == 'object'){ %>
+
+            <% context_menu.forEach((item,i) => { %>
+
+                <div class="link" app-click="<%- item.function %>('<%- table %>')">
+                    <i class="fas <%- item.icon %>"></i>
+                    <%- item.text %>
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
         <div class="link" app-click="editItem('<%- table %>')">
             <i class="fas fa-pen-alt"></i>
             Edit
@@ -35,4 +49,6 @@
             <i class="fas fa-trash"></i>
             Delete
         </div>
+
+
     </div>

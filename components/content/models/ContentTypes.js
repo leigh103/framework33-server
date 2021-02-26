@@ -45,8 +45,26 @@
 
         }
 
+        async init(){
 
+            let pages_ct = await DB.read(this.settings.collection).where(['type == pages']).first() //await this.find(['_key == 0']).get()
+
+            if (typeof pages_ct == 'object' && pages_ct._key){
+
+            } else {
+
+                let new_pages_ct = await this.getTemplate()
+                new_pages_ct.data.type = "pages"
+
+                await DB.create(this.settings.collection,new_pages_ct.data).first()
+                log('Created default content type: pages')
+
+            }
+
+        }
 
     }
+
+    new ContentTypes().init()
 
     module.exports = ContentTypes

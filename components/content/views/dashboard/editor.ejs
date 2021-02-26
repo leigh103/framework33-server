@@ -11,7 +11,7 @@
             <div class="h-100 bg-33-white py-2 overflow-y">
 
                 <div class="px-2 pb-2">
-                    <a app-click="goto('content','<%- content_type %>')"><i class="fas fa-chevron-left mr-05"></i>All <%- view.functions.depluralise(content_type) %> Content</a>
+                    <a href="/dashboard/content"><i class="fas fa-chevron-left mr-05"></i>All Content</a>
                 </div>
 
                 <div class="sortable bg-light-grey py-1 pl-1">
@@ -62,8 +62,8 @@
                     <div app-show="view.selected_block" class="mb-3">
                         <button class="btn bg-33-red w-100 mb-1" app-click="removeBlock(true)">Remove Block</button>
                     </div>
-                    <button class="btn bg-33-green w-100 mb-05" app-click="saveLocal()">Save Draft</button>
-                    <button class="btn bg-33-red w-100 mb-05" app-click="clearLocal()">Clear Local Draft</button>
+                    <!-- <button class="btn bg-33-green w-100 mb-05" app-click="saveLocal()">Save Draft</button>
+                    <button class="btn bg-33-red w-100 mb-05" app-click="clearLocal()">Clear Local Draft</button> -->
                     <button class="btn highlight w-100 mb-05" app-click="saveContent()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(content_type) %></span></button>
 
                 </div>
@@ -147,27 +147,27 @@
                     <div>
                         <div class="mb-1" app-for="field in view.editor">
 
-                            <div app-show="field.input == 'text'">
+                            <div app-if="field.input == 'text'">
                                 <label class="indent capitalise" app-bind="field.field"></label>
                                 <input type="text" app-model="field.value">
                             </div>
 
-                            <div app-show="field.input == 'textarea'">
+                            <div app-if="field.input == 'textarea'">
                                 <label class="indent capitalise" app-bind="field.field"></label>
                                 <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs') %>
                                 <div class="large resize contenteditable" app-model="field.value" contenteditable="true"></div>
                             </div>
 
-                            <div app-show="field.input == 'code'">
+                            <div app-if="field.input == 'code'">
                                 <label class="indent capitalise" app-bind="field.field"></label>
                                 <pre><code class="html contenteditable" contenteditable="true" app-model="field.value"></code></pre>
                             </div>
 
-                            <div app-show="field.input == 'image'">
+                            <div app-if="field.input == 'image'">
                                 <label class="indent capitalise" app-bind="field.field"></label>
                             </div>
 
-                            <div app-show="field.input == 'none'">
+                            <div app-if="field.input == 'none'">
                                 <label class="indent capitalise" app-bind="field.field"></label>
                             </div>
 
@@ -189,8 +189,8 @@
                         </div>
                         <div class="rowspan-5">
                             <label class="indent capitalise">Background Image</label><br>
-                            <label for="block_bg_image" class="clickable"><img src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image" app-placeholder="/images/Product_Placeholder.svg"></label>
-                            <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image','content',view.selected_block.name)">
+                            <label for="block_bg_image" class="clickable"><img src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image"></label>
+                            <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')">
                             <div class="grid col-2">
                                 <div></div>
                                 <div class="text-right">
@@ -224,80 +224,58 @@
 </div>
 
 
-    <div class="modal" app-show="view.modal == 'show_sections'" anim="{'enter':'fade-in'}">
+    <modal-auto app-show="view.modal == 'show_sections'" data-title="Add New Section" class="modal-auto-large">
 
-        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
-
-            <div class="grid col-2 pb-1">
-                <div>
-                    <h4 class="text-light capitalise">
-                        Add a new section
-                    </h4>
-                </div>
-            </div>
             <div class="grid col-5 gap-1">
                 <% for (var i in blocks){ %>
                     <div app-click="selectBlock('<%- blocks[i].block %>')" class="bg-33-white clickable rounded p-2 flex flex-middle"><%- blocks[i].name %></div>
                 <% } %>
             </div>
+
+
+    </modal-auto>
+
+
+    <modal-auto app-show="view.modal == 'show_del_block_confirm'" data-title="Delete this block?" class="modal-auto-large">
+        <div class="grid col-2 gap-2">
+            <button class="btn outline w-100" onclick="modalCloseAll()">Cancel</button>
+            <button class="btn highlight w-100" app-click="removeBlock()">Delete</button>
         </div>
+    </modal-auto>
 
-    </div>
 
-    <div class="modal" app-show="view.modal == 'show_del_block_confirm'" anim="{'enter':'fade-in'}">
+    <modal-auto app-show="view.modal == 'show_input'" data-title="Input" class="modal-auto-large">
 
-        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
+        <div class="grid col-2 pb-1 gap-2" style="width:50vw">
+            <div class="pb-1">
+                <h4 class="text-light capitalise" app-bind="view.exec.title">
 
-            <div class="grid col-2 pb-1">
-                <div>
-                    <h4 class="text-light capitalise">
-                        Delete this block?
-                    </h4>
-                </div>
+                </h4>
             </div>
-            <div class="grid col-2 gap-2">
-                <button class="btn outline w-100" onclick="modalCloseAll()">Cancel</button>
-                <button class="btn highlight w-100" app-click="removeBlock()">Delete</button>
+            <div></div>
+            <div app-show="view.exec.image">
+                <label>Upload Image</label>
+                <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="view.image_url" class="w-100"></label>
+                <input id="image_1" type="file" app-model="view.image_url">
             </div>
-        </div>
-
-    </div>
-
-    <div class="modal" app-show="view.modal == 'show_input'" anim="{'enter':'fade-in'}">
-
-        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
-
-            <div class="grid col-2 pb-1 gap-2" style="width:50vw">
-                <div class="pb-1">
-                    <h4 class="text-light capitalise" app-bind="view.exec.title">
-
-                    </h4>
-                </div>
-                <div></div>
-                <div app-show="view.exec.image">
-                    <label>Upload Image</label>
-                    <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="view.image_url" class="w-100"></label>
-                    <input id="image_1" type="file" app-model="view.image_url">
-                </div>
-                <div app-show="view.exec.input">
-                    <label app-bind="view.exec.input"></label>
-                    <input type="text" app-model="view.text_input">
-                </div>
-                <div app-show="view.exec.input_2">
-                    <label app-bind="view.exec.input_2"></label>
-                    <input type="text" app-model="view.text_input_2">
-                </div>
+            <div app-show="view.exec.input">
+                <label app-bind="view.exec.input"></label>
+                <input type="text" app-model="view.text_input">
             </div>
-
-            <div class="grid col-2 pb-1">
-                <div></div>
-                <div class="text-right">
-                    <button class="btn highlight" app-click="exec('exec')">Submit</button>
-                </div>
+            <div app-show="view.exec.input_2">
+                <label app-bind="view.exec.input_2"></label>
+                <input type="text" app-model="view.text_input_2">
             </div>
         </div>
 
-    </div>
+        <div class="grid col-2 pb-1">
+            <div></div>
+            <div class="text-right">
+                <button class="btn highlight" app-click="exec('exec')">Submit</button>
+            </div>
+        </div>
+        
+    </modal-auto>
 
     <div class="modal" app-show="view.modal == 'show_form_builder'" anim="{'enter':'fade-in'}">
 

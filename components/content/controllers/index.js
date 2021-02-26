@@ -14,7 +14,9 @@ const express = require('express'),
         views: 'content/views',
         menu: {
             side_nav: [
-                {link:'Content',slug: '/dashboard/content', weight:3}
+                {link:'Content',slug: '/dashboard/content', weight:3, subitems:[
+                    {link:'Content Types',slug: '/dashboard/content/content-types', weight:1}
+                ]}
             ]
         }
     },
@@ -169,7 +171,9 @@ const express = require('express'),
 
 
     let data = {
-
+        shop: view.ecommerce.shop,
+        meta: {},
+        model: new Content().settings
     },
     blocks = []
 
@@ -226,52 +230,66 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/content/:type?/:edit?/:key?', async(req, res) => {
+    routes.get('/dashboard/content/content-types', async(req, res) => {
+
+        data.model = new ContentTypes().settings
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
+        data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+
+        view.current_view = 'content'
+        data.title = 'Content'
+        data.table = 'content_types'
+        data.fields = data.model.fields
+        data.search_fields = data.model.search_fields
+
+        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+    })
+
+    routes.get('/dashboard/content/edit/:key?', async(req, res) => {
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs',settings.views+'/dashboard/scripts/script.ejs']
+        data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
 
         data.meta = {
             title: config.site.name+' | Content',
         }
 
-        data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs',settings.views+'/dashboard/styles/style.ejs']
+        view.current_view = 'content'
+        data.title = 'Content'
+        data.table = 'content'
+        data.content_type = req.params.type
+        data.content_key = req.params.key
+        data.fields = new Content().settings.fields
+
+        blocks = await functions.parseBlocks()
+        data.blocks = blocks
+
+        res.render(settings.views+'/dashboard/editor.ejs',data)
+
+    })
+
+    routes.get('/dashboard/content', async(req, res) => {
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/dashboard/scripts/script.ejs']
         data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
 
-        if (req.params.edit == 'new' || req.params.key || req.params.key == '0'){
-
-            if (req.params.key == 'context._key'){
-                res.redirect('/dashoard/content/page/edit/0')
-            }
-
-            view.current_view = 'content'
-            data.title = 'Content'
-            data.table = 'content'
-            data.content_type = req.params.type
-            data.content_key = req.params.key
-            data.fields = new Content().settings.fields
-
-            functions.parseBlocks().then((content_blocks)=>{
-                data.blocks = content_blocks
-                blocks = content_blocks
-                res.render(settings.views+'/dashboard/editor.ejs',data)
-            })
-
-        } else if (req.params.type){
-
-            view.current_view = 'content'
-            data.title = 'Content'
-            data.table = 'content'
-            data.content_type = req.params.type
-            data.fields = new Content().settings.fields
-            res.render(settings.views+'/dashboard/content.ejs',data)
-
-        } else {
-
-            view.current_view = 'content'
-            data.title = 'Content'
-            data.table = 'content_types'
-            data.fields = new ContentTypes().settings.fields
-            res.render(settings.views+'/dashboard/content_types.ejs',data)
-
+        data.meta = {
+            title: config.site.name+' | Content',
         }
+
+        view.current_view = 'content'
+        data.title = 'Content'
+        data.table = 'content'
+        data.content_type = req.params.type
+        data.fields = data.model.fields
+        data.search_fields = data.model.search_fields
+
+        data.context_menu = [
+            {function: "editContent",text:"Edit Content", icon:"fa-pencil"}
+        ]
+
+        res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
     })
 

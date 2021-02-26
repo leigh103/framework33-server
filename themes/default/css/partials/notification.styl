@@ -2,8 +2,9 @@
 
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     position: fixed;
-    padding: 1rem;
     color: $text-black;
     background-color: $color-light-grey;
     border-radius: $border-radius;
@@ -19,12 +20,24 @@
         flex: 1;
     }
 
+    .text {
+        padding: 1rem;
+        min-width: 200px;
+        max-width: 50vw;
+
+        @media $small {
+            max-width: 90vw;
+        }
+    }
+
     .icon {
         flex: 0 0 1rem;
         display:flex;
         align-items: flex-end;
         justify-content: center;
         font-size: 1.6rem;
+        height: 100%;
+        padding: 1rem 1rem 1rem 0;
     }
 
     @media $small {

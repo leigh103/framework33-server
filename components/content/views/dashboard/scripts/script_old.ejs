@@ -73,11 +73,11 @@
             }
 
             scope.addNewSection = function(){
-                console.log('here')
-            //    scope.checkSaved().then(()=>{
+                scope.checkSaved().then(()=>{
                     scope.view.modal = 'show_sections'
-                    view.update('view.modal')
-
+                }).catch((err)=>{
+                    scope.notify(err,'error')
+                })
             }
 
             scope.selectBlock = function(block_name){
@@ -86,16 +86,13 @@
                     scope.view.modal = false
                     scope.view.selected_block = block
                     scope.view.editor = block.editor
-                    view.update('view.modal')
-                    view.update('view.selected_block')
-                    view.update('view.editor')
                     scope.addBlock()
                 })
 
             }
 
             scope.loadBlock = function(content, index){
-
+console.log(scope.view.editor)
                 if (!index){
                     index = 0
                 }
@@ -105,8 +102,6 @@
 
                         scope.view.selected_block = block
                         scope.view.selected_block.index = index
-                        scope.view.selected_block.name = content.name
-                        scope.view.selected_block.styling = content.styling
 
                         if (content.styling){
                             scope.view.selected_block.styling = content.styling
@@ -130,11 +125,7 @@
                         scope.view.blocks = true
                         scope.view.add = false
 
-                        view.update('view.editor')
-                        view.update('view.blocks')
-                        view.update('view.selected_block')
-                        view.update('view.selected_block.styling.background')
-                        view.update('view.selected_block.styling.text')
+                        view.update('view')
 
                         setTimeout(function(){
 
@@ -192,7 +183,7 @@
                     } else {
                         scope.view.content.blocks.push(content)
                     }
-                    view.update('view.content.blocks')
+
                     localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
 
                 }
@@ -263,9 +254,9 @@
 
                             let ce_style = window.getComputedStyle(ce_divs[i])
                             if (ce_divs[i] && ce_style.display == 'block'){
-                                if (typeof ce_divs[i]._app == 'object'){
-                                    evaluate.setValue(ce_divs[i]._app.keys[0], scope.convertEntities(ce_divs[i].innerHTML))
-                                }
+
+                                evaluate.setValue(ce_divs[i]._app.keys[0], scope.convertEntities(ce_divs[i].innerHTML))
+
                             }
 
                             if (i == ce_divs.length-1){
@@ -320,21 +311,16 @@
             }
 
 
+
                 scope.saveContent = function(){
 
-                    if (scope.view.selected_block && scope.view.content.blocks[scope.view.selected_block.index]){
-                        scope.view.content.blocks[scope.view.selected_block.index].name = scope.view.selected_block.name
-                        view.update('view.content.blocks['+scope.view.selected_block.index+']')
-                    }
 
-                    if (scope.view.content.notification && scope.view.content.notification.length < 5){
-                        scope.view.content.notification = ''
-                        view.update('view.content.notification')
-                    }
+                    console.log(scope.view.editor)
 
                     scope.updateCE().then(()=>{
 
                         let payload = scope.view.content
+
 
                         payload._user_id = '<%- user._id %>'
 
@@ -362,45 +348,16 @@
 
                 }
 
-                scope.uploadImg = function(image, obj){
-
-                    let name = 'content-image'
-
-                    if (scope.view.content.slug){
-                        name = scope.view.content.slug
-                    }
-
-                    if (scope.view.selected_block && scope.view.selected_block.name){
-                        name += scope.view.selected_block.name.replace(/\s/g,'-').toLowerCase()
-                    }
-
-                    let payload = {
-                        base64: image,
-                        file_name: name,
-                        file_path: "content"
-                    }
-
-                    scope.view.upload_text = 'Uploading...'
-                    view.update('view.upload_text')
-
-                    http.post('/api/image',payload).then((data) => {
-                        data = data.replace(/\"/g,'')
-                        evaluate.setValue(obj, data)
-                        view.update(obj)
-                    }).catch((err)=>{
-                        scope.notify(err,'error')
-                    })
-
-                }
 
 
-            // scope.uploadImg = function(base64, obj, path, name){
-            //
-            //     scope.uploadImage(base64, obj, path, name).then(()=>{
-            //         scope.saveContent()
-            //     })
-            //
-            // }
+
+            scope.uploadImg = function(base64, obj, path, name){
+
+                scope.uploadImage(base64, obj, path, name).then(()=>{
+                    scope.saveContent()
+                })
+
+            }
 
             scope.delImg = function(base64, obj, path, name){
 
@@ -431,6 +388,7 @@
                 scope.view.content.notification = ''
                 document.getElementById('content_notification').innerHTML = ''
             }
+
 
         }
 

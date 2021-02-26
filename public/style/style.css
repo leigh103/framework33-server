@@ -1115,8 +1115,9 @@ modal-auto > section section.body {
 .notification {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   position: fixed;
-  padding: 1rem;
   color: #33424b;
   background-color: #f8f8f8;
   border-radius: 6px;
@@ -1131,12 +1132,24 @@ modal-auto > section section.body {
 .notification > div {
   flex: 1;
 }
+.notification .text {
+  padding: 1rem;
+  min-width: 200px;
+  max-width: 50vw;
+}
+@media only screen and (max-width: 851px) {
+  .notification .text {
+    max-width: 90vw;
+  }
+}
 .notification .icon {
   flex: 0 0 1rem;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   font-size: 1.6rem;
+  height: 100%;
+  padding: 1rem 1rem 1rem 0;
 }
 @media only screen and (max-width: 851px) {
   .notification {
@@ -1387,7 +1400,9 @@ modal-auto > section section.body {
 .table .cell.object,
 .table .cell.array,
 .table .cell.multiselect,
-.table .cell.barcode {
+.table .cell.barcode,
+.table .cell.notification,
+.table .cell.hide_top_nav {
   display: none;
 }
 @media only screen and (max-width: 851px) {
