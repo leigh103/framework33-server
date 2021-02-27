@@ -10,6 +10,23 @@
             scope.view.add = true
             scope.view.saved = true
 
+            document.onkeyup = function (e) {
+
+                scope.view.saved = false
+                clearTimeout(scope.view.auto_update)
+
+                scope.view.auto_update = setTimeout(function(){
+                    scope.renderContent()
+                },500)
+
+            }
+
+            window.onbeforeunload = function(event) {
+                if (!scope.view.saved){
+                    return 'You have unsaved changes'
+                }
+            }
+
             scope.editContent = function(table){
 
                 if (scope[table] && scope[table][scope.view.key] && scope[table][scope.view.key]._key){
@@ -99,7 +116,24 @@
                 if (!index){
                     index = 0
                 }
-                scope.checkSaved().then(()=>{
+
+                if (typeof content == 'string' && content.match(/preview_content_block_/)){
+                    content = scope.view.content.blocks[content.replace(/preview_content_block_/,'')]
+                } else if (typeof content != 'object'){
+                    return false
+                }
+
+                // let selected_preview_block = document.querySelector('#preview_content_block_'+index)
+                //
+                // if (typeof content == 'object' && selected_preview_block){
+                //     const preview = document.querySelector('#preview'),
+                //           rectpreview = preview.getBoundingClientRect(),
+                //           rectspb = selected_preview_block.getBoundingClientRect()
+                //
+                //     preview.scrollTop = rectspb.top - rectpreview.top;
+                // }
+
+            //    scope.checkSaved().then(()=>{
 
                     scope.get('/dashboard/content/get-blocks/'+content.block).then((block)=>{
 
@@ -164,9 +198,9 @@
 
                     })
 
-                }).catch((err)=>{
-                    scope.notify(err,'error')
-                })
+                // }).catch((err)=>{
+                //     scope.notify(err,'error')
+                // })
 
             }
 
@@ -240,15 +274,15 @@
             }
 
             scope.checkSaved = function(){
-                return new Promise(function(resolve, reject) {
-                    if (scope.view.saved === true){
-                        scope.notify('cancel')
-                        resolve()
-                    } else {
-                        scope.view.saved = true
-                        reject('This section has not been saved')
-                    }
-                })
+                // return new Promise(function(resolve, reject) {
+                //     if (scope.view.saved === true){
+                //         scope.notify('cancel')
+                //         resolve()
+                //     } else {
+                //         scope.view.saved = true
+                //         reject('This section has not been saved')
+                //     }
+                // })
             }
 
             scope.updateCE = function(){
@@ -319,6 +353,33 @@
 
             }
 
+            scope.renderContent = function(external){
+
+                http.post('/dashboard/content/render',scope.view.content).then((html)=>{
+
+                    document.querySelector('#preview').innerHTML = html
+
+                    let preview_blocks = document.querySelectorAll('#preview *[app-block]')
+
+                    for (var i in preview_blocks){
+                        if (preview_blocks[i] && typeof preview_blocks[i].addEventListener == 'function'){
+                            let id = "preview_content_block_"+i
+                            preview_blocks[i].setAttribute('id',id)
+                            preview_blocks[i].addEventListener('click',function(){
+                                scope.loadBlock(id)
+                            })
+                        }
+                    }
+
+                    if (external){
+                        document.getElementById("preview-link").click();
+                    }
+
+                }).catch((err)=>{
+                    scope.notify(err, 'error')
+                })
+
+            }
 
                 scope.saveContent = function(){
 
@@ -351,6 +412,8 @@
                             } else {
                                 scope.notify('Saved!')
                             }
+
+                            scope.view.saved = true
 
                         }).catch((err)=>{
                             scope.notify(err,5,'error')
@@ -387,6 +450,7 @@
                         data = data.replace(/\"/g,'')
                         evaluate.setValue(obj, data)
                         view.update(obj)
+                        scope.renderContent()
                     }).catch((err)=>{
                         scope.notify(err,'error')
                     })
@@ -431,6 +495,11 @@
                 scope.view.content.notification = ''
                 document.getElementById('content_notification').innerHTML = ''
             }
+
+            setTimeout(function(){
+                scope.renderContent()
+            },1000)
+
 
         }
 

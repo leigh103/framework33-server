@@ -537,6 +537,10 @@
 
                     document.execCommand(type,false,data)
 
+                    if (typeof scope.renderContent == 'function'){
+                        scope.renderContent()
+                    }
+
                 }
 
 

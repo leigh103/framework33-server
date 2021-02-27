@@ -8,6 +8,7 @@
 
 const express = require('express'),
     routes = express.Router(),
+    puppeteer = require('puppeteer'),
 
     settings = {
         default_route: 'root',
@@ -26,6 +27,13 @@ const express = require('express'),
 
 
     functions = {
+
+        launchPuppeteer: async () => {
+            browser = await puppeteer.launch({
+                                args: ['--no-sandbox'],
+                                timeout: 10000,
+                            });
+        },
 
         parseStyle:(style) => {
 
@@ -169,6 +177,7 @@ const express = require('express'),
 
 // routes
 
+    var browser, render_content
 
     let data = {
         shop: view.ecommerce.shop,
@@ -198,6 +207,7 @@ const express = require('express'),
 
         } else {
 
+            data.include_scripts = []
             data.blocks = blocks
             data.title = article.data.title
             data.date = article.data._updated
@@ -207,6 +217,59 @@ const express = require('express'),
             res.render(settings.views+'/view.ejs',data)
 
         }
+
+    })
+
+
+    routes.post('/dashboard/content/render', async (req, res) => {
+
+        render_content = req.body
+
+        var options = {
+            host: config.site.url.replace(/http\:\/\//,''),
+            path: '/dashboard/content/render'
+        }
+        var request = http.request(options, function (response) {
+            var data = '';
+            response.on('data', function (chunk) {
+                data += chunk;
+            });
+            response.on('end', function () {
+                res.send(data)
+
+            });
+        });
+        request.on('error', function (e) {
+            res.send(e.message)
+        });
+        request.end();
+
+    })
+
+    routes.get('/dashboard/content/render/:external?', async (req, res) => {
+
+        res.locals.functions = functions
+
+        if (typeof render_content == 'object'){
+
+            data.include_scripts = []
+            data.blocks = blocks
+            data.title = render_content.title
+            data.date = render_content._updated
+            data.meta = render_content.meta
+            data.content = render_content
+
+            if (req.params.external){
+                res.render(settings.views+'/view.ejs',data)
+            } else {
+                res.render(settings.views+'/render.ejs',data)
+            }
+
+
+        } else {
+            res.send('No render data available')
+        }
+
 
     })
 
@@ -317,6 +380,7 @@ const express = require('express'),
                 next()
             } else {
             //    console.log("article found")
+                data.include_scripts = []
                 data.blocks = blocks
                 data.title = article.data.title
                 data.date = article.data._updated
@@ -402,8 +466,12 @@ const express = require('express'),
         blocks = content_blocks
     })
 
+    functions.launchPuppeteer()
+
 
 // export
+
+
 
 
     module.exports = functions

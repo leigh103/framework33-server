@@ -31,6 +31,10 @@
                     duration = parseInt(duration)*1000
                 }
 
+                if (msg == '{}'){
+                    msg = 'Unable to complete the request'
+                }
+
                 scope.view.notification.msg = msg //.replace(/<\/?[^>]+(>|$)/g, "")
 
                 if (type){
@@ -41,6 +45,8 @@
 
                 if (icon){
                     scope.view.notification.icon = icon
+                } else if (type == 'error') {
+                    scope.view.notification.icon = 'fa-times'
                 } else {
                     scope.view.notification.icon = 'fa-check'
                 }

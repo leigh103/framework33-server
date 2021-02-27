@@ -1,0 +1,22 @@
+<% if (typeof content != 'undefined' && content.notification && content.notification.length > 0) { %>
+    <section class="page-notification">
+        <div class="contain">
+            <%- content.notification %>
+        </div>
+    </section>
+<% } %>
+
+<div class="page">
+
+    <% for (var i in content.blocks){ %>
+
+        <% content.blocks[i].content = {} %>
+        <% for (var ii in content.blocks[i].fields){ %>
+            <% content.blocks[i].content[content.blocks[i].fields[ii].field] = content.blocks[i].fields[ii].value %>
+            <% content.blocks[i].content[content.blocks[i].fields[ii].field+'_classes'] = content.blocks[i].fields[ii].classes %>
+        <% } %>
+        <%- include(config.site.theme_path+'/templates/blocks/'+content.blocks[i].block+'.ejs', {data:content.blocks[i].content, styling:content.blocks[i].styling}) %>
+
+    <% } %>
+
+</div>
