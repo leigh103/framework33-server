@@ -8,7 +8,7 @@
 
 const express = require('express'),
     routes = express.Router(),
-    puppeteer = require('puppeteer'),
+    // puppeteer = require('puppeteer'),
 
     settings = {
         default_route: 'root',
@@ -28,12 +28,12 @@ const express = require('express'),
 
     functions = {
 
-        launchPuppeteer: async () => {
-            browser = await puppeteer.launch({
-                                args: ['--no-sandbox'],
-                                timeout: 10000,
-                            });
-        },
+        // launchPuppeteer: async () => {
+        //     browser = await puppeteer.launch({
+        //                         args: ['--no-sandbox'],
+        //                         timeout: 10000,
+        //                     });
+        // },
 
         parseStyle:(style) => {
 
@@ -465,8 +465,8 @@ const express = require('express'),
     functions.parseBlocks().then((content_blocks)=>{
         blocks = content_blocks
     })
-
-    functions.launchPuppeteer()
+    // 
+    // functions.launchPuppeteer()
 
 
 // export
