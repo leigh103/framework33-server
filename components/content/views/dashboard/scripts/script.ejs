@@ -90,7 +90,7 @@
             }
 
             scope.addNewSection = function(){
-                console.log('here')
+
             //    scope.checkSaved().then(()=>{
                     scope.view.modal = 'show_sections'
                     view.update('view.modal')
@@ -228,6 +228,9 @@
                     }
                     view.update('view.content.blocks')
                     localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+
+                    scope.renderContent()
+                    scope.loadBlock('preview_content_block_'+scope.view.content.blocks.length-1)
 
                 }
 

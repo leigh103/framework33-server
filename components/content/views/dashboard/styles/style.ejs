@@ -22,6 +22,10 @@
         position: relative;
     }
 
+    #preview .page {
+        height: auto;
+    }
+
     #preview .contain {
         /* max-width: 40vw */
     }
@@ -31,7 +35,7 @@
         position: relative;
     }
 
-    #preview *[app-block]:hover:after {
+    #preview *[app-block]:hover:after, #preview .add-new-section:hover:after {
         content:'';
         display: block;
         position: absolute;
@@ -41,6 +45,7 @@
         height: 100%;
         background-color: rgba(200,200,200,0.2)
     }
+
 
     .loader {
   position: absolute;
