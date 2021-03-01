@@ -226,7 +226,7 @@ const express = require('express'),
         render_content = req.body
 
         var options = {
-            host: config.site.url.replace(/http\:\/\//,''),
+            host: config.site.url.replace(/http(s)?\:\/\//,''),
             path: '/dashboard/content/render'
         }
         var request = http.request(options, function (response) {
