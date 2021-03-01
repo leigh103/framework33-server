@@ -2,4 +2,13 @@
 <% if (item.value == 'user_id'){ %>
     <% value = user._id %>
 <% } %>
-<input type="hidden" app-model="new.<%- item.name %>" value="<%- value %>">
+
+<%
+    if (typeof obj_prefix == 'undefined' || obj_prefix == false){
+        obj_prefix = ''
+    } else {
+        obj_prefix = obj_prefix+'.'
+    }
+%>
+
+<input type="hidden" app-model="new.<%- obj_prefix %><%- item.name %>" value="<%- value %>">

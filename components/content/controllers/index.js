@@ -334,8 +334,7 @@ const express = require('express'),
 
     routes.get('/dashboard/content', async(req, res) => {
 
-        data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/dashboard/scripts/script.ejs']
-        data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/dashboard/scripts/dashboard_scripts.ejs']
 
         data.meta = {
             title: config.site.name+' | Content',
@@ -345,12 +344,15 @@ const express = require('express'),
         data.title = 'Content'
         data.table = 'content'
         data.content_type = req.params.type
-        data.fields = data.model.fields
-        data.search_fields = data.model.search_fields
+        data.fields = new Content().settings
+        data.search_fields = data.fields.search_fields
+        data.fields = data.fields.fields
 
         data.context_menu = [
             {function: "editContent",text:"Edit Content", icon:"fa-pencil"}
         ]
+
+        data.option_data = await view.functions.getOptionData('content_types')
 
         res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
@@ -365,15 +367,15 @@ const express = require('express'),
             content
 
         if (req.params.slug){
-            content_type = req.params.content_type
+            content_type = await new ContentTypes().find(['slug == '+req.params.content_type])
             slug = req.params.slug
         } else {
             slug = req.params.content_type
         }
 
-        if (content_type){ // get the article data
-            // console.log('getting article with ct', slug, content_type)
-            let article = await new Content().find(['slug == '+slug,'type == '+content_type])
+        if (typeof content_type == 'object' && content_type.data && content_type.data._key){ // found content type and find the article data
+
+            let article = await new Content().find(['slug == '+slug,'type == '+content_type.data._key, 'status == published'])
 
             if (article.data.length == 0 || article.error){
                 //console.log("article not found")
@@ -386,8 +388,8 @@ const express = require('express'),
                 data.date = article.data._updated
                 data.content = article.data
                 data.meta = article.data.meta
-                data.content_type = content_type
-                data.recent = await functions.getRecent(content_type,article._key)
+                data.content_type = content_type.data
+            //    data.recent = await functions.getRecent(content_type,article._key)
 
                 res.render(settings.views+'/view.ejs',data)
 
@@ -395,11 +397,20 @@ const express = require('express'),
 
         } else { // check content types first, and then check for articles
 
-            content = await new ContentTypes().find(['slug == '+slug])
+            content_type = await new ContentTypes().find(['slug == '+slug])
 
-            if (content.data.length == 0 || content.error){ // if it's not a content type, check for page content
+            if (typeof content_type.data == 'object' && content_type.data._key){ // show a list of articles from that content type
 
-                let article = await new Content().find(['slug == '+slug,'type == pages'])
+                let articles = await new Content().all(['type == '+content_type.data._key, 'status == published'])
+
+                data.content_type = content_type.data
+                data.articles = articles.data
+                data.meta = content_type.data.meta
+                res.render(config.site.theme_path+'/templates/content/list.ejs',data)
+
+            } else { // if it's not a content type, check for page content
+
+                let article = await new Content().find(['slug == '+slug, 'type NOT EXISTS', 'status == published'])
 
                 if (article.data.length == 0 || article.error){
 
@@ -412,20 +423,10 @@ const express = require('express'),
                     data.date = article.data._updated
                     data.content = article.data
                     data.meta = article.data.meta
-                    data.recent = await functions.getRecent(content_type,article._key)
 
                     res.render(settings.views+'/view.ejs',data)
 
                 }
-
-            } else { // show a list of articles from that content type
-
-                let articles = await new Content().all(['type == '+slug])
-
-                data.content_type = content.data
-                data.articles = articles.data
-                data.meta = content.data.meta
-                res.render(settings.views+'/list.ejs',data)
 
             }
 
@@ -465,7 +466,7 @@ const express = require('express'),
     functions.parseBlocks().then((content_blocks)=>{
         blocks = content_blocks
     })
-    // 
+    //
     // functions.launchPuppeteer()
 
 

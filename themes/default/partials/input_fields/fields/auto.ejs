@@ -1,5 +1,14 @@
+<%
+    if (typeof obj_prefix == 'undefined' || obj_prefix == false){
+        obj_prefix = ''
+    } else {
+        obj_prefix = obj_prefix+'.'
+    }
+%>
+
+
 <div class="">
     <%- max_characters %>
     <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
-    <input type="<%- item.input_type %>" app-model="new.<%- item.name %>" placeholder="<%- item.placeholder %>">
+    <input type="<%- item.input_type %>" app-model="new.<%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>">
 </div>

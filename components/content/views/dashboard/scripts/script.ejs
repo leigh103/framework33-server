@@ -27,13 +27,6 @@
                 }
             }
 
-            scope.editContent = function(table){
-
-                if (scope[table] && scope[table][scope.view.key] && scope[table][scope.view.key]._key){
-                    window.location.href = '/dashboard/content/edit/'+scope[table][scope.view.key]._key
-                }
-
-            }
 
 // content_type functions
 
@@ -118,7 +111,9 @@
                 }
 
                 if (typeof content == 'string' && content.match(/preview_content_block_/)){
-                    content = scope.view.content.blocks[content.replace(/preview_content_block_/,'')]
+                    index = parseInt(content.replace(/preview_content_block_/,''))
+                    content = scope.view.content.blocks[index]
+
                 } else if (typeof content != 'object'){
                     return false
                 }
@@ -224,6 +219,10 @@
                         scope.view.add = true
 
                     } else {
+
+                        if (!scope.view.content.blocks){
+                            scope.view.content.blocks = []
+                        }
                         scope.view.content.blocks.push(content)
                     }
                     view.update('view.content.blocks')
@@ -237,9 +236,10 @@
             }
 
             scope.deleteBlock = function(index){
-
+                console.log(index)
                 scope.view.content.blocks.splice(index, 1)
                 view.update('view.content.blocks')
+                scope.renderContent()
 
             }
 
@@ -248,14 +248,17 @@
                 if (conf){
                     scope.view.modal = 'show_del_block_confirm'
                 } else {
+                    console.log(scope.view.selected_block)
                     if (scope.view.selected_block.index){
                         scope.view.content.blocks.splice(scope.view.selected_block.index,1)
+                        scope.renderContent()
                         scope.showSettings()
                     }
                     scope.view.modal = false
                 }
 
-                view.update('view')
+                view.update('view.modal')
+
 
             }
 

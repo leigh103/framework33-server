@@ -1,0 +1,31 @@
+<% layout(config.site.theme+'/page.ejs') -%>
+
+
+<div class="page">
+
+    <div class="contain text-left pt-5">
+
+        <h1 class="capitalise"><%- content_type.name %></h1>
+
+        <% if (articles != 'undefined'){ %>
+            <% articles.forEach((article,i)=>{ %>
+
+                <a href="<%- view.meta.url %>/<%- content_type.slug %>/<%- article.slug %>" class="flex mt-2">
+
+                    <div class="flex-1">
+                        <% if (typeof article.meta == 'object' && article.meta.image){ %><img src="<%- article.meta.image %>" class="object-fit"><% } %>
+                    </div>
+                    <div class="flex-4 flex-middle-left flex-column pl-1">
+                        <h2 class="h4"><%- article.title %></h2>
+                        <p class="m-0"><%- moment(article._created).format('Do MMMM YYYY') %></p>
+
+                        <% if (typeof article.meta == 'object' && article.meta.description){ %><p class="mt-1 text-black"><%- article.meta.description %></p><% } %>
+                    </div>
+                </a>
+
+            <% }) %>
+        <% } %>
+
+    </div>
+
+</div>

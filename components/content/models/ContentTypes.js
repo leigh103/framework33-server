@@ -10,7 +10,7 @@
             this.settings = {
                 collection: 'content_types',
                 fields: [
-                    {name:'type',input_type:'text',placeholder:'Content Type', type:'string', required:true},
+                    {name:'name',input_type:'text',placeholder:'Content Type', type:'string', required:true},
                     {name:'slug',input_type:'text',placeholder:'Content Archive URL', type:'string', required:false},
                     {name:'meta', type:'object', required:false, subitems:[
                         {name:'title',input_type:'text',placeholder:'SEO Title', type:'string', required:false},
@@ -47,19 +47,20 @@
 
         async init(){
 
-            let pages_ct = await DB.read(this.settings.collection).where(['type == pages']).first() //await this.find(['_key == 0']).get()
-
-            if (typeof pages_ct == 'object' && pages_ct._key){
-
-            } else {
-
-                let new_pages_ct = await this.getTemplate()
-                new_pages_ct.data.type = "pages"
-
-                await DB.create(this.settings.collection,new_pages_ct.data).first()
-                log('Created default content type: pages')
-
-            }
+            // let pages_ct = await DB.read(this.settings.collection).where(['name == pages']).first() //await this.find(['_key == 0']).get()
+            //
+            // if (typeof pages_ct == 'object' && pages_ct._key){
+            //
+            // } else {
+            //
+            //     let new_pages_ct = await this.getTemplate()
+            //     new_pages_ct.data.name = "pages"
+            //     new_pages_ct.data.slug = "/"
+            //
+            //     await DB.create(this.settings.collection,new_pages_ct.data)
+            //     log('Created default content type: pages')
+            //
+            // }
 
         }
 

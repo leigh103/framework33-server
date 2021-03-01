@@ -1,5 +1,13 @@
+
+<%
+    if (typeof obj_prefix == 'undefined' || obj_prefix == false){
+        obj_prefix = ''
+    } else {
+        obj_prefix = obj_prefix+'.'
+    }
+%>
 <div class="colspan-2">
     <label><%- view.functions.parseName(item.name) %></label>
     <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:'blog'}) %>
-    <div class="large resize contenteditable" app-model="new.<%- item.name %>"></div>
+    <div class="large resize contenteditable" app-model="new.<%- obj_prefix %><%- item.name %>"></div>
 </div>

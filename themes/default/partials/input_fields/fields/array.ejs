@@ -1,5 +1,11 @@
 <% var obj = item.name.toLowerCase() %>
 
+<%
+    if (typeof obj_prefix != 'undefined' || obj_prefix != false){
+        obj = obj_prefix+'.'+obj
+    }
+%>
+
 <div class="colspan-2">
     <label><%- view.functions.parseName(item.name) %></label>
     <div class="mb-2 grid col-4 gap-1" app-show="new.<%- item.name %>">

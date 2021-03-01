@@ -13,53 +13,7 @@
             <% max_characters = '<div class="float-right text-small pr-1"><span app-bind="new.'+ item.name +'.length"></span>/'+item.truncate+' chars</div>' %>
         <% } %>
 
-        <% if (item.input_type == 'image'){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/image.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } else if (item.input_type == 'select'){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/select.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } else if (item.input_type == 'date'){ %>
-
-            <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:item.name, datepicker_obj:'new'}) %>
-
-        <% } else if (item.input_type == 'multiselect'){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/multiselect.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } else if (item.input_type == 'textarea'){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/textarea.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } else if (item.input_type == 'array' && item.subitems){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/object_array.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } else if (item.input_type == 'array'){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/array.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } else if (item.input_type == 'hidden'){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/hidden.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } else if (item.input_type == 'contenteditable'){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/contenteditable.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } else if (item.input_type){ %>
-
-            <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/auto.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text}) %>
-
-        <% } %>
-
-        <% if (item.input_type && item.margin_bottom && item.margin_bottom === true){ %>
-
-            <div class="colspan-2 mb-2"></div>
-
-        <% } %>
+        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/include_fields.ejs', {item:item, max_characters:max_characters}) %>
 
     <% }) %>
 

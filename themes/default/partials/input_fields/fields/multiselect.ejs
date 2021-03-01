@@ -1,14 +1,24 @@
+<%
+    if (typeof obj_prefix == 'undefined' || obj_prefix == false){
+        obj_prefix = ''
+        obj_prefix_snake = ''
+    } else {
+        obj_prefix_snake = obj_prefix+'_'
+        obj_prefix = obj_prefix+'.'
+    }
+%>
+
 <div class="relative layer-2">
     <label><%- view.functions.parseName(item.name) %></label>
-    <div class="tag-wrap bg-33-white p-1 w-100" app-click="view.dropdown<%- item.name %> = !view.dropdown<%- item.name %>">
+    <div class="tag-wrap bg-33-white p-1 w-100" app-click="view.dropdown<%- obj_prefix_snake %><%- item.name %> = !view.dropdown<%- obj_prefix_snake %><%- item.name %>">
         <div class="tag">
         </div>
     </div>
-    <div class="context absolute w-100 shadow bg-33-white layer-2" app-show="view.dropdown<%- item.name %>" anim="{'enter':'move-down','exit':'move-up'}">
+    <div class="context absolute w-100 shadow bg-33-white layer-2" app-show="view.dropdown<%- obj_prefix_snake %><%- item.name %>" anim="{'enter':'move-down','exit':'move-up'}">
         <% if (item.options){ %>
             <% if (Array.isArray(item.options)){ %>
                 <% item.options.forEach((option)=>{ %>
-                    <div class="p-05 clickable" app-click="push(new.<%- item.name %>,'<%- option.value %>')"><%- option.text %></div>
+                    <div class="p-05 clickable" app-click="push(new.<%- obj_prefix %><%- item.name %>,'<%- option.value %>')"><%- option.text %></div>
                 <% }) %>
             <% } %>
         <% } %>
@@ -16,7 +26,7 @@
             <% var option_data = []//view.functions.getOptionData(item.option_data) %>
             <% if (Array.isArray(option_data)){ %>
                 <% option_data.forEach((option)=>{ %>
-                    <div class="p-05 clickable" app-click="push(new.<%- item.name %>,'<%- option._key %>')"><%- option.name %></div>
+                    <div class="p-05 clickable" app-click="push(new.<%- obj_prefix %><%- item.name %>,'<%- option._key %>')"><%- option.name %></div>
                 <% }) %>
             <% } %>
         <% } %>

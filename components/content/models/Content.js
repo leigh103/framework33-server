@@ -14,17 +14,18 @@
                     {name:'slug',input_type:'text',placeholder:'Content URL', type:'slug', required:true},
                     {name:'notification',input_type:'text',placeholder:'Content Notificaton', type:'string', required:false, truncate:400},
                     {name:'blocks',type:'object',required:true},
-                    {name:'meta', type:'object', required:false, subitems:[
-                        {name:'title',input_type:'text',placeholder:'SEO Title', type:'string', required:false},
-                        {name:'description',input_type:'text',placeholder:'SEO Descripton', type:'string', required:false, truncate:160},
-                    ]},
-                    {name:'type',input_type:'text',placeholder:'Content Type', type:'string', required:true},
+                    {name:'type',input_type:'select',option_data:'content_types', options:[{text:'None', value:''}], type:'string', required:false},
                     {name:'tags',input_type:'text',placeholder:'Tags', type:'string', required:false},
                     {name:'status',input_type:'select',options:[{text:'Draft',value:'draft'},{text:'Published',value:'published'}],placeholder:'Status', type:'string', required:true},
                     {name:'publish_date',input_type:'date',placeholder:'Publish Date', type:'date', required:false},
-                    {name:'hide_top_nav',input_type:'checkbox',placeholder:'Hide site nav', type:'boolean', required:false}
+                    {name:'hide_top_nav',placeholder:'Hide site nav', type:'boolean', required:false},
+                    {name:'meta', type:'object', input_type:'object', required:false, subitems:[
+                        {name:'title',input_type:'text',placeholder:'SEO Title', type:'string', required:false},
+                        {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
+                        {name:'description',input_type:'textarea',placeholder:'SEO Descripton', type:'string', required:false, truncate:160}
+                    ]},
                 ],
-                search_fields:['title','slug','type','tags','status']
+                search_fields:['title','slug','tags','status']
             }
 
             this.routes = {
