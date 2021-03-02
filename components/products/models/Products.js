@@ -1,5 +1,6 @@
 
-    const Models = require(basedir+'/modules/Models')
+    const Models = require(basedir+'/modules/Models'),
+        Event
 
     class Products extends Models {
 
@@ -110,9 +111,9 @@
                     item.save()
 
                     if (item.data.stock < 1){
-                        new Event().trigger('out_of_stock')
+                        new Events().trigger('out_of_stock')
                     } else if (item.data.stock < 6){
-                        new Event().trigger('low_stock')
+                        new Events().trigger('low_stock')
                     }
 
                 }
