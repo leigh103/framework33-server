@@ -196,10 +196,19 @@
 
                 msg.TemplateModel.transactions = {
                     items: data.items,
+                    shipping_method: data.shipping_method,
+                    shipping_total: '0.00',
                     sub_total: (data.sub_total/100).toFixed(2),
                     tax: (data.tax/100).toFixed(2),
                     total: (data.total/100).toFixed(2)
                 }
+
+                if (data.shipping_total > 0){
+                    msg.TemplateModel.transactions.shipping_total = (data.shipping_total/100).toFixed(2)
+                }
+
+                console.log(msg)
+
             }
 
             if (data.link){

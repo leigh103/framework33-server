@@ -60,26 +60,26 @@ var express = require('express'),
     routes.get('/testevent', async (req,res) => {
 
         if (getGuard(req) == 'admin'){
-//             let transaction = await new Transactions().find('16780453')
-// console.log(transaction.data)
-//             if (transaction.data){
-//                 new global.Events('send_receipt').trigger(transaction.data)
-//             }
+            let transaction = await new Transactions().find('19160320')
 
-            let user_data = {
-                full_name: 'billy bob',
-                email: 'leeanderson60@gmail.com',
-                billing_address: {
-                    address_level1: "Audenshaw",
-                    address_level2: "Manchester",
-                    address_line1: "16 Duchess Drive",
-                    postal_code: "M34 5FT"
-                }
+            if (transaction.data){
+                new global.Events('send_receipt').trigger(transaction.data)
             }
 
-            let user = await new User(user_data).findOrSave()
-
-            res.json(user)
+            // let user_data = {
+            //     full_name: 'billy bob',
+            //     email: 'leeanderson60@gmail.com',
+            //     billing_address: {
+            //         address_level1: "Audenshaw",
+            //         address_level2: "Manchester",
+            //         address_line1: "16 Duchess Drive",
+            //         postal_code: "M34 5FT"
+            //     }
+            // }
+            //
+            // let user = await new User(user_data).findOrSave()
+            //
+            res.json(transaction.data)
         } else {
             res.redirect('/login/admin')
         }
