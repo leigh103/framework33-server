@@ -1,6 +1,5 @@
 
-    const Models = require(basedir+'/modules/Models'),
-        Event
+    const Models = require(basedir+'/modules/Models')
 
     class Products extends Models {
 
