@@ -90,6 +90,8 @@
 
                     this.data = transaction_data
 
+                    await this.updateStock()
+
                     // await new Cart().find(this.data._key).delete()
 
                     delete this.data._id
@@ -145,6 +147,17 @@
             if (save === true){
                 this.save()
             }
+
+        }
+
+        async updateStock(){
+
+            for (let item of this.data.items){
+
+                await new global[item.type]().updateStock(item._key, item.quantity)
+
+            }
+            return this
 
         }
 

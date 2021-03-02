@@ -97,6 +97,30 @@
 
         }
 
+        async updateStock(key, quantity){
+
+            return new Promise( async (resolve, reject) => {
+
+                let item = await new Products().find(key)
+                if (item.data && item.data.stock){
+
+                    item.data.stock = parseInt(item.data.stock)-parseInt(quantity)
+                    item.data.price = item.data.price/100
+                    item.save()
+
+                    if (item.data.stock < 1){
+                        new Event().trigger('out_of_stock')
+                    } else if (item.data.stock < 6){
+                        new Event().trigger('low_stock')
+                    }
+
+                }
+                resolve()
+
+            })
+
+        }
+
         async getRelated(){
 
             if (this.data && this.data.category && this.data.sub_category){
