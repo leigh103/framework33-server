@@ -102,6 +102,7 @@
             return new Promise( async (resolve, reject) => {
 
                 let item = await new Products().find(key)
+
                 if (item.data && item.data.stock){
 
                     item.data.stock = parseInt(item.data.stock)-parseInt(quantity)

@@ -1,32 +1,33 @@
 <div app-show="view.page == 'shipping'">
 
-    <h2 class="h4 text-weight-500">Shipping Address</h2>
+    <h2 class="h4 text-weight-500">Shipping</h2>
 
     <form autocomplete="on" style="margin-top: -0.3rem" class="mt-4 mt-s-1">
 
 
 
-        <label><input type="checkbox" app-click="shippingSameAsDelivery()"> Use billing address</label>
+        <label><input type="checkbox" app-click="shippingSameAsDelivery()" app-model="view.use_billing_address"> Use billing address</label>
 
-        <input type="text" placeholder="Address Line 1 *" class="underline" name="address_line1" app-model="cart.shipping_address.address_line1">
-        <input type="text" placeholder="Address Line 2" class="underline" name="address_line2" app-model="cart.shipping_address.address_line2">
-        <input type="text" placeholder="Town" class="underline" name="address_level1" app-model="cart.shipping_address.address_level1">
+        <div app-hide="view.use_billing_address">
+            <input type="text" placeholder="Address Line 1 *" class="underline" name="address_line1" app-model="cart.shipping_address.address_line1">
+            <input type="text" placeholder="Address Line 2" class="underline" name="address_line2" app-model="cart.shipping_address.address_line2">
+            <input type="text" placeholder="Town" class="underline" name="address_level1" app-model="cart.shipping_address.address_level1">
 
-        <div class="flex">
-            <input type="text" placeholder="City / County *" class="underline flex-2" name="address_level2" app-model="cart.shipping_address.address_level2">
-            <input type="text" placeholder="Address Postcode *" class="underline flex-1" name="postal_code" app-model="cart.shipping_address.postal_code">
+            <div class="flex">
+                <input type="text" placeholder="City / County *" class="underline flex-2" name="address_level2" app-model="cart.shipping_address.address_level2">
+                <input type="text" placeholder="Address Postcode *" class="underline flex-1" name="postal_code" app-model="cart.shipping_address.postal_code">
+            </div>
+
         </div>
 
     </form>
 
     <label class="mt-2">Delivery Method</label>
     <div class="relative">
-        <dropdown-select app-model="cart.delivery_method" class="mb-2 relative">
-            <div app-for="optn in view.delivery_options" app-attr="{'value':optn._key}">
-                <div app-bind="optn.name"></div>
-                <div app-bind="parseCurrency(optn.price)"></div>
-            </div>
-        </dropdown-select>
+        <select app-model="cart.delivery_method" class="mb-2 relative" app-change="setDelivery()">
+            <option value="" selected>Select Shipping...</option>
+            <option app-for="optn in view.delivery_options" app-attr="{'value':optn._key}" app-bind="parseDeliveryOption(optn)"></option>
+        </select>
     </div>
 
     <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700" app-show="cart.delivery_method" app-click="payment()">Payment <i class="fas fa-chevron-right ml-1"></i></button>

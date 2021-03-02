@@ -154,7 +154,16 @@
 
             for (let item of this.data.items){
 
-                await new global[item.type]().updateStock(item._key, item.quantity)
+                let model
+
+                if (typeof global[item.type] == 'function'){
+                    model = new global[item.type]()
+
+                    if (typeof model.updateStock == 'function'){
+                        await model.updateStock(item._key, item.quantity)
+                    }
+                }
+
 
             }
             return this

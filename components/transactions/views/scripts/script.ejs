@@ -4,6 +4,7 @@
         extend.cart = function(){
 
             scope.view.page = 'billing'
+            scope.view.use_billing_address = true
             scope.view.delivery_options = []
 
             <% if (typeof cart != 'undefined' && cart._key) { %>
@@ -19,16 +20,17 @@
                     }
                 }
 
-                watch['cart.delivery_method'] = function(data){
+                watch['cart.delivery_method'] = function(){
 
                     if (!scope.cart.shipping_total && scope.cart.delivery_method){
+
                         let shipping = scope.cart.delivery_options.findIndex((option)=>{
                             return option._key == scope.cart.delivery_method
                         })
 
-                        if (shipping >= 0){
+                        if (shipping >= 0 && typeof scope.cart.delivery_options[shipping] == 'object'){
+                            scope.cart.shipping_method = scope.cart.delivery_options[shipping].name
                             scope.cart.shipping_total = scope.cart.delivery_options[shipping].price
-                            console.log(scope.cart.total, scope.cart.shipping_total)
                             scope.cart.total += scope.cart.shipping_total
                             view.update('cart')
                         }
@@ -47,14 +49,15 @@
                     scope.cart.shipping_address = {}
                 }
 
-                scope.shippingSameAsDelivery = function(){
-                    if (this.target.checked === true){
-                        scope.cart.shipping_address = scope.cart.billing_address
-                    } else {
-                        scope.cart.shipping_address = {}
+                scope.parseDeliveryOption = function(optn){
+                    if (typeof optn == 'object'){
+                        if (optn.name && optn.price > 0){
+                            return optn.name+' - £'+(optn.price/100).toFixed(2)
+                        } else {
+                            return optn.name+' - Free'
+                        }
                     }
 
-                    view.update('cart.shipping_address')
                 }
 
                 scope.parseDeliveryOptions = function(){

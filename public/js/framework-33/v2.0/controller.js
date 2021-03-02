@@ -174,7 +174,7 @@
                                 initCarousels()
                             },1000)
                         }
-console.log(scope[collection])
+
                         resolve(data)
 
                     }).catch((err) => {
@@ -216,9 +216,6 @@ console.log(collection, scope[collection])
                                 }
                             }
 
-                        } else {
-                            scope[collection] = {}
-                            scope[collection].push(data)
                         }
 
                         resolve(data)

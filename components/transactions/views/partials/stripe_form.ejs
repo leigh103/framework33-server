@@ -32,7 +32,7 @@
 
 
 
-    <% if (typeof intent.client_secret != "undefined"){ %>
+    <% if (typeof intent == "object" && intent.client_secret){ %>
     <input type="hidden" value="<%- intent.client_secret %>" id="client_secret">
 
     <button class="btn bg-secondary w-100 thick" id="pay-now">Pay Now</button>

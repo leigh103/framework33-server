@@ -177,8 +177,9 @@ var express = require('express'),
 
         } else {
 
-            data.type = '404'
-            res.render(settings.views+'/gateways/stripe.ejs',data)
+            // data.type = '404'
+            // res.render(settings.views+'/gateways/stripe.ejs',data)
+            res.redirect('/'+view.ecommerce.cart_name)
 
         }
 

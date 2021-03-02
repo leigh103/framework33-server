@@ -454,6 +454,11 @@
                 if (check >= 0){
                     this.data.shipping_method = available_delivery_options[check].name
                     this.data.shipping_total = available_delivery_options[check].price
+
+                    if (!this.data.shipping_total){
+                        this.data.shipping_total = 0
+                    }
+                    
                     this.data.total += this.data.shipping_total
                 } else {
                     this.data.shipping_method = false
