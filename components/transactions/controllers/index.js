@@ -66,6 +66,7 @@ const express = require('express'),
         data.transactions = view.transactions
         data.include_scripts = [settings.views+'/scripts/script.ejs']
         data.cart = await new Cart().init(req)
+        data.cart.delivery_options = global.view.transactions.delivery_options
 
         res.render(settings.views+'/cart.ejs',data)
 
@@ -101,7 +102,7 @@ const express = require('express'),
 
     routes.get('/dashboard/transactions/settings', async(req, res) => {
 
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
 
         view.current_view = 'orders'
         view.current_sub_view = 'settings'
@@ -110,6 +111,12 @@ const express = require('express'),
         data.table = 'transaction_settings'
 
         data.fields = new TransactionSettings().settings.fields
+        data.delivery_options = data.fields.find((item)=>{
+            return item.name == 'delivery_options'
+        })
+        data.free_delivery = data.fields.find((item)=>{
+            return item.name == 'free_delivery'
+        })
 
         res.render(settings.views+'/dashboard/transaction_settings.ejs',data)
 

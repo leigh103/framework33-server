@@ -32,7 +32,8 @@
                         {name:'address_level2',input_type:'text',placeholder:'City', type:'string', required:true},
                         {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'postcode', required:true}
                     ]},
-                    {name:'_user_id', type:'string', required:true}
+                    {name:'_user_id', type:'string', required:true},
+                    {name:'delivery_method', type:'number', required:false}
                 ],
                 search_fields:['reference','customer.name','customer.email','customer.tel','billing_address.postal_code','shipping_address.postal_code']
             }
@@ -46,7 +47,8 @@
                         empty:['self'],
                         removeItem:['self'],
                         addItem:['self'],
-                        save:['self']
+                        save:['self'],
+                        setDelivery:['self']
                     },
                     put: {
                         save:['self']
@@ -62,9 +64,11 @@
                         empty:['admin','self'],
                         removeItem:['admin','self'],
                         addItem:['admin','self'],
-                        save:['admin','self']
+                        save:['admin','self'],
+                        setDelivery:['admin','self']
                     },
                     put: {
+                        save:['self']
                     },
                     delete: {
                         delete:['self']
@@ -79,6 +83,7 @@
             if (req && req.session && req.session.cart_id){
 
                 await this.find(req.session.cart_id)
+                await this.save()
                 return this.data
 
             } else if (req && req.session && req.session.user && req.session.user._id){
@@ -194,7 +199,7 @@
                     this.data.items.push(item)
                 }
 
-                await this.calcTotals()
+                //await this.calcTotals()
                 await this.save()
 
                 return this.data
@@ -222,7 +227,7 @@
                 }
             }
 
-            await this.calcTotals()
+            //await this.calcTotals()
             await this.save()
 
             return this.data
@@ -233,10 +238,15 @@
 
             this.data.items = []
 
-            await this.calcTotals()
+            //await this.calcTotals()
             await this.save()
             return this.data
 
+        }
+
+        async preSave(){
+            await this.calcTotals()
+            return this
         }
 
         setReference(){
@@ -251,6 +261,14 @@
 
         }
 
+        async setDelivery(delivery_data){
+
+            this.data.delivery_method = delivery_data.delivery_method
+            await this.save()
+            return this
+
+        }
+
 
     // calculations
 
@@ -261,17 +279,20 @@
             this.data.item_total = 0
             this.data.tax = 0
             this.data.total = 0
+            this.data.shipping_total = 0
 
             await this.calcItems()
-            this.data.item_total = parseInt(this.data.total).toFixed(2)
+            this.data.item_total = parseInt(this.data.total)
             await this.calcDiscounts()
             await this.calcTax()
+            await this.calcDelivery()
 
             if (!this.data.total){
-                this.data.item_total = "0.00"
-                this.data.sub_total = "0.00"
-                this.data.tax = "0.00"
-                this.data.total = "0.00"
+                this.data.item_total = 0
+                this.data.sub_total = 0
+                this.data.shipping_total = 0
+                this.data.tax = 0
+                this.data.total = 0
             }
 
             return this
@@ -294,6 +315,11 @@
             } else {
 
                 for (let item of this.data.items) {
+
+                    // let price_check = await new global[item.type]().find(item._key)
+                    // price_check = await item.makeCartResource()
+                    //
+                    // item.price = price_check.price
 
                     if (item.type == 'vouchers' && item.value){ // if a voucher, turn the value negative
 
@@ -347,8 +373,8 @@
                         if (item.type != 'vouchers' && item.type != 'account'){
                             item.sub_total = parseInt(item.price)/config.tax_amount
                             item.tax = parseInt(item.price)-parseInt(item.sub_total)
-                            item.tax = (item.tax*parseInt(item.quantity)).toFixed(2)
-                            item.sub_total = (item.sub_total*parseInt(item.quantity)).toFixed(2)
+                            item.tax = item.tax*parseInt(item.quantity)
+                            item.sub_total = item.sub_total*parseInt(item.quantity)
                             item.total = parseInt(item.price)*item.quantity
                         }
 
@@ -378,9 +404,64 @@
 
             }
 
-            this.data.sub_total = parseInt(this.data.sub_total).toFixed(2)
-            this.data.tax = parseInt(this.data.tax).toFixed(2)
-            this.data.total = parseInt(this.data.total).toFixed(2)
+            this.data.sub_total = parseInt(this.data.sub_total)
+            this.data.tax = parseInt(this.data.tax)
+            this.data.total = parseInt(this.data.total)
+
+            return this
+
+        }
+
+        async calcDelivery() {
+
+            if (this.data.delivery_method){
+
+                delete this.data.delivery_options
+
+                this.data.shipping_total = 0
+
+                let available_delivery_options = global.view.transactions.delivery_options.filter((option)=>{
+
+                    let ok = false
+
+                    if (option.orders_over && this.data.item_total && option.orders_over < this.data.item_total){
+                        ok = true
+                    }
+
+                    if (option.orders_under && this.data.item_total && option.orders_under >= this.data.item_total){
+                        ok = true
+                    }
+
+                    if (option.postcode_match && this.data.shipping_address.postcode){
+
+                        let re = new RexExp(option.postcode_match,'i')
+
+                        if (this.data.shipping_address.postcode.match(option.postcode_match)){
+                            ok = true
+                        } else {
+                            ok = false
+                        }
+                    }
+
+                    return ok
+
+                })
+
+                let check = available_delivery_options.findIndex((option)=>{
+                    return option._key == this.data.delivery_method
+                })
+
+                if (check >= 0){
+                    this.data.shipping_method = available_delivery_options[check].name
+                    this.data.shipping_total = available_delivery_options[check].price
+                    this.data.total += this.data.shipping_total
+                } else {
+                    this.data.shipping_method = false
+                    this.data.shipping_total = false
+                    this.data.delivery_method = false
+                }
+
+            }
 
             return this
 

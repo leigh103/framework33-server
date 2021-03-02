@@ -4,8 +4,10 @@
                 <a href="/">
                     <% if (user.avatar){ %>
                         <img src="<%- user.avatar %>" class="avatar">
+                    <% } else if (typeof view != 'undefined' && view.logo){ %>
+                        <img src="<%- view.logo %>">
                     <% } else { %>
-                        <img src="/images/logo.svg">
+                        <img src="/images/Profile_Placeholder.svg" class="avatar">
                     <% } %>
                 </a>
             </div>

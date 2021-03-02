@@ -4,6 +4,7 @@
         extend.cart = function(){
 
             scope.view.page = 'billing'
+            scope.view.delivery_options = []
 
             <% if (typeof cart != 'undefined' && cart._key) { %>
 
@@ -18,6 +19,24 @@
                     }
                 }
 
+                watch['cart.delivery_method'] = function(data){
+
+                    if (!scope.cart.shipping_total && scope.cart.delivery_method){
+                        let shipping = scope.cart.delivery_options.findIndex((option)=>{
+                            return option._key == scope.cart.delivery_method
+                        })
+
+                        if (shipping >= 0){
+                            scope.cart.shipping_total = scope.cart.delivery_options[shipping].price
+                            console.log(scope.cart.total, scope.cart.shipping_total)
+                            scope.cart.total += scope.cart.shipping_total
+                            view.update('cart')
+                        }
+                    }
+
+
+                }
+
                 scope.cart = <%- JSON.stringify(cart) %>
 
                 if (!scope.cart.billing_address){
@@ -26,6 +45,53 @@
 
                 if (!scope.cart.shipping_address){
                     scope.cart.shipping_address = {}
+                }
+
+                scope.shippingSameAsDelivery = function(){
+                    if (this.target.checked === true){
+                        scope.cart.shipping_address = scope.cart.billing_address
+                    } else {
+                        scope.cart.shipping_address = {}
+                    }
+
+                    view.update('cart.shipping_address')
+                }
+
+                scope.parseDeliveryOptions = function(){
+
+                    if (scope.cart.delivery_options){
+
+                        scope.view.delivery_options = scope.cart.delivery_options.filter((option)=>{
+
+                            let ok = false
+
+                            if (option.orders_over && scope.cart.item_total && option.orders_over < scope.cart.item_total){
+                                ok = true
+                            }
+
+                            if (option.orders_under && scope.cart.item_total && option.orders_under >= scope.cart.item_total){
+                                ok = true
+                            }
+
+                            if (option.postcode_match && scope.cart.shipping_address.postcode){
+
+                                let re = new RexExp(option.postcode_match,'i')
+
+                                if (scope.cart.shipping_address.postcode.match(option.postcode_match)){
+                                    ok = true
+                                } else {
+                                    ok = false
+                                }
+                            }
+
+                            return ok
+
+                        })
+
+                        view.update('view.delivery_options')
+
+                    }
+
                 }
 
                 scope.addToCart = function(item_key, type){
@@ -120,6 +186,7 @@
                     scope.put('cart',<%- cart._key %>,scope.cart).then((cart)=>{
                         scope.cart = cart
                         scope.view.page = 'shipping'
+                        scope.parseDeliveryOptions()
                         view.update('cart')
                         view.update('view.page')
                         scope.notify('Cart Updated')
@@ -133,6 +200,20 @@
 
                     scope.view.page = 'gateways'
                     view.update('view.page')
+
+                    let payload = {
+                        _key: scope.cart._key,
+                        delivery_method: scope.cart.delivery_method
+                    }
+
+                    scope.post('cart/set-delivery',payload).then((cart)=>{
+                        console.log(cart)
+                        scope.cart = cart
+                        view.update('cart')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                    })
+
 
                 }
 

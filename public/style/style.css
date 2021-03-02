@@ -812,7 +812,7 @@ select.invalid {
 }
 input[disabled],
 select option[disabled] {
-  color: #82888c;
+  background-color: rgba(255,255,255,0.5);
 }
 input[type="text"].border,
 input[type="select"].border,
@@ -822,8 +822,8 @@ input[type="password"].border {
 input[type=checkbox] {
   flex: none;
   position: relative;
-  width: 3.8rem;
-  margin-bottom: 1rem;
+  width: 2rem;
+  vertical-align: middle;
 }
 input[type=checkbox]:after {
   content: '';
@@ -831,9 +831,9 @@ input[type=checkbox]:after {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  top: -0.3rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  top: -0.5rem;
   border-radius: 0.25rem;
   left: 0;
   background-color: #fff;

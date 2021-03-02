@@ -78,7 +78,12 @@
                     </div>
                     <div class="cell middle name">
                         <div app-bind="transaction.customer.full_name" class="text-bold capitalise"></div>
-                        <span class="mr-1" app-bind="transaction.customer.email"></span><span app-bind="transaction.customer.tel"></span>
+
+                        <% if (status == 'processing'){ %>
+                            <span class="mr-05" app-bind="transaction.shipping_method"></span>(<span app-bind="parseCurrency(transaction.shipping_total)"></span>)
+                        <% } else { %>
+                            <span class="mr-1" app-bind="transaction.customer.email"></span><span app-bind="transaction.customer.tel"></span>
+                        <% } %>
 
                     </div>
 
@@ -180,6 +185,10 @@
                         <% }) %>
                     </select>
 
+
+                        <label class="within">Shipping Method</label>
+                        <input type="text" app-model="new.shipping_method" disabled>
+
             </div>
 
             <div class="colspan-m-2">
@@ -279,16 +288,20 @@
                         <div class="cell py-0 text-right"></div>
                     </div>
                     <div class="row">
-                        <div class="cell py-0">Item Total</div>
-                        <div class="cell py-0 text-right" app-bind="parseCurrency(new.item_total)"></div>
-                    </div>
-                    <div class="row">
                         <div class="cell py-0">Sub Total</div>
                         <div class="cell py-0 text-right" app-bind="parseCurrency(new.sub_total)"></div>
                     </div>
                     <div class="row">
                         <div class="cell py-0">VAT</div>
                         <div class="cell py-0 text-right" app-bind="parseCurrency(new.tax)"></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell py-0">Item Total</div>
+                        <div class="cell py-0 text-right" app-bind="parseCurrency(new.item_total)"></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell py-0 pt-1">Shipping</div>
+                        <div class="cell py-0 text-right pt-1" app-bind="parseCurrency(new.shipping_total)"></div>
                     </div>
                     <div class="row">
                         <div class="cell py-0 text-bold">Total</div>

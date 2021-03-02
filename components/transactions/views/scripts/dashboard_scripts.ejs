@@ -4,6 +4,25 @@
 
         scope.view.selected = false
 
+        scope.removeDelOptn = function(index){
+
+            scope.transaction_settings.delivery_options.splice(index, 1)
+            view.update('transaction_settings.delivery_options')
+        }
+
+        scope.addDelOptn = function(){
+
+            if (!scope.transaction_settings.delivery_options){
+                scope.transaction_settings.delivery_options = []
+            }
+            scope.transaction_settings.delivery_options.push(scope.new)
+            console.log(scope.transaction_settings.delivery_options)
+            scope.new = {}
+            view.update('transaction_settings.delivery_options')
+            view.update('new')
+            scope.saveItem('transaction_settings', scope.transaction_settings)
+        }
+
         scope.editTransacton = function(idx){
 
             contextCloseAll()
@@ -24,6 +43,18 @@
             view.update('new.status_logs')
             view.update('new.billing_address')
             view.update('new.shipping_address')
+
+        }
+
+        scope.parseDeliveryOptions = function(){
+
+            scope.transaction_settings.delivery_options = scope.transaction_settings.delivery_options.map((option)=>{
+                console.log(option)
+                                                            option.price = option.price/100
+                                                            option.orders_over = option.orders_over/100
+                                                            return option
+                                                        })
+            view.update('transaction_settings.delivery_options')
 
         }
 

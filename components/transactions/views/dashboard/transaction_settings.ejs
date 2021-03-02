@@ -1,22 +1,119 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <div class="grid col-2 header">
-        <div class="flex flex-middle-left flex-column">
-            <h3 class="text-weight-600"><%- title %></h3>
-            <p class="transparent-2">Edit your transaction settings here</p>
+    <div class="grid col-2 col-s-1">
+        <div class="flex flex-left-top flex-column">
+            <h1 class="h4 text-weight-600"><%- title %></h1>
+            <p class="transparent-2 mt-0">Edit your transaction settings here</p>
         </div>
-        <div class="flex flex-middle-right">
-
+        <div class="flex flex-top-right flex-column-s">
+            <div class="text-right">
+                <button class="btn highlight capitalise" app-click="saveItem('<%- table %>',<%- table %>)">
+                    <span>Save <%- view.functions.parseName(table) %></span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="grid pb-2 gap-1 col-3" style="align-items: start;" app-init="get('<%- table %>','0','new')">
+    <div class="grid pb-2 gap-1 col-2 w-60 w-m-100 w-s-100" style="align-items: start;" app-init="get('<%- table %>','0')">
 
-        <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
+        <h4 class="colspan-2 my-2">Payment Gateways</h4>
+        <div class="flex">
+            <div class="flex-none">
+                <label>Enable</label>
+                <input type="checkbox" app-model="transaction_settings.stripe_enabled">
+            </div>
+            <div class="flex-1">
+                <label>Public Key</label>
+                <input type="password" app-model="transaction_settings.stripe_public_key">
+            </div>
+        </div>
+        <div>
+            <label>Button Text</label>
+            <input type="text" app-model="transaction_settings.stripe_button_text">
+        </div>
 
-    </div>
-    <div class="text-right">
-        <button class="btn highlight capitalise" app-click="saveItem('<%- table %>',new)">
-            <span>Save <%- view.functions.parseName(table) %></span>
-        </button>
+        <div class="colspan-2">
+            <h4 class="my-2">Delivery Options</h4>
+
+            <div>
+
+                <div class="bg-mid-grey p-2 mb-1" app-for="optn in transaction_settings.delivery_options">
+
+                    <div class="text-right">
+                        <a app-click="removeDelOptn($index)"><i class="fas fa-times"></i></a>
+                    </div>
+
+                    <div class="flex">
+                        <div class="flex-none">
+                            <label>Enabled</label>
+                            <input type="checkbox" app-model="optn.enabled">
+                        </div>
+                        <div class="flex-1">
+                            <label>Name</label>
+                            <input type="text" app-model="optn.name">
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div class="flex-1 pr-1">
+                            <label>Price</label>
+                            <input type="text" app-model="optn.price" class="text-right">
+                        </div>
+                        <div class="flex-1 px-1">
+                            <label>Orders Over</label>
+                            <input type="text" app-model="optn.orders_over" class="text-right">
+                        </div>
+                        <div class="flex-1">
+                            <label>Orders Under</label>
+                            <input type="text" app-model="optn.orders_under" class="text-right">
+                        </div>
+
+                    </div>
+                        <div class="">
+                            <label>Postcode Match</label>
+                            <input type="text" app-model="optn.postcode_match">
+                        </div>
+                    </div>
+
+            </div>
+
+            <div class=" p-2 mb-1">
+
+                <div class="flex">
+                    <div class="flex-none">
+                        <label>Enabled</label>
+                        <input type="checkbox" app-model="new.enabled">
+                    </div>
+                    <div class="flex-1">
+                        <label>Name</label>
+                        <input type="text" app-model="new.name" placeholder="Postage Name">
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="flex-1 pr-1">
+                        <label>Price</label>
+                        <input type="text" app-model="new.price" class="text-right">
+                    </div>
+                    <div class="flex-1 px-1">
+                        <label>Orders Over</label>
+                        <input type="text" app-model="new.orders_over" class="text-right">
+                    </div>
+                    <div class="flex-1">
+                        <label>Orders Under</label>
+                        <input type="text" app-model="new.orders_under" class="text-right">
+                    </div>
+                </div>
+                <div class="">
+                    <label>Postcode Match</label>
+                    <input type="text" app-model="new.postcode_match">
+                </div>
+
+
+                <div class="text-right">
+                    <button class="btn bg-secondary mt-1" app-click="addDelOptn()">Add New</button>
+                </div>
+            </div>
+
+
+        </div>
+
     </div>

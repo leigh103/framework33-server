@@ -1,4 +1,4 @@
-<% layout('default/fullscreen.ejs') -%>
+<%- layout(config.site.theme+'/fullscreen.ejs') %>
 
     <% if (typeof content_key != 'undefined' && content_key != 'new'){ %>
         <div class="page-full vh-100 bg-light-grey text-left" app-init="getContent('<%- content_key %>')">

@@ -329,6 +329,7 @@
             }
 
             scope.openModal = function(modal){
+                contextCloseAll()
                 scope.view.modal = modal
                 view.update('view.modal')
             }

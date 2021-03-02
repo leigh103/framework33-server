@@ -160,9 +160,11 @@
                         data = JSON.parse(data)
 
                         if (output){
+                            console.log(collection, data, output)
                             scope[output] = data
                             view.update(output)
                         } else {
+
                             scope[collection] = data
                             view.update(collection)
                         }
@@ -172,7 +174,7 @@
                                 initCarousels()
                             },1000)
                         }
-
+console.log(scope[collection])
                         resolve(data)
 
                     }).catch((err) => {
@@ -201,7 +203,7 @@
                     .then((data) => {
 
                         data = JSON.parse(data)
-
+console.log(collection, scope[collection])
                         if (scope[collection]){
 
                             for (var i in scope[collection]){

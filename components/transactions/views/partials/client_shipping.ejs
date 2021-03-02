@@ -4,6 +4,10 @@
 
     <form autocomplete="on" style="margin-top: -0.3rem" class="mt-4 mt-s-1">
 
+
+
+        <label><input type="checkbox" app-click="shippingSameAsDelivery()"> Use billing address</label>
+
         <input type="text" placeholder="Address Line 1 *" class="underline" name="address_line1" app-model="cart.shipping_address.address_line1">
         <input type="text" placeholder="Address Line 2" class="underline" name="address_line2" app-model="cart.shipping_address.address_line2">
         <input type="text" placeholder="Town" class="underline" name="address_level1" app-model="cart.shipping_address.address_level1">
@@ -15,7 +19,18 @@
 
     </form>
 
-    <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700" app-click="payment()">Payment <i class="fas fa-chevron-right ml-1"></i></button>
+    <label class="mt-2">Delivery Method</label>
+    <div class="relative">
+        <dropdown-select app-model="cart.delivery_method" class="mb-2 relative">
+            <div app-for="optn in view.delivery_options" app-attr="{'value':optn._key}">
+                <div app-bind="optn.name"></div>
+                <div app-bind="parseCurrency(optn.price)"></div>
+            </div>
+        </dropdown-select>
+    </div>
+
+    <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700" app-show="cart.delivery_method" app-click="payment()">Payment <i class="fas fa-chevron-right ml-1"></i></button>
+    <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700 transparent" app-hide="cart.delivery_method">Select Delivery Method <i class="fas fa-chevron-right ml-1"></i></button>
     <a class="btn bg-none mt-5 mt-s-1 text-left text-secondary w-100" app-click="view.page = 'billing'"><i class="fas fa-chevron-left mr-1"></i>Your Details</a>
 
 </div>
