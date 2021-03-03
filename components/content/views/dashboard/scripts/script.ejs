@@ -370,16 +370,23 @@
 
                 let section = document.getElementById(id),
                     section_insert = document.getElementById('insert-new-section')
-                let section_box = section.getBoundingClientRect(),
-                    pos = (section_box.y+section_box.height)-33
-
-                section_insert.style.top = pos+'px'
-                section_insert.style.display = 'flex'
+//                 let section_box = section.getBoundingClientRect(),
+//                     pos = (section_box.y+section_box.height)-33
+// console.log(section_box)
+//                 section_insert.style.top = pos+'px'
+//                 section_insert.style.display = 'flex'
+                    section_insert.style.display = 'flex'
+                    section.parentNode.insertBefore(section_insert, section.nextSibling)
 
 
             }
 
             scope.renderContent = function(external){
+
+                let section_insert = document.getElementById('insert-new-section'),
+                    preview = document.getElementById('preview')
+
+                preview.parentNode.insertBefore(section_insert, preview.nextSibling)
 
                 http.post('/dashboard/content/render',scope.view.content).then((html)=>{
 
