@@ -223,7 +223,12 @@
                         if (!scope.view.content.blocks){
                             scope.view.content.blocks = []
                         }
-                        scope.view.content.blocks.push(content)
+                        if (scope.view.hovered_section >= 0){
+                            scope.view.content.blocks.splice(scope.view.hovered_section+1, 0, content)
+                        } else {
+                            scope.view.content.blocks.push(content)
+                        }
+
                     }
                     view.update('view.content.blocks')
                     localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
@@ -359,6 +364,21 @@
 
             }
 
+            scope.showInsertSecton = function(id){
+
+                scope.view.hovered_section = parseInt(id.replace(/preview_content_block_/,''))
+
+                let section = document.getElementById(id),
+                    section_insert = document.getElementById('insert-new-section')
+                let section_box = section.getBoundingClientRect(),
+                    pos = (section_box.y+section_box.height)-33
+
+                section_insert.style.top = pos+'px'
+                section_insert.style.display = 'flex'
+
+
+            }
+
             scope.renderContent = function(external){
 
                 http.post('/dashboard/content/render',scope.view.content).then((html)=>{
@@ -373,6 +393,12 @@
                             preview_blocks[i].setAttribute('id',id)
                             preview_blocks[i].addEventListener('click',function(){
                                 scope.loadBlock(id)
+                            })
+                            preview_blocks[i].addEventListener('mouseover',function(){
+                                scope.showInsertSecton(id)
+                            })
+                            preview_blocks[i].addEventListener('mouseout',function(){
+                            //    document.getElementById('insert-new-section').style.display = 'none'
                             })
                         }
                     }
