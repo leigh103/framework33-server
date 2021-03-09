@@ -1,25 +1,35 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <div class="header">
+    <div class="header" app-init="get('<%- table %>','<%- key %>','new')">
         <div class="title">
-            <h1><%- title %></h1>
+            <h1 class="capitalise"><%- table %> / <span app-bind="new.name"></span></h1>
         </div>
         <div class="buttons">
-            <button class="btn bg-primary" app-click="newObj('<%- table %>')">Add <%- view.functions.parseName(table,true) %><i class="fa fa-plus ml-05"></i></button>
+            <a class="btn bg-white" href="/dashboard/<%- table %>">
+                Cancel
+            </a>
+            <button class="btn highlight capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
+                <span>Save <%- view.functions.parseName(table,true) %></span>
+            </button>
+            <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
+                <span>Add <%- view.functions.parseName(table,true) %></span>
+            </button>
         </div>
     </div>
 
     <div class="actions">
 
         <div class="tabs">
+            <% for (var tab in fields){ %>
 
+                <a app-click="view.edit_tab = '<%- tab %>'" app-class="{'active':view.edit_tab == '<%- tab %>'}" class="capitalise"><%- tab %></a>
+
+            <% } %>
         </div>
 
 
     </div>
 
-    <div class="table-wrap" app-init="get('<%- table %>','<%- key %>','new')">
-
-        <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
-
+    <div class="edit-wrap">
+            <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
     </div>

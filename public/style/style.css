@@ -409,7 +409,7 @@ a:hover {
   justify-content: flex-start;
 }
 .dashboard .header .buttons {
-  flex: 4;
+  flex: 1;
   text-align: right;
   display: flex;
   align-items: center;
@@ -516,6 +516,62 @@ a:hover {
   color: #98538e;
   cursor: pointer;
   font-weight: bold;
+}
+.dashboard .edit {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 2rem;
+}
+.dashboard .edit-wrap {
+  background-color: #fff;
+  padding: 3.125rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: block;
+}
+.dashboard .edit label {
+  color: #a0a0a0;
+}
+.dashboard .edit input,
+.dashboard .edit textarea,
+.dashboard .edit select {
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  color: #383f47;
+}
+.dashboard .edit input[type=text],
+.dashboard .edit input[type=password],
+.dashboard .edit input[type=number],
+.dashboard .edit input[type=email],
+.dashboard .edit select {
+  height: 2.5rem;
+}
+.dashboard .edit input[type=checkbox]:after {
+  border: 1px solid #e3e3e3;
+}
+.dashboard .edit > div {
+  grid-column-end: span 2;
+}
+.dashboard .edit .input-image {
+  grid-row-end: span 2;
+}
+.dashboard .edit .input-textarea {
+  grid-column-end: span 6;
+  grid-row-end: span 2;
+}
+.dashboard .edit .input-checkbox {
+  grid-column-end: span 1;
+}
+.dashboard .edit .input-object label {
+  margin-top: 1rem;
+}
+.dashboard .edit .input-object-array {
+  grid-column-end: span 6;
+}
+.dashboard .edit .input-object-array-wrap {
+  background-color: #f4f6f8;
+  padding: 3.125rem;
+  border-radius: 6px;
 }
 .dashboard .mailbox .messages {
   height: 100%;
@@ -694,7 +750,8 @@ a:hover {
 .dashboard .page .actions {
   flex: 0 0 3.75rem;
 }
-.dashboard .page .table-wrap {
+.dashboard .page .table-wrap,
+.dashboard .page .edit-wrap {
   flex: 1;
 }
 .dashboard .page-full {
@@ -944,7 +1001,8 @@ input[type="password"].border {
 input[type=checkbox] {
   flex: none;
   position: relative;
-  width: 2rem;
+  width: 0;
+  height: 0;
   vertical-align: middle;
 }
 input[type=checkbox]:after {
@@ -957,7 +1015,7 @@ input[type=checkbox]:after {
   height: 1.75rem;
   top: -0.5rem;
   border-radius: 0.25rem;
-  left: 0;
+  left: -1px;
   background-color: #fff;
   color: #98538e;
   font-size: 1.25rem;

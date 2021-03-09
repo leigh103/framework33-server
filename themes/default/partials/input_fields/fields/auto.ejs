@@ -7,7 +7,7 @@
 %>
 
 
-<div class="">
+<div class="input-<%- item.input_type %>">
     <%- max_characters %>
     <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
     <input type="<%- item.input_type %>" app-model="new.<%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>">

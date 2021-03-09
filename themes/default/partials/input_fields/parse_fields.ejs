@@ -6,15 +6,23 @@
 
 <% } else { %>
 
-    <% fields.forEach((item,i)=>{ %>
+    <% for (var tab in fields){ %>
 
-        <% var max_characters = ""; max_chars_text = ""; %>
-        <% if (typeof item.truncate != 'undefined'){ %>
-            <% max_characters = '<div class="float-right text-small pr-1"><span app-bind="new.'+ item.name +'.length"></span>/'+item.truncate+' chars</div>' %>
-        <% } %>
+        <div app-show="view.edit_tab == '<%- tab %>'" class="edit">
 
-        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/include_fields.ejs', {item:item, max_characters:max_characters}) %>
+            <% fields[tab].forEach((item,i) => { %>
 
-    <% }) %>
+                <% var max_characters = ""; max_chars_text = ""; %>
+                <% if (typeof item.truncate != 'undefined'){ %>
+                    <% max_characters = '<div class="float-right text-small pr-1"><span app-bind="new.'+ item.name +'.length"></span>/'+item.truncate+' chars</div>' %>
+                <% } %>
+
+                <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/include_fields.ejs', {item:item, max_characters:max_characters}) %>
+
+            <% }) %>
+
+        </div>
+
+    <% } %>
 
 <% } %>

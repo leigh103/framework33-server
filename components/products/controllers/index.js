@@ -71,7 +71,7 @@ const express = require('express'),
         shop: view.ecommerce.shop,
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
-        model: new Products().settings
+        model: new Products()
     }
 
     routes.get('*', (req, res, next) => {
@@ -144,7 +144,7 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/products/:cat?', async(req, res) => {
+    routes.get('/dashboard/products/:key?/:cat?', async(req, res) => {
 
         data.meta = {
             title: config.site.name+' | Products'
@@ -159,7 +159,7 @@ const express = require('express'),
 
         data.query = '?limit=30'
 
-        if (req.params.cat){
+        if (req.params.key == 'category' && req.params.cat){
 
             if (req.params.cat == 'inactive'){
                 view.current_sub_view = 'inactive'
@@ -171,13 +171,24 @@ const express = require('express'),
                 data.query += '&category=%27'+req.params.cat+'%27'
             }
 
+            data.option_data = await view.functions.getOptionData('product_categories')
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+
+            res.render(settings.views+'/dashboard/products.ejs',data)
+
+        } else if (req.params.key){
+            data.key = req.params.key
+            data.option_data = await view.functions.getOptionData('product_categories')
+            data.fields = data.model.parseEditFields()
+            res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+        } else {
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
         }
 
-        data.option_data = await view.functions.getOptionData('product_categories')
-        data.fields = data.model.fields
-        data.search_fields = data.model.search_fields
 
-        res.render(settings.views+'/dashboard/products.ejs',data)
         //res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
     })

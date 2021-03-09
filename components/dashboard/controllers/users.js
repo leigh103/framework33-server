@@ -10,12 +10,12 @@ const express = require('express'),
     routes = express.Router(),
 
     settings = {
-        default_route: 'dashboard/users',
+        default_route: 'dashboard/user',
         views: 'dashboard/views',
         protected_guards:['admin'],
         menu: {
             side_nav:[
-                {link:'Users',slug: '/dashboard/users', weight: 10, icon:'<i class="fa fa-users"></i>', protected_guard:['admin']}
+                {link:'Users',slug: '/dashboard/user', weight: 10, icon:'<i class="fa fa-users"></i>', protected_guard:['admin']}
             ]
         }
     },
@@ -33,7 +33,7 @@ const express = require('express'),
 
     let data = {
         include_scripts: [settings.views+'/scripts/script.ejs'],
-        model: new User().settings
+        model: new User()
     }
 
     routes.get('*', (req, res, next) => {
@@ -45,17 +45,22 @@ const express = require('express'),
         }
     })
 
-    routes.get('/', (req, res) => {
+    routes.get('/:key?', (req, res) => {
 
         view.current_view = 'users'
 
         data.title = 'Users'
         data.table = 'user'
 
-        data.fields = data.model.fields
-        data.search_fields = data.model.search_fields
-
-        res.render(settings.views+'/table.ejs',data)
+        if (req.params.key){
+            data.key = req.params.key
+            data.fields = data.model.parseEditFields()
+            res.render(settings.views+'/edit.ejs',data)
+        } else {
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+            res.render(settings.views+'/table.ejs',data)
+        }
 
     })
 

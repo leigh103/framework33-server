@@ -56,7 +56,7 @@
         }
 
         .buttons {
-            flex: 4;
+            flex: 1;
             text-align: right;
             display: flex;
             align-items: center;
@@ -192,7 +192,82 @@
         }
     }
 
+    .edit {
 
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-gap:2rem;
+
+        &-wrap {
+            background-color: white;
+            padding: 3.125rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: block;
+
+        }
+
+        label {
+            color: $color-grey;
+        }
+
+        input, textarea, select {
+            border: 1px solid #E3E3E3;
+            border-radius: 4px;
+            color: $color-dark-grey;
+        }
+
+        input[type=text],input[type=password],input[type=number],input[type=email], select {
+            height: 2.5rem
+        }
+
+        input[type=checkbox]{
+            &:after {
+                border: 1px solid #E3E3E3;
+            }
+        }
+
+        & > div {
+            grid-column-end: span 2;
+        }
+
+        .input {
+
+            &-image {
+                grid-row-end: span 2;
+            }
+
+            &-textarea {
+                grid-column-end: span 6;
+                grid-row-end: span 2;
+            }
+
+            &-checkbox {
+                grid-column-end: span 1;
+            }
+
+            &-object {
+
+                label {
+                    margin-top: 1rem;
+                }
+
+                &-array {
+
+                    grid-column-end: span 6;
+
+                    &-wrap {
+                        background-color: $color-light-grey;
+                        padding: 3.125rem;
+                        border-radius: $border-radius;
+                    }
+
+                }
+
+            }
+
+        }
+    }
 
     .mailbox {
 
@@ -412,7 +487,7 @@
             flex: 0 0 3.75rem;
         }
 
-        .table-wrap {
+        .table-wrap, .edit-wrap {
             flex: 1;
         }
 

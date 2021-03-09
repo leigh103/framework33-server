@@ -513,6 +513,39 @@
 
         }
 
+        parseEditFields(){
+
+            let tabs = {edit: []}
+
+            this.settings.fields.map((field)=>{
+                if (!field.tab){
+                    tabs.edit.push(field)
+                } else {
+                    if (!tabs[field.tab]){
+                        tabs[field.tab] = []
+                    }
+                    tabs[field.tab].push(field)
+                }
+            })
+
+            let keys = Object.keys(tabs),
+                i,
+                len = keys.length,
+                sorted_tabs = {edit: tabs['edit']}
+
+            keys.sort();
+
+            for (i = 0; i < len; i++) {
+                if (keys[i] != 'edit'){
+                    sorted_tabs[keys[i]] = tabs[keys[i]]
+                }
+
+            }
+
+            return sorted_tabs
+
+        }
+
     }
 
     module.exports = Model

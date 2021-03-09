@@ -10,12 +10,12 @@ const express = require('express'),
     routes = express.Router(),
 
     settings = {
-        default_route: 'dashboard/admins',
+        default_route: 'dashboard/admin',
         views: 'dashboard/views',
         protected_guards:['admin'],
         menu: {
             side_nav:[
-                {link:'Admins',slug: '/dashboard/admins', weight: 9, icon:'<i class="fa fa-user-shield"></i>', protected_guard:['admin']}
+                {link:'Admins',slug: '/dashboard/admin', weight: 9, icon:'<i class="fa fa-user-shield"></i>', protected_guard:['admin']}
             ]
         }
     },
@@ -33,7 +33,7 @@ const express = require('express'),
 
     let data = {
         include_scripts: [settings.views+'/scripts/script.ejs'],
-        model: new Admin().settings
+        model: new Admin()
     }
 
     routes.get('*', (req, res, next) => {
@@ -45,17 +45,24 @@ const express = require('express'),
         }
     })
 
-    routes.get('/', (req, res) => {
+    routes.get('/:key?', (req, res) => {
 
         view.current_view = 'admins'
 
         data.title = 'Admins'
         data.table = 'admin'
 
-        data.fields = data.model.fields
-        data.search_fields = data.model.search_fields
 
-        res.render(settings.views+'/table.ejs',data)
+
+        if (req.params.key){
+            data.key = req.params.key
+            data.fields = data.model.parseEditFields()
+            res.render(settings.views+'/edit.ejs',data)
+        } else {
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+            res.render(settings.views+'/table.ejs',data)
+        }
 
     })
 

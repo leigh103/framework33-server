@@ -2,11 +2,11 @@
 
 
 
-<div class="colspan-2">
+<div class="input-object-array">
     <label><%- view.functions.parseName(item.name) %></label>
-    <div class="mb-2 w-100">
+    <div class="mb-2 w-100 input-object-array-wrap">
 
-        <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1" app-for="<%- obj %> in new.<%- item.name %>">
+        <div class="input-object-array-item grid col-5 gap-1" app-for="<%- obj %> in new.<%- item.name %>">
 
             <div class="colspan-5 text-right">
                 <a app-click="splice('new.<%- item.name %>', <%- obj %>)"><i class="fas fa-times"></i></a>
