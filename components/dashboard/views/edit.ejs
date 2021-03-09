@@ -1,0 +1,25 @@
+<% layout(config.site.theme+'/dashboard.ejs') -%>
+
+    <div class="header">
+        <div class="title">
+            <h1><%- title %></h1>
+        </div>
+        <div class="buttons">
+            <button class="btn bg-primary" app-click="newObj('<%- table %>')">Add <%- view.functions.parseName(table,true) %><i class="fa fa-plus ml-05"></i></button>
+        </div>
+    </div>
+
+    <div class="actions">
+
+        <div class="tabs">
+
+        </div>
+
+
+    </div>
+
+    <div class="table-wrap" app-init="get('<%- table %>','<%- key %>','new')">
+
+        <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
+
+    </div>

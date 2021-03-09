@@ -1,40 +1,34 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-
-        <div class="grid col-2 col-s-1">
-            <div class="flex flex-left-top flex-column">
-                <h1 class="h4 text-weight-600"><%- title %></h1>
-                <p class="transparent-2 mt-0">This table contains <span app-bind="<%- table %>.length"></span> items</p>
+        <div class="header">
+            <div class="title">
+                <h1><%- title %></h1>
             </div>
-            <div class="flex flex-top-right flex-column-s">
-
+            <div class="buttons">
+                <a class="btn bg-white" href="/dashboard/transactions/completed">Archive</a>
+                <button class="btn bg-primary" app-click="newObj('<%- table %>')">Add <%- view.functions.parseName(table,true) %><i class="fa fa-plus ml-05"></i></button>
             </div>
         </div>
 
-        <% if (status.match(/paid|processing|shipped/)){ %>
-            <!-- <div class="colspan-2 tabs mb-2">
-                <a class="<% if (status == 'paid'){ %>active<% } %>" href="/dashboard/transactions/paid">New <span app-show="view.status_count_obj.paid">(<span app-bind="view.status_count_obj.paid"></span>)</span></a>
-                <a class="<% if (status == 'processing'){ %>active<% } %>" href="/dashboard/transactions/processing">Processing <span app-show="view.status_count_obj.processing">(<span app-bind="view.status_count_obj.processing"></span>)</span></a>
-                <a class="<% if (status == 'shipped'){ %>active<% } %>" href="/dashboard/transactions/shipped">Shipped <span app-show="view.status_count_obj.shipped">(<span app-bind="view.status_count_obj.shipped"></span>)</span></a>
-            </div> -->
-        <% } %>
+        <div class="actions">
 
-        <div class="flex my-1">
-            <% if (status.match(/paid|processing|shipped/)){ %>
-                <a class="flex-none btn <% if (status == 'paid'){ %>bg-secondary<% } %>" href="/dashboard/transactions/paid">New <span class="ml-05" app-show="view.status_count_obj.paid">(<span app-bind="view.status_count_obj.paid"></span>)</span></a>
-                <a class="flex-none btn <% if (status == 'processing'){ %>bg-secondary<% } %>" href="/dashboard/transactions/processing">Processing <span class="ml-05" app-show="view.status_count_obj.processing">(<span app-bind="view.status_count_obj.processing"></span>)</span></a>
-                <a class="flex-none btn <% if (status == 'shipped'){ %>bg-secondary<% } %>" href="/dashboard/transactions/shipped">Shipped <span class="ml-05" app-show="view.status_count_obj.shipped">(<span app-bind="view.status_count_obj.shipped"></span>)</span></a>
-            <% } %>
+            <div class="tabs">
+                <% if (status.match(/paid|processing|shipped/)){ %>
+                    <a class="<% if (status == 'paid'){ %>active<% } %>" href="/dashboard/transactions/paid">New <span class="counter" app-show="view.status_count_obj.paid">(<span app-bind="view.status_count_obj.paid"></span>)</span></a>
+                    <a class="<% if (status == 'processing'){ %>active<% } %>" href="/dashboard/transactions/processing">Processing <span class="counter" app-show="view.status_count_obj.processing">(<span app-bind="view.status_count_obj.processing"></span>)</span></a>
+                    <a class="<% if (status == 'shipped'){ %>active<% } %>" href="/dashboard/transactions/shipped">Shipped <span class="counter" app-show="view.status_count_obj.shipped">(<span app-bind="view.status_count_obj.shipped"></span>)</span></a>
+                <% } %>
+            </div>
+
             <% if (typeof search_fields == 'object'){ %>
-                <div class="flex-1 flex w-s-100 mb-s-2">
-                    <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
+                <div class="search" onmouseover="scope.focusSearch(this)" onmouseout="scope.focusSearch(this)">
                     <input type="text" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
                 </div>
             <% } %>
         </div>
 
 
-        <div class="table-wrap">
+        <div class="table-wrap rounded">
 
             <div class="table button-overlay" app-show="view.selected" anim="{'enter':'fade-in','exit':'fade-out'}">
                 <div class="row table-header">
@@ -64,50 +58,56 @@
                         <div class="cell middle" style="width:35rem">Tracking</div>
                     <% } %>
                     <div class="cell middle action text-right">Total</div>
-                    <div class="cell middle status text-center" style="width:10rem">Status</div>
+                    <div class="cell middle status text-right" style="width:10rem">Status</div>
 
                 </div>
 
-                <div class="row" app-for="transaction in transactions" app-class="{'transparent-2':transaction.status != '<%- status %>'}">
+            </div>
 
-                    <div class="cell middle text-left"><input type="checkbox" app-model="transaction.selected" app-change="showActions()" class="border"></div>
+            <div class="table-inner-wrap">
+                <div class="table">
 
-                    <div class="cell middle" app-click="editTransacton($index)">
-                        <div class="text-secondary text-bold" app-bind="transaction.reference"></div>
-                        <div class="text-light" app-bind="parseDate(transaction._created,'Do MMM h:mma')"></div>
-                    </div>
-                    <div class="cell middle name">
-                        <div app-bind="transaction.customer.full_name" class="text-bold capitalise"></div>
+                    <div class="row" app-for="transaction in transactions" app-class="{'transparent-2':transaction.status != '<%- status %>'}">
 
-                        <% if (status == 'processing'){ %>
-                            <span class="mr-05" app-bind="transaction.shipping_method"></span>(<span app-bind="parseCurrency(transaction.shipping_total)"></span>)
-                        <% } else { %>
-                            <span class="mr-1" app-bind="transaction.customer.email"></span><span app-bind="transaction.customer.tel"></span>
-                        <% } %>
+                        <div class="cell middle text-left" style="width:4rem"><input type="checkbox" app-model="transaction.selected" app-change="showActions()" class="border"></div>
 
-                    </div>
+                        <div class="cell middle" app-click="editTransacton($index)" style="width:15rem">
+                            <div class="text-secondary text-bold" app-bind="transaction.reference"></div>
+                            <div class="text-light" app-bind="parseDate(transaction._created,'Do MMM h:mma')"></div>
+                        </div>
+                        <div class="cell middle name">
+                            <div app-bind="transaction.customer.full_name" class="text-bold capitalise"></div>
 
-                    <% if (status == 'processing'){ %>
-                        <div class="cell middle action text-right">
-                            <div class="grid col-6 gap-1">
-                                <select app-model="transaction.shipping_method" app-attr="{'id':transaction._key}" class="colspan-2">
-                                    <option value="">Select Courier</option>
-                                    <option value="dpd">DPD</option>
-                                    <option value="royal_mail">Royal Mail</option>
-                                    <option value="yodel">Yodel</option>
-                                    <option value="other">Other</option>
-                                </select>
+                            <% if (status == 'processing'){ %>
+                                <span class="mr-05" app-bind="transaction.shipping_method"></span>(<span app-bind="parseCurrency(transaction.shipping_total)"></span>)
+                            <% } else { %>
+                                <span class="mr-1" app-bind="transaction.customer.email"></span><span app-bind="transaction.customer.tel"></span>
+                            <% } %>
 
-                                <input type="text" app-model="transaction.shipping_reference" app-change="checkTracking($index)" class="colspan-3">
-                                <button class="btn bg-secondary" app-click="addTracking(transaction)">Add</button>
-                            </div>
                         </div>
 
-                    <% } %>
+                        <% if (status == 'processing'){ %>
+                            <div class="cell middle action text-right" style="width:35rem">
+                                <div class="grid col-6 gap-1">
+                                    <select app-model="transaction.shipping_method" app-attr="{'id':transaction._key}" class="colspan-2">
+                                        <option value="">Select Courier</option>
+                                        <option value="dpd">DPD</option>
+                                        <option value="royal_mail">Royal Mail</option>
+                                        <option value="yodel">Yodel</option>
+                                        <option value="other">Other</option>
+                                    </select>
 
-                    <div class="cell middle items text-right text-bold" app-bind="parseCurrency(transaction.total)"></div>
-                    <div class="cell middle text-center"><div class="status" app-class="transaction.status" app-bind="transaction.status" app-click="goto('transactions',transaction.status)"></div></div>
+                                    <input type="text" app-model="transaction.shipping_reference" app-change="checkTracking($index)" class="colspan-3">
+                                    <button class="btn bg-secondary" app-click="addTracking(transaction)">Add</button>
+                                </div>
+                            </div>
 
+                        <% } %>
+
+                        <div class="cell middle items text-right text-bold" app-bind="parseCurrency(transaction.total)"></div>
+                        <div class="cell middle text-right" style="width:10rem"><div class="status" app-class="transaction.status" app-bind="transaction.status" app-click="goto('transactions',transaction.status)"></div></div>
+
+                    </div>
                 </div>
             </div>
         </div>

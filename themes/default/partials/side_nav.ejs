@@ -1,24 +1,25 @@
-    <div class="side-nav bg-33-dream text-black">
+    <div class="side-nav collapse">
         <div class="header">
-            <div class="logo">
-                <a href="/">
-                    <% if (user.avatar){ %>
-                        <img src="<%- user.avatar %>" class="avatar">
-                    <% } else if (typeof view != 'undefined' && view.logo){ %>
-                        <img src="<%- view.logo %>">
-                    <% } else { %>
-                        <img src="/images/Profile_Placeholder.svg" class="avatar">
-                    <% } %>
-                </a>
-            </div>
 
-            <div class="user-info">
+        </div>
+
+        <div class="links">
+            <%- include(config.site.theme_path+'/partials/menu.ejs',{menu:view.menus.side_nav}) %>
+        </div>
+
+        <div class="profile">
+
+            <% if (user.avatar){ %>
+                <img src="<%- user.avatar %>" class="avatar">
+            <% } else if (typeof view != 'undefined' && view.logo){ %>
+                <img src="<%- view.logo %>" class="avatar">
+            <% } else { %>
+                <img src="/images/Profile_Placeholder.svg" class="avatar">
+            <% } %>
+
+            <div class="text">
                 <p class="h5 text-weight-600 mb-0"><%- view.functions.getTimeOfDay() %> <% if(typeof user.full_name != 'undefined'){ %><%- view.functions.getFirstName(user.full_name) %><% } %></p>
                 <p class="text-small transparent-2 mt-0">Logged in as <%- user.guard %></p>
             </div>
-        </div>
-
-        <div class="">
-            <%- include('partials/menu.ejs',{menu:view.menus.side_nav}) %>
         </div>
     </div>

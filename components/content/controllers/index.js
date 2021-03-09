@@ -15,7 +15,7 @@ const express = require('express'),
         views: 'content/views',
         menu: {
             side_nav: [
-                {link:'Content',slug: '/dashboard/content', weight:3, subitems:[
+                {link:'Content',slug: '/dashboard/content', weight:3, icon:'<i class="fa fa-newspaper"></i>', subitems:[
                     {link:'Content Types',slug: '/dashboard/content/content-types', weight:1}
                 ]}
             ]

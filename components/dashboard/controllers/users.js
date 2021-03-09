@@ -15,7 +15,7 @@ const express = require('express'),
         protected_guards:['admin'],
         menu: {
             side_nav:[
-                {link:'Users',slug: '/dashboard/users', weight: 10, protected_guard:['admin']}
+                {link:'Users',slug: '/dashboard/users', weight: 10, icon:'<i class="fa fa-users"></i>', protected_guard:['admin']}
             ]
         }
     },

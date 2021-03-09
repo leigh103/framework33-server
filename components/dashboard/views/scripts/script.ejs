@@ -13,6 +13,16 @@
                 }
             }
 
+            scope.focusSearch = function(el){
+
+                if (el.classList.contains('focused')){
+                    el.classList.remove('focused')
+                } else {
+                    el.classList.add('focused')
+                }
+
+            }
+
             scope.view.input_check = ''
 
             <% if (typeof status_count == 'object'){ %>
@@ -637,7 +647,11 @@
                     }
                 }
 
+            }
 
+            let search_box = document.querySelector('.search input')
+            if (search_box){
+                search_box.focus()
             }
 
         }

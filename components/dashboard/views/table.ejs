@@ -1,20 +1,22 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <div class="grid col-2 col-s-1">
-        <div class="flex flex-left-top flex-column">
-            <h1 class="h4 text-weight-600"><%- title %></h1>
-            <p class="transparent-2 mt-0">This table contains <span app-bind="<%- table %>.length"></span> items</p>
+    <div class="header">
+        <div class="title">
+            <h1><%- title %></h1>
         </div>
-        <div class="flex flex-top-right flex-column-s">
-            <button class="flex-none btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
+        <div class="buttons">
+            <button class="btn bg-primary" app-click="newObj('<%- table %>')">Add <%- view.functions.parseName(table,true) %><i class="fa fa-plus ml-05"></i></button>
         </div>
     </div>
 
-    <div class="flex my-1">
+    <div class="actions">
+
+        <div class="tabs">
+
+        </div>
 
         <% if (typeof search_fields == 'object'){ %>
-            <div class="flex-1 flex w-s-100 mb-s-2">
-                <button class="bg-33-white text-33-grey pr-0"><i class="fas fa-search"></i></button>
+            <div class="search">
                 <input type="text" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
             </div>
         <% } %>

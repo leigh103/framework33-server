@@ -16,7 +16,7 @@ const express = require('express'),
         views: 'postmark_broadcast/views',
         menu: {
             side_nav: [
-                {link:'Promotional Email',slug: '/dashboard/promotional-email', weight:1}
+                {link:'Promotional Email',slug: '/dashboard/promotional-email', icon:'<i class="fa fa-mail-bulk"></i>', weight:1}
             ]
         }
     }

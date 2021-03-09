@@ -21,11 +21,10 @@ const express = require('express'),
                 {link:'Dashboard',slug: '/dashboard', weight: 10, protected_guards:['admin']}
             ],
             side_nav:[
-                {link:'Dashboard',slug: '/dashboard', weight: 1, protected_guards:['admin'],subitems:[
-                    {link:'Overview',slug: '/dashboard', weight:1},
-                    {link:'Mailbox',slug: '/dashboard/mailbox', weight:2},
-                    {link:'Logs',slug: '/dashboard/logs', weight:3},
-                    {link:'Components',slug: '/dashboard/components', weight:4}
+                {link:'Dashboard',slug: '/dashboard', icon:'<i class="fa fa-tachometer-alt"></i>', weight: 1, protected_guards:['admin'],subitems:[
+                    {link:'Mailbox',slug: '/dashboard/mailbox', icon:'<i class="fa fa-envelope"></i>', weight:2},
+                    {link:'Logs',slug: '/dashboard/logs', icon:'<i class="fa fa-clipboard-list"></i>', weight:3},
+                    {link:'Components',slug: '/dashboard/components', icon:'<i class="fa fa-list"></i>', weight:4}
                 ]}
             ]
         },

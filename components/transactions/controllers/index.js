@@ -15,13 +15,13 @@ const express = require('express'),
         views: 'transactions/views',
         menu: {
             side_nav: [
-                {link:'Orders',slug: '/dashboard/transactions/paid', weight:1, subitems:[
-                    {link:'Incomplete Carts',slug: '/dashboard/transactions/new', weight:9},
+                {link:'Orders',slug: '/dashboard/transactions/paid', icon:'<i class="fa fa-money-check-alt"></i>', weight:1, subitems:[
+                    {link:'Incomplete Carts',slug: '/dashboard/transactions/new', icon:'<i class="fa fa-shopping-cart"></i>', weight:9},
                     // {link:'New',slug: '/dashboard/transactions/paid', weight:2},
                     // {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
                     // {link:'Shipped',slug: '/dashboard/transactions/shipped', weight:4},
-                    {link:'Archive',slug: '/dashboard/transactions/completed', weight:5},
-                    {link:'Settings',slug: '/dashboard/transactions/settings', weight:7}
+                    {link:'Archive',slug: '/dashboard/transactions/completed', icon:'<i class="fa fa-check"></i>', weight:5},
+                    {link:'Settings',slug: '/dashboard/transactions/settings', icon:'<i class="fa fa-cog"></i>', weight:7}
                 ]}
             ],
             nav: [

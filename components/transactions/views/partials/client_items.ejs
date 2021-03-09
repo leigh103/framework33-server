@@ -1,18 +1,20 @@
-<div class="pr-2 pt-7 hidden-s">
+<div class="p-6 hidden-s">
 
-    <h1 class="h4 text-weight-500">Shopping <%- view.ecommerce.cart_name %></h1>
+    <h1 class="h4 slab">In your basket</h1>
 
-    <div class="grid col-4 gap-1 mb-2 mt-5 text-33-grey">
-        <div class="colspan-2">Item</div>
+    <div class="grid col-5 gap-1 mb-2 mt-5 text-33-grey">
+        <div class="">Item</div>
+        <div class="colspan-2"></div>
         <div class="text-center">Qty</div>
         <div class="text-right">Price</div>
     </div>
 
     <div>
-        <div class="grid col-4 gap-1 my-2" app-for="item in cart.items">
-            <div class="colspan-2 text-weight-700"><a app-attr="{'href':item.slug}" app-bind="item.name"></a></div>
-            <div class="text-center" app-bind="item.quantity"></div>
-            <div class="text-right text-weight-700"><span app-bind="parseCurrency(item.price)"></span></div>
+        <div class="grid col-5 gap-1 my-2" app-for="item in cart.items">
+            <div><img src="/images/Product_Placeholder.svg" app-src="item.image"></div>
+            <div class="colspan-2 text-weight-700 flex-middle-left"><a app-attr="{'href':item.slug}" app-bind="item.name"></a></div>
+            <div class="text-center flex-middle" app-bind="item.quantity"></div>
+            <div class="text-right text-weight-700 flex-middle-right"><span app-bind="parseCurrency(item.price)"></span></div>
         </div>
     </div>
 
@@ -40,8 +42,8 @@
 
 </div>
 
-<div class="hidden block-s">
-    <h1 class="h4 text-weight-500">Shopping <%- view.ecommerce.cart_name %></h1>
+<div class="hidden-m hidden-d block-s my-2">
+    <h1 class="h4 slab">In your basket</h1>
     <div class="grid col-2 gap-1 mt-1">
         <div><span app-bind="cart.items.length"></span> items</div>
         <div app-bind="parseCurrency(cart.total)" class="text-right"></div>

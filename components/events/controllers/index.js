@@ -14,7 +14,7 @@ const express = require('express'),
         views: 'events/views',
         menu: {
             side_nav: [
-                {link:'Events',slug: '/dashboard/events', weight:8}
+                {link:'Events',slug: '/dashboard/events', icon:'<i class="fa fa-mail-bulk"></i>', weight:8}
             ]
         }
     },
@@ -68,7 +68,7 @@ const express = require('express'),
 
     })
 
-    routes.get('/events', async(req, res) => {
+    routes.get('/events/:key?', async(req, res) => {
 
         data.meta = {
             title: config.site.name+' | Events'
@@ -84,7 +84,12 @@ const express = require('express'),
         data.fields = data.model.fields
         data.search_fields = data.model.search_fields
 
-        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        if (req.params.key){
+            data.key = req.params.key
+            res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+        } else {
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        }
 
     })
 

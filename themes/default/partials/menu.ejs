@@ -11,18 +11,45 @@
                 typeof user == 'object' && !user.guard  && menu[i].authenticated == false ||
                 typeof user == 'undefined' && menu[i].authenticated == false
             ){ %>
-                <% if (menu[i].icon){ %><div class="icon"><%= menu[i].icon %></div><% } %>
-                <a id="menu-<%- view.functions.parseSnake(menu[i].link) %>" <% if (typeof menu[i].subitems != 'undefined' && !menu[i].slug){ %>app-click="view.sub_<%- i %> = !view.sub_<%- i %>"<% } else { %> href="<%= menu[i].slug %>"<% } %> class="<% if (view.current_view == menu[i].link.toLowerCase()){ %>active<% } %>"><%= menu[i].link %></a>
+
+                <a id="menu-<%- view.functions.parseSnake(menu[i].link) %>" <% if (typeof menu[i].subitems != 'undefined' && !menu[i].slug){ %>app-click="view.sub_<%- i %> = !view.sub_<%- i %>"<% } else { %> href="<%= menu[i].slug %>"<% } %> class="<% if (view.current_view == menu[i].link.toLowerCase()){ %>active<% } %>">
+                    <% if (menu[i].icon){ %><div class="icon" title="<%= menu[i].link %>"><%- menu[i].icon %></div><% } %>
+                    <div class="text"><%= menu[i].link %></div>
+                </a>
             <% } %>
             <% if (typeof menu[i].subitems != 'undefined'){ %>
                 <div class="subitems <% if (view.current_view == menu[i].link.toLowerCase()){ %>in-view"<% } else { %>" app-show="view.sub_<%- i %>"<% } %>>
-                    <div class="contain">
-                        <% for (var ii in menu[i].subitems){ %>
-                            <a  id="menu-<%- view.functions.parseSnake(menu[i].subitems[ii].link) %>"href="<%= menu[i].subitems[ii].slug %>" class="subitem <% if (view.current_sub_view == menu[i].subitems[ii].link.toLowerCase()){ %>active<% } %>">
-                                <% if (menu[i].subitems[ii].icon){ %><div class="icon"><%= menu[i].subitems[ii].icon %></div><% } %>
-                                <%= menu[i].subitems[ii].link %>
-                            </a>
-                        <% } %>
+                    <div class="subitems-container">
+                        <div class="contain">
+                            <% for (var ii in menu[i].subitems){ %>
+
+
+                                <% if (menu[i].subitems[ii].subitems){ %>
+
+                                    <div class="subitem <% if (view.current_sub_view == menu[i].subitems[ii].link.toLowerCase()){ %>active<% } %>">
+                                        <% if (menu[i].subitems[ii].icon){ %><div class="icon" title="<%= menu[i].subitems[ii].link %>"><%- menu[i].subitems[ii].icon %></div><% } %>
+                                        <h4 class="text"><%= menu[i].subitems[ii].link %></h4>
+
+                                        <% for (var iii in menu[i].subitems[ii].subitems){ %>
+                                            <a id="menu-<%- view.functions.parseSnake(menu[i].subitems[ii].subitems[iii].link) %>"href="<%= menu[i].subitems[ii].subitems[iii].slug %>" class="sub_subitem <% if (view.current_sub_view == menu[i].subitems[ii].subitems[iii].link.toLowerCase()){ %>active<% } %>">
+                                                <% if (menu[i].subitems[ii].subitems[iii].icon){ %><div class="icon" title="<%= menu[i].subitems[ii].subitems[iii].link %>"><%- menu[i].subitems[ii].subitems[iii].icon %></div><% } %>
+                                                <div class="text"><%= menu[i].subitems[ii].subitems[iii].link %></div>
+                                            </a>
+                                        <% } %>
+
+                                    </div>
+
+                                <% } else { %>
+
+                                    <a id="menu-<%- view.functions.parseSnake(menu[i].subitems[ii].link) %>"href="<%= menu[i].subitems[ii].slug %>" class="subitem <% if (view.current_sub_view == menu[i].subitems[ii].link.toLowerCase()){ %>active<% } %>">
+                                        <% if (menu[i].subitems[ii].icon){ %><div class="icon" title="<%= menu[i].subitems[ii].link %>"><%- menu[i].subitems[ii].icon %></div><% } %>
+                                        <div class="text"><%= menu[i].subitems[ii].link %></div>
+                                    </a>
+
+                                <% } %>
+
+                            <% } %>
+                        </div>
                     </div>
                 </div>
             <% } %>

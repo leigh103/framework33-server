@@ -8,7 +8,7 @@
         </div>
 
         <div class="links colspan-3 text-right overflow-x">
-            <%- include('default/partials/menu.ejs',{menu:view.menus.nav}) %>
+            <%- include(config.site.theme_path+'/partials/menu.ejs',{menu:view.menus.nav}) %>
         </div>
 
         <div class="burger colspan-1 flex flex-middle-right" onclick="toggleMenu('.mega-menu')">
@@ -25,6 +25,6 @@
         <i class="fas fa-times"></i>
     </div>
 
-    <%- include('default/partials/menu.ejs',{menu:view.menus.nav}) %>
+    <%- include(config.site.theme_path+'/partials/menu.ejs',{menu:view.menus.nav}) %>
 
 </section>
