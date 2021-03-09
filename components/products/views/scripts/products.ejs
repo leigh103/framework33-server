@@ -56,6 +56,37 @@
 
         }
 
+        scope.getItem = function(collection, key){
+
+            scope.view.loader = true
+            view.update('view.loader')
+
+            setTimeout(function(){
+                http.get('/api/'+collection+'/'+key).then((data)=>{
+                    scope.new = JSON.parse(data)
+
+                    if (scope.new.category){
+                        let sub_cat = scope.new.sub_category+''
+                        scope.get('product_categories/'+scope.new.category).then((category)=>{
+                            scope.sub_categories = category.sub_categories
+                            view.update('sub_categories')
+                        }).then(()=>{
+                            scope.new.sub_category = sub_cat
+                            view.update('new.sub_category')
+                        })
+                    }
+
+                    if (!scope.new.gallery){
+                        scope.new.gallery = []
+                    }
+                    scope.view.loader = false
+                    view.update('view.loader')
+                    view.update('new')
+                })
+            },500)
+
+        }
+
         scope.uploadImg = function(image, obj, input){
 
             let payload = {

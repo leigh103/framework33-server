@@ -14,9 +14,11 @@
                     {name:'gallery',input_type:'img_array',placeholder:'Gallery', type:'object', tab:'gallery', required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'brand',input_type:'text',placeholder:'Brand', type:'string', required:false},
+                    {name:'activated',input_type:'checkbox',type:'boolean',required: false},
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
                     {name:'barcode',input_type:'text',placeholder:'barcode', type:'barcode', required:false, barcode_type:'ean13'},
                     {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},
+                    {name:'sub_category',input_type:'select', option_for:'sub_category in sub_categories',type:'string', required:false},
                     {name:'variants',input_type:'multiselect',option_data:'products', tab:'variants', type:'string', required:false},
                     {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'price',  required:false},
                     {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'price', type:'number', required:false},
@@ -26,7 +28,7 @@
                     {name:'customisation',input_type:'array',placeholder:'Customisation', tab:'customisation', type:'object',required: false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', truncate:160, required:false},
                     {name:'content',input_type:'contenteditable',placeholder:'Content', tab:'content', type:'string', required:false},
-                    {name:'activated',input_type:'checkbox',type:'boolean',required: false},
+
                 ],
                 search_fields:['name','brand', 'barcode']
             }

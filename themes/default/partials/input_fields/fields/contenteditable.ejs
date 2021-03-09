@@ -6,8 +6,10 @@
         obj_prefix = obj_prefix+'.'
     }
 %>
-<div class="colspan-2">
+<div class="input-contenteditable field-<%- obj_prefix %><%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
-    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:'blog'}) %>
-    <div class="large resize contenteditable" app-model="new.<%- obj_prefix %><%- item.name %>"></div>
+    <div class="input-contenteditable-wrap">
+        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:'blog'}) %>
+        <div class="large resize contenteditable" app-model="new.<%- obj_prefix %><%- item.name %>" contenteditable="true"></div>
+    </div>
 </div>

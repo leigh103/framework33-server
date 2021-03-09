@@ -4,24 +4,28 @@
         <input type="text" app-model="new.<%- item %>">
     <% }) %>
 
-<% } else { %>
+<% } else if (typeof fields == 'object') { %>
 
     <% for (var tab in fields){ %>
 
-        <div app-show="view.edit_tab == '<%- tab %>'" class="edit">
+        <% if (Array.isArray(fields[tab])) { %>
 
-            <% fields[tab].forEach((item,i) => { %>
+            <div app-show="view.edit_tab == '<%- tab %>'" class="edit tab-<%- tab %>">
 
-                <% var max_characters = ""; max_chars_text = ""; %>
-                <% if (typeof item.truncate != 'undefined'){ %>
-                    <% max_characters = '<div class="float-right text-small pr-1"><span app-bind="new.'+ item.name +'.length"></span>/'+item.truncate+' chars</div>' %>
-                <% } %>
+                <% fields[tab].forEach((item,i) => { %>
 
-                <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/include_fields.ejs', {item:item, max_characters:max_characters}) %>
+                    <% var max_characters = ""; max_chars_text = ""; %>
+                    <% if (typeof item.truncate != 'undefined'){ %>
+                        <% max_characters = '<div class="float-right text-small pr-1"><span app-bind="new.'+ item.name +'.length"></span>/'+item.truncate+' chars</div>' %>
+                    <% } %>
 
-            <% }) %>
+                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/include_fields.ejs', {item:item, max_characters:max_characters}) %>
 
-        </div>
+                <% }) %>
+
+            </div>
+
+        <% } %>
 
     <% } %>
 

@@ -8,7 +8,7 @@
     }
 %>
 
-<div class="relative layer-2">
+<div class="relative layer-2 field-<%- obj_prefix %><%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
     <div class="tag-wrap bg-33-white p-1 w-100" app-click="view.dropdown<%- obj_prefix_snake %><%- item.name %> = !view.dropdown<%- obj_prefix_snake %><%- item.name %>">
         <div class="tag">

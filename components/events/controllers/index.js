@@ -36,7 +36,7 @@ const express = require('express'),
     let data = {
         meta: {},
         include_styles: ['dashboard/views/styles/dashboard-style.ejs'],
-        model: new Events().settings
+        model: new Events()
     }
 
     routes.get('*', (req, res, next) => {
@@ -81,13 +81,13 @@ const express = require('express'),
         data.title = 'Events'
         data.table = 'events'
 
-        data.fields = data.model.fields
-        data.search_fields = data.model.search_fields
-
         if (req.params.key){
             data.key = req.params.key
+            data.fields = data.model.parseEditFields()
             res.render(basedir+'/components/dashboard/views/edit.ejs',data)
         } else {
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
             res.render(basedir+'/components/dashboard/views/table.ejs',data)
         }
 

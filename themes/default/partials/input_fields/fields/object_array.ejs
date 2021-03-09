@@ -2,14 +2,14 @@
 
 
 
-<div class="input-object-array">
+<div class="input-object-array field-<%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
     <div class="mb-2 w-100 input-object-array-wrap">
 
         <div class="input-object-array-item grid col-5 gap-1" app-for="<%- obj %> in new.<%- item.name %>">
 
             <div class="colspan-5 text-right">
-                <a app-click="splice('new.<%- item.name %>', <%- obj %>)"><i class="fas fa-times"></i></a>
+                <a app-click="splice('new.<%- item.name %>', <%- obj %>)">Remove&nbsp;&nbsp;<i class="fas fa-times"></i></a>
             </div>
 
             <% item.subitems.forEach((subitem,i)=>{ %>
@@ -86,11 +86,7 @@
 
     </div>
 
-    <div class="text-right mb-2" app-hide="view.new_<%- item.name %>">
-        <button class="btn bg-33-blue text-33-white" app-click="view.new_<%- item.name %> = true">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
-    </div>
-
-    <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1" app-show="view.new_<%- item.name %>">
+    <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1">
 
         <% item.subitems.forEach((subitem,i)=>{ %>
 
@@ -169,10 +165,7 @@
         <% }) %>
 
         <div class="colspan-5 text-right">
-
-
-
-            <a class="inline-block mr-1" app-click="view.new_<%- item.name %> = !view.new_<%- item.name %>">Cancel <i class="ml-1 fas fa-times"></i></a> <button class="btn bg-33-blue text-33-white" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
+            <button class="btn bg-primary" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
         </div>
 
     </div>

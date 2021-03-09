@@ -33,6 +33,10 @@
 
     <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/array.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj_prefix}) %>
 
+<% } else if (item.input_type == 'img_array'){ %>
+
+    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/img_array.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj_prefix}) %>
+
 <% } else if (item.input_type == 'object'){ %>
 
     <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/object.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj_prefix}) %>

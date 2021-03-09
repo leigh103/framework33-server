@@ -1,8 +1,8 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <div class="header" app-init="get('<%- table %>','<%- key %>','new')">
+    <div class="header" app-init="getItem('<%- table %>','<%- key %>')">
         <div class="title">
-            <h1 class="capitalise"><%- table %> / <span app-bind="new.name"></span></h1>
+            <h1 class="capitalise"><%- view.functions.parseName(table) %> / <span app-bind="new.name"></span></h1>
         </div>
         <div class="buttons">
             <a class="btn bg-white" href="/dashboard/<%- table %>">
@@ -20,16 +20,24 @@
     <div class="actions">
 
         <div class="tabs">
-            <% for (var tab in fields){ %>
-
-                <a app-click="view.edit_tab = '<%- tab %>'" app-class="{'active':view.edit_tab == '<%- tab %>'}" class="capitalise"><%- tab %></a>
-
+            <% if (typeof fields == 'object') { %>
+                <% for (var tab in fields){ %>
+                    <a app-click="view.edit_tab = '<%- tab %>'" app-class="{'active':view.edit_tab == '<%- tab %>'}" class="capitalise"><%- view.functions.parseName(tab) %></a>
+                <% } %>
             <% } %>
         </div>
 
-
     </div>
 
-    <div class="edit-wrap">
+    <div class="edit-wrap edit-<%- table %>">
             <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
+    </div>
+
+    <div class="loader-wrap" app-show="view.loader" data-animation="{'exit':'fade-out'}">
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
     </div>

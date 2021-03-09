@@ -46,6 +46,30 @@
                                     .where(query)
                                     .first()
 
+                if (typeof this.data.price != 'undefined'){
+                    this.data.price = (this.data.price/100).toFixed(2)
+                }
+
+                if (typeof this.data.adjustment != 'undefined'){
+
+                    if (typeof this.data.adjustment == 'string' && this.data.adjustment.match(/%/)){
+
+                    } else if (typeof this.data.adjustment == 'number'){
+
+                        this.data.adjustment = this.data.adjustment/100
+                        if (this.data.adjustment < 0){
+                            this.data.adjustment = Math.abs(this.data.adjustment)
+                            this.data.adjustment = '-£'+this.data.adjustment.toFixed(2)
+                        } else {
+                            this.data.adjustment = '£'+this.data.adjustment.toFixed(2)
+                        }
+
+                    } else {
+                        this.data.adjustment = ''
+                    }
+                    
+                }
+
                 if (this.data.length > 0 || Object.keys(this.data).length > 0){
                     this.data.guard = this.settings.collection
                     return this
@@ -515,11 +539,11 @@
 
         parseEditFields(){
 
-            let tabs = {edit: []}
+            let tabs = {details: []}
 
             this.settings.fields.map((field)=>{
                 if (!field.tab){
-                    tabs.edit.push(field)
+                    tabs.details.push(field)
                 } else {
                     if (!tabs[field.tab]){
                         tabs[field.tab] = []
@@ -531,12 +555,12 @@
             let keys = Object.keys(tabs),
                 i,
                 len = keys.length,
-                sorted_tabs = {edit: tabs['edit']}
+                sorted_tabs = {details: tabs['details']}
 
             keys.sort();
 
             for (i = 0; i < len; i++) {
-                if (keys[i] != 'edit'){
+                if (keys[i] != 'details'){
                     sorted_tabs[keys[i]] = tabs[keys[i]]
                 }
 

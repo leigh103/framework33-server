@@ -6,7 +6,7 @@
     }
 %>
 
-<div class="flex flex-column flex-middle-left">
+<div class="input-select field-<%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
     <select app-model="new.<%- obj_prefix %><%- item.name %>">
         <% if (Array.isArray(item.options)){ %>
@@ -15,12 +15,15 @@
             <% }) %>
         <% } %>
         <% if (item.option_data){ %>
-
             <% if (Array.isArray(option_data)){ %>
                 <% option_data.forEach((option)=>{ %>
                     <option class="capitalise" value="<%- option._key %>"><%- option.name %></option>
                 <% }) %>
             <% } %>
+        <% } %>
+        <% if (item.option_for){ %>
+            <option value="" selected>None</option>
+            <option app-for="<%- item.option_for %>" app-attr="{'value':<%- item.name %>._key}" app-bind="<%- item.name %>.name"></option>
         <% } %>
     </select>
 </div>

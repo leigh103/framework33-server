@@ -363,6 +363,10 @@ console.log(collection, scope[collection])
 
         }
 
+        scope.parsePriceField = function(field){
+            console.log(field)
+        }
+
         scope.parseAdjustment = function(input){
 
             if (typeof input == 'string' && input.match(/%/)){

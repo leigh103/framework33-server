@@ -1,0 +1,24 @@
+<% var obj = item.name.toLowerCase() %>
+
+<%
+    if (typeof obj_prefix != 'undefined' || obj_prefix != false){
+        obj = obj_prefix+'.'+obj
+    }
+%>
+
+<div class="input-img_array field-<%- item.name %>">
+
+    <label><%- view.functions.parseName(item.name) %></label>
+
+    <div class="flex flex-row mb-1">
+        <label for="new_image" class="btn bg-primary text-white">Upload <i class="fas fa-image ml-1"></i></label>
+        <input type="file" app-model="new.<%- item.name %>_new" app-change="uploadImg(new.<%- item.name %>_new,'new.<%- item.name %>','new.<%- item.name %>_new')" id="new_image" nane="new_image" placeholder="Add new Image">
+    </div>
+
+    <div class="grid pb-2 gap-1 col-5" style="align-items: start;">
+        <div class="h-100 w-100" app-for="<%- obj %> in new.<%- item.name %>">
+            <img app-src="<%- obj %>.value" app-click="splice(new.<%- item.name %>,<%- obj %>)" class="object-fit">
+        </div>
+    </div>
+
+</div>

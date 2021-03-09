@@ -71,7 +71,8 @@ const express = require('express'),
         shop: view.ecommerce.shop,
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
-        model: new Products()
+        model: new Products(),
+        table_buttons:['<a href="/dashboard/products/attributes" class="btn bg-white">Attributes</a>','<a href="/dashboard/products/categories" class="btn bg-white">Categories</a>']
     }
 
     routes.get('*', (req, res, next) => {
@@ -83,7 +84,7 @@ const express = require('express'),
         next()
     })
 
-    routes.get('/dashboard/products/categories', async(req, res) => {
+    routes.get('/dashboard/products/categories/:key?', async(req, res) => {
 
         data.meta = {
             title: config.site.name+' | Product Categories'
@@ -97,13 +98,21 @@ const express = require('express'),
         data.title = 'Product Categories'
         data.table = 'product_categories'
 
-        data.fields = new ProductCategories().settings.fields
+        data.model = new ProductCategories()
 
-        res.render(settings.views+'/dashboard/product_categories.ejs',data)
+        if (req.params.key){
+            data.key = req.params.key
+            data.fields = data.model.parseEditFields()
+            res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+        } else {
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        }
 
     })
 
-    routes.get('/dashboard/products/attributes', async(req, res) => {
+    routes.get('/dashboard/products/attributes/:key?', async(req, res) => {
 
         data.meta = {
             title: config.site.name+' | Product Attributes'
@@ -117,9 +126,17 @@ const express = require('express'),
         data.title = 'Product Attributes'
         data.table = 'product_attributes'
 
-        data.fields = new ProductAttributes().settings.fields
+        data.model = new ProductAttributes()
 
-        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        if (req.params.key){
+            data.key = req.params.key
+            data.fields = data.model.parseEditFields()
+            res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+        } else {
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        }
 
     })
 
@@ -153,11 +170,14 @@ const express = require('express'),
         view.current_view = 'products'
         view.current_sub_view = 'all'
         data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
+        data.include_styles = [settings.views+'/styles/dashboard_style.ejs']
 
         data.title = 'Products'
         data.table = 'products'
 
         data.query = '?limit=30'
+
+        data.model = new Products()
 
         if (req.params.key == 'category' && req.params.cat){
 
@@ -187,7 +207,6 @@ const express = require('express'),
             data.search_fields = data.model.settings.search_fields
             res.render(basedir+'/components/dashboard/views/table.ejs',data)
         }
-
 
         //res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
