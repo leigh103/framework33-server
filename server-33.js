@@ -297,6 +297,7 @@ const express = require('express'),
 
             stylus(styl)
                 .set('paths', [__dirname + '/themes/'+config.site.theme+'/css'])
+                .set('compress',true)
                 .render(function(err, css){
 
                     if (err) return console.error(err)
