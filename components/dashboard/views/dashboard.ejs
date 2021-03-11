@@ -1,26 +1,26 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <h3 class="mb-3">Dashboard</h3>
-
-    <div class="grid col-2 row-4 gap-2">
-
-        <div class="widget rowspan-2">
+    <div class="header">
+        <div class="title">
+            <h1 class="capitalise">Dashboard</h1>
+        </div>
+        <div class="buttons">
 
         </div>
-        <div class="widget">
-            <p class="text-weight-500">Widget</p>
+    </div>
+
+    <div class="actions">
+
+        <div class="tabs">
+            <% if (typeof fields == 'object') { %>
+                <% for (var tab in fields){ %>
+                    <a app-click="view.edit_tab = '<%- tab %>'" app-class="{'active':view.edit_tab == '<%- tab %>'}" class="capitalise"><%- view.functions.parseName(tab) %></a>
+                <% } %>
+            <% } %>
         </div>
 
-        <div class="widget">
-            <p class="text-weight-500">Widget</p>
-        </div>
+    </div>
 
-        <div class="widget">
-            <p class="text-weight-500">Widget</p>
-        </div>
-
-        <div class="widget">
-            <p class="text-weight-500">Widget</p>
-        </div>
+    <div class="edit-wrap">
 
     </div>

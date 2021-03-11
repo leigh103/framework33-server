@@ -59,15 +59,15 @@
                         this.data.adjustment = this.data.adjustment/100
                         if (this.data.adjustment < 0){
                             this.data.adjustment = Math.abs(this.data.adjustment)
-                            this.data.adjustment = '-£'+this.data.adjustment.toFixed(2)
+                            this.data.adjustment = '-'+this.data.adjustment.toFixed(2)
                         } else {
-                            this.data.adjustment = '£'+this.data.adjustment.toFixed(2)
+                            this.data.adjustment = this.data.adjustment.toFixed(2)
                         }
 
                     } else {
                         this.data.adjustment = ''
                     }
-                    
+
                 }
 
                 if (this.data.length > 0 || Object.keys(this.data).length > 0){

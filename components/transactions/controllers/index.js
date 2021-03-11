@@ -15,13 +15,13 @@ const express = require('express'),
         views: 'transactions/views',
         menu: {
             side_nav: [
-                {link:'Orders',slug: '/dashboard/transactions/paid', icon:'<i class="fa fa-money-check-alt"></i>', weight:1, subitems:[
-                    {link:'Incomplete Carts',slug: '/dashboard/transactions/new', icon:'<i class="fa fa-shopping-cart"></i>', weight:9},
+                {link:'Orders',slug: '/dashboard/transactions/paid', icon:'<span class="icon shoppingtrolley"></span>', weight:1, subitems:[
+                    {link:'Incomplete Carts',slug: '/dashboard/transactions/new', icon:'<span class="icon shoppingtrolley"></span>', weight:9},
                     // {link:'New',slug: '/dashboard/transactions/paid', weight:2},
                     // {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
                     // {link:'Shipped',slug: '/dashboard/transactions/shipped', weight:4},
-                    {link:'Archive',slug: '/dashboard/transactions/completed', icon:'<i class="fa fa-check"></i>', weight:5},
-                    {link:'Settings',slug: '/dashboard/transactions/settings', icon:'<i class="fa fa-cog"></i>', weight:7}
+                    {link:'Archive',slug: '/dashboard/transactions/completed', icon:'<span class="icon shoppingtrolley"></span>', weight:5},
+                    {link:'Settings',slug: '/dashboard/transactions/settings', icon:'<span class="icon shoppingtrolley"></span>', weight:7}
                 ]}
             ],
             nav: [
@@ -121,6 +121,21 @@ const express = require('express'),
         res.render(settings.views+'/dashboard/transaction_settings.ejs',data)
 
     })
+
+        routes.get('/dashboard/transactions/edit/:key', async(req, res) => {
+
+            data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
+
+            view.current_view = 'orders'
+            data.key = req.params.key
+            data.table = 'transactions'
+            data.model = new Transactions()
+            data.statuses = data.model.statuses
+            data.fields = data.model.parseEditFields()
+
+            res.render(settings.views+'/dashboard/transaction_edit.ejs',data)
+
+        })
 
     routes.get('/dashboard/transactions/:status', async(req, res) => {
 

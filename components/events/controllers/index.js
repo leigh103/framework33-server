@@ -14,7 +14,7 @@ const express = require('express'),
         views: 'events/views',
         menu: {
             side_nav: [
-                {link:'Events',slug: '/dashboard/events', icon:'<i class="fa fa-mail-bulk"></i>', weight:8}
+                {link:'Events',slug: '/dashboard/events', icon:'<span class="icon pulse"></span>', weight:8}
             ]
         }
     },

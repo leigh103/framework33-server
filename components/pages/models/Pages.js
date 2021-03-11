@@ -1,20 +1,20 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class Content extends Models {
+    class Pages extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'content',
+                collection: 'pages',
                 fields: [
-                    {name:'title',input_type:'text',placeholder:'Content Title', type:'string', required:true},
-                    {name:'slug',input_type:'text',placeholder:'Content URL', type:'slug', required:true},
-                    {name:'notification',input_type:'text',placeholder:'Content Notificaton', type:'string', required:false, truncate:400},
+                    {name:'title',input_type:'text',placeholder:'Page Title', type:'string', required:true},
+                    {name:'slug',input_type:'text',placeholder:'Page URL', type:'slug', required:true},
+                    {name:'notification',input_type:'text',placeholder:'Page Notificaton', type:'string', required:false, truncate:400},
                     {name:'blocks',type:'object',required:true},
-                    {name:'type',input_type:'select',option_data:'content_types', options:[{text:'None', value:''}], type:'string', required:false},
+                    {name:'type',input_type:'select',option_data:'page_types', options:[{text:'None', value:''}], type:'string', required:false},
                     {name:'tags',input_type:'text',placeholder:'Tags', type:'string', required:false},
                     {name:'status',input_type:'select',options:[{text:'Draft',value:'draft'},{text:'Published',value:'published'}],placeholder:'Status', type:'string', required:true},
                     {name:'publish_date',input_type:'date',placeholder:'Publish Date', type:'date', required:false},
@@ -51,11 +51,11 @@
                 }
             }
 
-            this.content_types = []
+            this.page_types = []
 
         }
 
-        async getContentTypes(){
+        async getPageTypes(){
 
 
         }
@@ -63,4 +63,4 @@
 
     }
 
-    module.exports = Content
+    module.exports = Pages

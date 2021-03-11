@@ -1,4 +1,4 @@
-<section class="content-blog <%- styling.background.class %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Blog Header" app-block-description="This is a blog block">
+<section class="pages-blog <%- styling.background.class %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Blog Header" app-block-description="This is a blog block">
 
     <div class="contain text-left py-3">
 
@@ -18,9 +18,9 @@
 
             </div>
             <div class="details pt-1">
-                <h4 class="capitalise mb-1">Recent <%- view.functions.pluralise(content_type) %></h4>
+                <h4 class="capitalise mb-1">Recent <%- view.functions.pluralise(pages_type) %></h4>
                 <% if (typeof recent != 'undefined'){ %><%- recent %><% } %>
-                <% if (typeof content_type == 'object' && content_type.slug){ %><a class="block mt-1" href="/<%- content_type.slug %>">View All</a><% } %>
+                <% if (typeof page_type == 'object' && page_type.slug){ %><a class="block mt-1" href="/<%- page_type.slug %>">View All</a><% } %>
             </div>
 
         </div>

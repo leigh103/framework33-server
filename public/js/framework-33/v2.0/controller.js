@@ -20,6 +20,7 @@
 
                 if (msg == 'cancel'){
                     scope.view.notification = {}
+                    view.update('view.notification')
                     return false
                 }
 

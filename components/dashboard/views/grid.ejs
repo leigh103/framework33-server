@@ -28,7 +28,7 @@
         <% } %>
     </div>
 
-    <%- include(basedir+'/components/dashboard/views/partials/table.ejs') %>
+    <%- include(basedir+'/components/dashboard/views/partials/grid.ejs') %>
 
     <div class="fixed bottom left w-100 p-2 hidden-m hidden-d">
         <button class="btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
@@ -41,7 +41,7 @@
             <% context_menu.forEach((item,i) => { %>
 
                 <div class="link" app-click="<%- item.function %>('<%- table %>')">
-                    <span class="icon <%- item.icon %>"></span>
+                    <span class="icon <%- item.icon %> primary"></span>
                     <%- item.text %>
                 </div>
 

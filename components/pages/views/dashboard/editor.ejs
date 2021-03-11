@@ -1,7 +1,7 @@
 <%- layout(config.site.theme+'/fullscreen.ejs') %>
 
-    <% if (typeof content_key != 'undefined' && content_key != 'new'){ %>
-        <div class="page-full vh-100 bg-light-grey text-left" app-init="getContent('<%- content_key %>')">
+    <% if (typeof page_key != 'undefined' && page_key != 'new'){ %>
+        <div class="page-full vh-100 bg-light-grey text-left" app-init="getPage('<%- page_key %>')">
     <% } else { %>
         <div class="page-full vh-100 bg-light-grey text-left">
     <% } %>
@@ -11,7 +11,7 @@
             <div class="flex-1 h-100 bg-33-white py-2 overflow-y" app-show="view.block_list">
 
                 <div class="px-2 pb-2">
-                    <a href="/dashboard/content"><i class="fas fa-chevron-left mr-05"></i>All Content</a>
+                    <a href="/dashboard/pages"><i class="fas fa-chevron-left mr-05"></i>All Pages</a>
                 </div>
 
                 <div class="sortable bg-light-grey py-1 pl-1">
@@ -33,7 +33,7 @@
                     <div class="">
 
                     </div>
-                    <div class="list-item bg-33-white" app-for="block in view.content.blocks" app-click="loadBlock(block,$index)">
+                    <div class="list-item bg-33-white" app-for="block in view.pages.blocks" app-click="loadBlock(block,$index)">
                         <div class="icon drag-me">
                         </div>
                         <div class="flex-2">
@@ -62,9 +62,9 @@
                     <div app-show="view.selected_block" class="mb-3">
                         <button class="btn bg-33-red w-100 mb-1" app-click="removeBlock(true)">Remove Block</button>
                     </div>
-                    <button class="btn bg-33-green w-100 mb-05" app-click="renderContent()">Update Preview</button>
-                    <button class="btn bg-33-green w-100 mb-05" app-click="renderContent(true)">Show Full Preview</button>
-                    <button class="btn highlight w-100 mb-05" app-click="saveContent()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(content_type) %></span></button>
+                    <button class="btn bg-33-green w-100 mb-05" app-click="renderPage()">Update Preview</button>
+                    <button class="btn bg-33-green w-100 mb-05" app-click="renderPage(true)">Show Full Preview</button>
+                    <button class="btn highlight w-100 mb-05" app-click="savePage()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(page_type) %></span></button>
 
                 </div>
 
@@ -73,12 +73,12 @@
             <div class="flex-2 py-2 pl-1 pr-2 vh-100 overflow-y">
 
                 <div class="pb-2">
-                    <a href="/dashboard/content"><i class="fas fa-chevron-left mr-05"></i>All Content</a>
+                    <a href="/dashboard/pages"><i class="fas fa-chevron-left mr-05"></i>All Pages</a>
                 </div>
 
                 <div app-hide="view.blocks">
                     <div class="grid col-2">
-                        <h4 class="mb-1">Content Meta</h4>
+                        <h4 class="mb-1">Pages Meta</h4>
                         <div class="text-right">
 
                         </div>
@@ -88,44 +88,44 @@
 
                         <label class=" capitalise">Add a notification to this page (400 chars. max)</label>
                         <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:"simple"}) %>
-                        <div id="content_notification" class="large resize contenteditable" app-model="view.content.notification" contenteditable="true"></div>
+                        <div id="pages_notification" class="large resize contenteditable" app-model="view.pages.notification" contenteditable="true"></div>
                         <div class="text-right text-small mt-05">
                             <a app-click="removeNotification()"><i class="fas fa-times"></i> Remove Notification</a>
                         </div>
                     </div>
 
                     <div class="my-1">
-                        <label class="">Content Title</label>
-                        <input type="text" app-model="view.content.title">
+                        <label class="">Page Title</label>
+                        <input type="text" app-model="view.pages.title">
                     </div>
 
                     <div class="my-1">
-                        <label class="">Content URL</label>
-                        <input type="text" app-model="view.content.slug">
+                        <label class="">Page URL</label>
+                        <input type="text" app-model="view.pages.slug">
                     </div>
 
                     <div class="grid col-2 gap-2 relative my-1 layer-5">
 
                         <div class="">
                             <label class="">Published</label>
-                            <select app-model="view.content.status">
+                            <select app-model="view.pages.status">
                                 <option value="draft">Draft</option>
                                 <option value="published">Published</option>
                             </select>
                         </div>
 
                         <div class="pt-2">
-                            <label class="checkbox"><input type="checkbox" app-model="view.content.hide_top_nav"> Hide site nav bar</label>
+                            <label class="checkbox"><input type="checkbox" app-model="view.pages.hide_top_nav"> Hide site nav bar</label>
                         </div>
 
                         <div class="">
                             <label class="">Publish On</label>
-                            <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:'publish_on', datepicker_obj:'view.content'}) %>
+                            <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:'publish_on', datepicker_obj:'view.pages'}) %>
                         </div>
 
                         <div class="">
                             <label class="">Unpublish On</label>
-                            <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:'unpublish_on', datepicker_obj:'view.content'}) %>
+                            <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:'unpublish_on', datepicker_obj:'view.pages'}) %>
                         </div>
 
                     </div>
@@ -134,13 +134,13 @@
 
                     <div class="my-1">
                         <label class="">Title</label>
-                        <input type="text" app-model="view.content.meta.title">
+                        <input type="text" app-model="view.pages.meta.title">
                     </div>
 
                     <div class="my-1">
-                        <div class="float-right text-small pr-1" app-bind="view.content.meta.description.length"></div>
+                        <div class="float-right text-small pr-1" app-bind="view.pages.meta.description.length"></div>
                         <label class="">Descripton (160 chars. max)</label>
-                        <textarea app-model="view.content.meta.description"></textarea>
+                        <textarea app-model="view.pages.meta.description"></textarea>
                     </div>
 
                 </div>
@@ -220,9 +220,9 @@
                     <div app-show="view.selected_block" class="mb-3">
                         <button class="btn bg-33-red w-100 mb-1" app-click="removeBlock(true)">Remove Block</button>
                     </div>
-                    <button class="btn bg-33-green w-100 mb-05" app-click="renderContent()">Update Preview</button>
-                    <button class="btn bg-33-green w-100 mb-05" app-click="renderContent(true)">Show Full Preview</button>
-                    <button class="btn highlight w-100 mb-05" app-click="saveContent()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(content_type) %></span></button>
+                    <button class="btn bg-33-green w-100 mb-05" app-click="renderPage()">Update Preview</button>
+                    <button class="btn bg-33-green w-100 mb-05" app-click="renderPage(true)">Show Full Preview</button>
+                    <button class="btn highlight w-100 mb-05" app-click="savePage()">Save&nbsp;<span class="capitalise"><%- view.functions.depluralise(page_type) %></span></button>
 
                 </div>
 
@@ -401,4 +401,4 @@
 
     </div>
 
-    <a href="/dashboard/content/render/preview" id="preview-link" target="preview" class="hidden"></a>
+    <a href="/dashboard/pages/render/preview" id="preview-link" target="preview" class="hidden"></a>

@@ -1,5 +1,5 @@
 //
-// Content Module
+// Pages Module
 // Dashboard and frontend CMS
 //
 
@@ -12,11 +12,11 @@ const express = require('express'),
 
     settings = {
         default_route: 'root',
-        views: 'content/views',
+        views: 'pages/views',
         menu: {
             side_nav: [
-                {link:'Content',slug: '/dashboard/content', weight:3, icon:'<i class="fa fa-newspaper"></i>', subitems:[
-                    {link:'Content Types',slug: '/dashboard/content/content-types', weight:1}
+                {link:'Pages',slug: '/dashboard/pages', weight:3, icon:'<span class="icon screen"></span>', subitems:[
+                    {link:'Pages Types',slug: '/dashboard/pages/pages-types', weight:1}
                 ]}
             ]
         }
@@ -157,7 +157,7 @@ const express = require('express'),
 
         getRecent:async (type,key) => {
 
-            let articles = await new Content().all(['type == '+type]).get(),
+            let articles = await new Pages().all(['type == '+type]).get(),
                 article_list = ''
 
             articles.forEach((article)=>{
@@ -177,12 +177,12 @@ const express = require('express'),
 
 // routes
 
-    var browser, render_content
+    var browser, render_pages
 
     let data = {
         shop: view.ecommerce.shop,
         meta: {},
-        model: new Content().settings
+        model: new Pages().settings
     },
     blocks = []
 
@@ -199,7 +199,7 @@ const express = require('express'),
 
         res.locals.functions = functions
 
-        let article = await new Content().find(['slug == homepage','status == published'])
+        let article = await new Pages().find(['slug == homepage','status == published'])
 
         if (article.data.length == 0 || article.error){
 
@@ -212,7 +212,7 @@ const express = require('express'),
             data.title = article.data.title
             data.date = article.data._updated
             data.meta = article.data.meta
-            data.content = article.data
+            data.pages = article.data
 
             res.render(settings.views+'/view.ejs',data)
 
@@ -221,13 +221,13 @@ const express = require('express'),
     })
 
 
-    routes.post('/dashboard/content/render', async (req, res) => {
+    routes.post('/dashboard/pages/render', async (req, res) => {
 
-        render_content = req.body
+        render_pages = req.body
 
         var options = {
             host: config.site.url.replace(/http(s)?\:\/\//,''),
-            path: '/dashboard/content/render'
+            path: '/dashboard/pages/render'
         }
         var request = http.request(options, function (response) {
             var data = '';
@@ -246,18 +246,18 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/content/render/:external?', async (req, res) => {
+    routes.get('/dashboard/pages/render/:external?', async (req, res) => {
 
         res.locals.functions = functions
 
-        if (typeof render_content == 'object'){
+        if (typeof render_pages == 'object'){
 
             data.include_scripts = []
             data.blocks = blocks
-            data.title = render_content.title
-            data.date = render_content._updated
-            data.meta = render_content.meta
-            data.content = render_content
+            data.title = render_pages.title
+            data.date = render_pages._updated
+            data.meta = render_pages.meta
+            data.pages = render_pages
 
             if (req.params.external){
                 res.render(settings.views+'/view.ejs',data)
@@ -273,7 +273,7 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/content/get-blocks/:name?', (req, res) => {
+    routes.get('/dashboard/pages/get-blocks/:name?', (req, res) => {
 
         if (blocks[req.params.name]){
             functions.parseBlocks().then((blocks)=>{
@@ -282,9 +282,9 @@ const express = require('express'),
                 res.status(500).send(err)
             })
         } else {
-            functions.parseBlocks().then((content_blocks)=>{
-                data.blocks = content_blocks
-                blocks = content_blocks
+            functions.parseBlocks().then((pages_blocks)=>{
+                data.blocks = pages_blocks
+                blocks = pages_blocks
                 res.json(blocks)
             }).catch((err)=>{
                 res.status(500).send(err)
@@ -293,15 +293,15 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/content/content-types', async(req, res) => {
+    routes.get('/dashboard/pages/page-types', async(req, res) => {
 
-        data.model = new ContentTypes().settings
+        data.model = new PageTypes().settings
         data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
         data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
 
-        view.current_view = 'content'
-        data.title = 'Content'
-        data.table = 'content_types'
+        view.current_view = 'pages'
+        data.title = 'Pages'
+        data.table = 'page_types'
         data.fields = data.model.fields
         data.search_fields = data.model.search_fields
 
@@ -309,21 +309,21 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/content/edit/:key?', async(req, res) => {
+    routes.get('/dashboard/pages/:key', async(req, res) => {
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs',settings.views+'/dashboard/scripts/script.ejs']
         data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
 
         data.meta = {
-            title: config.site.name+' | Content',
+            title: config.site.name+' | Pages',
         }
 
-        view.current_view = 'content'
-        data.title = 'Content'
-        data.table = 'content'
-        data.content_type = req.params.type
-        data.content_key = req.params.key
-        data.fields = new Content().settings.fields
+        view.current_view = 'pages'
+        data.title = 'Pages'
+        data.table = 'pages'
+        data.page_type = req.params.type
+        data.page_key = req.params.key
+        data.fields = new Pages().settings.fields
 
         blocks = await functions.parseBlocks()
         data.blocks = blocks
@@ -332,50 +332,50 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/content', async(req, res) => {
+    routes.get('/dashboard/pages', async(req, res) => {
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/dashboard/scripts/dashboard_scripts.ejs']
 
         data.meta = {
-            title: config.site.name+' | Content',
+            title: config.site.name+' | Pages',
         }
 
-        view.current_view = 'content'
-        data.title = 'Content'
-        data.table = 'content'
-        data.content_type = req.params.type
-        data.fields = new Content().settings
+        view.current_view = 'pages'
+        data.title = 'Pages'
+        data.table = 'pages'
+        data.pages_type = req.params.type
+        data.fields = new Pages().settings
         data.search_fields = data.fields.search_fields
         data.fields = data.fields.fields
 
         data.context_menu = [
-            {function: "editContent",text:"Edit Content", icon:"fa-pencil"}
+            {function: "viewPage",text:"View Page", icon:"eye"}
         ]
 
-        data.option_data = await view.functions.getOptionData('content_types')
+        data.option_data = await view.functions.getOptionData('page_types')
 
-        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        res.render(basedir+'/components/dashboard/views/grid.ejs',data)
 
     })
 
-    routes.get('/:content_type/:slug?', async (req, res, next) => {
+    routes.get('/:pages_type/:slug?', async (req, res, next) => {
 
         res.locals.functions = functions
 
-        let content_type = false,
+        let pages_type = false,
             slug,
-            content
+            pages
 
         if (req.params.slug){
-            content_type = await new ContentTypes().find(['slug == '+req.params.content_type])
+            pages_type = await new PageTypes().find(['slug == '+req.params.pages_type])
             slug = req.params.slug
         } else {
-            slug = req.params.content_type
+            slug = req.params.pages_type
         }
 
-        if (typeof content_type == 'object' && content_type.data && content_type.data._key){ // found content type and find the article data
+        if (typeof pages_type == 'object' && pages_type.data && pages_type.data._key){ // found pages type and find the article data
 
-            let article = await new Content().find(['slug == '+slug,'type == '+content_type.data._key, 'status == published'])
+            let article = await new Pages().find(['slug == '+slug,'type == '+pages_type.data._key, 'status == published'])
 
             if (article.data.length == 0 || article.error){
                 //console.log("article not found")
@@ -386,31 +386,31 @@ const express = require('express'),
                 data.blocks = blocks
                 data.title = article.data.title
                 data.date = article.data._updated
-                data.content = article.data
+                data.pages = article.data
                 data.meta = article.data.meta
-                data.content_type = content_type.data
-            //    data.recent = await functions.getRecent(content_type,article._key)
+                data.pages_type = pages_type.data
+            //    data.recent = await functions.getRecent(pages_type,article._key)
 
                 res.render(settings.views+'/view.ejs',data)
 
             }
 
-        } else { // check content types first, and then check for articles
+        } else { // check pages types first, and then check for articles
 
-            content_type = await new ContentTypes().find(['slug == '+slug])
+            pages_type = await new PageTypes().find(['slug == '+slug])
 
-            if (typeof content_type.data == 'object' && content_type.data._key){ // show a list of articles from that content type
+            if (typeof pages_type.data == 'object' && pages_type.data._key){ // show a list of articles from that pages type
 
-                let articles = await new Content().all(['type == '+content_type.data._key, 'status == published'])
+                let articles = await new Pages().all(['type == '+pages_type.data._key, 'status == published'])
 
-                data.content_type = content_type.data
+                data.pages_type = pages_type.data
                 data.articles = articles.data
-                data.meta = content_type.data.meta
-                res.render(config.site.theme_path+'/templates/content/list.ejs',data)
+                data.meta = pages_type.data.meta
+                res.render(config.site.theme_path+'/templates/pages/list.ejs',data)
 
-            } else { // if it's not a content type, check for page content
+            } else { // if it's not a pages type, check for page pages
 
-                let article = await new Content().find(['slug == '+slug, 'type NOT EXISTS', 'status == published'])
+                let article = await new Pages().find(['slug == '+slug, 'type NOT EXISTS', 'status == published'])
 
                 if (article.data.length == 0 || article.error){
 
@@ -421,7 +421,7 @@ const express = require('express'),
                     data.blocks = blocks
                     data.title = article.data.title
                     data.date = article.data._updated
-                    data.content = article.data
+                    data.pages = article.data
                     data.meta = article.data.meta
 
                     res.render(settings.views+'/view.ejs',data)
@@ -463,8 +463,8 @@ const express = require('express'),
 
     })
 
-    functions.parseBlocks().then((content_blocks)=>{
-        blocks = content_blocks
+    functions.parseBlocks().then((pages_blocks)=>{
+        blocks = pages_blocks
     })
     //
     // functions.launchPuppeteer()

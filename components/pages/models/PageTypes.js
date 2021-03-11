@@ -1,17 +1,17 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class ContentTypes extends Models {
+    class PageTypes extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'content_types',
+                collection: 'page_types',
                 fields: [
-                    {name:'name',input_type:'text',placeholder:'Content Type', type:'string', required:true},
-                    {name:'slug',input_type:'text',placeholder:'Content Archive URL', type:'string', required:false},
+                    {name:'name',input_type:'text',placeholder:'Page Type', type:'string', required:true},
+                    {name:'slug',input_type:'text',placeholder:'Page Archive URL', type:'string', required:false},
                     {name:'meta', type:'object', required:false, subitems:[
                         {name:'title',input_type:'text',placeholder:'SEO Title', type:'string', required:false},
                         {name:'description',input_type:'text',placeholder:'SEO Descripton', type:'string', required:false, truncate:160},
@@ -58,7 +58,7 @@
             //     new_pages_ct.data.slug = "/"
             //
             //     await DB.create(this.settings.collection,new_pages_ct.data)
-            //     log('Created default content type: pages')
+            //     log('Created default page type: pages')
             //
             // }
 
@@ -66,6 +66,6 @@
 
     }
 
-    new ContentTypes().init()
+    new PageTypes().init()
 
-    module.exports = ContentTypes
+    module.exports = PageTypes

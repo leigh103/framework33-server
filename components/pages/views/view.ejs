@@ -1,0 +1,16 @@
+<% layout(config.site.theme+'/page.ejs') -%>
+
+<div class="page">
+
+    <% for (var i in pages.blocks){ %>
+
+        <% pages.blocks[i].pages = {} %>
+        <% for (var ii in pages.blocks[i].fields){ %>
+            <% pages.blocks[i].pages[pages.blocks[i].fields[ii].field] = pages.blocks[i].fields[ii].value %>
+            <% pages.blocks[i].pages[pages.blocks[i].fields[ii].field+'_classes'] = pages.blocks[i].fields[ii].classes %>
+        <% } %>
+        <%- include(config.site.theme_path+'/templates/blocks/'+pages.blocks[i].block+'.ejs', {data:pages.blocks[i].pages, styling:pages.blocks[i].styling}) %>
+
+    <% } %>
+
+</div>

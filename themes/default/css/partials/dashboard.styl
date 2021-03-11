@@ -73,9 +73,7 @@
 
         display: flex;
         flex-direction: row;
-        -webkit-box-shadow: 0px $border-radius 0px 0px rgba(255,255,255,1);
-        -moz-box-shadow: 0px $border-radius 0px 0px rgba(255,255,255,1);
-        box-shadow: 0px $border-radius 0px 0px rgba(255,255,255,1);
+
 
         .tabs {
             flex: 1;
@@ -85,11 +83,14 @@
 
             a {
                 color: $color-dark-grey;
-                height: 100%;
+                height: 3.75rem;
                 padding: 1rem 1.875rem;
                 margin:0;
                 border-top-right-radius:$border-radius;
                 border-top-left-radius:$border-radius;
+                -webkit-box-shadow: 0px $border-radius 0px 0px rgba(255,255,255,1);
+                -moz-box-shadow: 0px $border-radius 0px 0px rgba(255,255,255,1);
+                box-shadow: 0px $border-radius 0px 0px rgba(255,255,255,1);
 
                 &.active {
                     background-color: white;
@@ -113,7 +114,7 @@
             }
 
             input {
-                height: 100%;
+                height: 3.75rem;
                 border-top-right-radius:$border-radius;
                 border-top-left-radius:$border-radius;
             }
@@ -149,7 +150,7 @@
 
         border-collapse:separate;
         border-spacing: 0 1rem;
-        font-size: 0.875rem;
+            font-size: 1rem;
         overflow-x: hidden;
         overflow-y: auto;
 
@@ -181,7 +182,7 @@
             .cell {
                 height: 3.875rem;
                 vertical-align: middle;
-                font-size: 1rem;
+
                 margin-bottom: 1.375rem;
 
                 a {
@@ -255,6 +256,7 @@
             &:after {
                 border: 1px solid #E3E3E3;
             }
+
         }
 
         & > div {
@@ -316,6 +318,64 @@
             }
 
         }
+    }
+
+    .grid {
+
+        grid-template-columns: repeat(4,1fr);
+        grid-gap: 2rem;
+
+        @media $desktop-4k {
+            grid-template-columns: repeat(6,1fr);
+        }
+
+        @media $desktop-1080p {
+            grid-template-columns: repeat(5,1fr);
+        }
+
+        @media $medium {
+            grid-template-columns: repeat(3,1fr);
+        }
+
+        @media $small {
+            grid-template-columns: repeat(1,1fr);
+        }
+
+        &-wrap {
+            padding: 2rem 0;
+        }
+
+        &-item {
+            background-color: rgba(255,255,255,0.5);
+            border-radius: $border-radius;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            .thumbnail {
+                flex: 3;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .details {
+                flex: 1;
+                display: flex;
+                background-color: white;
+                padding: 1rem 1.25rem;
+                text-transform: capitalize;
+
+                div {
+                    flex: 1;
+                    &.context-link {
+                        flex: none
+                    }
+                }
+
+            }
+
+        }
+
     }
 
     .mailbox {
@@ -555,6 +615,10 @@
 
         .header {
             flex: 0 0 4.0625rem;
+            padding: 0 1.35rem;
+            span.icon {
+                background-color: $color-grey;
+            }
         }
 
         .links {
@@ -579,21 +643,34 @@
 
                     cursor: pointer;
 
+                    span.icon {
+                        background-color: $color-grey;
+                    }
+
                     &:hover {
                         color: $color-primary;
+
+                        span.icon {
+                            background-color: $color-primary;
+                        }
                     }
 
                     &.active {
                         background-color: $bg-light-grey;
                         color: $color-primary;
                         // border-left: 3px solid $color-primary;
+                        span.icon {
+                            background-color: $color-primary;
+                        }
                     }
 
-                    .icon {
+                    & > .icon {
                         font-size: 1.25rem;
                         height: auto;
                         margin: 0 1rem 0 0;
                     }
+
+
 
                     div.count {
                         position: absolute;
@@ -629,7 +706,7 @@
 
         .profile {
             flex: 0 0 4.0625rem;
-            padding: 0 1.2rem;
+            padding: 1.5rem 1.2rem;
             .avatar {
                 height: 2rem;
                 width: 2rem;
@@ -677,10 +754,11 @@
         }
 
         .actions {
-            flex: 0 0 3.75rem;
+            flex: 0 1 auto;
+            max-height: 3.75rem;
         }
 
-        .table-wrap, .edit-wrap {
+        .table-wrap, .edit-wrap, .grid-wrap, .list-wrap {
             flex: 1;
         }
 

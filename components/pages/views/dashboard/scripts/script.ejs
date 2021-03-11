@@ -2,9 +2,9 @@
 
     <script>
 
-        extend.content = function(){
+        extend.pages = function(){
 
-            scope.view.content = {
+            scope.view.pages = {
                 blocks:[]
             }
             scope.view.add = true
@@ -16,7 +16,7 @@
                 clearTimeout(scope.view.auto_update)
 
                 scope.view.auto_update = setTimeout(function(){
-                    scope.renderContent()
+                    scope.renderPage()
                 },500)
 
             }
@@ -28,12 +28,12 @@
             }
 
 
-// content_type functions
+// pages_type functions
 
 
             scope.getTypes = function(){
 
-                scope.get('content_types').then((data)=>{
+                scope.get('page_types').then((data)=>{
                     console.log(data)
                 })
 
@@ -42,8 +42,8 @@
             scope.addType = function(){
 
                 scope.new._user_id = '<%- user._id %>'
-                scope.post('content_types',scope.new).then((data)=>{
-                    scope.notify('Added content type')
+                scope.post('page_types',scope.new).then((data)=>{
+                    scope.notify('Added page type')
                 }).catch((err)=>{
                     scope.notify(err,'error')
                 })
@@ -51,28 +51,28 @@
             }
 
 
-// content functions
+// pages functions
 
 
-            scope.setContent = function(type){
-                scope.view.content.type = type
+            scope.setPage = function(type){
+                scope.view.pages.type = type
             }
 
-            scope.getContent = function(key){
+            scope.getPage = function(key){
 
-                // if (localStorage.getItem('content')){
+                // if (localStorage.getItem('pages')){
                 //
-                //     let content = JSON.parse(localStorage.getItem('content'))
-                //     console.log(content)
-                //     scope.view.content.blocks = content.blocks
-                //     scope.view.content = content
+                //     let pages = JSON.parse(localStorage.getItem('pages'))
+                //     console.log(pages)
+                //     scope.view.pages.blocks = pages.blocks
+                //     scope.view.pages = pages
                 //
                 // } else {
 
-                    scope.get('content',key).then((content)=>{
-
-                        scope.view.content = content
-                        view.update('view.content')
+                    scope.get('pages',key).then((pages)=>{
+console.log(pages)
+                        scope.view.pages = pages
+                        view.update('view.pages')
 
                     }).catch((err)=>{
                         scope.notify(err,5,'error')
@@ -92,7 +92,7 @@
 
             scope.selectBlock = function(block_name){
 
-                scope.get('/dashboard/content/get-blocks/'+block_name).then((block)=>{
+                scope.get('/dashboard/pages/get-blocks/'+block_name).then((block)=>{
                     scope.view.modal = false
                     scope.view.selected_block = block
                     scope.view.editor = block.editor
@@ -104,23 +104,23 @@
 
             }
 
-            scope.loadBlock = function(content, index){
+            scope.loadBlock = function(pages, index){
 
                 if (!index){
                     index = 0
                 }
 
-                if (typeof content == 'string' && content.match(/preview_content_block_/)){
-                    index = parseInt(content.replace(/preview_content_block_/,''))
-                    content = scope.view.content.blocks[index]
+                if (typeof pages == 'string' && pages.match(/preview_pages_block_/)){
+                    index = parseInt(pages.replace(/preview_pages_block_/,''))
+                    pages = scope.view.pages.blocks[index]
 
-                } else if (typeof content != 'object'){
+                } else if (typeof pages != 'object'){
                     return false
                 }
 
-                // let selected_preview_block = document.querySelector('#preview_content_block_'+index)
+                // let selected_preview_block = document.querySelector('#preview_pages_block_'+index)
                 //
-                // if (typeof content == 'object' && selected_preview_block){
+                // if (typeof pages == 'object' && selected_preview_block){
                 //     const preview = document.querySelector('#preview'),
                 //           rectpreview = preview.getBoundingClientRect(),
                 //           rectspb = selected_preview_block.getBoundingClientRect()
@@ -130,31 +130,31 @@
 
             //    scope.checkSaved().then(()=>{
 
-                    scope.get('/dashboard/content/get-blocks/'+content.block).then((block)=>{
+                    scope.get('/dashboard/pages/get-blocks/'+pages.block).then((block)=>{
 
                         scope.view.selected_block = block
                         scope.view.selected_block.index = index
-                        scope.view.selected_block.name = content.name
-                        scope.view.selected_block.styling = content.styling
+                        scope.view.selected_block.name = pages.name
+                        scope.view.selected_block.styling = pages.styling
 
-                        if (content.styling){
-                            scope.view.selected_block.styling = content.styling
+                        if (pages.styling){
+                            scope.view.selected_block.styling = pages.styling
                         }
 
-                        let new_fields = [], content_field
+                        let new_fields = [], pages_field
 
                         block.editor.map((field)=>{
 
-                            content_field = content.fields.find((item)=>{
+                            pages_field = pages.fields.find((item)=>{
                                 return item.field == field.field
                             })
-                            if (content_field){
-                                field.value = content_field.value
-                                field.classes = content_field.classes
+                            if (pages_field){
+                                field.value = pages_field.value
+                                field.classes = pages_field.classes
                             }
                         })
 
-                        content.fields = block.editor
+                        pages.fields = block.editor
                         scope.view.editor = block.editor
                         scope.view.blocks = true
                         scope.view.add = false
@@ -203,7 +203,7 @@
 
                 if (scope.view.selected_block){
 
-                    let content = {
+                    let pages = {
                         name: scope.view.selected_block.name,
                         styling: scope.view.selected_block.styling,
                         block: scope.view.selected_block.block,
@@ -212,7 +212,7 @@
 
                     if (scope.view.selected_block.index){
 
-                        scope.view.content.blocks[scope.view.selected_block.index] = content
+                        scope.view.pages.blocks[scope.view.selected_block.index] = pages
 
                         scope.view.selected_block = {}
                         scope.view.blocks = true
@@ -220,21 +220,21 @@
 
                     } else {
 
-                        if (!scope.view.content.blocks){
-                            scope.view.content.blocks = []
+                        if (!scope.view.pages.blocks){
+                            scope.view.pages.blocks = []
                         }
                         if (scope.view.hovered_section >= 0){
-                            scope.view.content.blocks.splice(scope.view.hovered_section+1, 0, content)
+                            scope.view.pages.blocks.splice(scope.view.hovered_section+1, 0, pages)
                         } else {
-                            scope.view.content.blocks.push(content)
+                            scope.view.pages.blocks.push(pages)
                         }
 
                     }
-                    view.update('view.content.blocks')
-                    localStorage.setItem('content',JSON.stringify(scope.view.content.blocks))
+                    view.update('view.pages.blocks')
+                    localStorage.setItem('pages',JSON.stringify(scope.view.pages.blocks))
 
-                    scope.renderContent()
-                    scope.loadBlock('preview_content_block_'+scope.view.content.blocks.length-1)
+                    scope.renderPage()
+                    scope.loadBlock('preview_pages_block_'+scope.view.pages.blocks.length-1)
 
                 }
 
@@ -242,9 +242,9 @@
 
             scope.deleteBlock = function(index){
                 console.log(index)
-                scope.view.content.blocks.splice(index, 1)
-                view.update('view.content.blocks')
-                scope.renderContent()
+                scope.view.pages.blocks.splice(index, 1)
+                view.update('view.pages.blocks')
+                scope.renderPage()
 
             }
 
@@ -255,8 +255,8 @@
                 } else {
                     console.log(scope.view.selected_block)
                     if (scope.view.selected_block.index){
-                        scope.view.content.blocks.splice(scope.view.selected_block.index,1)
-                        scope.renderContent()
+                        scope.view.pages.blocks.splice(scope.view.selected_block.index,1)
+                        scope.renderPage()
                         scope.showSettings()
                     }
                     scope.view.modal = false
@@ -335,7 +335,7 @@
 
                     scope.updateCE().then(()=>{
 
-                        localStorage.setItem('content',JSON.stringify(scope.view.content))
+                        localStorage.setItem('pages',JSON.stringify(scope.view.pages))
                         scope.view.saved = true
                         scope.notify("Saved as a local draft. The live page hasn't been altered. Click 'Save' once done editing.")
                         resolve()
@@ -348,7 +348,7 @@
 
             scope.clearLocal = function(save){
 
-                localStorage.removeItem('content')
+                localStorage.removeItem('pages')
 
                 if (save){
                     return new Promise(function(resolve, reject) {
@@ -366,7 +366,7 @@
 
             scope.showInsertSecton = function(id){
 
-                scope.view.hovered_section = parseInt(id.replace(/preview_content_block_/,''))
+                scope.view.hovered_section = parseInt(id.replace(/preview_pages_block_/,''))
 
                 let section = document.getElementById(id),
                     section_insert = document.getElementById('insert-new-section')
@@ -381,14 +381,14 @@
 
             }
 
-            scope.renderContent = function(external){
+            scope.renderPage = function(external){
 
                 let section_insert = document.getElementById('insert-new-section'),
                     preview = document.getElementById('preview')
 
                 preview.parentNode.insertBefore(section_insert, preview.nextSibling)
 
-                http.post('/dashboard/content/render',scope.view.content).then((html)=>{
+                http.post('/dashboard/pages/render',scope.view.pages).then((html)=>{
 
                     document.querySelector('#preview').innerHTML = html
 
@@ -396,7 +396,7 @@
 
                     for (var i in preview_blocks){
                         if (preview_blocks[i] && typeof preview_blocks[i].addEventListener == 'function'){
-                            let id = "preview_content_block_"+i
+                            let id = "preview_pages_block_"+i
                             preview_blocks[i].setAttribute('id',id)
                             preview_blocks[i].addEventListener('click',function(){
                                 scope.loadBlock(id)
@@ -420,34 +420,34 @@
 
             }
 
-                scope.saveContent = function(){
+                scope.savePage = function(){
 
-                    if (scope.view.selected_block && scope.view.content.blocks[scope.view.selected_block.index]){
-                        scope.view.content.blocks[scope.view.selected_block.index].name = scope.view.selected_block.name
-                        view.update('view.content.blocks['+scope.view.selected_block.index+']')
+                    if (scope.view.selected_block && scope.view.pages.blocks[scope.view.selected_block.index]){
+                        scope.view.pages.blocks[scope.view.selected_block.index].name = scope.view.selected_block.name
+                        view.update('view.pages.blocks['+scope.view.selected_block.index+']')
                     }
 
-                    if (scope.view.content.notification && scope.view.content.notification.length < 5){
-                        scope.view.content.notification = ''
-                        view.update('view.content.notification')
+                    if (scope.view.pages.notification && scope.view.pages.notification.length < 5){
+                        scope.view.pages.notification = ''
+                        view.update('view.pages.notification')
                     }
 
                     scope.updateCE().then(()=>{
 
-                        let payload = scope.view.content
+                        let payload = scope.view.pages
 
                         payload._user_id = '<%- user._id %>'
 
-                        if (scope.view.content.slug){
-                            payload.slug = scope.view.content.slug
+                        if (scope.view.pages.slug){
+                            payload.slug = scope.view.pages.slug
                         } else {
-                            payload.slug = scope.view.content.title
+                            payload.slug = scope.view.pages.title
                         }
 
-                        scope.post('content', payload).then((content)=>{
+                        scope.post('pages', payload).then((pages)=>{
 
                             if (scope.window.path_obj.pop() == 'new'){
-                                window.location.href = 'edit/'+content._key
+                                window.location.href = 'edit/'+pages._key
                             } else {
                                 scope.notify('Saved!')
                             }
@@ -466,10 +466,10 @@
 
                 scope.uploadImg = function(image, obj){
 
-                    let name = 'content-image'
+                    let name = 'pages-image'
 
-                    if (scope.view.content.slug){
-                        name = scope.view.content.slug
+                    if (scope.view.pages.slug){
+                        name = scope.view.pages.slug
                     }
 
                     if (scope.view.selected_block && scope.view.selected_block.name){
@@ -479,7 +479,7 @@
                     let payload = {
                         base64: image,
                         file_name: name,
-                        file_path: "content"
+                        file_path: "pages"
                     }
 
                     scope.view.upload_text = 'Uploading...'
@@ -489,7 +489,7 @@
                         data = data.replace(/\"/g,'')
                         evaluate.setValue(obj, data)
                         view.update(obj)
-                        scope.renderContent()
+                        scope.renderPage()
                     }).catch((err)=>{
                         scope.notify(err,'error')
                     })
@@ -500,7 +500,7 @@
             // scope.uploadImg = function(base64, obj, path, name){
             //
             //     scope.uploadImage(base64, obj, path, name).then(()=>{
-            //         scope.saveContent()
+            //         scope.savepages()
             //     })
             //
             // }
@@ -508,7 +508,7 @@
             scope.delImg = function(base64, obj, path, name){
 
                 scope.deleteImage(base64, obj, path, name).then(()=>{
-                    scope.saveContent()
+                    scope.savePage()
                 })
 
             }
@@ -531,12 +531,12 @@
             }
 
             scope.removeNotification = function(){
-                scope.view.content.notification = ''
-                document.getElementById('content_notification').innerHTML = ''
+                scope.view.pages.notification = ''
+                document.getElementById('pages_notification').innerHTML = ''
             }
 
             setTimeout(function(){
-                scope.renderContent()
+                scope.renderPage()
             },1000)
 
 

@@ -3,7 +3,7 @@
     &.button-overlay {
         position: absolute;
         z-index:3;
-        background-color: $bg-light-grey;
+        background: none;
     }
 
     &-wrap {
@@ -47,8 +47,54 @@
             width: 6rem;
         }
 
-        &.textarea, &.category.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav {
+        &.textarea, &.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav, &.items_per_customer {
             display: none;
+        }
+
+        &.checkbox {
+            width: 5rem;
+            text-align: center;
+        }
+
+        &.status {
+            width: 8rem;
+            text-align: center;
+        }
+
+        &.select-all {
+            width: 3rem;
+            text-align: left;
+        }
+
+        &.text {
+            width: 10rem;
+        }
+
+        &.number, &.price, &.adjustment {
+            width: 5rem;
+            text-align: left;
+        }
+
+        &.context-link {
+            text-align: right;
+            width: 6rem;
+        }
+
+        &.name, &.title {
+            width: 15rem;
+        }
+
+        input, select, textarea {
+            border: 1px solid #DDDDDD;
+            border-radius: $border-radius;
+            height: $input-height;
+
+            & + .btn {
+                height: 35px;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                margin-left: -6px;
+            }
         }
 
         @media $small {

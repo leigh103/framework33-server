@@ -6,12 +6,12 @@
         right:auto;
         top: 0;
         min-width:150px;
-        background-color: white;
+        background-color: $bg-light-grey;
         font-size: 0.875em !important;
-        padding: 0.938rem;
         color: $brand_black;
-        border-radius: 0.250em;
+        border-radius: $border-radius;
         box-shadow: $shadow;
+        padding: 0.4rem;
         z-index: 750;
 
         &.right {
@@ -23,12 +23,12 @@
             display: block;
             cursor: pointer;
             font-weight: 400;
-            opacity: 0.8;
             color: $color-primary;
-            padding: 0.4rem 0.625rem;
+            padding: 0.5rem 1rem;
+
 
             &:hover {
-                opacity: 1
+                background-color: rgba(255,255,255,0.5)
             }
 
             &:last-child {

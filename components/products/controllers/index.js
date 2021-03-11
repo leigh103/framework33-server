@@ -14,12 +14,12 @@ const express = require('express'),
         views: 'products/views',
         menu: {
             side_nav: [
-                {link:'Products',slug: '/dashboard/products', icon:'<i class="fa fa-box-open"></i>', weight:1, subitems:[
+                {link:'Products',slug: '/dashboard/products', icon:'<span class="icon box"></span>', weight:1, subitems:[
                     // {link:'All',slug: '/dashboard/products', weight:1},
                     // {link:'Inactive',slug: '/dashboard/products/inactive', weight:5},
                     // {link:'Sale Items',slug: '/dashboard/products/sale', weight:6},
-                    {link:'Categories',slug: '/dashboard/products/categories', icon:'<i class="fa fa-cubes"></i>', weight:3},
-                    {link:'Attributes',slug: '/dashboard/products/attributes', icon:'<i class="fa fa-list"></i>', weight:4}
+                    {link:'Categories',slug: '/dashboard/products/categories', icon:'<span class="icon box"></span>', weight:3},
+                    {link:'Attributes',slug: '/dashboard/products/attributes', icon:'<span class="icon box"></span>', weight:4}
                 ]}
             ]
         }

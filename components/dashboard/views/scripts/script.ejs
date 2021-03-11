@@ -175,17 +175,9 @@
 
             }
 
-            scope.editItem = function(collection, key, no_modal){
+            scope.editItem = function(collection){
 
-                contextCloseAll()
-
-                scope.new = scope[collection][scope.view.key]
-
-                if (!no_modal){
-                    scope.openModal('show_edit')
-                }
-
-                view.update('new')
+                window.location.href = '/dashboard/'+collection+'/'+scope[collection][scope.view.key]._key
 
             }
 
@@ -219,16 +211,17 @@
                 }
 
                 scope.post(collection, obj).then((data)=>{
-                    console.log(collection, data, scope.view.key)
-                    scope[collection][scope.view.key] = data
-                    view.update(collection+'['+scope.view.key+']')
-                    if (!keep_open){
-                        scope.closeModal()
-                    }
+                    // console.log(collection, data, scope.view.key)
+                    // scope[collection][scope.view.key] = data
+                    // view.update(collection+'['+scope.view.key+']')
+                    // if (!keep_open){
+                    //     scope.closeModal()
+                    // }
 
                     scope.notify('Updated')
 
                 }).catch((err)=>{
+                    console.log(err)
                     scope.notify(err,'error',5,'fa-exclamation-circle')
                 })
 

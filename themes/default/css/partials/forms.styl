@@ -62,8 +62,8 @@ input[type=checkbox] {
 
     flex: none;
     position: relative;
-    width: 0;
-    height: 0;
+    width: 1.70rem;
+    height: 1.70rem;
     vertical-align: middle;
 
     &:after {
@@ -74,7 +74,6 @@ input[type=checkbox] {
         justify-content: center;
         width: 1.75rem;
         height: 1.75rem;
-        top: -0.5rem;
         border-radius: 0.25rem;
         left: -1px;
         background-color: white;
@@ -91,6 +90,7 @@ input[type=checkbox] {
     &:checked {
         &:after {
             content:'\2713';
+            border: 1px solid $color-primary;
         }
     }
 
