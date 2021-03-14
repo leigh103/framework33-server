@@ -5,11 +5,6 @@
                 <h1><%- title %></h1>
             </div>
             <div class="buttons">
-                <% if (status.match(/completed/)){ %>
-                    <a class="btn bg-white" href="/dashboard/transactions/paid">Active Orders</a>
-                <% } else { %>
-                    <a class="btn bg-white" href="/dashboard/transactions/completed">Archive</a>
-                <% } %>
                 <button class="btn bg-primary" app-click="newObj('<%- table %>')">Add <%- view.functions.parseName(table,true) %><i class="fa fa-plus ml-05"></i></button>
             </div>
         </div>
@@ -17,11 +12,13 @@
         <div class="actions">
 
             <div class="tabs">
-                <% if (status.match(/paid|processing|shipped/)){ %>
+
                     <a class="<% if (status == 'paid'){ %>active<% } %>" href="/dashboard/transactions/paid">New <span class="counter" app-show="view.status_count_obj.paid">(<span app-bind="view.status_count_obj.paid"></span>)</span></a>
                     <a class="<% if (status == 'processing'){ %>active<% } %>" href="/dashboard/transactions/processing">Processing <span class="counter" app-show="view.status_count_obj.processing">(<span app-bind="view.status_count_obj.processing"></span>)</span></a>
                     <a class="<% if (status == 'shipped'){ %>active<% } %>" href="/dashboard/transactions/shipped">Shipped <span class="counter" app-show="view.status_count_obj.shipped">(<span app-bind="view.status_count_obj.shipped"></span>)</span></a>
-                <% } %>
+                    <a class="<% if (status == 'refund'){ %>active<% } %>" href="/dashboard/transactions/refund">Refunds</a>
+                    <a class="<% if (status == 'completed'){ %>active<% } %>" href="/dashboard/transactions/completed">Archive</a>
+
             </div>
 
             <% if (typeof search_fields == 'object'){ %>
@@ -36,7 +33,7 @@
 
             <div class="table button-overlay" app-show="view.selected" anim="{'enter':'fade-in','exit':'fade-out'}">
                 <div class="row table-header">
-                    <div class="cell middle text-left" style="width: 4rem"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"></div>
+                    <div class="cell middle text-left select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"></div>
                     <div class="cell middle text-left">
                         <div class="context-link btn bg-mid-grey text-black" app-click="toggleContext('change-status')">
                             Update Selected

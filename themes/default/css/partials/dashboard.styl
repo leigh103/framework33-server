@@ -182,8 +182,13 @@
             .cell {
                 height: 3.875rem;
                 vertical-align: middle;
-
+                padding-left: 0.25rem;
+                padding-right: 0.25rem;
                 margin-bottom: 1.375rem;
+
+                &.py-0 {
+                    height: auto;
+                }
 
                 a {
                     color: $color-primary;
@@ -238,6 +243,13 @@
             border: 1px solid #E3E3E3;
             border-radius: 4px;
             color: $color-dark-grey;
+
+            &.no-style {
+                border: none !important;
+                height: auto !important;
+                padding: 0 !important;
+                font-size: 1rem !important;
+            }
         }
 
         input[type=text],input[type=password],input[type=number],input[type=email], select {
@@ -320,59 +332,61 @@
         }
     }
 
-    .grid {
+    .grid-wrap {
 
-        grid-template-columns: repeat(4,1fr);
-        grid-gap: 2rem;
+        padding: 2rem 0;
 
-        @media $desktop-4k {
-            grid-template-columns: repeat(6,1fr);
-        }
+        .grid {
+            grid-template-columns: repeat(4,1fr);
+            grid-gap: 2rem;
 
-        @media $desktop-1080p {
-            grid-template-columns: repeat(5,1fr);
-        }
-
-        @media $medium {
-            grid-template-columns: repeat(3,1fr);
-        }
-
-        @media $small {
-            grid-template-columns: repeat(1,1fr);
-        }
-
-        &-wrap {
-            padding: 2rem 0;
-        }
-
-        &-item {
-            background-color: rgba(255,255,255,0.5);
-            border-radius: $border-radius;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-
-            .thumbnail {
-                flex: 3;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
+            @media $desktop-4k {
+                grid-template-columns: repeat(6,1fr);
             }
-            .details {
-                flex: 1;
-                display: flex;
-                background-color: white;
-                padding: 1rem 1.25rem;
-                text-transform: capitalize;
 
-                div {
+            @media $desktop-1080p {
+                grid-template-columns: repeat(5,1fr);
+            }
+
+            @media $medium {
+                grid-template-columns: repeat(3,1fr);
+            }
+
+            @media $small {
+                grid-template-columns: repeat(1,1fr);
+            }
+
+            &-item {
+                background-color: rgba(255,255,255,0.5);
+                border-radius: $border-radius;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+
+                .thumbnail {
+                    flex: 3;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                .details {
                     flex: 1;
-                    &.context-link {
-                        flex: none
+                    display: flex;
+                    background-color: white;
+                    padding: 1rem 1.25rem;
+                    text-transform: capitalize;
+
+                    div {
+                        flex: 1;
+                        &.context-link {
+                            flex: none
+                        }
                     }
+
                 }
 
             }
+
 
         }
 
@@ -478,92 +492,92 @@
     @keyframes dot {
         0% {
         transform: rotateZ(0) translateY(0) scaleX(1);
-        background-color: #1e3f57;
+        background-color: $color-primary;
         }
         30% {
         transform: rotateZ(180deg) translateY(-20px) scaleX(1);
-        background-color: #3c617d;
+        background-color: $color-primary;
         }
         50% {
         transform: rotateZ(360deg) translateY(-20px) scaleX(1.1);
-        background-color: #6bb2cd;
+        background-color: $color-primary;
         }
         70% {
         transform: rotateZ(540deg) translateY(-20px) scaleX(1);
-        background-color: #3c617d;
+        background-color: $color-primary;
         }
         100% {
         transform: rotateZ(720deg) translateY(0) scaleX(1);
-        background-color: #1e3f57;
+        background-color: $color-primary;
         }
     }
 
     @keyframes dot2 {
         0% {
         transform: rotateZ(0deg) translateY(0) scaleX(1);
-        background-color: #1e3f57;
+        background-color: $color-primary;
         }
         30% {
         transform: rotateZ(180deg) translateY(-20px) scaleX(1);
-        background-color: #3c617d;
+        background-color: $color-primary;
         }
         50% {
         transform: rotateZ(270deg) translateY(-20px) scaleX(1.1);
-        background-color: #6bb2cd;
+        background-color: $color-primary;
         }
         70% {
         transform: rotateZ(360deg) translateY(-20px) scaleX(1);
-        background-color: #3c617d;
+        background-color: $color-primary;
         }
         100% {
         transform: rotateZ(540deg) translateY(0) scaleX(1);
-        background-color: #1e3f57;
+        background-color: $color-primary;
         }
     }
 
     @keyframes dot3 {
         0% {
         transform: rotateZ(-180deg) translateY(0) scaleX(1);
-        background-color: #1e3f57;
+        background-color: $color-primary;
         }
         30% {
         transform: rotateZ(0deg) translateY(-20px) scaleX(1);
-        background-color: #3c617d;
+        background-color: $color-primary;
         }
         50% {
         transform: rotateZ(180deg) translateY(-20px) scaleX(1.1);
-        background-color: #6bb2cd;
+        background-color: $color-primary;
         }
         70% {
         transform: rotateZ(360deg) translateY(-20px) scaleX(1);
-        background-color: #3c617d;
+        background-color: $color-primary;
         }
         100% {
         transform: rotateZ(540deg) translateY(0) scaleX(1);
-        background-color: #1e3f57;
+        background-color: $color-primary;
         }
     }
 
     @keyframes dot4 {
         0% {
         transform: rotateZ(-180deg) translateY(0) scaleX(1);
-        background-color: #1e3f57;
+        background-color: $color-primary;
         }
         30% {
         transform: rotateZ(0deg) translateY(-20px) scaleX(1);
-        background-color: #3c617d;
+        background-color: $color-primary;
         }
         50% {
         transform: rotateZ(90deg) translateY(-20px) scaleX(1.1);
-        background-color: #6bb2cd;
+        background-color: $color-primary;
         }
         70% {
         transform: rotateZ(180deg) translateY(-20px) scaleX(1);
-        background-color: #3c617d;
+        background-color: $color-primary;
         }
         100% {
         transform: rotateZ(360deg) translateY(0) scaleX(1);
-        background-color: #1e3f57;
+        background-color: $color-primary;
         }
     }
 

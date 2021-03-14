@@ -4,6 +4,51 @@
 
         scope.view.selected = false
 
+        scope.setRefund = function(item){
+            item.refund = true
+            item.refund_qty = item.quantity
+            view.update('new.items')
+        }
+
+        scope.checkRefund = function(item, type){
+
+            if (item.refund_qty > item.quantity){
+                item.refund_qty = item.quantity
+                scope.notify('Refund quantity cannot be more than '+item.quantity+' for this item','error')
+            }
+
+        }
+
+        scope.createRefund = function(){
+
+            let check = scope.new.items.filter((item)=>{
+                return item.refund
+            })
+
+            if (check.length > 0){
+
+                let payload = {
+                    _key: scope.new._key,
+                    items: check
+                }
+                scope.post('transactions/refund', payload).then((data)=>{
+
+                    scope.new = data
+                    scope.view.refund = false
+                    view.update('new')
+                    view.update('view.refund')
+                    scope.notify('Refund Created')
+
+                }).catch((err)=>{
+                    console.log(err)
+                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                })
+            } else {
+                scope.notify('Please select items to refund','error')
+            }
+
+        }
+
         scope.removeDelOptn = function(index){
 
             scope.transaction_settings.delivery_options.splice(index, 1)

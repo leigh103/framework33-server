@@ -13,6 +13,7 @@
                 {text:'Processing',value:'processing',icon:'box-open'},
                 {text:'Shipped',value:'shipped',icon:'mail-bulk'},
                 {text:'Completed',value:'completed',icon:'check-circle'},
+                {text:'Refund',value:'refund',icon:'mail-bulk'},
                 {text:'Deleted',value:'deleted',icon:'trash-alt'}
             ]
 
@@ -64,7 +65,8 @@
                     },
                     post: {
                         save:['admin'],
-                        updateStatus:['admin']
+                        updateStatus:['admin'],
+                        refund:['admin']
                     },
                     put: {
                         save:['admin']
@@ -101,12 +103,10 @@
 
                     resolve()
 
-                } else if (this.data.status && !this.data.status.match(/completed/)) {
+                } else {
 
                     resolve()
 
-                } else {
-                    reject()
                 }
 
             })
@@ -214,6 +214,52 @@
             }
 
             return ids
+
+        }
+
+        async refund(data){
+
+            let new_refund_cart = await new Cart().getTemplate()
+
+            new_refund_cart.data.customer = this.data.customer
+            new_refund_cart.data._key = Date.now()
+            new_refund_cart.data._id = 'cart/'+new_refund_cart.data._key
+            new_refund_cart.data._user_id = this.data.customer._key
+            new_refund_cart.data.items = data.items
+            new_refund_cart.data.status = 'refund'
+            new_refund_cart.data.transaction_id = this.data._key
+            new_refund_cart.data.reference = 'R'+this.data.reference
+
+            await new_refund_cart.refundItems()
+            await new_refund_cart.calcRefundTotal()
+            // console.log(new_refund_cart.data)
+            let new_refund = await new Transactions(new_refund_cart.data).save()
+            await this.updateRefundItems(data, new_refund.data._key)
+            this.data.status_logs['refunded'] = moment().toISOString()
+// console.log('items',this)
+            this.save()
+            return this
+
+        }
+
+        async updateRefundItems(data, refund_id){
+
+            return new Promise( async (resolve, reject) => {
+
+                data.items.map((refund_item)=>{
+                    for (let i in this.data.items){
+                        if (refund_item._key == this.data.items[i]._key && refund_item.type == this.data.items[i].type){
+                            this.data.items[i].refund_transaction_id = refund_id
+                            this.data.items[i].refund_value = refund_item.refund_value
+                            this.data.items[i].refund_date = refund_item.refund_date
+                            this.data.items[i].refund_qty = refund_item.refund_qty
+                        }
+                    }
+                })
+
+                resolve()
+
+            })
 
         }
 

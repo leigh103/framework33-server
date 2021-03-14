@@ -283,9 +283,14 @@
 
             await this.calcItems()
             this.data.item_total = parseInt(this.data.total)
-            await this.calcDiscounts()
-            await this.calcTax()
-            await this.calcDelivery()
+            if (this.data.status != 'refund'){
+                await this.calcDiscounts()
+                await this.calcTax()
+                await this.calcDelivery()
+            } else {
+                this.data.item_total = -Math.abs(this.data.item_total)
+                this.data.total = -Math.abs(this.data.total)
+            }
 
             if (!this.data.total){
                 this.data.item_total = 0
@@ -294,6 +299,78 @@
                 this.data.tax = 0
                 this.data.total = 0
             }
+
+            return this
+
+        }
+
+        async calcRefundTotal() {
+
+            this.data.sub_total = 0
+            this.data.tax = 0
+            this.data.total = 0
+
+            for (let item of this.data.items) {
+
+                item.total = -Math.abs(item.total)
+                this.data.total = parseInt(this.data.total)+parseInt(item.refund_value)
+
+            }
+
+            this.data.total = -Math.abs(this.data.total)
+            return this
+
+        }
+
+        async refundItems(){
+
+            this.data.items = this.data.items.map((item,i)=>{
+
+                item.sub_total = 0
+                item.tax = 0
+
+                if (item.refund_qty > 0 && item.refund_qty <= item.quantity){ // individual item refund
+
+                    item.quantity = parseInt(item.refund_qty)
+                    item.total = item.price*item.quantity
+                    item.refund_value = item.total
+
+                } else if (item.refund_amount){ // partial refund
+
+                    let percent = false
+
+                    if (item.refund_amount.match(/-/)){
+                        item.refund_amount = parseFloat(item.refund_amount.replace(/-/,''))
+                    }
+
+                    if (item.refund_amount.match(/%/)){
+                        percent = true
+                    }
+
+                    let matches = item.refund_amount.match(/([0-9]+.[0-9]{0,2})/)
+                    if (matches && matches[1]){
+
+                        if (percent === true){
+                            item.refund_value = parseInt((item.total/100)*parseFloat(matches[1]))
+                        } else {
+                            item.refund_value = parseInt(parseFloat(matches[1])*100)
+                        }
+
+                    } else {
+                        item.refund_value = 0
+                    }
+
+                    item.total = item.total - item.refund_value
+
+                } else { // full item refund
+                    item.total = item.price*item.quantity
+                    item.refund_value = item.total
+                }
+
+                item.refund_date = moment().toISOString()
+                return item
+
+            })
 
             return this
 
@@ -458,7 +535,7 @@
                     if (!this.data.shipping_total){
                         this.data.shipping_total = 0
                     }
-                    
+
                     this.data.total += this.data.shipping_total
                 } else {
                     this.data.shipping_method = false

@@ -137,36 +137,45 @@ const express = require('express'),
 
         })
 
-    routes.get('/dashboard/transactions/:status', async(req, res) => {
+    routes.get('/dashboard/transactions/:status?', async(req, res) => {
+
+        data.status = 'paid'
+        if (req.params.status){
+            data.status = req.params.status
+        }
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
 
         view.current_view = 'orders'
 
-        data.statuses = new Transactions().statuses
-
         data.status_count = await DB.read('transactions').where(['status != completed','status != deleted']).collect('status')
 
         if (req.params.status == 'new'){
+
+            data.model = new Cart()
+            data.status = 'paid'
             data.title = 'Transactions'
             data.table = 'cart'
-            view.current_sub_view = data.status
-            data.status = req.params.status
+            view.current_sub_view = 'new'
             data.query = false
-            data.fields = new Cart().settings.fields
-            data.search_fields = new Cart().settings.search_fields
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+
         } else {
+
+            data.model = new Transactions()
+
+            data.statuses = data.model.statuses
             data.title = 'Transactions'
             data.table = 'transactions'
-            data.status = req.params.status
             view.current_sub_view = data.status
-            data.query = '?status='+req.params.status
+            data.query = '?status='+data.status
 
-            data.fields = data.model.fields
-            data.search_fields = data.model.search_fields
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
         }
 
-        if (data.status == 'completed' || data.status == 'deleted'){
+        if (!data.status.match(/paid|shipped|processing/)){
             data.query += '&limit=60'
         }
 
