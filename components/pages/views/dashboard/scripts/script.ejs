@@ -70,7 +70,7 @@
                 // } else {
 
                     scope.get('pages',key).then((pages)=>{
-console.log(pages)
+
                         scope.view.pages = pages
                         view.update('view.pages')
 
@@ -85,8 +85,7 @@ console.log(pages)
             scope.addNewSection = function(){
 
             //    scope.checkSaved().then(()=>{
-                    scope.view.modal = 'show_sections'
-                    view.update('view.modal')
+                    scope.openModal('show_sections')
 
             }
 
@@ -251,7 +250,7 @@ console.log(pages)
             scope.removeBlock = function(conf){
 
                 if (conf){
-                    scope.view.modal = 'show_del_block_confirm'
+                    scope.openModal('show_del_block_confirm')
                 } else {
                     console.log(scope.view.selected_block)
                     if (scope.view.selected_block.index){
@@ -261,9 +260,6 @@ console.log(pages)
                     }
                     scope.view.modal = false
                 }
-
-                view.update('view.modal')
-
 
             }
 
@@ -447,7 +443,7 @@ console.log(pages)
                         scope.post('pages', payload).then((pages)=>{
 
                             if (scope.window.path_obj.pop() == 'new'){
-                                window.location.href = 'edit/'+pages._key
+                                window.location.href = pages._key
                             } else {
                                 scope.notify('Saved!')
                             }
