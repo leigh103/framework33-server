@@ -72,7 +72,7 @@ const express = require('express'),
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
         model: new Products(),
-        table_buttons:['<a href="/dashboard/products/attributes" class="btn bg-white">Attributes</a>','<a href="/dashboard/products/categories" class="btn bg-white">Categories</a>']
+        tabs: [{href: '/dashboard/products', text:'Products'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
     }
 
     routes.get('*', (req, res, next) => {
@@ -81,7 +81,24 @@ const express = require('express'),
         } else {
             data.user = {}
         }
+        data.path = req.url
         next()
+    })
+
+    routes.get('/dashboard/product_categories/:key?', async(req, res) => {
+        let url = '/dashboard/products/categories'
+        if (req.params.key){
+            url += '/'+req.params.key
+        }
+        res.redirect(url)
+    })
+
+    routes.get('/dashboard/product_attributes/:key?', async(req, res) => {
+        let url = '/dashboard/products/attributes'
+        if (req.params.key){
+            url += '/'+req.params.key
+        }
+        res.redirect(url)
     })
 
     routes.get('/dashboard/products/categories/:key?', async(req, res) => {
@@ -97,6 +114,7 @@ const express = require('express'),
         data.query = ''
         data.title = 'Product Categories'
         data.table = 'product_categories'
+
 
         data.model = new ProductCategories()
 
@@ -158,6 +176,31 @@ const express = require('express'),
 
         res.render(settings.views+'/dashboard/product_settings.ejs',data)
     //    res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+    })
+
+    routes.get('/dashboard/products/new', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Add New Product'
+        }
+
+        view.current_view = 'products'
+        view.current_sub_view = 'all'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
+        data.include_styles = [settings.views+'/styles/dashboard_style.ejs']
+
+        data.title = 'Add New Product'
+        data.table = 'products'
+
+        data.query = '?limit=30'
+
+        data.model = new Products()
+
+        data.key = 'new'
+        data.option_data = await view.functions.getOptionData('product_categories')
+        data.fields = data.model.parseEditFields()
+        res.render(basedir+'/components/dashboard/views/edit.ejs',data)
 
     })
 

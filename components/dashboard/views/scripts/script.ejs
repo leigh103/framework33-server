@@ -166,12 +166,14 @@
 
             scope.getItem = function(collection, key){
 
-                setTimeout(function(){
-                    http.get('/api/'+collection+'/'+key).then((data)=>{
-                        scope.new = JSON.parse(data)
-                        view.update('new')
-                    })
-                },500)
+                if (key != 'new'){
+                    setTimeout(function(){
+                        http.get('/api/'+collection+'/'+key).then((data)=>{
+                            scope.new = JSON.parse(data)
+                            view.update('new')
+                        })
+                    },500)
+                }
 
             }
 

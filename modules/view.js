@@ -263,7 +263,9 @@
                         field = 'name'
                     }
 
-                    if (i == fields.length-1){
+                    if (fields.length == 1){
+                        output += field
+                    } else if (i == fields.length-1){
                         output += 'or '+field
                     } else if (i == fields.length-2){
                         output += field+' '
