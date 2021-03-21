@@ -6,13 +6,20 @@
         right:auto;
         top: 0;
         min-width:150px;
-        background-color: $bg-light-grey;
-        font-size: 0.875em !important;
-        color: $brand_black;
+        background-color: white;
+        font-size: 0.875rem !important;
+
+        border: 1px solid $color-primary;
         border-radius: $border-radius;
-        box-shadow: $shadow;
-        padding: 0.4rem;
+
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+        padding: 0rem;
         z-index: 750;
+
+        &.from-button {
+            border-top-right-radius: 0;
+            border-top-left-radius: 1.25rem;
+        }
 
         &.right {
             left: auto;
@@ -22,13 +29,12 @@
         .link {
             display: block;
             cursor: pointer;
-            font-weight: 400;
-            color: $color-primary;
-            padding: 0.5rem 1rem;
-
+            padding: 0.5rem 1.4rem;
+            padding-top: calc(0.5rem - 1px);
+            color: $text-black;
 
             &:hover {
-                background-color: rgba(255,255,255,0.5)
+                color: $color-primary;
             }
 
             &:last-child {

@@ -120,8 +120,8 @@
 
 @font-face {
     font-family: 'Nunito';
-    src: url('fonts/NunitoSans-Regular.ttf');
-    src: url('fonts/NunitoSans-Regular.ttf') format('truetype');
+    src: url('fonts/NunitoSans-Light.ttf');
+    src: url('fonts/NunitoSans-Light.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -129,8 +129,8 @@
 
 @font-face {
     font-family: 'Nunito';
-    src: url('fonts/NunitoSans-Bold.ttf');
-    src: url('fonts/NunitoSans-Bold.ttf') format('truetype');
+    src: url('fonts/NunitoSans-SemiBold.ttf');
+    src: url('fonts/NunitoSans-SemiBold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
     font-display: swap;

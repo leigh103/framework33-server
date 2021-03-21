@@ -3,6 +3,7 @@
     extend.transactions = function(){
 
         scope.view.selected = false
+        scope.view.all_action_text = 'Bulk Actions'
 
         scope.setRefund = function(item){
             item.refund = true
@@ -109,9 +110,9 @@
                 idx = 0
             }
             if (this.target.value.match(/^[A-Za-z]{2}[0-9]+GB$/)){
-                scope.transactions[idx].shipping_method = 'royal_mail'
+                scope.transactions[idx].shipping_company = 'royal_mail'
             } else if (this.target.value.match(/^0[0-9]{10,14}[a-zA-Z]?$/)){
-                scope.transactions[idx].shipping_method = 'dpd'
+                scope.transactions[idx].shipping_company = 'dpd'
             }
 
             view.update('transactions['+idx+']')
@@ -131,6 +132,23 @@
                     view.update('view.selected')
                 }
 
+            }
+
+        }
+
+        scope.selectAllAction = function(action, text){
+            scope.view.all_action_text = text
+            scope.view.all_action = action
+            view.update('view.all_action_text')
+            contextCloseAll()
+        }
+
+        scope.processAllAction = function(){
+
+            if (scope.view.all_action && scope.view.all_action == 'print'){
+                scope.printAll()
+            } else if (scope.view.all_action){
+                scope.updateAll(scope.view.all_action)
             }
 
         }

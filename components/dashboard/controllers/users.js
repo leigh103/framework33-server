@@ -15,7 +15,7 @@ const express = require('express'),
         protected_guards:['admin'],
         menu: {
             side_nav:[
-                {link:'Users',slug: '/dashboard/user', weight: 10, icon:'<span class="icon person"></span>', protected_guard:['admin']}
+                {link:'Customers',slug: '/dashboard/user', weight: 10, icon:'<span class="icon person"></span>', protected_guard:['admin']}
             ]
         }
     },
@@ -49,7 +49,7 @@ const express = require('express'),
 
         view.current_view = 'users'
 
-        data.title = 'Users'
+        data.title = 'Customers'
         data.table = 'user'
 
         if (req.params.key){

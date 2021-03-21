@@ -46,21 +46,29 @@
 
             scope.toggleContext = function(type, key){
 
+
                 let el = document.getElementById(type),
                     target = this.target
 
-                if (target && !target._app){
-
+                if (target && !target.classList.contains('context-link') || target && !target._app){
                     target = target.parentNode
                 }
 
                 if (el && el.style && el.style.display != 'none'){
-                    el.style.display = 'none'
+                    view.exitView(el).then(()=>{
+                    })
                 } else {
                     contextCloseAll()
                 }
 
-                el.style.display = 'block'
+                let table_wrap = document.querySelector('.table-inner-wrap')
+                if (table_wrap){
+                    console.log('no scroll')
+                    table_wrap.style.overflowY = 'hidden'
+                }
+
+                view.enterView(el).then(()=>{
+                })
 
                 let target_pos = target.getBoundingClientRect()
 
@@ -71,10 +79,11 @@
                     left = left - el.offsetWidth + target.offsetWidth
                 }
 
-                top = top+target.offsetHeight
+                top = top
 
                 el.style.top = top+'px'
                 el.style.left = left+'px'
+                el.style.width = target_pos.width+'px'
 
                 if (typeof key == 'number'){
                     scope.view.key = key

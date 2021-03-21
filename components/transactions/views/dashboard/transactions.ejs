@@ -22,7 +22,8 @@
             </div>
 
             <% if (typeof search_fields == 'object'){ %>
-                <div class="search" onmouseover="scope.focusSearch(this)" onmouseout="scope.focusSearch(this)">
+                <div class="search">
+                    <span class="icon search black"></span>
                     <input type="text" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
                 </div>
             <% } %>
@@ -35,14 +36,19 @@
                 <div class="row table-header">
                     <div class="cell middle text-left select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"></div>
                     <div class="cell middle text-left">
-                        <div class="context-link btn bg-mid-grey text-black" app-click="toggleContext('change-status')">
-                            Update Selected
-                            <i class="fas fa-chevron-down ml-1"></i>
+                        <div class="flex button-wrap">
+                            <div class="context-link btn border text-black" app-click="toggleContext('change-status')" style="width: 15rem;">
+                                <span app-bind="view.all_action_text" class="flex-1"></span>
+                                <span class="icon arrowdown primary right float-right" class="flex-none"></span>
+                            </div>
+                            <button app-click="processAllAction()" class="bg-primary">Apply</button>
                         </div>
+                    </div>
+                    <div class="cell middle text-right">
 
-                        <% if (status == 'paid'){ %><button class="bg-secondary" app-click="updateAll('processing')">Print and Process<i class="fas fa-print ml-1"></i></button><% } %>
-                        <% if (status == 'processing'){ %><button class="bg-secondary" app-click="updateAll('shipped')">Mark as Shipped<i class="fas fa-mail-bulk ml-1"></i></button><% } %>
-                        <% if (status == 'shipped'){ %><button class="bg-secondary" app-click="updateAll('completed')">Mark as Complete<i class="fas fa-check ml-1"></i></button><% } %>
+                        <% if (status == 'paid'){ %><button class="bg-secondary" app-click="updateAll('processing')">Print and Process<span class="icon arrowright white right"></span></button><% } %>
+                        <% if (status == 'processing'){ %><button class="bg-secondary" app-click="updateAll('shipped')">Mark as Shipped<span class="icon arrowright white right"></span></button><% } %>
+                        <% if (status == 'shipped'){ %><button class="bg-secondary" app-click="updateAll('completed')">Mark as Complete<span class="icon arrowright white right"></span></button><% } %>
 
                     </div>
                 </div>
@@ -56,10 +62,11 @@
                     <div class="cell middle text">Reference</div>
                     <div class="cell middle">Customer</div>
                     <% if (status == 'processing'){ %>
-                        <div class="cell middle text-left" style="width:30%">Tracking</div>
+                        <div class="cell middle text-left" style="width:40%">Tracking</div>
                     <% } %>
                     <div class="cell middle price text-right">Total</div>
                     <div class="cell middle status text-right">Status</div>
+                    <div class="cell middle text-right action"></div>
 
                 </div>
 
@@ -88,9 +95,9 @@
                         </div>
 
                         <% if (status == 'processing'){ %>
-                            <div class="cell middle action text-right" style="width:30%">
+                            <div class="cell middle action text-right" style="width:40%">
                                 <div class="grid col-6 gap-1">
-                                    <select app-model="transaction.shipping_method" app-attr="{'id':transaction._key}" class="colspan-2">
+                                    <select app-model="transaction.shipping_company" app-attr="{'id':transaction._key}" class="colspan-2">
                                         <option value="">Select Courier</option>
                                         <option value="dpd">DPD</option>
                                         <option value="royal_mail">Royal Mail</option>
@@ -99,7 +106,7 @@
                                     </select>
                                     <div class="colspan-4 flex">
                                         <input type="text" app-model="transaction.shipping_reference" app-change="checkTracking($index)">
-                                        <button class="btn bg-secondary" app-click="addTracking(transaction)">Add</button>
+                                        <button class="btn bg-secondary" app-click="addTracking(transaction)"><span class="icon tick white"></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -108,26 +115,31 @@
 
                         <div class="cell middle price text-right text-bold" app-bind="parseCurrency(transaction.total)"></div>
                         <div class="cell middle text-right status"><div class="status" app-class="transaction.status" app-bind="transaction.status" app-click="goto('transactions',transaction.status)"></div></div>
+                        <div class="cell middle text-right context-link" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">
+
+                            <div class="context-menu context-link btn" app-click="toggleContext('context',$index)">
+                                <i class="fas fa-chevron-down context-link"></i>
+                            </div>
+
+                        </div>
 
                     </div>
                 </div>
             </div>
         </div>
 
-    <div id="change-status" class="context dropdown text-left" style="display: none">
+    <div id="change-status" class="context dropdown from-button text-left" style="display: none" data-animation="{'enter':'fade-in','exit':'fade-out'}">
+        <div class="link text-bold" app-bind="view.all_action_text"></div>
         <% statuses.forEach((status,i)=>{ %>
 
             <% if (status.value != 'new'){ %>
-                <div class="link" app-click="updateAll('<%- status.value %>')">
-                    <i class="fas fa-<%- status.icon %>"></i>
+                <div class="link" app-click="selectAllAction('<%- status.value %>','Mark as <%- status.text %>')">
                     Mark as <%- status.text %>
                 </div>
             <% } %>
 
         <% }) %>
-        <div class="spacer"></div>
-        <div class="link" app-click="printAll()">
-            <i class="fas fa-print"></i>
+        <div class="link" app-click="selectAllAction('print', 'Print Selected')">
             Print Selected
         </div>
 

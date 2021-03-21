@@ -154,7 +154,7 @@ const express = require('express'),
 
             data.model = new Cart()
             data.status = 'paid'
-            data.title = 'Transactions'
+            data.title = 'Orders'
             data.table = 'cart'
             view.current_sub_view = 'new'
             data.query = false
@@ -166,7 +166,7 @@ const express = require('express'),
             data.model = new Transactions()
 
             data.statuses = data.model.statuses
-            data.title = 'Transactions'
+            data.title = 'Orders'
             data.table = 'transactions'
             view.current_sub_view = data.status
             data.query = '?status='+data.status

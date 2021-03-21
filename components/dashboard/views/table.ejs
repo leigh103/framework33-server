@@ -26,7 +26,8 @@
         </div>
 
         <% if (typeof search_fields == 'object'){ %>
-            <div class="search" onmouseover="scope.focusSearch(this)" onmouseout="scope.focusSearch(this)">
+            <div class="search">
+                <span class="icon search black"></span>
                 <input type="text" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
             </div>
         <% } %>

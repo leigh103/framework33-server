@@ -3,7 +3,7 @@
     &.button-overlay {
         background-color: white;
         position: absolute;
-        width: 60%;
+        width: 100%;
         z-index:3;
     }
 
@@ -33,7 +33,7 @@
     }
 
     .cell {
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         overflow: visible !important;
 
         &.image {
@@ -100,6 +100,19 @@
 
         @media $small {
             min-width: 20vw;
+        }
+
+        input[type=checkbox] {
+
+            width: 0.9rem;
+            height: 0.9rem;
+
+            &:after {
+                margin-top:-0.3rem;
+                width: 1.375rem;
+                height: 1.375rem;
+            }
+
         }
 
         img {

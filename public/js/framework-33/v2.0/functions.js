@@ -11,6 +11,11 @@ function setLayer(className, idx){
 
 var contextCloseAll = function(){
 
+    let table_wrap = document.querySelector('.table-inner-wrap')
+    if (table_wrap){
+        table_wrap.style.overflowY = 'auto'
+    }
+
     if (scope && scope.view && scope.view.context){
         scope.view.context = false
     }
