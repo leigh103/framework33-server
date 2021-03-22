@@ -2,7 +2,7 @@
 
     <div class="header" app-init="getItem('<%- table %>','<%- key %>')">
         <div class="title">
-            <h1 class="capitalise"><%- view.functions.parseName(table) %> / <span app-bind="new.name"></span></h1>
+            <h1 class="capitalise"><a class="text-black" href="/dashboard/<%- table %>"><span class="icon arrowleft black sm" style="margin-top: -4px;"></span> <span app-bind="new.name" class="font-weight-300"></span></a></h1>
         </div>
 
         <div class="buttons">

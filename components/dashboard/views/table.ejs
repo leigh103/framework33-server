@@ -28,7 +28,7 @@
         <% if (typeof search_fields == 'object'){ %>
             <div class="search">
                 <span class="icon search black"></span>
-                <input type="text" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
+                <input type="text" app-change="search('<%- table %>')" placeholder="Search <%- title %>">
             </div>
         <% } %>
     </div>

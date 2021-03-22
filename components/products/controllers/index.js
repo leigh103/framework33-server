@@ -72,7 +72,7 @@ const express = require('express'),
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
         model: new Products(),
-        tabs: [{href: '/dashboard/products', text:'Products'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
+        tabs: [{href: '/dashboard/products', text:'Active (4)'},{href: '/dashboard/products?activated=false', text:'Inactive'},{href: '/dashboard/products?activated=false', text:'Deleted'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
     }
 
     routes.get('*', (req, res, next) => {

@@ -207,7 +207,7 @@
             scope.view.all_selected = !scope.view.all_selected
 
             scope.transactions = scope.transactions.map((transaction) => {
-                transaction.selected = !transaction.selected
+                transaction.selected = scope.view.all_selected
                 return transaction
             })
 

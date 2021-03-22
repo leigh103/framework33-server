@@ -322,6 +322,42 @@ const express = require('express'),
 
         }
 
+        global.renderDashboardTheme = () => {
+
+            let dasboard_styl = fs.readFileSync(__dirname + '/themes/default/dashboard_css/dashboard.styl', 'utf8'),
+                dasboard_style_path = __dirname + '/public/style/dashboard.css'
+
+            if (dasboard_styl){
+
+                stylus(dasboard_styl)
+                    .set('paths', [__dirname + '/themes/default/dashboard_css'])
+                    .set('compress',true)
+                    .render(function(err, css){
+
+                        if (err) return console.error(err)
+
+                        let header_path = __dirname + '/themes/'+config.site.theme+'/partials/head.ejs',
+                            header = fs.readFileSync(header_path, 'utf8')
+
+                        if (typeof header == 'string'){
+                            header = header.replace(/\/style\/dashboard\.css\?v=(.*?)\"/,'/style/dashboard.css?v='+Date.now()+'"')
+                            fs.writeFile(header_path, header, function (err) {
+                                if (err) return log(err)
+                                log('Dashboard Style cache updated')
+                            })
+                        }
+
+                        fs.writeFile(dasboard_style_path, css, function (err) {
+                            if (err) return log(err)
+                            log('Dashboard Styl rendered')
+                        })
+
+                })
+
+            }
+
+        }
+
 
         // boot components and servers
 
@@ -368,6 +404,12 @@ const express = require('express'),
             watch(['./themes/'+config.site.theme+'/css'], { recursive: true }, function(evt, name) {
 
                 global.renderTheme()
+
+            })
+
+            watch(['./themes/default/dashboard_css'], { recursive: true }, function(evt, name) {
+
+                global.renderDashboardTheme()
 
             })
 

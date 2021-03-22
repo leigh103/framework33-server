@@ -122,18 +122,44 @@ const express = require('express'),
 
     })
 
-        routes.get('/dashboard/transactions/edit/:key', async(req, res) => {
+
+    routes.get('/dashboard/transactions/edit/:key', async(req, res) => {
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
+
+        view.current_view = 'orders'
+        data.key = req.params.key
+        data.table = 'transactions'
+        data.model = new Transactions()
+        data.statuses = data.model.statuses
+        data.fields = data.model.parseEditFields()
+
+        res.render(settings.views+'/dashboard/transaction_edit.ejs',data)
+
+    })
+
+
+        routes.get('/dashboard/transactions/archive', async(req, res) => {
+
+            data.status = 'completed'
+            if (req.params.status){
+                data.status = req.params.status
+            }
+
+            data.tabs = [{href: '/dashboard/transactions/archive', text:'Completed'},{href: '/dashboard/transactions/refunds', text:'Refunds'},{href: '/dashboard/transactions/deleted', text:'Deleted'}]
 
             data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
 
             view.current_view = 'orders'
-            data.key = req.params.key
-            data.table = 'transactions'
-            data.model = new Transactions()
-            data.statuses = data.model.statuses
-            data.fields = data.model.parseEditFields()
+            data.title = 'Order Archive'
 
-            res.render(settings.views+'/dashboard/transaction_edit.ejs',data)
+            data.status_count = await DB.read('transactions').where(['status != completed','status != deleted']).collect('status')
+
+            data.model = new Transactions()
+            data.table = 'transactions'
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
         })
 

@@ -1,0 +1,198 @@
+.table {
+
+    &.button-overlay {
+        background-color: white;
+        position: absolute;
+        width: 100%;
+        z-index:3;
+    }
+
+    &-wrap {
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+
+    @media $small {
+        white-space: nowrap;
+        table-layout: auto;
+        width: auto;
+
+        &-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+    }
+
+    .table-header {
+        font-weight: 500;
+
+        .cell {
+            padding-bottom: 0 !important;
+        }
+    }
+
+    .cell {
+        font-size: 0.875rem;
+        overflow: visible !important;
+
+        &.image {
+            width: 4rem;
+        }
+
+        &.title.select {
+            width: 4rem;
+        }
+
+        &.boolean, &.integer, &.action  {
+            width: 6rem;
+        }
+
+        &.textarea, &.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav, &.items_per_customer {
+            display: none; 
+        }
+
+        &.checkbox {
+            width: 5rem;
+            text-align: center;
+        }
+
+        &.status {
+            width: 8rem;
+            text-align: center;
+        }
+
+        &.select-all {
+            width: 3rem;
+            text-align: left;
+        }
+
+        &.text {
+            width: 10rem;
+        }
+
+        &.number, &.price, &.adjustment {
+            width: 5rem;
+            text-align: left;
+        }
+
+        &.context-link {
+            text-align: right;
+            width: 6rem;
+        }
+
+        &.name, &.title {
+            width: 15rem;
+        }
+
+        input, select, textarea {
+            border: 1px solid #DDDDDD;
+            border-radius: $border-radius;
+            height: $input-height;
+
+            & + .btn {
+                height: 35px;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                margin-left: -6px;
+            }
+        }
+
+        @media $small {
+            min-width: 20vw;
+        }
+
+        input[type=checkbox] {
+
+            width: 0.9rem;
+            height: 0.9rem;
+
+            &:after {
+                margin-top:-0.3rem;
+                width: 1.375rem;
+                height: 1.375rem;
+            }
+
+        }
+
+        img {
+            &.avatar {
+                display: block;
+                height: 3rem;
+                width: 3rem;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+        }
+
+        .status {
+            color: $dashboard-color-primary;
+            text-transform: capitalize;
+            font-weight: 600;
+            // display: inline-block;
+            // vertical-align: middle;
+            // padding: 0.2rem 1rem;
+            // background-color: $dashboard-color-grey;
+            // color: white;
+            // border-radius: 1rem;
+            // font-size: 0.8rem;
+            // text-transform: capitalize;
+            //
+            // &.paid {
+            //     background-color: $bg-paid;
+            // }
+            //
+            // &.processing {
+            //     background-color: $bg-processing;
+            // }
+            //
+            // &.shipped {
+            //     background-color: $bg-shipped;
+            // }
+            //
+            // &.completed {
+            //     background: none;
+            //     color: $text-black;
+            //     padding: 0
+            // }
+
+        }
+
+    }
+
+    &.list-items {
+
+        display: flex !important;
+        flex-direction: column;
+
+
+        & > .row {
+
+            display: flex;
+            flex-direction: row;
+            padding: 1.5rem 2rem;
+            background-color: white;
+            margin-bottom: 1rem;
+            box-shadow: $shadow;
+            border-radius: $border-radius;
+
+            & > .cell {
+
+                padding: 0;
+
+                &.flex-none {
+                    flex: none
+                }
+
+                &.flex-auto {
+                    flex: auto
+                }
+
+            }
+
+        }
+
+
+
+    }
+}

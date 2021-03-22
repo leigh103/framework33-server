@@ -26,7 +26,7 @@ input[type="file"] {
 input.underline, select.underline, textarea.underline {
     background: none;
     text-decoration: none !important;
-    border-bottom: 1px solid $color-mid-light-grey;
+    border-bottom: 1px solid $dashboard-color-mid-light-grey;
     padding: 0 !important;
     height: 3.5rem !important;
 }
@@ -55,7 +55,7 @@ input[disabled], select option[disabled] {
 }
 
 input[type="text"].border,input[type="select"].border,input[type="password"].border {
-    border: 0.01rem solid $color-mid-light-grey;
+    border: 0.01rem solid $dashboard-color-mid-light-grey;
 }
 
 input[type=checkbox] {
@@ -77,20 +77,20 @@ input[type=checkbox] {
         border-radius: 0.25rem;
         left: -1px;
         background-color: white;
-        color: $text-primary;
+        color: $dashboard-text-primary;
         font-size: 1.1em;
     }
 
     &.border {
         &:after {
-            border: 0.01rem solid $color-mid-light-grey;
+            border: 0.01rem solid $dashboard-color-mid-light-grey;
         }
     }
 
     &:checked {
         &:after {
             content:'\2713';
-            // border: 1px solid $color-primary;
+            // border: 1px solid $dashboard-color-primary;
         }
     }
 

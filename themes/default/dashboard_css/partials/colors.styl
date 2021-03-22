@@ -1,0 +1,70 @@
+.text {
+    &-light-grey {
+        color: $dashboard-light-grey
+    }
+    &-primary {
+        color: $dashboard-color-primary;
+    }
+    &-error, &-red {
+        color: $dashboard-color-red;
+    }
+
+    &-secondary {
+        color: $dashboard-color-secondary;
+    }
+    &-black {
+        color: $dashboard-color-dark-grey;
+    }
+    &-white {
+        color: $dashboard-color-white;
+    }
+}
+
+.bg {
+    &-dark-grey {
+        background-color: $dashboard-bg-dark-grey
+    }
+    &-light-grey {
+        background-color: $dashboard-light-grey
+    }
+    &-light-grey2 {
+        background-color: $dashboard-color-light-grey2
+    }
+    &-mid-grey {
+        background-color: $dashboard-color-mid-light-grey
+    }
+    &-primary {
+        background-color: $dashboard-primary;
+    }
+
+    &-secondary {
+        background-color: $dashboard-secondary;
+    }
+    &-black {
+        background-color: $dashboard-black;
+    }
+
+    &-text-dark {
+        position: relative;
+        &:before {
+            background-color: rgba(30,30,30,0.25);
+            content:'';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+
+
+        }
+        & > * {
+            position: relative;
+            z-index: 2
+        }
+    }
+    &-white {
+        background-color: $bg-white;
+    }
+}
