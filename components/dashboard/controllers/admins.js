@@ -12,12 +12,7 @@ const express = require('express'),
     settings = {
         default_route: 'dashboard/admin',
         views: 'dashboard/views',
-        protected_guards:['admin'],
-        menu: {
-            side_nav:[
-                {link:'Admins',slug: '/dashboard/admin', weight: 9, icon:'<span class="icon person"></span>', protected_guard:['admin']}
-            ]
-        }
+        protected_guards:['admin']
     },
 
 
@@ -33,7 +28,8 @@ const express = require('express'),
 
     let data = {
         include_scripts: [settings.views+'/scripts/script.ejs'],
-        model: new Admin()
+        model: new Admin(),
+        tabs: [{href: '/dashboard/admin', text:'Administrators'},{href: '/dashboard/customers', text:'Customers'}]
     }
 
     routes.get('*', (req, res, next) => {
@@ -43,16 +39,16 @@ const express = require('express'),
         } else {
             res.redirect('/login/admin')
         }
+        next()
     })
 
     routes.get('/:key?', (req, res) => {
 
-        view.current_view = 'admins'
+        view.current_view = 'people'
+        view.current_sub_view = 'administrators'
 
-        data.title = 'Admins'
+        data.title = 'People'
         data.table = 'admin'
-
-
 
         if (req.params.key){
             data.key = req.params.key

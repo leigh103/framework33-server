@@ -1,7 +1,7 @@
 
     const Model = require(basedir+'/modules/Models')
 
-    class evnts extends Model {
+    class Automations extends Model {
 
         constructor(data){
 
@@ -14,11 +14,11 @@
             }
 
             this.settings = {
-                collection: 'events',
+                collection: 'automations',
                 fields: [
-                    {name:'name',input_type:'text',placeholder:'evnt Name', type:'string', required:true},
-                    {name:'trigger',input_type:'text',placeholder:'evnt trigger', type:'string', required:true},
-                    {name:'description',input_type:'textarea',placeholder:'evnt Description', type:'string', required:true},
+                    {name:'name',input_type:'text',placeholder:'Automation Name', type:'string', required:true},
+                    {name:'trigger',input_type:'text',placeholder:'Automation trigger', type:'string', required:true},
+                    {name:'description',input_type:'textarea',placeholder:'Automation Description', type:'string', required:true},
                     {name:'actions',input_type:'array', type:'array', tab:'actions', required:true, subitems:[
                         {name:'method',input_type:'select', options:[{text:'Mailbox',value:'mailbox'},{text:'Email',value:'email'},{text:'SMS',value:'sms'}] , type:'string', required:true},
                         {name:'to',input_type:'text',placeholder:'method', type:'string', required:true},
@@ -294,4 +294,4 @@
 
     }
 
-    module.exports = evnts
+    module.exports = Automations

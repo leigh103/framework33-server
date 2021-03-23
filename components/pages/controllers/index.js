@@ -15,7 +15,7 @@ const express = require('express'),
         views: 'pages/views',
         menu: {
             side_nav: [
-                {link:'Pages',slug: '/dashboard/pages', weight:3, icon:'<span class="icon screen"></span>', subitems:[
+                {link:'Pages',slug: '/dashboard/pages', weight:2, icon:'<span class="icon screen"></span>', subitems:[
                     {link:'Pages Types',slug: '/dashboard/pages/pages-types', weight:1}
                 ]}
             ]
@@ -195,6 +195,14 @@ const express = require('express'),
         next()
     })
 
+    routes.get('/dashboard/page_types/:key?', async(req, res) => {
+        let url = '/dashboard/pages/settings/page-types'
+        if (req.params.key){
+            url += '/'+req.params.key
+        }
+        res.redirect(url)
+    })
+
     routes.get('/', async (req, res, next) => {
 
         res.locals.functions = functions
@@ -293,19 +301,63 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/pages/page-types', async(req, res) => {
-
-        data.model = new PageTypes().settings
-        data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
-        data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+    routes.get('/dashboard/pages/settings/page-types/:key', async(req, res) => {
 
         view.current_view = 'pages'
-        data.title = 'Pages'
-        data.table = 'page_types'
-        data.fields = data.model.fields
-        data.search_fields = data.model.search_fields
+        view.current_sub_view = 'Page Types'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
-        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        data.query = ''
+        data.title = 'Page Types'
+        data.table = 'page_types'
+
+
+        data.model = new PageTypes()
+
+        data.key = req.params.key
+        data.fields = data.model.parseEditFields()
+        res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+
+    })
+
+    routes.get('/dashboard/pages/settings/:page?', async (req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Page Settings',
+        }
+
+        view.current_sub_view = 'details'
+
+        if (req.params.page){
+            view.current_sub_view = req.params.page
+        }
+
+        data.tabs = [
+            {href:'/dashboard/pages/settings', text: 'Details'},
+            {href:'/dashboard/pages/settings/page-types', text: 'Page Types'},
+            {href:'/dashboard/pages/settings/media', text: 'Media'},
+            {href:'/dashboard/pages/settings/menus', text: 'Menus'},
+            {href:'/dashboard/pages/settings/links', text: 'Links'}
+        ]
+
+        data.action_buttons = [{href:'/dashboard/pages', text: 'Back'}]
+
+        view.current_view = 'pages'
+        data.title = 'Page Settings'
+
+        if (req.params.page == 'page-types'){
+            data.model = new PageTypes().settings
+            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
+            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            view.current_sub_view = 'Page Types'
+            data.table = 'page_types'
+            data.fields = data.model.fields
+            data.search_fields = data.model.search_fields
+
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        } else {
+            res.render(settings.views+'/dashboard/settings.ejs',data)
+        }
 
     })
 
@@ -335,6 +387,7 @@ const express = require('express'),
     routes.get('/dashboard/pages', async(req, res) => {
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/dashboard/scripts/dashboard_scripts.ejs']
+        data.action_buttons = [{href:'/dashboard/pages/settings', text: 'Settings'}]
 
         data.meta = {
             title: config.site.name+' | Pages',

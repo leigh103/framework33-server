@@ -13,10 +13,10 @@ const express = require('express'),
 
     settings = {
         default_route: 'dashboard',
-        views: 'postmark_broadcast/views',
+        views: 'marketing/views',
         menu: {
             side_nav: [
-                {link:'Promotional Email',slug: '/dashboard/promotional-email', icon:'<span class="icon suppliers"></span>', weight:1}
+                {link:'Marketing',slug: '/dashboard/marketing', icon:'<span class="icon megaphone"></span>', weight:7}
             ]
         }
     }
@@ -97,19 +97,31 @@ const functions = {
         next()
     })
 
-    routes.get('/promotional-email', async(req, res) => {
+    routes.get('/marketing/:page?', async(req, res) => {
 
         data.meta = {
-            title: config.site.name+' | Promotional Email'
+            title: config.site.name+' | marketing'
         }
 
-        view.current_view = 'promotional-email'
+        view.current_sub_view = 'Email'
+
+        if (req.params.page){
+            view.current_sub_view = req.params.page
+        }
+
+        data.tabs = [
+            {href:'/dashboard/marketing', text: 'Email'},
+            {href:'/dashboard/marketing/sms', text: 'SMS'},
+            {href:'/dashboard/marketing/social-media', text: 'Social Media'}
+        ]
+
+        view.current_view = 'marketing'
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
-        data.title = 'Promotional Emails'
-        data.table = 'bulk_message'
+        data.title = 'Marketing'
+        data.table = 'marketing'
 
-        data.fields = new BulkMessage().settings.fields
+        data.fields = new Marketing().settings.fields
 
         res.render(basedir+'/components/dashboard/views/table.ejs',data)
 

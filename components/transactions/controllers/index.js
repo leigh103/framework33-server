@@ -15,7 +15,7 @@ const express = require('express'),
         views: 'transactions/views',
         menu: {
             side_nav: [
-                {link:'Orders',slug: '/dashboard/transactions/paid', icon:'<span class="icon shoppingtrolley"></span>', weight:1, subitems:[
+                {link:'Orders',slug: '/dashboard/transactions/paid', icon:'<span class="icon shoppingtrolley"></span>', weight:4, subitems:[
                     {link:'Incomplete Carts',slug: '/dashboard/transactions/new', icon:'<span class="icon shoppingtrolley"></span>', weight:9},
                     // {link:'New',slug: '/dashboard/transactions/paid', weight:2},
                     // {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
@@ -126,9 +126,9 @@ const express = require('express'),
     routes.get('/dashboard/transactions/edit/:key', async(req, res) => {
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
-
         view.current_view = 'orders'
         data.key = req.params.key
+        data.title = 'Orders'
         data.table = 'transactions'
         data.model = new Transactions()
         data.statuses = data.model.statuses
@@ -139,29 +139,29 @@ const express = require('express'),
     })
 
 
-        routes.get('/dashboard/transactions/archive', async(req, res) => {
+    routes.get('/dashboard/transactions/archive', async(req, res) => {
 
-            data.status = 'completed'
-            if (req.params.status){
-                data.status = req.params.status
-            }
+        data.status = 'completed'
+        if (req.params.status){
+            data.status = req.params.status
+        }
 
-            data.tabs = [{href: '/dashboard/transactions/archive', text:'Completed'},{href: '/dashboard/transactions/refunds', text:'Refunds'},{href: '/dashboard/transactions/deleted', text:'Deleted'}]
+        data.tabs = [{href: '/dashboard/transactions/archive', text:'Completed'},{href: '/dashboard/transactions/refunds', text:'Refunds'},{href: '/dashboard/transactions/deleted', text:'Deleted'}]
 
-            data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
 
-            view.current_view = 'orders'
-            data.title = 'Order Archive'
+        view.current_view = 'orders'
+        data.title = 'Order Archive'
 
-            data.status_count = await DB.read('transactions').where(['status != completed','status != deleted']).collect('status')
+        data.status_count = await DB.read('transactions').where(['status != completed','status != deleted']).collect('status')
 
-            data.model = new Transactions()
-            data.table = 'transactions'
-            data.fields = data.model.settings.fields
-            data.search_fields = data.model.settings.search_fields
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        data.model = new Transactions()
+        data.table = 'transactions'
+        data.fields = data.model.settings.fields
+        data.search_fields = data.model.settings.search_fields
+        res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
-        })
+    })
 
     routes.get('/dashboard/transactions/:status?', async(req, res) => {
 

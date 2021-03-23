@@ -1,0 +1,38 @@
+
+
+<% if (typeof title == 'undefined'){ var title = ''} %>
+<% if (typeof view.current_sub_view == 'undefined'){ view.current_sub_view = ''} %>
+
+<div class="header">
+    <div class="title">
+        <h1><%- title %></h1>
+    </div>
+    <div class="buttons">
+        <% if (typeof action_buttons != 'undefined'){ %>
+            <% action_buttons.forEach(button => { %>
+                <a <% if (button.href){ %> href="<%- button.href %>"<% } %> <% if (button.click){ %> app-click="<%- button.click %>"<% } %> class="btn <% if (title.toLowerCase() == button.text.toLowerCase() || view.current_sub_view.toLowerCase() == button.text.toLowerCase()){ %>bg-primary<% } else { %>bg-white<% } %>"><%- button.text %></a>
+            <% }) %>
+        <% } %>
+        <% if (typeof table != 'undefined'){ %>
+            <a class="btn bg-primary" href="/dashboard/<%- table %>/new">Add <%- view.functions.parseName(table,true) %><span class="icon plus right white"></span></a>
+        <% } %>
+    </div>
+</div>
+
+<div class="actions">
+
+    <div class="tabs">
+        <% if (typeof tabs != 'undefined'){ %>
+            <% tabs.forEach(tab => { %>
+                <a href="<%- tab.href %>" class="<% if (title.toLowerCase() == tab.text.toLowerCase() || view.current_sub_view.toLowerCase() == tab.text.toLowerCase()){ %>active<% } %>"><%- tab.text %></a>
+            <% }) %>
+        <% } %>
+    </div>
+
+    <% if (typeof search_fields == 'object'){ %>
+        <div class="search">
+            <span class="icon search black"></span>
+            <input type="text" app-change="search('<%- table %>')" placeholder="Search <%- title %>">
+        </div>
+    <% } %>
+</div>

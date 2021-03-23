@@ -2,7 +2,7 @@
 
     <div class="header" app-init="getItem('<%- table %>','<%- key %>')">
         <div class="title">
-            <h1 class="capitalise"><%- view.functions.parseName(table) %> / <span app-bind="new.reference"></span></h1>
+            <h1 class="capitalise"><%- title %> / <span app-bind="new.reference"></span></h1>
         </div>
         <div class="buttons">
             <a class="btn bg-white" href="/dashboard/<%- table %>">
@@ -41,16 +41,16 @@
     <div class="actions">
 
         <div class="tabs">
-            <% if (typeof fields == 'object') { %>
-                <% for (var tab in fields){ %>
-                    <a app-click="view.edit_tab = '<%- tab %>'" app-class="{'active':view.edit_tab == '<%- tab %>'}" class="capitalise"><%- view.functions.parseName(tab) %></a>
-                <% } %>
-            <% } %>
+            <a app-click="view.edit_tab = 'details'" app-class="{'active':view.edit_tab == 'details'}" class="capitalise">Details</a>
+            <a app-click="view.edit_tab = 'items'" app-class="{'active':view.edit_tab == 'items'}" class="capitalise">Items</a>
+            <a app-click="view.edit_tab = 'logs'" app-class="{'active':view.edit_tab == 'logs'}" class="capitalise">Logs</a>
         </div>
 
     </div>
 
     <div class="edit-wrap edit-<%- table %> edit">
+
+        <div app-show="view.edit_tab == 'details'">
 
             <div class="flex-middle-right mb-2">
                 <div class="text-right">
@@ -60,183 +60,199 @@
                 <img app-src="new.barcode" class="inline-block icon xxl ml-1">
             </div>
 
-        <div class="grid col-4 gap-2">
+            <div class="grid col-2 gap-2">
 
-            <div class="colspan-m-2">
+                <div class="">
 
-                <div>
-                    <label>Reference</label>
-                    <input type="text" app-model="new.reference" class="no-style">
+                    <div>
+                        <label>Reference</label>
+                        <input type="text" app-model="new.reference" class="no-style">
+                    </div>
+
+                        <label class="within">Status</label>
+                        <select app-model="new.status" class="no-style">
+                            <% statuses.forEach((status,i)=>{ %>
+                                <% if (status.value != 'new'){ %>
+                                    <option value="<%- status.value %>"><%- status.text %></option>
+                                <% } %>
+                            <% }) %>
+                        </select>
+
+
+                        <label class="within">Shipping Method</label>
+                        <input type="text" app-model="new.shipping_method" disabled class="no-style">
+
                 </div>
 
-                    <label class="within">Status</label>
-                    <select app-model="new.status" class="no-style">
-                        <% statuses.forEach((status,i)=>{ %>
-                            <% if (status.value != 'new'){ %>
-                                <option value="<%- status.value %>"><%- status.text %></option>
-                            <% } %>
-                        <% }) %>
+                <div class="">
+                    <label>Customer</label>
+                    <input type="text" app-model="new.customer.full_name" placeholder="Name" class="no-style">
+                    <input type="text" app-model="new.customer.tel" placeholder="Tel" class="no-style">
+                    <input type="text" app-model="new.customer.email" placeholder="Email" class="no-style">
+                    <label class="within mb-1">Notification Method</label>
+                    <select app-model="new.customer.notification_method" class="text-primary no-style">
+                        <option value="" disabled>Not Specified</option>
+                        <option value="email">Email</option>
+                        <option value="sms">SMS</option>
                     </select>
+                </div>
 
+                <div class="">
+                    <label>Billing Address</label>
+                    <input type="text" app-model="new.billing_address.address_line1" placeholder="Line 1" class="no-style">
+                    <input type="text" app-model="new.billing_address.address_line2" placeholder="Line 2" class="no-style">
+                    <input type="text" app-model="new.billing_address.address_level1" placeholder="Town / City" class="no-style">
+                    <input type="text" app-model="new.billing_address.address_level2" placeholder="County" class="no-style">
+                    <input type="text" app-model="new.billing_address.postal_code" placeholder="Postcode" class="no-style">
+                </div>
 
-                    <label class="within">Shipping Method</label>
-                    <input type="text" app-model="new.shipping_method" disabled class="no-style">
+                <div class="">
+                    <label>Shipping Address</label>
+                    <input type="text" app-model="new.shipping_address.address_line1" placeholder="Line 1" class="no-style">
+                    <input type="text" app-model="new.shipping_address.address_line2" placeholder="Line 2" class="no-style">
+                    <input type="text" app-model="new.shipping_address.address_level1" placeholder="Town / City" class="no-style">
+                    <input type="text" app-model="new.shipping_address.address_level2" placeholder="County" class="no-style">
+                    <input type="text" app-model="new.shipping_address.postal_code" placeholder="Postcode" class="no-style">
+                </div>
 
             </div>
 
-            <div class="colspan-m-2">
-                <label>Customer</label>
-                <input type="text" app-model="new.customer.full_name" placeholder="Name" class="no-style">
-                <input type="text" app-model="new.customer.tel" placeholder="Tel" class="no-style">
-                <input type="text" app-model="new.customer.email" placeholder="Email" class="no-style">
-                <label class="within mb-1">Notification Method</label>
-                <select app-model="new.customer.notification_method" class="text-primary no-style">
-                    <option value="" disabled>Not Specified</option>
-                    <option value="email">Email</option>
-                    <option value="sms">SMS</option>
-                </select>
-            </div>
+        </div>
 
-            <div class="colspan-m-2">
-                <label>Billing Address</label>
-                <input type="text" app-model="new.billing_address.address_line1" placeholder="Line 1" class="no-style">
-                <input type="text" app-model="new.billing_address.address_line2" placeholder="Line 2" class="no-style">
-                <input type="text" app-model="new.billing_address.address_level1" placeholder="Town / City" class="no-style">
-                <input type="text" app-model="new.billing_address.address_level2" placeholder="County" class="no-style">
-                <input type="text" app-model="new.billing_address.postal_code" placeholder="Postcode" class="no-style">
-            </div>
+        <div app-show="view.edit_tab == 'items'">
 
-            <div class="colspan-m-2">
-                <label>Shipping Address</label>
-                <input type="text" app-model="new.shipping_address.address_line1" placeholder="Line 1" class="no-style">
-                <input type="text" app-model="new.shipping_address.address_line2" placeholder="Line 2" class="no-style">
-                <input type="text" app-model="new.shipping_address.address_level1" placeholder="Town / City" class="no-style">
-                <input type="text" app-model="new.shipping_address.address_level2" placeholder="County" class="no-style">
-                <input type="text" app-model="new.shipping_address.postal_code" placeholder="Postcode" class="no-style">
-            </div>
-
-
-            <div class="colspan-4" app-hide="view.refund">
-                <div class="table">
-                    <div class="row table-header">
-                        <div class="cell" style="width:50%;">Item</div>
-                        <div class="cell text-center">Qty</div>
-                        <div class="cell text-right">Price</div>
-                        <div class="cell text-right" >Adj.</div>
-                        <div class="cell text-right">Paid</div>
-                        <div class="cell text-right">Tax</div>
-                        <div class="cell text-right">Total</div>
-                    </div>
-                    <div class="row" app-for="item in new.items">
-                        <div class="cell">
-                            <div class="flex flex-column">
-                                <a app-attr="{'href':'/dashboard/products/'+item._key}" app-bind="item.name" class="text-bold text-primary"></a>
-                                <span app-show="item.refund_transaction_id" class="text-italic">Refunded <span app-bind="parseCurrency(item.refund_value)"></span> on <span app-bind="parseDate(item.refund_date,'Do MMMM YYYY h:mma')"></span> <a app-attr="{'href':'/dashboard/transactions/edit/'+item.refund_transaction_id}"><span class="icon link primary"></span></a></span>
-                            </div>
+            <div class="grid col-3">
+                <div class="colspan-3" app-hide="view.refund">
+                    <div class="table">
+                        <div class="row table-header">
+                            <div class="cell" style="width:50%;">Item</div>
+                            <div class="cell text-center">Qty</div>
+                            <div class="cell text-right">Price</div>
+                            <div class="cell text-right" >Adj.</div>
+                            <div class="cell text-right">Paid</div>
+                            <div class="cell text-right">Tax</div>
+                            <div class="cell text-right">Total</div>
                         </div>
-                        <div class="cell text-center" app-bind="item.quantity"></div>
-                        <div class="cell text-right"><span app-show="item.original_price" app-bind="parseCurrency(item.original_price)"></span><span app-hide="item.original_price" app-bind="parseCurrency(item.price)"></span></div>
-                        <div class="cell text-right" app-bind="parseAdjustment(item.adjustment)"></div>
-                        <div class="cell text-right" app-bind="parseCurrency(item.price)"></div>
-                        <div class="cell text-right" app-bind="parseCurrency(item.tax)"></div>
-                        <div class="cell text-right text-bold" app-bind="parseCurrency(item.total)"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="colspan-4" app-show="view.refund">
-                <div class="table">
-                    <div class="row table-header">
-                        <div class="cell" style="width:50%;">Item</div>
-                        <div class="cell text-center">Qty</div>
-                        <div class="cell text-right">Price</div>
-                        <div class="cell text-center">Refund <span class="icon help primary" title="Select each item you want to refund"></span></div>
-                        <div class="cell text-center">Refund Qty <span class="icon help primary" title="Optional. Specify the number of items to include in the refund"></span></div>
-                        <div class="cell text-right">Partial Refund <span class="icon help primary" title="Optional. Enter an amount to deduct from this row either as a percentage, or monetary value"></span></div>
-                    </div>
-                    <div class="row" app-for="item in new.items">
-                        <div class="cell text-bold text-primary">
-                            <div class="flex flex-column">
-                                <a app-attr="{'href':'/dashboard/products/'+item._key}" app-bind="item.name"></a>
-                                <a app-show="item.refund_transaction_id" app-attr="{'href':'/dashboard/transactions/edit/'+item.refund_transaction_id}">Refunded <span app-bind="parseCurrency(item.refund_value)"></span> on <span app-bind="parseDate(item.refund_date,'Do MMMM YYYY h:mma')"></span></a>
+                        <div class="row" app-for="item in new.items">
+                            <div class="cell">
+                                <div class="flex flex-column">
+                                    <a app-attr="{'href':'/dashboard/products/'+item._key}" app-bind="item.name" class="text-bold text-primary"></a>
+                                    <span app-show="item.refund_transaction_id" class="text-italic">Refunded <span app-bind="parseCurrency(item.refund_value)"></span> on <span app-bind="parseDate(item.refund_date,'Do MMMM YYYY h:mma')"></span> <a app-attr="{'href':'/dashboard/transactions/edit/'+item.refund_transaction_id}"><span class="icon link primary"></span></a></span>
+                                </div>
                             </div>
+                            <div class="cell text-center" app-bind="item.quantity"></div>
+                            <div class="cell text-right"><span app-show="item.original_price" app-bind="parseCurrency(item.original_price)"></span><span app-hide="item.original_price" app-bind="parseCurrency(item.price)"></span></div>
+                            <div class="cell text-right" app-bind="parseAdjustment(item.adjustment)"></div>
+                            <div class="cell text-right" app-bind="parseCurrency(item.price)"></div>
+                            <div class="cell text-right" app-bind="parseCurrency(item.tax)"></div>
+                            <div class="cell text-right text-bold" app-bind="parseCurrency(item.total)"></div>
                         </div>
-                        <div class="cell text-center" app-bind="item.quantity"></div>
-                        <div class="cell text-right"><span app-show="item.original_price" app-bind="parseCurrency(item.original_price)"></span><span app-hide="item.original_price" app-bind="parseCurrency(item.price)"></span></div>
-                        <div class="cell text-center"><input type="checkbox" app-model="item.refund" app-click="setRefund(item)"></div>
-                        <div class="cell text-right"><input type="number" app-show="item.refund" app-model="item.refund_qty" app-change="checkRefund(item,'whole')"></div>
-                        <div class="cell text-right"><input type="text" class="text-right" app-show="item.refund" app-model="item.refund_amount" app-change="checkRefund(item, 'partial')"></div>
+                    </div>
+                </div>
+
+                <div class="colspan-3" app-show="view.refund">
+                    <div class="table">
+                        <div class="row table-header">
+                            <div class="cell" style="width:50%;">Item</div>
+                            <div class="cell text-center">Qty</div>
+                            <div class="cell text-right">Price</div>
+                            <div class="cell text-center">Refund <span class="icon help primary" title="Select each item you want to refund"></span></div>
+                            <div class="cell text-center">Refund Qty <span class="icon help primary" title="Optional. Specify the number of items to include in the refund"></span></div>
+                            <div class="cell text-right">Partial Refund <span class="icon help primary" title="Optional. Enter an amount to deduct from this row either as a percentage, or monetary value"></span></div>
+                        </div>
+                        <div class="row" app-for="item in new.items">
+                            <div class="cell text-bold text-primary">
+                                <div class="flex flex-column">
+                                    <a app-attr="{'href':'/dashboard/products/'+item._key}" app-bind="item.name"></a>
+                                    <a app-show="item.refund_transaction_id" app-attr="{'href':'/dashboard/transactions/edit/'+item.refund_transaction_id}">Refunded <span app-bind="parseCurrency(item.refund_value)"></span> on <span app-bind="parseDate(item.refund_date,'Do MMMM YYYY h:mma')"></span></a>
+                                </div>
+                            </div>
+                            <div class="cell text-center" app-bind="item.quantity"></div>
+                            <div class="cell text-right"><span app-show="item.original_price" app-bind="parseCurrency(item.original_price)"></span><span app-hide="item.original_price" app-bind="parseCurrency(item.price)"></span></div>
+                            <div class="cell text-center"><input type="checkbox" app-model="item.refund" app-click="setRefund(item)"></div>
+                            <div class="cell text-right"><input type="number" app-show="item.refund" app-model="item.refund_qty" app-change="checkRefund(item,'whole')"></div>
+                            <div class="cell text-right"><input type="text" class="text-right" app-show="item.refund" app-model="item.refund_amount" app-change="checkRefund(item, 'partial')"></div>
+                        </div>
+                    </div>
+                </div>
+                <div></div>
+                <div></div>
+                <div class="">
+                    <div class="table">
+                        <div class="row table-header">
+                            <div class="cell py-0" style="width:50%;">Totals</div>
+                            <div class="cell py-0 text-right"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Sub Total</div>
+                            <div class="cell py-0 text-right" app-bind="parseCurrency(new.sub_total)"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">VAT</div>
+                            <div class="cell py-0 text-right" app-bind="parseCurrency(new.tax)"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Item Total</div>
+                            <div class="cell py-0 text-right" app-bind="parseCurrency(new.item_total)"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0 pt-1">Shipping</div>
+                            <div class="cell py-0 text-right pt-1" app-bind="parseCurrency(new.shipping_total)"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0 text-bold">Total</div>
+                            <div class="cell py-0 text-right text-bold" app-bind="parseCurrency(new.total)"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="colspan-2">
-                <div class="table">
-                    <div class="row table-header">
-                        <div class="cell py-0" style="width:50%;">Logs</div>
-                        <div class="cell py-0 text-right"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Created</div>
-                        <div class="cell py-0" app-bind="parseDate(new._created,'DD/MM/YY h:mma')"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Paid</div>
-                        <div class="cell py-0" app-bind="parseDate(new.status_logs.paid,'DD/MM/YY h:mma')"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Processed</div>
-                        <div class="cell py-0" app-bind="parseDate(new.status_logs.processing,'DD/MM/YY h:mma')"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Shipped</div>
-                        <div class="cell py-0" app-bind="parseDate(new.status_logs.shipped,'DD/MM/YY h:mma')"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Completed</div>
-                        <div class="cell py-0" app-bind="parseDate(new.status_logs.completed,'DD/MM/YY h:mma')"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Refunded</div>
-                        <div class="cell py-0" app-bind="parseDate(new.status_logs.refunded,'DD/MM/YY h:mma')"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Deleted</div>
-                        <div class="cell py-0" app-bind="parseDate(new.status_logs.deleted,'DD/MM/YY h:mma')"></div>
+            </div>
+
+            <div app-show="view.edit_tab == 'logs'">
+
+                <div class="colspan-2">
+                    <div class="table">
+                        <div class="row table-header">
+                            <div class="cell py-0" style="width:50%;">Logs</div>
+                            <div class="cell py-0 text-right"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Created</div>
+                            <div class="cell py-0" app-bind="parseDate(new._created,'DD/MM/YY h:mma')"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Paid</div>
+                            <div class="cell py-0" app-bind="parseDate(new.status_logs.paid,'DD/MM/YY h:mma')"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Processed</div>
+                            <div class="cell py-0" app-bind="parseDate(new.status_logs.processing,'DD/MM/YY h:mma')"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Shipped</div>
+                            <div class="cell py-0" app-bind="parseDate(new.status_logs.shipped,'DD/MM/YY h:mma')"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Completed</div>
+                            <div class="cell py-0" app-bind="parseDate(new.status_logs.completed,'DD/MM/YY h:mma')"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Refunded</div>
+                            <div class="cell py-0" app-bind="parseDate(new.status_logs.refunded,'DD/MM/YY h:mma')"></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell py-0">Deleted</div>
+                            <div class="cell py-0" app-bind="parseDate(new.status_logs.deleted,'DD/MM/YY h:mma')"></div>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="hidden-s hidden-m"></div>
 
-            <div class="colspan-m-2">
-                <div class="table">
-                    <div class="row table-header">
-                        <div class="cell py-0" style="width:50%;">Totals</div>
-                        <div class="cell py-0 text-right"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Sub Total</div>
-                        <div class="cell py-0 text-right" app-bind="parseCurrency(new.sub_total)"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">VAT</div>
-                        <div class="cell py-0 text-right" app-bind="parseCurrency(new.tax)"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0">Item Total</div>
-                        <div class="cell py-0 text-right" app-bind="parseCurrency(new.item_total)"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0 pt-1">Shipping</div>
-                        <div class="cell py-0 text-right pt-1" app-bind="parseCurrency(new.shipping_total)"></div>
-                    </div>
-                    <div class="row">
-                        <div class="cell py-0 text-bold">Total</div>
-                        <div class="cell py-0 text-right text-bold" app-bind="parseCurrency(new.total)"></div>
-                    </div>
-                </div>
-            </div>
+
 
         </div>
 

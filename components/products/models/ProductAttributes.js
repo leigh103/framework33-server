@@ -10,7 +10,7 @@
             this.settings = {
                 collection: 'product_attributes',
                 fields: [
-                    {name:'attribute',input_type:'text',placeholder:'Attribute', type:'string', required:true},
+                    {name:'name',input_type:'text',placeholder:'Attribute', type:'string', required:true},
                     {name:'options',input_type:'array',placeholder:'Options', type:'object', required:false}
                 ]
             }

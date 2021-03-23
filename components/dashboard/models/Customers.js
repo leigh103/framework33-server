@@ -2,14 +2,14 @@
 
     const Users = require(basedir+'/modules/Users')
 
-    class User extends Users {
+    class Customers extends Users {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'user',
+                collection: 'customers',
                 fields: [
                     {name:'avatar',input_type:'image',placeholder:'User Picture', type:'image', required:false},
                     {name:'title',input_type:'select',options:[{text:'Mr',value:'mr'},{text:'Mrs',value:'mrs'},{text:'Miss',value:'miss'},{text:'Ms',value:'ms'},{text:'Dr',value:'dr'}],placeholder:'Title', type:'string', required:false},
@@ -71,4 +71,4 @@
 
     }
 
-    module.exports = User
+    module.exports = Customers

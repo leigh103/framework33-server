@@ -1,37 +1,6 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <div class="header">
-        <div class="title">
-            <h1><%- title %></h1>
-        </div>
-        <div class="buttons">
-
-            <% if (typeof table_buttons != 'undefined'){ %>
-                <% table_buttons.forEach(button => { %>
-                    <%- button %>
-                <% }) %>
-            <% } %>
-            <a class="btn bg-primary" href="/dashboard/<%- table %>/new">Add <%- view.functions.parseName(table,true) %><span class="icon plus right white"></span></a>
-        </div>
-    </div>
-
-    <div class="actions">
-
-        <div class="tabs">
-            <% if (typeof tabs != 'undefined'){ %>
-                <% tabs.forEach(tab => { %>
-                    <a href="<%- tab.href %>" class="<% if (path == tab.href){ %>active<% } %>"><%- tab.text %></a>
-                <% }) %>
-            <% } %>
-        </div>
-
-        <% if (typeof search_fields == 'object'){ %>
-            <div class="search">
-                <span class="icon search black"></span>
-                <input type="text" app-change="search('<%- table %>')" placeholder="Search <%- title %>">
-            </div>
-        <% } %>
-    </div>
+    <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
 
     <%- include(basedir+'/components/dashboard/views/partials/table.ejs') %>
 

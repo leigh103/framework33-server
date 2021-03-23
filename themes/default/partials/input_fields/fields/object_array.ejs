@@ -1,7 +1,5 @@
 <% var obj = item.name.toLowerCase(); var colspan = 2; %>
 
-
-
 <div class="input-object-array field-<%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
     <div class="mb-2 w-100 input-object-array-wrap">
@@ -58,23 +56,7 @@
 
                     <div class="colspan-<%- colspan %>">
 
-                        <label><%- view.functions.parseName(subitem.name) %></label>
-
-                        <select app-model="<%- obj %>.<%- subitem.name %>">
-
-                            <% if (subitem.options){ %>
-                                <% subitem.options.forEach((option)=>{ %>
-                                    <option value="<%- option.value %>"><%- option.text %></option>
-                                <% }) %>
-                            <% } %>
-                            <% if (subitem.option_data){ %>
-                                <% var option_data = view.functions.getOptionData(subitem.option_data) %>
-                                <% option_data.forEach((option)=>{ %>
-                                    <option value="<%- option._key %>"><%- option.name %></option>
-                                <% }) %>
-                            <% } %>
-
-                        </select>
+                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/select.ejs',{item:subitem, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj}) %>
 
                     </div>
 
@@ -132,23 +114,7 @@
 
                 <div class="colspan-<%- colspan %>">
 
-                    <label><%- view.functions.parseName(subitem.name) %></label>
-
-                    <select app-model="new.new_array.<%- subitem.name %>">
-
-                        <% if (subitem.options){ %>
-                            <% subitem.options.forEach((option)=>{ %>
-                                <option value="<%- option.value %>"><%- option.text %></option>
-                            <% }) %>
-                        <% } %>
-                        <% if (subitem.option_data){ %>
-                            <% var option_data = view.functions.getOptionData(subitem.option_data) %>
-                            <% option_data.forEach((option)=>{ %>
-                                <option value="<%- option._key %>"><%- option.name %></option>
-                            <% }) %>
-                        <% } %>
-
-                    </select>
+                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/select.ejs',{item:subitem, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj}) %>
 
                 </div>
 

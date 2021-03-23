@@ -6,6 +6,19 @@
 
         scope.view.upload_text = "Upload Image"
 
+        scope.get('product_attributes')
+
+        watch['new.attributes.attribute'] = function(data){
+            if (scope.product_attributes){
+                scope.selected_attribute = scope.product_attributes.filter((item)=>{
+                    return item._key == data
+                })
+                scope.selected_attribute = scope.selected_attribute[0].options
+                view.update('selected_attribute')
+            }
+
+        }
+
         watch['new.category'] = function(data){
             console.log(data)
             scope.get('product_categories/'+data).then((category)=>{

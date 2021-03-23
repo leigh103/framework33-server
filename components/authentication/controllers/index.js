@@ -15,10 +15,6 @@ const express = require('express'),
             nav: [
                 {link:'Login',slug: '/login', weight: 10, authenticated:false}
             ],
-            side_nav: [
-                {link:'Login',slug: '/login', weight: 99, authenticated:false},
-                {link:'Logout',slug:'/logout', weight: 99, authenticated:true}
-            ],
             footer: [
                 {link:'Admin Login',slug: '/login/admin', weight: 10, authenticated:false},
                 {link:'Logout',slug:'/logout', weight: 10, authenticated:true}
@@ -64,14 +60,14 @@ const express = require('express'),
 
             if (time_diff > config.users.password_reset_timeout){
 
-                let user = await new User().find(['password_reset == '+timestamp_hash]),
+                let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash]),
                     auth_data = user.deleteReset()
 
                 res.render(config.site.theme_path+'/templates/authentication/activate.ejs', {error:'For security reasons, activation tokens are only valid for '+config.users.password_reset_timeout+' minutes. Please try again.'})
 
             } else {
 
-                let user = await new User().find(['password_reset == '+timestamp_hash])
+                let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash])
 
                 if (user.error){
                     res.render(config.site.theme_path+'/templates/authentication/activate.ejs', {error:'Invalid token'})
@@ -125,7 +121,7 @@ const express = require('express'),
 
         if (req.body.password && req.body.password_conf && req.body.password != '' && req.body.password_conf != '' && req.body.password == req.body.password_conf){
 
-            let user = await new User(req.body).findOrSave()
+            let user = await new Customers(req.body).findOrSave()
 
             if (!user || user.error){
 
@@ -143,7 +139,7 @@ const express = require('express'),
                 if (auth_data && auth_data.error){
                     res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:req.body.guard,error:auth_data.error})
                 } else if (auth_data && auth_data._id){
-    
+
                     req.session.user = auth_data
                     if (req.cookies && req.cookies['connect.sid']){
                         req.session.user.ws_id = req.cookies['connect.sid']
@@ -203,7 +199,7 @@ const express = require('express'),
 
         if (time_diff > config.users.password_reset_timeout){
 
-            let user = await new User().find(['password_reset == '+timestamp_hash]),
+            let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash]),
                 auth_data = user.deleteReset()
 
             res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard:req.params.guard,error:'For security reasons, password reset tokens are only valid for '+config.users.password_reset_timeout+' minutes. Please try again.'})

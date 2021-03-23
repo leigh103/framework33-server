@@ -1,13 +1,16 @@
 <% layout(config.site.theme+'/dashboard.ejs') -%>
 
-    <h3 class="mb-3">Server Components</h3>
+
+<%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
+
+<div class="edit-wrap">
 
     <% if (typeof components != 'undefined'){ %>
 
-        <div class="table list-items">
+        <div class="table ">
 
             <% components.forEach((component) => { %>
-                <div class="row">
+                <div class="row bg-white">
                     <div class="cell capitalise text-weight-500 flex-1"><%- component.name %></div>
                     <div class="cell capitalise text-weight-500 flex-1 text-center <% if (component.loaded){ %>text-33-green<% } else { %>text-33-red<% } %>"><% if (!component.loaded){  %><i class="fas fa-times"></i><% } else { %><i class="fas fa-check"></i><% } %></div>
                     <div class="cell flex-3 <% if (!component.loaded){ %>text-33-red<% } %>">
@@ -64,3 +67,5 @@
         </div>
 
     <% } %>
+
+    </div>

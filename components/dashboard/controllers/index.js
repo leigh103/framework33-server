@@ -25,11 +25,12 @@ const express = require('express'),
                     {link:'Mailbox',slug: '/dashboard/mailbox', icon:'<span class="icon envelope"></span>', weight:2},
                     {link:'Logs',slug: '/dashboard/logs', icon:'<span class="icon contenttext"></span>', weight:3},
                     {link:'Components',slug: '/dashboard/components', icon:'<span class="icon contentfeatures"></span>', weight:4}
-                ]}
+                ]},
+                {link:'People',slug: '/dashboard/admin', weight: 6, icon:'<span class="icon person"></span>', protected_guard:['admin']}
             ]
         },
         includes: [
-            {name:'users',path:'users.js'},
+            {name:'customers',path:'customers.js'},
             {name:'admins',path:'admins.js'}
         ]
     },
@@ -49,7 +50,8 @@ const express = require('express'),
         include_scripts: [settings.views+'/scripts/script.ejs'],
         meta:{
             title: config.site.name+' | Dashboard'
-        }
+        },
+        tabs:[{href:'/dashboard', text:'Dashboard'},{href:'/dashboard/mailbox', text:'Mailbox'},{href:'/dashboard/components', text:'Components'},{href:'/dashboard/logs', text:'Logs'}]
     }
 
 
@@ -60,12 +62,13 @@ const express = require('express'),
         } else {
             res.redirect('/login/admin')
         }
+        next()
     })
 
     routes.get('/', (req, res) => {
 
         view.current_view = 'dashboard'
-        data.title = 'Users'
+        data.title = 'Dashboard'
         res.render(settings.views+'/dashboard.ejs',data)
 
     })
@@ -95,15 +98,23 @@ const express = require('express'),
     routes.get('/logs', (req, res) => {
 
         view.current_view = 'dashboard'
-        data.title = 'logs'
+        data.title = 'Logs'
         res.render(settings.views+'/logs.ejs',data)
+
+    })
+
+    routes.get('/settings', (req, res) => {
+
+        view.current_view = 'settings'
+        data.title = 'Settings'
+        res.render(settings.views+'/settings.ejs',data)
 
     })
 
     routes.get('/mailbox', (req, res) => {
 
         view.current_view = 'dashboard'
-        data.title = 'mailbox'
+        data.title = 'Mailbox'
         res.render(settings.views+'/mailbox.ejs',data)
 
     })

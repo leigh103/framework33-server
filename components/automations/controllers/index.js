@@ -11,10 +11,10 @@ const express = require('express'),
 
     settings = {
         default_route: 'dashboard',
-        views: 'events/views',
+        views: 'automations/views',
         menu: {
             side_nav: [
-                {link:'Events',slug: '/dashboard/events', icon:'<span class="icon pulse"></span>', weight:8}
+                {link:'Automations',slug: '/dashboard/automations', icon:'<span class="icon clock"></span>', weight:5}
             ]
         }
     },
@@ -36,7 +36,7 @@ const express = require('express'),
     let data = {
         meta: {},
         include_styles: ['dashboard/views/styles/dashboard-style.ejs'],
-        model: new Events()
+        model: new Automations()
     }
 
     routes.get('*', (req, res, next) => {
@@ -48,18 +48,18 @@ const express = require('express'),
         next()
     })
 
-    routes.get('/events/customers', async(req, res) => {
+    routes.get('/automations/customers', async(req, res) => {
 
         data.meta = {
-            title: config.site.name+' | Events'
+            title: config.site.name+' | Automations'
         }
 
-        view.current_view = 'events'
+        view.current_view = 'automations'
         view.current_sub_view = 'customers'
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
-        data.title = 'Events'
-        data.table = 'events'
+        data.title = 'Automations'
+        data.table = 'automations'
 
         data.fields = data.model.fields
         data.search_fields = data.model.search_fields
@@ -68,18 +68,18 @@ const express = require('express'),
 
     })
 
-    routes.get('/events/:key?', async(req, res) => {
+    routes.get('/automations/:key?', async(req, res) => {
 
         data.meta = {
-            title: config.site.name+' | Events'
+            title: config.site.name+' | Automations'
         }
 
-        view.current_view = 'events'
+        view.current_view = 'automations'
         view.current_sub_view = ''
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
-        data.title = 'Events'
-        data.table = 'events'
+        data.title = 'Automations'
+        data.table = 'automations'
 
         if (req.params.key){
             data.key = req.params.key

@@ -1,14 +1,14 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class BulkMessage extends Models {
+    class Marketing extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'bulk_message',
+                collection: 'marketing',
                 fields: [
                     {name:'content',input_type:'textarea',placeholder:'Enter email content', type:'string', required:false},
                     {name:'template_id',input_type:'text',placeholder:'Enter Postmark template ID', type:'string', required:false},
@@ -44,4 +44,4 @@
 
     }
 
-    module.exports = BulkMessage
+    module.exports = Marketing

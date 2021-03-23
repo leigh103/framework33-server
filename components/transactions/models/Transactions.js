@@ -23,22 +23,22 @@
                     // {name:'status',input_field:'select',options:this.statuses, type:'string', required:false},
                     // {name:'barcode',input_field:'_key',placeholder:'Barcode', type:'barcode', required:false},
                     {name:'reference', type:'string', input_type:'text',required:true},
-                    {name:'items', type:'array', required:false},
-                    {name:'customer', type:'object', required:false, subitems:[
+                    {name:'items', type:'array', tab:'items',required:false},
+                    {name:'customer', type:'object', required:false, tab:'customer',subitems:[
                         {name:'title',input_type:'select',options:[{text:'Mr',value:'mr'},{text:'Mrs',value:'mrs'},{text:'Miss',value:'miss'},{text:'Ms',value:'ms'},{text:'Dr',value:'dr'}],placeholder:'Title', type:'string', required:false},
                         {name:'full_name',input_type:'text',placeholder:'Name', type:'string', required:true},
                         {name:'email',input_type:'email',placeholder:'Email Address', type:'email', required:false},
                         {name:'tel',input_type:'number',placeholder:'Mobile Number', type:'tel', required:false},
                         {name:'notification_method',input_type:'select',options:[{text:'SMS Text',value:'sms'},{text:'Email',value:'email'}],placeholder:'Select preferred notification method', type:'string', required:false}
                     ]},
-                    {name:'billing_address', type:'object', required:false, subitems:[
+                    {name:'billing_address', type:'object', required:false, tab:'customer',subitems:[
                         {name:'address_line1',input_type:'text',placeholder:'Address Line 1', type:'string', required:true},
                         {name:'address_line2',input_type:'text',placeholder:'Address Line 2', type:'string', required:false},
                         {name:'address_level1',input_type:'text',placeholder:'County', type:'string', required:false},
                         {name:'address_level2',input_type:'text',placeholder:'City', type:'string', required:true},
                         {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'string', required:true}
                     ]},
-                    {name:'shipping_address', type:'object', required:false, subitems:[
+                    {name:'shipping_address', type:'object', required:false, tab:'customer',subitems:[
                         {name:'address_line1',input_type:'text',placeholder:'Address Line 1', type:'string', required:true},
                         {name:'address_line2',input_type:'text',placeholder:'Address Line 2', type:'string', required:false},
                         {name:'address_level1',input_type:'text',placeholder:'County', type:'string', required:false},

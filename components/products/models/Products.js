@@ -10,8 +10,7 @@
             this.settings = {
                 collection: 'products',
                 fields: [
-                    {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
-                    {name:'gallery',input_type:'img_array',placeholder:'Gallery', type:'object', tab:'gallery', required:false},
+                    {name:'gallery',input_type:'img_array',placeholder:'Images', type:'object', tab:'images', required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'brand',input_type:'text',placeholder:'Brand', type:'string', required:false},
                     {name:'activated',input_type:'checkbox',type:'boolean',required: false},
@@ -20,15 +19,17 @@
                     {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},
                     {name:'sub_category',input_type:'select', option_for:'sub_category in sub_categories',type:'string', required:false},
                     {name:'variants',input_type:'multiselect',option_data:'products', tab:'variants', type:'string', required:false},
-                    {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'price',  required:false},
-                    {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'price', type:'number', required:false},
-                    {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'price',required: true},
-                    {name:'adjustment',input_type:'text',placeholder:'Adjustment', tab:'price',type:'discount',required: false},
-                    {name:'attributes',input_type:'array',option_data:'product_attributes', tab:'attributes', placeholder:'Attributes',type:'object',required: false},
+                    {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'prices and stock',  required:false},
+                    {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'prices and stock', type:'number', required:false},
+                    {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'prices and stock',required: true},
+                    {name:'adjustment',input_type:'text',placeholder:'Adjustment', tab:'prices and stock',type:'discount',required: false},
+                    {name:'attributes',input_type:'array', tab:'attributes', placeholder:'Attributes',type:'array',required: false, subitems:[
+                        {name:'attribute',input_type:'select', option_for:'attribute in product_attributes', type:'string', required:false},
+                        {name:'value',input_type:'select', option_for:'value in selected_attribute', type:'string', required:false}
+                    ]},
                     {name:'customisation',input_type:'array',placeholder:'Customisation', tab:'customisation', type:'object',required: false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', truncate:160, required:false},
-                    {name:'content',input_type:'contenteditable',placeholder:'Content', tab:'content', type:'string', required:false},
-
+                    {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:false}
                 ],
                 search_fields:['name','brand', 'barcode']
             }

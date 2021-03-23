@@ -14,7 +14,7 @@ const express = require('express'),
         views: 'products/views',
         menu: {
             side_nav: [
-                {link:'Products',slug: '/dashboard/products', icon:'<span class="icon box"></span>', weight:1, subitems:[
+                {link:'Products',slug: '/dashboard/products', icon:'<span class="icon box"></span>', weight:3, subitems:[
                     // {link:'All',slug: '/dashboard/products', weight:1},
                     // {link:'Inactive',slug: '/dashboard/products/inactive', weight:5},
                     // {link:'Sale Items',slug: '/dashboard/products/sale', weight:6},
@@ -72,16 +72,16 @@ const express = require('express'),
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
         model: new Products(),
-        tabs: [{href: '/dashboard/products', text:'Active (4)'},{href: '/dashboard/products?activated=false', text:'Inactive'},{href: '/dashboard/products?activated=false', text:'Deleted'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
+        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products?activated=false', text:'Inactive'},{href: '/dashboard/products?activated=false', text:'Deleted'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
     }
 
-    routes.get('*', (req, res, next) => {
+    routes.get('*', async (req, res, next) => {
         if (req.session && req.session.user && req.session.user.guard){
             data.user = req.session.user
         } else {
             data.user = {}
         }
-        data.path = req.url
+        
         next()
     })
 
@@ -211,7 +211,7 @@ const express = require('express'),
         }
 
         view.current_view = 'products'
-        view.current_sub_view = 'all'
+        view.current_sub_view = 'products'
         data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
         data.include_styles = [settings.views+'/styles/dashboard_style.ejs']
 
@@ -242,10 +242,12 @@ const express = require('express'),
 
         } else if (req.params.key){
             data.key = req.params.key
+            view.current_sub_view = 'details'
             data.option_data = await view.functions.getOptionData('product_categories')
             data.fields = data.model.parseEditFields()
             res.render(basedir+'/components/dashboard/views/edit.ejs',data)
         } else {
+            view.current_sub_view = 'active'
             data.fields = data.model.settings.fields
             data.search_fields = data.model.settings.search_fields
             res.render(basedir+'/components/dashboard/views/table.ejs',data)
