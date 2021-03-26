@@ -1,0 +1,28 @@
+<section class="<% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Model Carousel" app-block-description="This is a carousel block which displays data from the database" app-init="get('<%- data.api_address %>')" app-input="text" app-field="api_address">
+
+
+        <div class="carousel align-middle <%- data.carousel_classes %>" data-auto-slide="5" app-input="text" app-field="carousel_classes">
+
+            <div class="arrow arrow-left" onclick="chgSlide(this,'prev')"></div>
+
+            <div class="slides">
+
+                <div class="slide" app-for="product in products">
+                    <div class="contain py-6 <%- data.container_classes %>">
+
+                        <h2 app-bind="product.name"></h2>
+                        <p app-bind="product.description"></p>
+                        <a app-attr="{'href':product.url}" class="btn bg-primary thick rounded mt-1">View More</a>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="arrow arrow-right" onclick="chgSlide(this,'next')"></div>
+            <div class="dots"></div>
+
+        </div>
+
+
+</section>

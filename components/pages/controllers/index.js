@@ -107,7 +107,8 @@ const express = require('express'),
                             },
                             container:{
                                 class:''
-                            }
+                            },
+                            carousel:false
                         }
                         blocks[block_name].inputs = data.match(/app\-input\=['"](.*?)['"]/g)
                         blocks[block_name].fields = data.match(/app\-field\=['"](.*?)['"]/g)

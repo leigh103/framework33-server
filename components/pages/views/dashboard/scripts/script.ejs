@@ -112,7 +112,11 @@
 
             }
 
-            scope.addNewSection = function(){
+            scope.addNewSection = function(append){
+
+                if (append){
+                    scope.view.hovered_section = false
+                }
 
             //    scope.checkSaved().then(()=>{
                     scope.openModal('show_sections')
@@ -193,6 +197,7 @@
                         view.update('view.editor')
                         view.update('view.blocks')
                         view.update('view.selected_block')
+                        view.update('view.selected_block.styling.carousel')
                         view.update('view.selected_block.styling.container')
                         view.update('view.selected_block.styling.background')
                         view.update('view.selected_block.styling.text')
@@ -262,7 +267,8 @@
                         if (!scope.view.pages.blocks){
                             scope.view.pages.blocks = []
                         }
-                        if (scope.view.hovered_section >= 0){
+                        if (scope.view.hovered_section !== false && scope.view.hovered_section >= 0){
+                            console.log('hs',scope.view.hovered_section)
                             scope.view.pages.blocks.splice(scope.view.hovered_section+1, 0, pages)
                         } else {
                             scope.view.pages.blocks.push(pages)
@@ -293,12 +299,13 @@
                     scope.openModal('show_del_block_confirm')
                 } else {
 
-                    if (scope.view.selected_block.index){
+                    if (scope.view.selected_block.index >= 0){
                         scope.view.pages.blocks.splice(scope.view.selected_block.index,1)
+                        view.update('view.pages.blocks')
                         scope.renderPage()
-                        scope.showSettings()
+                        scope.showMenu('init')
                     }
-                    scope.view.modal = false
+                    scope.closeModal()
                 }
 
             }
@@ -412,7 +419,10 @@
 //                 section_insert.style.top = pos+'px'
 //                 section_insert.style.display = 'flex'
                     section_insert.style.display = 'flex'
-                    section.parentNode.insertBefore(section_insert, section.nextSibling)
+                    if (section && section.parentNode){
+                        section.parentNode.insertBefore(section_insert, section.nextSibling)
+                    }
+
 
 
             }
@@ -422,7 +432,9 @@
                 var section_insert = document.getElementById('insert-new-section'),
                     preview = document.getElementById('preview')
 
-                preview.parentNode.insertBefore(section_insert, preview.nextSibling)
+                if (preview && preview.parentNode){
+                    preview.parentNode.insertBefore(section_insert, preview.nextSibling)
+                }
 
                 http.post('/dashboard/pages/render',scope.view.pages).then((html)=>{
 
@@ -484,7 +496,7 @@
                         } else {
                             payload.slug = scope.view.pages.title
                         }
-
+console.log(payload)
                         scope.post('pages', payload).then((pages)=>{
 
                             if (scope.window.path_obj.pop() == 'new'){

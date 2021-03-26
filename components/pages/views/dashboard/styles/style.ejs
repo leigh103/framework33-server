@@ -254,6 +254,23 @@
         margin-bottom: 1rem;
     }
 
+    .list-block.carousel {
+        margin-left: 2rem;
+        width: calc(100% - 2rem);
+        position: relative;
+    }
+
+    .list-block.carousel:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -2rem;
+        display: block;
+        width: 0.25rem;
+        height: 100%;
+        background: #98538e;
+    }
+
     .list-block.no-border {
         border: none;
     }
@@ -300,7 +317,7 @@
         mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
     }
 
-    span.icon.carousel {
+    span.icon.model-carousel {
         -webkit-mask-image: url('/images/dashboard-icons/Icon-Duplicate.svg');
         mask-image: url('/images/dashboard-icons/Icon-Duplicate.svg');
     }

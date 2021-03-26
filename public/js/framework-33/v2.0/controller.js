@@ -206,7 +206,7 @@
                     .then((data) => {
 
                         data = JSON.parse(data)
-console.log(collection, scope[collection])
+
                         if (scope[collection]){
 
                             for (var i in scope[collection]){

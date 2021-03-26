@@ -1,5 +1,7 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
+<% var carousel = false %>
+
 <div class="page">
 
     <% for (var i in pages.blocks){ %>
@@ -9,7 +11,48 @@
             <% pages.blocks[i].pages[pages.blocks[i].fields[ii].field] = pages.blocks[i].fields[ii].value %>
             <% pages.blocks[i].pages[pages.blocks[i].fields[ii].field+'_classes'] = pages.blocks[i].fields[ii].classes %>
         <% } %>
-        <%- include(config.site.theme_path+'/templates/blocks/'+pages.blocks[i].folder+'/'+pages.blocks[i].block+'.ejs', {data:pages.blocks[i].pages, styling:pages.blocks[i].styling}) %>
+
+        <% var next = i; next++ %>
+
+        <% if (pages.blocks[i].styling && pages.blocks[i].styling.carousel && pages.blocks[i].styling.carousel === true){ %>
+
+            <% if (carousel === false){ %>
+
+                <section>
+
+                    <div class="carousel align-middle" data-auto-slide="5">
+
+                        <div class="arrow arrow-left" onclick="chgSlide(this,'prev')"></div>
+
+                        <div class="slides">
+
+            <% } %>
+
+            <% carousel = true %>
+
+                            <div class="slide">
+                                <%- include(config.site.theme_path+'/templates/blocks/'+pages.blocks[i].folder+'/'+pages.blocks[i].block+'.ejs', {data:pages.blocks[i].pages, styling:pages.blocks[i].styling}) %>
+                            </div>
+
+            <% if (!pages.blocks[next] || pages.blocks[next] && !pages.blocks[next].styling || pages.blocks[next].styling && !pages.blocks[next].styling.carousel){ %>
+
+                        </div>
+
+                        <div class="arrow arrow-right" onclick="chgSlide(this,'next')"></div>
+                        <div class="dots"></div>
+
+                    </div>
+
+
+                </section>
+
+                <% carousel = false %>
+
+            <% } %>
+
+        <% } else { %>
+                <%- include(config.site.theme_path+'/templates/blocks/'+pages.blocks[i].folder+'/'+pages.blocks[i].block+'.ejs', {data:pages.blocks[i].pages, styling:pages.blocks[i].styling}) %>
+        <% } %>
 
     <% } %>
 

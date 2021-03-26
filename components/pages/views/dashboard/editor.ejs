@@ -28,6 +28,7 @@
                             <div>
                                 <div class="mb-1" app-for="field in view.editor">
 
+
                                     <div app-if="field.input == 'text'">
                                         <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
                                         <input type="text" app-model="field.value">
@@ -73,6 +74,9 @@
                             </div>
 
                             <div class="mb-1-children">
+                                <div>
+                                    <label class=" capitalise"><input type="checkbox" app-model="view.selected_block.styling.carousel">Carousel this block</label>
+                                </div>
                                 <div>
                                     <label class=" capitalise">Block Background Color</label>
                                     <input type="text" app-model="view.selected_block.styling.background.color">
@@ -224,19 +228,16 @@
 
                         <div app-show="view.tab == 'blocks'" class="fields">
 
-                            <div class="sortable">
-                                <div class="">
-
-                                </div>
-                                <div class="list-block" app-for="block in view.pages.blocks" app-click="loadBlock(block,$index)">
+                            <div class="sortable" app-sorted="renderPage()">
+                                <div class="list-block" app-for="block in view.pages.blocks" app-click="loadBlock(block,$index)" app-class="{'carousel':block.styling.carousel == true}">
                                     <span app-class="block.block" class="flex-none icon xl primary left"></span>
                                     <div class="flex-1" app-bind="block.name"></div>
-                                    <span class="flex-none icon sectiongrab grey"></span>
+                                    <span class="flex-none icon sectiongrab grey sortable-handle"></span>
                                 </div>
                             </div>
                             <div class="">
 
-                                <div class="list-block no-border" app-click="addNewSection()">
+                                <div class="list-block no-border" app-click="addNewSection(true)">
                                     <span class="flex-none icon xl plus grey left"></span>
                                     <div class="flex-1">Add block</div>
                                     <span class=""></span>
