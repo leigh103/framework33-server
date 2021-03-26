@@ -5,10 +5,14 @@
         extend.pages = function(){
 
             scope.view.pages = {
-                blocks:[]
+                blocks:[],
+                title:'',
+                slug:''
             }
             scope.view.add = true
             scope.view.saved = true
+            scope.view.show_details = true
+            scope.view.modal_tab = 'basics'
 
             document.onkeyup = function (e) {
 
@@ -29,6 +33,11 @@
 
 
 // pages_type functions
+
+
+            scope.setUpNew = function(){
+                scope.openModal('set_up')
+            }
 
 
             scope.getTypes = function(){
@@ -53,6 +62,25 @@
 
 // pages functions
 
+            scope.showMenu = function(section){
+
+                scope.view.menu = section
+
+                if (section == 'main'){
+                    scope.view.tab = 'blocks'
+                } else if (section == 'init'){
+                    scope.view.menu = 'main'
+                    scope.view.tab = 'blocks'
+                } else if (section == 'edit'){
+                    scope.view.tab = 'content'
+                }
+                view.update('view.menu')
+                view.update('view.tab')
+
+            }
+
+            scope.showMenu('init')
+
 
             scope.setPage = function(type){
                 scope.view.pages.type = type
@@ -72,6 +100,8 @@
                     scope.get('pages',key).then((pages)=>{
 
                         scope.view.pages = pages
+                        scope.view.tab = 'blocks'
+
                         view.update('view.pages')
 
                     }).catch((err)=>{
@@ -147,6 +177,7 @@
                             pages_field = pages.fields.find((item)=>{
                                 return item.field == field.field
                             })
+
                             if (pages_field){
                                 field.value = pages_field.value
                                 field.classes = pages_field.classes
@@ -157,38 +188,40 @@
                         scope.view.editor = block.editor
                         scope.view.blocks = true
                         scope.view.add = false
+                        scope.showMenu('edit')
 
                         view.update('view.editor')
                         view.update('view.blocks')
                         view.update('view.selected_block')
+                        view.update('view.selected_block.styling.container')
                         view.update('view.selected_block.styling.background')
                         view.update('view.selected_block.styling.text')
 
-                        setTimeout(function(){
+                    //    setTimeout(function(){
 
-                            let code = document.querySelectorAll('code.contenteditable')
-                            if (code){
+                        let code = document.querySelectorAll('code.contenteditable')
+                        if (code){
 
-                                for (var i in code){
-                                    if (code[i] && typeof code[i].addEventListener == 'function'){
-                                        //when the contenteditable gets focused, start listening to key presses
-                                        code[i].removeEventListener('keydown', scope.insertTab)
-                                        code[i].addEventListener('keydown', scope.insertTab)
-                                    }
+                            for (var i in code){
+                                if (code[i] && typeof code[i].addEventListener == 'function'){
+                                    //when the contenteditable gets focused, start listening to key presses
+                                    code[i].removeEventListener('keydown', scope.insertTab)
+                                    code[i].addEventListener('keydown', scope.insertTab)
                                 }
                             }
+                        }
 
-                            let imgs = document.querySelectorAll('.contenteditable img')
-                            if (imgs){
-                                for (var i in imgs){
-                                    if (imgs[i] && typeof imgs[i].addEventListener == 'function'){
-                                        imgs[i].removeEventListener('click', scope.showImageEdit)
-                                        imgs[i].addEventListener('click', scope.showImageEdit)
-                                    }
+                        let imgs = document.querySelectorAll('.contenteditable img')
+                        if (imgs){
+                            for (var i in imgs){
+                                if (imgs[i] && typeof imgs[i].addEventListener == 'function'){
+                                    imgs[i].removeEventListener('click', scope.showImageEdit)
+                                    imgs[i].addEventListener('click', scope.showImageEdit)
                                 }
                             }
+                        }
 
-                        },500)
+                    //    },500)
 
                     })
 
@@ -202,9 +235,16 @@
 
                 if (scope.view.selected_block){
 
+                    scope.view.editor.map((field)=>{
+                        if (!field.value){
+                            field.value = capitalise(field.field.replace(/_/g,' '))+" goes here"
+                        }
+                    })
+
                     let pages = {
                         name: scope.view.selected_block.name,
                         styling: scope.view.selected_block.styling,
+                        folder: scope.view.selected_block.folder,
                         block: scope.view.selected_block.block,
                         fields: scope.view.editor
                     }
@@ -252,7 +292,7 @@
                 if (conf){
                     scope.openModal('show_del_block_confirm')
                 } else {
-                    console.log(scope.view.selected_block)
+
                     if (scope.view.selected_block.index){
                         scope.view.pages.blocks.splice(scope.view.selected_block.index,1)
                         scope.renderPage()
@@ -379,14 +419,19 @@
 
             scope.renderPage = function(external){
 
-                let section_insert = document.getElementById('insert-new-section'),
+                var section_insert = document.getElementById('insert-new-section'),
                     preview = document.getElementById('preview')
 
                 preview.parentNode.insertBefore(section_insert, preview.nextSibling)
 
                 http.post('/dashboard/pages/render',scope.view.pages).then((html)=>{
 
-                    document.querySelector('#preview').innerHTML = html
+                    if (html.length < 36){
+                        preview.innerHTML = '<div class="p-3 text-italic text-black transparent-3"><span class="icon arrowleft left black"></span>To get started, add a block using the menu on the left</div>'
+                    } else {
+                        preview.innerHTML = html
+                    }
+
 
                     let preview_blocks = document.querySelectorAll('#preview *[app-block]')
 
@@ -458,6 +503,10 @@
                        scope.notify('Not saved: '+err,'error')
                     })
 
+                }
+
+                scope.saveNewPage = function(){
+                    console.log(scope.view.pages)
                 }
 
                 scope.uploadImg = function(image, obj){

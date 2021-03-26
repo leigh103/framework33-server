@@ -1,5 +1,11 @@
 .table {
 
+    border-collapse:separate;
+    // border-spacing: 0 1rem;
+        font-size: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+
     &.button-overlay {
         background-color: white;
         position: absolute;
@@ -11,6 +17,29 @@
         width: 100%;
         overflow-y: hidden;
         overflow-x: hidden;
+        position: relative;
+        background-color: white;
+        padding: 0 0 2rem 0;
+        display: flex;
+        flex-direction: column;
+
+        .table {
+            flex: none;
+        }
+
+        .table-inner-wrap {
+            flex: 1;
+        }
+
+        &.rounded {
+            border-radius: 0;
+            border-top-left-radius:$border-radius;
+        }
+    }
+
+    &-inner-wrap {
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
     @media $small {
@@ -32,129 +61,181 @@
         }
     }
 
-    .cell {
-        font-size: 0.875rem;
-        overflow: visible !important;
+    .row {
 
-        &.image {
-            width: 4rem;
+        &.table-header {
+            color: $dashboard-color-grey;
         }
 
-        &.title.select {
-            width: 4rem;
-        }
+        .cell {
+            height: 4.875rem;
+            vertical-align: middle;
+            padding: 0 0.25rem;
+            margin-bottom: 1.375rem;
+            font-size: 0.875rem;
+            overflow: visible !important;
+            border-bottom: 2px solid #F4F6F8;
 
-        &.boolean, &.integer, &.action  {
-            width: 6rem;
-        }
-
-        &.textarea, &.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav, &.items_per_customer {
-            display: none; 
-        }
-
-        &.checkbox {
-            width: 5rem;
-            text-align: center;
-        }
-
-        &.status {
-            width: 8rem;
-            text-align: center;
-        }
-
-        &.select-all {
-            width: 3rem;
-            text-align: left;
-        }
-
-        &.text {
-            width: 10rem;
-        }
-
-        &.number, &.price, &.adjustment {
-            width: 5rem;
-            text-align: left;
-        }
-
-        &.context-link {
-            text-align: right;
-            width: 6rem;
-        }
-
-        &.name, &.title {
-            width: 15rem;
-        }
-
-        input, select, textarea {
-            border: 1px solid #DDDDDD;
-            border-radius: $border-radius;
-            height: $input-height;
-
-            & + .btn {
-                height: 35px;
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-                margin-left: -6px;
-            }
-        }
-
-        @media $small {
-            min-width: 20vw;
-        }
-
-        input[type=checkbox] {
-
-            width: 0.9rem;
-            height: 0.9rem;
-
-            &:after {
-                margin-top:-0.3rem;
-                width: 1.375rem;
-                height: 1.375rem;
+            &.py-0 {
+                height: auto;
             }
 
-        }
+            &:first-child {
+                padding-left: 1.25rem;
+            }
 
-        img {
-            &.avatar {
-                display: block;
+            &:last-child {
+                padding-right: 1.25rem;
+            }
+
+            a {
+                color: $dashboard-color-primary;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+            img.image, &.image img {
+                object-fit: cover;
                 height: 3rem;
                 width: 3rem;
-                object-fit: cover;
-                border-radius: 50%;
-            }
-        }
 
-        .status {
-            color: $dashboard-color-primary;
-            text-transform: capitalize;
-            font-weight: 600;
-            // display: inline-block;
-            // vertical-align: middle;
-            // padding: 0.2rem 1rem;
-            // background-color: $dashboard-color-grey;
-            // color: white;
-            // border-radius: 1rem;
-            // font-size: 0.8rem;
-            // text-transform: capitalize;
-            //
-            // &.paid {
-            //     background-color: $bg-paid;
-            // }
-            //
-            // &.processing {
-            //     background-color: $bg-processing;
-            // }
-            //
-            // &.shipped {
-            //     background-color: $bg-shipped;
-            // }
-            //
-            // &.completed {
-            //     background: none;
-            //     color: $text-black;
-            //     padding: 0
-            // }
+                &.lg {
+                    height: 6rem;
+                    width: 6rem;
+                }
+
+                &.sm {
+                    height: 2rem;
+                    width: 2rem;
+                }
+
+                &.xsm {
+                    height: 1rem;
+                    width: 1rem;
+                }
+            }
+
+            &.image {
+                width: 4rem;
+            }
+
+            &.title.select {
+                width: 4rem;
+            }
+
+            &.boolean, &.integer, &.action  {
+                width: 6rem;
+            }
+
+            &.textarea, &.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav, &.items_per_customer {
+                display: none;
+            }
+
+            &.checkbox {
+                width: 5rem;
+                text-align: center;
+            }
+
+            &.status {
+                width: 8rem;
+                text-align: center;
+            }
+
+            &.select-all {
+                width: 4rem;
+                text-align: left;
+            }
+
+            &.text {
+                // width: 10rem;
+            }
+
+            &.number, &.price, &.adjustment {
+                width: 5rem;
+                text-align: left;
+            }
+
+            &.context-link {
+                text-align: right;
+                width: 6rem;
+            }
+
+            &.name, &.title {
+                width: 15rem;
+            }
+
+            input, select, textarea {
+                border: 1px solid #DDDDDD;
+                border-radius: $border-radius;
+                height: $input-height;
+
+                & + .btn {
+                    height: 35px;
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                    margin-left: -6px;
+                }
+            }
+
+            @media $small {
+                min-width: 20vw;
+            }
+
+            input[type=checkbox] {
+
+                width: 0.9rem;
+                height: 0.9rem;
+
+                &:after {
+                    margin-top:-0.3rem;
+                    width: 1.375rem;
+                    height: 1.375rem;
+                }
+
+            }
+
+            img {
+                &.avatar {
+                    display: block;
+                    height: 3rem;
+                    width: 3rem;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+            }
+
+            .status {
+                color: $dashboard-color-primary;
+                text-transform: capitalize;
+                font-weight: 600;
+                // display: inline-block;
+                // vertical-align: middle;
+                // padding: 0.2rem 1rem;
+                // background-color: $dashboard-color-grey;
+                // color: white;
+                // border-radius: 1rem;
+                // font-size: 0.8rem;
+                // text-transform: capitalize;
+                //
+                // &.paid {
+                //     background-color: $bg-paid;
+                // }
+                //
+                // &.processing {
+                //     background-color: $bg-processing;
+                // }
+                //
+                // &.shipped {
+                //     background-color: $bg-shipped;
+                // }
+                //
+                // &.completed {
+                //     background: none;
+                //     color: $text-black;
+                //     padding: 0
+                // }
+
+            }
 
         }
 

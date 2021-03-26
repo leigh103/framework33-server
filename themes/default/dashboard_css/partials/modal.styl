@@ -7,12 +7,19 @@ modal {
             border-radius: $border-radius;
 
             header {
-                background-color: $bg-light-grey;
-                border-bottom: 1px solid #d9d9d9;
+                background-color: $dashboard-bg-light-grey;
+                border-bottom: none;
+                flex: 0 0 5rem;
+
+                & > div:first-child {
+                    font-size: 1.375rem;
+                }
+
             }
 
             section.body {
-                background-color: $bg-light-grey;
+                padding-top:0;
+                background-color: $dashboard-bg-light-grey;
             }
 
         }

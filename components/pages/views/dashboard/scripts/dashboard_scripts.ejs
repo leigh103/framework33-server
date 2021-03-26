@@ -6,7 +6,10 @@
             scope.viewPage = function(table){
 
                 if (scope[table] && scope[table][scope.view.key] && scope[table][scope.view.key].slug){
-                    if (scope[table][scope.view.key].slug == 'homepage'){
+
+                    if (scope[table][scope.view.key].status != 'published'){
+                        window.location.href = '/dashboard/pages/'+scope[table][scope.view.key]._key
+                    } else if (scope[table][scope.view.key].slug == 'homepage'){
                         window.location.href = '/'
                     } else {
                         window.location.href = '/'+scope[table][scope.view.key].slug

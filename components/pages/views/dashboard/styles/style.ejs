@@ -1,9 +1,9 @@
+<link href="/style/dashboard.css?v=1614765140082" rel="stylesheet">
 <style>
 
     div[contenteditable=true], pre {
         font-size: 0.875rem;
         background-color: white;
-        padding: 1rem 1.2rem;
         width:100%;
         min-height: 10rem;
     }
@@ -21,7 +21,7 @@
     #preview {
         background-color: white;
         position: relative;
-        min-height:50vh;
+        min-height:100vh;
     }
 
     #preview .page {
@@ -204,6 +204,121 @@
   }
 }
 
+    .menu-link {
+        height: 71px;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .menu-wrap {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-right: 2px solid #f2f2f2;
+    }
+
+    .menu {
+        flex: 1;
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .menu .fields {
+        background-color: white;
+        padding: 1rem;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .input-contenteditable {
+        border: 1px solid #f2f2f2;
+        padding: 0 1rem 1rem 1rem;
+    }
+
+    .list-block {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: 4.375rem;
+        padding: 0 1.25rem;
+        border: 1px solid #DDDDDD;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+    }
+
+    .list-block.no-border {
+        border: none;
+    }
+
+    date-picker .value, select {
+        border: 1px solid #f2f2f2;
+        border-radius: 6px;
+    }
+
+    span.icon {
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+    }
+
+    span.icon.code {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+        mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+    }
+
+    span.icon.text-hero, span.icon.advanced-text-hero {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentBanner.svg');
+        mask-image: url('/images/dashboard-icons/Icon-ContentBanner.svg');
+    }
+
+    span.icon.text-two-col, span.icon.advanced-text-two-col {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+        mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+    }
+
+    span.icon.text-single-col, span.icon.advanced-text-single-col {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+        mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+    }
+
+    span.icon.text-three-col, span.icon.advanced-text-three-col {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+        mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+    }
+
+    span.icon.carousel {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-Duplicate.svg');
+        mask-image: url('/images/dashboard-icons/Icon-Duplicate.svg');
+    }
+
+    span.icon.blog-title {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentTitle.svg');
+        mask-image: url('/images/dashboard-icons/Icon-ContentBanner.svg');
+    }
+
+    span.icon.blog-content {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+        mask-image: url('/images/dashboard-icons/Icon-ContentText.svg');
+    }
+
+    span.icon.triangle-fade-bottom, span.icon.triangle-fade-top, span.icon.curve-top {
+        -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentBanner.svg');
+        mask-image: url('/images/dashboard-icons/Icon-ContentBanner.svg');
+    }
 
 
 </style>

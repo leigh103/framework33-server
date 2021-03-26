@@ -7,7 +7,9 @@
 
         scope.window = {
             path: window.location.pathname,
-            path_obj: window.location.pathname.replace(/^\//,'').split('/')
+            path_obj: window.location.pathname.replace(/^\//,'').split('/'),
+            hash: window.location.hash.substr(1),
+            search: window.location.search.substr(1).split(/&|&&/)
         }
 
         scope.notify = function(msg, type, duration, icon){
@@ -364,6 +366,10 @@ console.log(collection, scope[collection])
 
         }
 
+        scope.parseSnakeCase = function(str){
+            return str.replace(/_/g,' ')
+        }
+
         scope.parsePriceField = function(field){
             console.log(field)
         }
@@ -602,6 +608,10 @@ console.log(date, obj)
 
             }
 
+        }
+
+        if (scope.window.hash){
+            scope.view.tab = scope.window.hash
         }
 
         let page_form = document.getElementsByTagName('form')

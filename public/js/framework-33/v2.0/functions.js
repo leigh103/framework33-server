@@ -110,6 +110,10 @@ var getDaysArray = function(year, month, short) {
     return result;
 }
 
+var capitalise = function(str, lower = false){
+    return (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase());
+}
+
 document.addEventListener("click", function (e) {
 
     if (e.target.classList.contains('context') || e.target.classList.contains('context-link')){

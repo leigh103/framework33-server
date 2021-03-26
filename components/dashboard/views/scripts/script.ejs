@@ -355,12 +355,16 @@
             }
 
             scope.openModal = function(modal){
+                document.getElementsByTagName('body')[0].style.overflowY = 'hidden'
+                document.getElementsByTagName('html')[0].style.overflowY = 'hidden'
                 contextCloseAll()
                 scope.view.modal = modal
                 view.update('view.modal')
             }
 
             scope.closeModal = function(){
+                document.getElementsByTagName('body')[0].style.overflowY = 'auto'
+                document.getElementsByTagName('html')[0].style.overflowY = 'auto'
                 scope.view.modal = false
                 view.update('view.modal')
             }

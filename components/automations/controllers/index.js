@@ -14,7 +14,7 @@ const express = require('express'),
         views: 'automations/views',
         menu: {
             side_nav: [
-                {link:'Automations',slug: '/dashboard/automations', icon:'<span class="icon clock"></span>', weight:5}
+                {link:'Automations',slug: '/dashboard/automations', icon:'<span class="icon cycle"></span>', weight:5}
             ]
         }
     },

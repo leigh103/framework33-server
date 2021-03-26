@@ -8,6 +8,8 @@
 
 const express = require('express'),
     routes = express.Router(),
+    util = require('util'),
+    readFile = util.promisify(fs.readFile),
     // puppeteer = require('puppeteer'),
 
     settings = {
@@ -41,7 +43,7 @@ const express = require('express'),
 
             if (style.background){
                 if (style.background.color){
-                    str += 'background-color: '+style.background.color+';'
+                    str += 'background: '+style.background.color+';'
                 }
                 if (style.background.image){
                     str += 'background-image: url('+style.background.image+');background-size:cover;background-repeat: no-repeat; background-position:center center;'
@@ -58,98 +60,209 @@ const express = require('express'),
 
         parseBlocks:()=>{
 
-            return new Promise(function(resolve, reject) {
+            return new Promise( async (resolve, reject) => {
 
                 var blocks = {}
-                fs.readdir(config.site.theme_path+'/templates/blocks', (err, files) => {
 
-                    if (err){
-                        reject(err)
-                    } else {
+                await glob(config.site.theme_path+'/templates/blocks/**/*.ejs', async (er, files) => {
 
-                        files.forEach(async (file, index) => {
+                    for (let filepath of files){
 
-                            await fs.readFile(config.site.theme_path+'/templates/blocks/'+file, function read(err, data) {
-                                if (err) {
-                                    throw err;
-                                }
-                                data = data+''
-                                block_name = file.replace(/\.[a-z]+$/,'').replace(/\s/g,'-')
-                                blocks[block_name] = {}
-                                blocks[block_name].html = data.replace(/\r|\n/g,'').replace(/app\-field\=['"]/g,'id="'+block_name+'-')
-                                blocks[block_name].block = block_name
-                                blocks[block_name].name = data.match(/app\-block\=['"](.*?)['"]/)
-                                if (blocks[block_name].name){
-                                    blocks[block_name].name = blocks[block_name].name[1].charAt(0).toUpperCase() + blocks[block_name].name[1].slice(1)
-                                } else {
-                                    blocks[block_name].name = ''
-                                }
+                        let data = await readFile(filepath)
+                        data = data+''
 
-                                blocks[block_name].description = data.match(/app\-block-description\=['"](.*?)['"]/)
-                                if (blocks[block_name].description){
-                                    blocks[block_name].description = blocks[block_name].description[1]
-                                } else {
-                                    blocks[block_name].description = ''
-                                }
+                        filepath = filepath.split('/')
+                        let filename = filepath.pop(),
+                            folder = filepath.pop()
 
-                                blocks[block_name].styling = {
-                                    background:{
-                                        image:'',
-                                        color:'',
-                                        class:''
-                                    },
-                                    text:{
-                                        color:''
+
+                        block_name = filename.replace('.ejs','').replace(/\.[a-z]+$/,'').replace(/\s/g,'-')
+
+                        blocks[block_name] = {}
+                        blocks[block_name].folder = folder
+                        blocks[block_name].html = data.replace(/\r|\n/g,'').replace(/app\-field\=['"]/g,'id="'+block_name+'-')
+                        blocks[block_name].block = block_name
+                        blocks[block_name].name = data.match(/app\-block\=['"](.*?)['"]/)
+                        if (blocks[block_name].name){
+                            blocks[block_name].name = blocks[block_name].name[1].charAt(0).toUpperCase() + blocks[block_name].name[1].slice(1)
+                        } else {
+                            blocks[block_name].name = ''
+                        }
+
+                        blocks[block_name].description = data.match(/app\-block-description\=['"](.*?)['"]/)
+                        if (blocks[block_name].description){
+                            blocks[block_name].description = blocks[block_name].description[1]
+                        } else {
+                            blocks[block_name].description = ''
+                        }
+
+                        blocks[block_name].styling = {
+                            background:{
+                                image:'',
+                                color:'',
+                                class:''
+                            },
+                            text:{
+                                color:''
+                            },
+                            container:{
+                                class:''
+                            }
+                        }
+                        blocks[block_name].inputs = data.match(/app\-input\=['"](.*?)['"]/g)
+                        blocks[block_name].fields = data.match(/app\-field\=['"](.*?)['"]/g)
+                        blocks[block_name].element_style = data.match(/app\-styling\=['"](.*?)['"]/g)
+                        blocks[block_name].editor = []
+
+                        if (blocks[block_name].inputs && blocks[block_name].fields){
+
+                            for (var i in blocks[block_name].fields){
+
+                                if (blocks[block_name].fields[i] && blocks[block_name].inputs[i]){
+
+                                    let field_match = blocks[block_name].fields[i].match(/app\-field\=['"](.*?)['"]/)
+                                    if (field_match && field_match[1]){
+                                        blocks[block_name].fields[i] = field_match[1]
                                     }
-                                }
-                                blocks[block_name].inputs = data.match(/app\-input\=['"](.*?)['"]/g)
-                                blocks[block_name].fields = data.match(/app\-field\=['"](.*?)['"]/g)
-                                blocks[block_name].element_style = data.match(/app\-styling\=['"](.*?)['"]/g)
-                                blocks[block_name].editor = []
 
-                                if (blocks[block_name].inputs && blocks[block_name].fields){
+                                    let input_match = blocks[block_name].inputs[i].match(/app\-input\=['"](.*?)['"]/)
+                                    if (input_match && input_match[1]){
+                                        blocks[block_name].inputs[i] = input_match[1]
+                                    }
 
-                                    for (var i in blocks[block_name].fields){
+                                    blocks[block_name].editor[i] = {field:blocks[block_name].fields[i], input:blocks[block_name].inputs[i], value:''}
 
-                                        if (blocks[block_name].fields[i] && blocks[block_name].inputs[i]){
-
-                                            let field_match = blocks[block_name].fields[i].match(/app\-field\=['"](.*?)['"]/)
-                                            if (field_match && field_match[1]){
-                                                blocks[block_name].fields[i] = field_match[1]
-                                            }
-
-                                            let input_match = blocks[block_name].inputs[i].match(/app\-input\=['"](.*?)['"]/)
-                                            if (input_match && input_match[1]){
-                                                blocks[block_name].inputs[i] = input_match[1]
-                                            }
-
-                                            blocks[block_name].editor[i] = {field:blocks[block_name].fields[i], input:blocks[block_name].inputs[i], value:''}
-
-                                            if (blocks[block_name].element_style && blocks[block_name].element_style[i]){
-                                                let styling_match = blocks[block_name].element_style[i].match(/app\-styling\=['"](.*?)['"]/)
-                                                if (styling_match && styling_match[1]){
-                                                    blocks[block_name].editor[i].styling = 'true'
-                                                    blocks[block_name].editor[i].classes = ''
-                                                }
-                                            }
-
+                                    if (blocks[block_name].element_style && blocks[block_name].element_style[i]){
+                                        let styling_match = blocks[block_name].element_style[i].match(/app\-styling\=['"](.*?)['"]/)
+                                        if (styling_match && styling_match[1]){
+                                            blocks[block_name].editor[i].styling = 'true'
+                                            blocks[block_name].editor[i].classes = ''
                                         }
-
                                     }
 
                                 }
 
-                                if (index >= files.length-1){
-                                    resolve(blocks)
-                                }
+                            }
 
-                            });
-
-                        })
+                        }
 
                     }
 
+                    resolve(blocks)
+
                 })
+
+
+
+
+                // fs.readdir(config.site.theme_path+'/templates/blocks', (err, folders) => {
+                //
+                //     if (err){
+                //         reject(err)
+                //     } else {
+                //
+                //         folders.forEach(async (folder, index) => {
+                //
+                //             fs.readdir(config.site.theme_path+'/templates/blocks/'+folder, (err, files) => {
+                //
+                //                 files.forEach(async (file, i) => {
+                //
+                //                     await fs.readFile(config.site.theme_path+'/templates/blocks/'+folder+'/'+file, function read(err, data) {
+                //                             if (err) {
+                //                                 throw err;
+                //                             }
+                //                             data = data+''
+                //                             block_name = file.replace(/\.[a-z]+$/,'').replace(/\s/g,'-')
+                //                             console.log(block_name)
+                //                             blocks[block_name] = {}
+                //                             blocks[block_name].html = data.replace(/\r|\n/g,'').replace(/app\-field\=['"]/g,'id="'+block_name+'-')
+                //                             blocks[block_name].block = block_name
+                //                             blocks[block_name].name = data.match(/app\-block\=['"](.*?)['"]/)
+                //                             if (blocks[block_name].name){
+                //                                 blocks[block_name].name = blocks[block_name].name[1].charAt(0).toUpperCase() + blocks[block_name].name[1].slice(1)
+                //                             } else {
+                //                                 blocks[block_name].name = ''
+                //                             }
+                //
+                //                             blocks[block_name].description = data.match(/app\-block-description\=['"](.*?)['"]/)
+                //                             if (blocks[block_name].description){
+                //                                 blocks[block_name].description = blocks[block_name].description[1]
+                //                             } else {
+                //                                 blocks[block_name].description = ''
+                //                             }
+                //
+                //                             blocks[block_name].styling = {
+                //                                 background:{
+                //                                     image:'',
+                //                                     color:'',
+                //                                     class:''
+                //                                 },
+                //                                 text:{
+                //                                     color:''
+                //                                 },
+                //                                 container:{
+                //                                     class:''
+                //                                 }
+                //                             }
+                //                             blocks[block_name].inputs = data.match(/app\-input\=['"](.*?)['"]/g)
+                //                             blocks[block_name].fields = data.match(/app\-field\=['"](.*?)['"]/g)
+                //                             blocks[block_name].element_style = data.match(/app\-styling\=['"](.*?)['"]/g)
+                //                             blocks[block_name].editor = []
+                //
+                //                             if (blocks[block_name].inputs && blocks[block_name].fields){
+                //
+                //                                 for (var i in blocks[block_name].fields){
+                //
+                //                                     if (blocks[block_name].fields[i] && blocks[block_name].inputs[i]){
+                //
+                //                                         let field_match = blocks[block_name].fields[i].match(/app\-field\=['"](.*?)['"]/)
+                //                                         if (field_match && field_match[1]){
+                //                                             blocks[block_name].fields[i] = field_match[1]
+                //                                         }
+                //
+                //                                         let input_match = blocks[block_name].inputs[i].match(/app\-input\=['"](.*?)['"]/)
+                //                                         if (input_match && input_match[1]){
+                //                                             blocks[block_name].inputs[i] = input_match[1]
+                //                                         }
+                //
+                //                                         blocks[block_name].editor[i] = {field:blocks[block_name].fields[i], input:blocks[block_name].inputs[i], value:''}
+                //
+                //                                         if (blocks[block_name].element_style && blocks[block_name].element_style[i]){
+                //                                             let styling_match = blocks[block_name].element_style[i].match(/app\-styling\=['"](.*?)['"]/)
+                //                                             if (styling_match && styling_match[1]){
+                //                                                 blocks[block_name].editor[i].styling = 'true'
+                //                                                 blocks[block_name].editor[i].classes = ''
+                //                                             }
+                //                                         }
+                //
+                //                                     }
+                //
+                //                                 }
+                //
+                //                             }
+                //
+                //
+                //                         });
+                //
+                //                     });
+                //
+                //                 });
+                //
+                //
+                //                 if (index >= folders.length-1){
+                //                     console.log('done')
+                //                     resolve(blocks)
+                //                 }
+                //
+                //             });
+                //
+                //         }
+                //
+                //         })
+                //
+                // //    }
+                //
+                // })
 
             })
 
@@ -260,6 +373,7 @@ const express = require('express'),
 
         if (typeof render_pages == 'object'){
 
+            data.include_styles = []
             data.include_scripts = []
             data.blocks = blocks
             data.title = render_pages.title
@@ -375,7 +489,9 @@ const express = require('express'),
         data.table = 'pages'
         data.page_type = req.params.type
         data.page_key = req.params.key
-        data.fields = new Pages().settings.fields
+        data.model = new Pages()
+        data.fields = data.model.parseEditFields()
+        data.option_data = await view.functions.getOptionData('page_types')
 
         blocks = await functions.parseBlocks()
         data.blocks = blocks
