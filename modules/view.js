@@ -223,8 +223,7 @@
 
             parseCurrency:(price)=>{
                 if (!isNaN(price)){
-                    price = price/100
-                    return '£'+price.toFixed(2)
+                    return '£'+parseFloat(price).toFixed(2)
                 } else {
                     return '£0.00'
                 }

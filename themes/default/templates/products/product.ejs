@@ -1,5 +1,13 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
+<%
+
+    var name = product.name.split(' ')
+    var end_name = name.pop()
+    name = name.join(' ')
+
+ %>
+
 <section class="page bg-cream-1 product single">
 
     <div class="contain">
@@ -8,19 +16,21 @@
 
             <div class="gallery">
                 <img src="<%- product.thumbnail %>" app-src="view.gallery_image" class="main-image" alt="This is the product image for <%- product.name %>">
-                <div class="thumbs">
-                    <% if (Array.isArray(product.gallery) && product.gallery.length > 0){ %>
+
+                <% if (Array.isArray(product.gallery) && product.gallery.length > 0){ %>
+                    <div class="thumbs">
                         <% product.gallery.forEach((image)=>{ %>
                             <img src="<%- image.value %>" class="clickable" app-click="selectImage('<%- image.value %>')">
                         <% }) %>
-                    <% } %>
-                </div>
+                    </div>
+                <% } %>
+
             </div>
 
             <div class="details">
 
                 <div class="breadcrumbs">
-                    <a href="/<%- view.ecommerce.shop.slug %>" title="View all products">Products</a> /
+                    <a href="/<%- view.ecommerce.shop.slug %>" title="View all products">Categories</a> /
                     <a class="" href="/<%- category.slug %>" title="View products in the <%- category.name %> category"><%- category.name %></a>
                     <% if (typeof sub_category == 'object'){ %>
                         / <a class="" href="/<%- category.slug %>/<%- sub_category.slug %>" title="View products in the <%- sub_category.name %> category"><%- sub_category.name %></a>
@@ -28,12 +38,12 @@
                 </div>
 
                 <div class="info">
-                    <h1 class="slab title" title="This product is called <%- product.name %>"><%- product.name %></h1>
-                    <h2 class="price" title="The price for <%- product.name %> is £<%- functions.getPrice(product.price, product.adjustment) %>">
-                        £<%- functions.getPrice(product.price, product.adjustment) %>
+                    <h1 class="slab title" title="This product is called <%- product.name %>"><span><%- name.trim() %></span><span class="ml-05 text-weight-200"><%- end_name.trim() %></span></h1>
+                    <h2 class="price" title="The price for <%- product.name %> is £<%- functions.getPrice(product) %>">
+                        £<%- functions.getPrice(product) %>
                         <% if (product.adjustment){ %>
                             <br>
-                            <span class="previous-price"><%- view.functions.parseCurrency(product.price) %></span>
+                            <span class="previous-price"><%- view.functions.parseCurrency(product.original_price) %></span>
                             <% if (typeof product.adjustment == 'string' && product.adjustment.match(/%/)){ %>
                                 <span class="discount-price"><%- Math.abs(product.adjustment.replace(/%/g,'')) %>% off</span>
                             <% } else { %>

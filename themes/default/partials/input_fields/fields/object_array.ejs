@@ -48,8 +48,7 @@
 
                     <div class="rowspan-4">
                         <label><%- view.functions.parseName(subitem.name) %></label>
-                        <label app-attr="{'for':'sub_image_'+$index}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="<%- obj %>.<%- subitem.name %>" class="<%- subitem.name %>"></label>
-                        <input app-attr="{'id':'sub_image_'+$index}" type="file" app-model="<%- obj %>.<%- subitem.name %>">
+                        <label for="block_bg_image" app-click="showMediaLibrary('<%- obj %>.<%- subitem.name %>')"><img src="/images/Product_Placeholder.svg" app-src="<%- obj %>.<%- subitem.name %>" class="<%- subitem.name %>"></label>
                     </div>
 
                 <% } else if (subitem.input_type == 'select'){ %>
@@ -106,8 +105,7 @@
 
                 <div class="rowspan-4">
                     <label><%- view.functions.parseName(subitem.name) %></label>
-                    <label app-attr="{'for':'sub_image_'+$index}" class="clickable rowspan-4"><img src="/images/Profile_Placeholder.svg" app-src="new.new_array.<%- subitem.name %>" class="<%- subitem.name %>"></label>
-                    <input app-attr="{'id':'sub_image_'+$index}" type="file" app-model="new.new_array.<%- subitem.name %>">
+                    <label for="block_bg_image" app-click="showMediaLibrary('new.new_array.<%- subitem.name %>')"><img src="/images/Product_Placeholder.svg" app-src="new.new_array.<%- subitem.name %>" class="<%- subitem.name %>"></label>
                 </div>
 
             <% } else if (subitem.input_type == 'select'){ %>

@@ -31,27 +31,38 @@ const express = require('express'),
 
     functions = {
 
-        getPrice: (price, adjustment) => {
+        getPrice: (item) => {
 
-            let adjustment_value
+            if (typeof item.price != 'string'){
+                item.price = item.price/100
+            }
 
-            if (adjustment){
+            if (item.adjustment){
 
-                if (typeof adjustment == 'string' && adjustment.match(/%/)){
+                if (item.original_price){
+                    item.price = item.original_price
+                }
 
-                    adjustment_value = adjustment.replace(/%/,'')
-                    adjustment_value = (price/100)*adjustment_value
-                    return ((price+parseFloat(adjustment_value))/100).toFixed(2)
+                if (typeof item.adjustment == 'string' && item.adjustment.match(/%/)){
+
+                    item.adjustment = item.adjustment.replace(/\$|\£|\#|p/,'')
+
+                    item.adjustment_value = parseFloat(item.adjustment.replace(/%/,''))
+                    item.adjustment_value = parseFloat((item.price/100)*item.adjustment_value)
+                    item.original_price = item.price
+                    item.price = (parseFloat(item.price)+item.adjustment_value).toFixed(2)
 
                 } else {
 
-                    return ((price+parseInt(adjustment))/100).toFixed(2)
+                    item.original_price = item.price
+                    item.adjustment_value = item.adjustment
+                    item.price = item.price+item.adjustment
 
                 }
 
-            } else {
-                return (price/100).toFixed(2)
             }
+
+            return item.price
 
         },
 
@@ -71,7 +82,6 @@ const express = require('express'),
         shop: view.ecommerce.shop,
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
-        model: new Products(),
         tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products?activated=false', text:'Inactive'},{href: '/dashboard/products?activated=false', text:'Deleted'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
     }
 
@@ -81,7 +91,7 @@ const express = require('express'),
         } else {
             data.user = {}
         }
-        
+
         next()
     })
 
@@ -109,7 +119,7 @@ const express = require('express'),
 
         view.current_view = 'products'
         view.current_sub_view = 'categories'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
         data.query = ''
         data.title = 'Product Categories'
@@ -257,7 +267,7 @@ const express = require('express'),
 
     })
 
-    routes.get('/'+view.ecommerce.shop.slug, async (req, res, next) => {
+    routes.get('/'+view.ecommerce.shop.slug, async (req, res) => {
 
         data.shop = view.ecommerce.shop
         data.meta.title = config.site.name+' | '+view.ecommerce.shop.name
@@ -272,6 +282,8 @@ const express = require('express'),
     })
 
     routes.get('/:category/:sub_category?/:product?', async (req, res, next) => {
+
+        delete data.parent_category
 
         if (req.params.category == view.ecommerce.cart_name){
             console.log(req.params.category,view.ecommerce.cart_name)

@@ -9,9 +9,5 @@
 %>
 <div class="input-image field-<%- obj_prefix %><%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
-    <label for="image_<%- obj_prefix_snake %><%- item.name %>" class="clickable">
-        <img src="/images/Profile_Placeholder.svg" app-hide="new.<%- obj_prefix %><%- item.name %>" class="avatar">
-        <img app-show="new.<%- obj_prefix %><%- item.name %>" app-src="new.<%- obj_prefix %><%- item.name %>" class="<%- item.name %>">
-    </label>
-    <input id="image_<%- obj_prefix_snake %><%- item.name %>" type="file" app-model="new.<%- obj_prefix %><%- item.name %>">
+    <label for="block_bg_image" app-click="showMediaLibrary('new.<%- obj_prefix %><%- item.name %>')"><img src="/images/Product_Placeholder.svg" app-src="new.<%- obj_prefix %><%- item.name %>" class="<%- item.name %>"></label>
 </div>

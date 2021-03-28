@@ -10,7 +10,7 @@
         <div class="flex-middle-right">
             <div class="flex flex-row mb-1">
                 <label for="new_image" class="btn bg-primary text-white">Upload <i class="fas fa-image ml-1"></i></label>
-                <input type="file" app-change="uploadMedia(<% if (typeof table != 'undefined'){ %>'<%- table %>'<% } else { %><% } %>)" id="new_image" name="new_image" placeholder="Add new Image">
+                <input type="file" app-change="uploadMedia(<% if (typeof table != 'undefined'){ %>'<%- table %>'<% } else { %><% } %>)" id="new_image" name="new_image" style="display: none">
             </div>
         </div>
     </div>

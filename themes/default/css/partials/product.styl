@@ -1,5 +1,9 @@
 .product {
 
+    &-thumb {
+        padding: 0 0 2rem 0;
+    }
+
     &.single {
 
         .layout {
@@ -16,31 +20,45 @@
         .gallery {
 
             height: "calc(100vh - %s)" % $top-nav-height;
+            max-height: 800px;
             position: relative;
 
             @media $small {
-                height: 50vh
+                height: auto;
+                width: 100vw;
+                margin-left: -2rem;
             }
 
             img.main-image {
+
                 height: 100%;
-                width: 100%
+                width: 100%;
                 object-fit: cover;
+
+                @media $small {
+                    height: 100vw;
+                    width: 100vw;
+                    object-fit: cover;
+                }
             }
 
             .thumbs {
                 position: absolute;
-                top: 0;
+                top: 6rem;
                 left: 0;
                 width: 5rem;
                 height: auto;
+                background-color: #f6f6f6;
 
                 @media $small {
                     background-color: white;
                     position: relative;
                     height: 5rem;
-                    width: 100vw;
+                    top:0;
+                    margin: 0 0 2rem 0;
+                    width: 100%;
                     overflow-x: auto;
+                    overflow-y: hidden;
                 }
 
                 img {
@@ -61,17 +79,17 @@
 
         .details {
 
-            padding: 6rem 0 6rem 6rem;
+            padding: 3rem 0 3rem 3rem;
             display: flex;
             flex-direction: column;
 
             @media $medium {
-                padding: 2rem
+                padding: 2rem;
             }
 
             @media $small {
-                margin-top: 5rem;
-                padding: 2rem
+
+                padding: 2rem 0;
             }
 
             .breadcrumbs {
@@ -102,16 +120,20 @@
                 flex: 1;
 
                 .title {
-                    font-size: 2rem;
-                    margin-bottom: 1rem;
+                    font-size: 1.875rem;
+                    margin-bottom: 1.25rem;
                 }
 
-                .price {
-                    font-size: 1.25rem;
+                .price, .previous-price, .discount-price {
+                    font-size: 1.125rem;
                 }
 
-                .previous-price, .discount {
-                    font-size: 0.875rem;
+                .previous-price, .discount-price {
+                    color: rgba(42, 42, 41, 0.5);
+                }
+
+                p {
+                    margin: 1.875rem 0;
                 }
 
                 .previous-price {
@@ -123,6 +145,7 @@
                     margin-top: 2rem;
                     display: flex;
                     width: 50%;
+                    height 50px;
 
                     @media $small {
                         width: 100%;
@@ -130,10 +153,12 @@
 
                     .quantity {
                         flex: 0 0 3rem;
+                        height 100%;
                         display: flex;
 
                         & > * {
                             flex: 1;
+                            height 100%;
                         }
 
                         .remove, .add {
@@ -149,8 +174,11 @@
 
                     .buy, .out-of-stock {
                         flex: 1;
+                        height 100%;
                         margin-left: 1rem;
-                        border: 3px solid $color-primary;
+                        font-size: 14px;
+                        font-weight: 600;
+                        border: 2px solid $color-primary;
                         text-transform: uppercase;
                         background: none;
                         color: $color-primary;
@@ -162,36 +190,84 @@
 
 
             .sharing {
-
                 flex: 0 0 auto;
-                text-align: right;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
                 border-top: 1px solid #ccc;
                 padding-top: 1em;
                 margin-top: 2rem;
-
+                font-size: 14px;
+                font-weight: 300;
             }
 
         }
 
+        .content {
+            background-color: white;
+            padding: 6rem;
+            text-align: center;
 
-                .content {
-                    background-color: white;
-                    padding: 6rem;
-                    text-align: center;
+            @media $small {
+                padding: 2rem 0;
+            }
 
-                    .tabs {
-                        display: block;
-                        width: 100%;
-                        text-align: center;
-                    }
+            .tabs {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
 
-                    .content-text {
-                        padding-top: 2rem;
-                        max-width: 900px;
-                        margin: auto;
-                        text-align: left;
-                    }
+            .content-text {
+                padding-top: 2rem;
+                max-width: 900px;
+                margin: auto;
+                text-align: left;
+            }
+        }
+
+
+        .related {
+            background-color: $color-brown;
+            padding: 6rem;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+
+            @media $small {
+                padding: 2rem 0 4rem 0;
+
+                .contain {
+                    padding: 0;
                 }
+            }
+
+            h4 {
+                font-size: 14px;
+                margin-bottom: 2rem;
+            }
+
+            a {
+                color: white;
+            }
+
+            .products {
+                width: 100%;
+                overflow-x: auto;
+                overflow-y: hidden;
+                white-space: nowrap;
+                text-align: left;
+
+                .product-thumb {
+                    display: inline-block;
+                    width: 18rem;
+                    margin-right: 2.3rem;
+                    height: auto;
+                    vertical-align: top;
+                }
+            }
+
+        }
 
     }
 
