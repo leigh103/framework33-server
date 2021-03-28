@@ -3,19 +3,13 @@ section {
     &.separator {
         position: absolute !important;
         width:100%;
-        height: 10rem;
+        height: 2.5rem;
         margin-top:-1px;
         z-index:100;
 
-        @media $small {
-            height: 5rem;
-        }
-
         &.upper {
-            margin-top:calc(-10rem + 2px);
-            @media $small {
-                margin-top:calc(-5rem + 2px);
-            }
+            margin-top:calc(-2.5rem + 2px);
+
         }
 
     }

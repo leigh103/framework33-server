@@ -261,6 +261,9 @@
 
         label {
             color: $dashboard-color-grey;
+            &.bg-primary {
+                color: $dashboard-color-white;
+            }
         }
 
         input, textarea, select {
@@ -303,6 +306,45 @@
 
             &-image {
                 grid-row-end: span 4;
+            }
+
+            &-img_array {
+                grid-column-end: span 12;
+
+
+                .img_array-img {
+
+                    position:relative;
+                    height: 18rem;
+                    width: 100%;
+                    padding: 1rem 1rem 1rem 1rem;
+                    border: 1px solid $dashboard-color-mid-light-grey;
+                    border-radius: 6px;
+
+                    .icons {
+                        opacity:0
+                        position: absolute;
+                        top:0;
+                        left: 0;
+                        width: 100%;
+                        padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+                        background-color: rgba(255,255,255,0.7);
+                        transition: opacity 0.5s ease;
+
+                        @media $medium {
+                            opacity: 1;
+                        }
+
+                        @media $small {
+                            opacity: 1;
+                        }
+                    }
+
+
+                    &:hover .icons {
+                        opacity: 1;
+                    }
+                }
             }
 
             &-textarea {
@@ -361,6 +403,7 @@
         padding: 2rem 0;
 
         .grid {
+
             grid-template-columns: repeat(4,1fr);
             grid-gap: 2rem;
 
@@ -383,18 +426,19 @@
             &-item {
                 background-color: rgba(255,255,255,0.5);
                 border-radius: $border-radius;
+                height: 20rem;
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
 
-                .thumbnail {
-                    flex: 3;
+                .grid-thumbnail {
+                    flex: 1;
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
                 }
                 .details {
-                    flex: 1;
+                    flex: 0 0 5rem;
                     display: flex;
                     background-color: white;
                     padding: 1rem 1.25rem;
@@ -405,6 +449,58 @@
                         &.context-link {
                             flex: none
                         }
+                    }
+
+                }
+
+            }
+
+            &.compact {
+                grid-template-columns: repeat(8,1fr);
+                grid-gap: 0;
+
+                @media $desktop-4k {
+                    grid-template-columns: repeat(10,1fr);
+                }
+
+                @media $desktop-1080p {
+                    grid-template-columns: repeat(8,1fr);
+                }
+
+                @media $medium {
+                    grid-template-columns: repeat(5,1fr);
+                }
+
+                @media $small {
+                    grid-template-columns: repeat(3,1fr);
+                }
+
+                .grid-item {
+                    background-color: rgba(255,255,255,0.5);
+                    border-radius: 0 !important;
+                    height: 12rem;
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+
+                    .grid-thumbnail {
+                        flex: 1;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .details {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        opacity: 0;
+                        transition: opacity 0.5s ease;
+                    }
+
+                    &:hover .details {
+                        opacity: 1;
                     }
 
                 }

@@ -367,7 +367,12 @@
         }
 
         scope.parseSnakeCase = function(str){
-            return str.replace(/_/g,' ')
+            if (typeof str == 'string'){
+                return str.replace(/_/g,' ')
+            } else {
+                return str
+            }
+
         }
 
         scope.parsePriceField = function(field){

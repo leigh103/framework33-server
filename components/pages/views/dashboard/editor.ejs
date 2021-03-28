@@ -34,6 +34,19 @@
                                         <input type="text" app-model="field.value">
                                     </div>
 
+                                    <div app-if="field.input == 'number'">
+                                        <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+                                        <input type="number" app-model="field.value">
+                                    </div>
+
+                                    <div app-if="field.input == 'color_picker'">
+                                        <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
+
+                                        <div class="color_picker" app-model="$parent">
+                                            <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
+                                        </div>
+                                    </div>
+
                                     <div app-if="field.input == 'textarea'">
                                         <label class=" capitalise" app-bind="field.field"></label>
                                         <div class="input-contenteditable field-content">
@@ -64,6 +77,8 @@
                                 </div>
                             </div>
 
+                            <div app-show="view.editor == false" class="p-1 text-italic transparent-3 text-small">This block has no editable content</div>
+
                         </div>
 
                         <div app-show="view.tab == 'block_styling'" class="fields">
@@ -79,7 +94,10 @@
                                 </div>
                                 <div>
                                     <label class=" capitalise">Block Background Color</label>
-                                    <input type="text" app-model="view.selected_block.styling.background.color">
+
+                                    <div class="color_picker" app-model="view.selected_block.styling.background.color">
+                                        <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
+                                    </div>
                                 </div>
                                 <div class="">
                                     <label class="capitalise">Block Background Image</label>

@@ -126,6 +126,15 @@
 
         }
 
+        scope.insertMedia = function(media){
+            console.log(scope.view.media_obj, media)
+            scope.push(scope.view.media_obj,media.url)
+            scope.saveItem('<%- table %>',scope.new, true)
+            view.update(scope.view.media_obj)
+            scope.closeModal()
+            delete scope.view.media_obj
+        }
+
         scope.showCategoryProducts = function(){
             window.location.href = '/dashboard/products/'+scope.product_categories[scope.view.key]._key
         }

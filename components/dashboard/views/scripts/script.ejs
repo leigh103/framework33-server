@@ -354,6 +354,23 @@
 
             }
 
+            scope.insertMedia = function(media){
+                console.log(media)
+            }
+
+            scope.showMediaLibrary = function(obj){
+
+                scope.view.media_obj = obj
+
+                scope.get('media_library').then((data)=>{
+
+                    scope.media_library = data
+                    scope.openModal('show_media_library')
+
+                })
+
+            }
+
             scope.openModal = function(modal){
                 document.getElementsByTagName('body')[0].style.overflowY = 'hidden'
                 document.getElementsByTagName('html')[0].style.overflowY = 'hidden'

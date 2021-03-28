@@ -1,0 +1,23 @@
+
+<modal-auto app-show="view.modal == 'show_media_library'" data-title="Click to insert or upload new media" class="modal-auto-large">
+
+    <div class="grid col-2">
+        <div>
+            <a href="/dashboard/media-library" class="btn bg-white">Media Library</a>
+        </div>
+        <div class="flex-middle-right">
+            <div class="flex flex-row mb-1">
+                <label for="new_image" class="btn bg-primary text-white">Upload <i class="fas fa-image ml-1"></i></label>
+                <input type="file" app-model="new.media_new" app-change="uploadImg(new)" id="new_image" nane="new_image" placeholder="Add new Image">
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-wrap">
+        <div class="grid compact">
+            <div class="grid-item" app-for="media in media_library"><img app-src="media.thumbnail" class="object-fit" app-click="insertMedia(media)"></div>
+        </div>
+    </div>
+
+
+</modal-auto>

@@ -2,7 +2,12 @@
 
     <div class="contain vh-50 vh-s-70 flex-middle-left flex-column" data-parallax="0.2">
 
-        <h1 class="" app-input="text" app-field="h1" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.h1 %></h1>
+        <% if (!h1){ %>
+            <h1 class="" app-input="text" app-field="h1" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.h1 %></h1>
+            <% h1 = true; %>
+        <% } else { %>
+            <h2 class="h1" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.h1 %></h2>
+        <% } %>
         <h4 class="my-1" data-animation="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1s'}" app-input="text" app-field="h4"><%- data.h4 %></h4>
         <div class="text-light <%- data.link_classes %>" data-animation="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1.3s'}" app-input="textarea" app-field="link"><%- data.link %></div>
     </div>

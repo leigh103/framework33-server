@@ -5,7 +5,7 @@
 
     <div class="header">
         <div class="title">
-            <h1 class="mr-1"><%- title %></h1><input type="text" class="flex-1" app-change="search('<%- table %>')" placeholder="Search by <%- view.functions.parseSearchFields(search_fields) %>">
+            <h1 class="mr-1"><%- title %></h1><input type="text" class="flex-1" app-change="search('<%- table %>')" placeholder="Search <%- view.functions.parseName(table,true) %>">
         </div>
         <div class="buttons">
 
@@ -19,7 +19,11 @@
         </div>
     </div>
 
-    <%- include(basedir+'/components/dashboard/views/partials/grid.ejs') %>
+    <% if (typeof grid_view != 'undefined' && grid_view == 'compact'){ %>
+        <%- include(basedir+'/components/dashboard/views/partials/grid-compact.ejs') %>
+    <% } else { %>
+        <%- include(basedir+'/components/dashboard/views/partials/grid.ejs') %>
+    <% } %>
 
     <div class="fixed bottom left w-100 p-2 hidden-m hidden-d">
         <button class="btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>

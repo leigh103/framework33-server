@@ -65,7 +65,7 @@
         }
 
         async save(){
-console.log('uploading image')
+
             if (!fs.existsSync(this.path_check)){
                 await fs.mkdirSync(this.path_check);
             }
@@ -81,6 +81,8 @@ console.log('uploading image')
             await fs.writeFile(this.name, this.base64Data, 'base64', function(err) {
                 if (err){console.log(err)}
             })
+
+            await DB.create('media_library',{name:this.file_name, thumbnail:this.result, url:this.result, full_path:this.name,type:'image',file_type:this.ext})
 
             return this.result
 
