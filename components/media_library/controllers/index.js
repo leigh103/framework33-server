@@ -62,7 +62,7 @@ const express = require('express'),
 
         view.current_view = 'media_library'
         view.current_sub_view = ''
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['media_library/views/scripts/script.ejs']
 
         data.title = 'Media library'
         data.table = 'media_library'
@@ -82,7 +82,7 @@ const express = require('express'),
 
         view.current_view = 'media_library'
         view.current_sub_view = ''
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/scripts/script.ejs']
 
         data.title = 'Media library'
         data.table = 'media_library'

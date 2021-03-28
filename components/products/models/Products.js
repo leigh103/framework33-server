@@ -18,16 +18,16 @@
                     {name:'barcode',input_type:'text',placeholder:'barcode', type:'barcode', required:false, barcode_type:'ean13'},
                     {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},
                     {name:'sub_category',input_type:'select', option_for:'sub_category in sub_categories',type:'string', required:false},
-                    {name:'variants',input_type:'multiselect',option_data:'products', tab:'variants', type:'string', required:false},
+                    {name:'variants',input_type:'multiselect',option_data:'products', tab:'product_variants', type:'string', required:false},
                     {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'prices and stock',  required:false},
                     {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'prices and stock', type:'number', required:false},
                     {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'prices and stock',required: true},
                     {name:'adjustment',input_type:'text',placeholder:'Adjustment', tab:'prices and stock',type:'discount',required: false},
-                    {name:'attributes',input_type:'array', tab:'attributes', placeholder:'Attributes',type:'array',required: false, subitems:[
+                    {name:'attributes',input_type:'array', tab:'product_attributes', placeholder:'Attributes',type:'array',required: false, subitems:[
                         {name:'attribute',input_type:'select', option_for:'attribute in product_attributes', type:'string', required:false},
                         {name:'value',input_type:'select', option_for:'value in selected_attribute', type:'string', required:false}
                     ]},
-                    {name:'customisation',input_type:'array',placeholder:'Customisation', tab:'customisation', type:'object',required: false},
+                    {name:'customisation',input_type:'array',placeholder:'Customisation', tab:'product_customisation', type:'object',required: false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', truncate:160, required:false},
                     {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:false}
                 ],
@@ -121,6 +121,18 @@
                 resolve()
 
             })
+
+        }
+
+        async preSave(){
+
+            if (this.data && Array.isArray(this.data.gallery) && this.data.gallery[0]){
+                this.data.thumbnail = this.data.gallery[0].value
+            }
+
+            if (this.data.gallery_new){
+                delete this.data.gallery_new
+            }
 
         }
 

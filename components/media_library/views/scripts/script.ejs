@@ -1,0 +1,33 @@
+<script>
+
+    extend.media_library = function(){
+
+        scope.deleteItem = function(collection, text){
+
+            if (scope.view.modal && scope.view.modal == 'delete_confirm'){
+
+                contextCloseAll()
+
+                let key = scope[collection][scope.view.key]._key
+                scope.closeModal()
+                scope.delete(collection,key).then(()=>{
+                    delete scope.view.modal_text
+                    view.update(collection)
+                    scope.notify('Deleted')
+                }).catch((err)=>{
+                    console.log(err)
+                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                })
+
+            } else {
+                scope.view.modal_text = 'If this media is used elsewhere on the site, it will result in a missing image. Please ensure it is not being used before deleting'
+                view.update('view.modal_text')
+                scope.openModal('delete_confirm')
+            }
+
+        }
+
+    }
+
+
+</script>

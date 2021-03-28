@@ -1,14 +1,16 @@
 
-<modal-auto app-show="view.modal == 'show_media_library'" data-title="Click to insert or upload new media" class="modal-auto-large">
+<modal-auto app-show="view.modal == 'show_media_library'" data-title="Insert or upload new media" class="modal-auto-large">
 
     <div class="grid col-2">
-        <div>
-            <a href="/dashboard/media-library" class="btn bg-white">Media Library</a>
+        <div class="flex button-wrap">
+            <button class="btn bg-white flex-none pr-0"><span class="icon search m-0 black"></span></button>
+            <input type="text" app-change="search('media_library')" placeholder="Search Media" class="flex-1 rounded" <% if (typeof table != 'undefined'){ %>value="<%- table %>"<% } %>>
+            <a href="/dashboard/media-library" class="btn bg-white flex-none">Media Library<span class="icon arrowright right black"></span></a>
         </div>
         <div class="flex-middle-right">
             <div class="flex flex-row mb-1">
                 <label for="new_image" class="btn bg-primary text-white">Upload <i class="fas fa-image ml-1"></i></label>
-                <input type="file" app-model="new.media_new" app-change="uploadImg(new)" id="new_image" nane="new_image" placeholder="Add new Image">
+                <input type="file" app-change="uploadMedia(<% if (typeof table != 'undefined'){ %>'<%- table %>'<% } else { %><% } %>)" id="new_image" name="new_image" placeholder="Add new Image">
             </div>
         </div>
     </div>

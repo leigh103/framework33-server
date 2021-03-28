@@ -68,6 +68,85 @@
 
         }
 
+        scope.uploadMedia = function(path){
+
+            return new Promise( async (resolve, reject) => {
+
+                scope.notify('Uploading...',false,'inf')
+
+                var file = this.target.files[0],
+                    imageType = /image.*/
+
+                if (!path){
+                    path = 'media'
+                }
+
+                if (typeof file == 'object' && typeof file.type == 'string' && file.type.match(imageType)) {
+
+                    let reader = new FileReader(),
+                        filename = this.target.files[0].name
+
+                    filename = filename.split('.')[0]
+
+                    reader.onload = function(e) {
+
+                        let payload = {
+                            base64: reader.result,
+                            file_name: filename.replace(/\s/g,'-').toLowerCase(),
+                            file_path: path
+                        }
+
+                        http.post('/api/image/save',payload).then((data) => {
+
+                            scope.media_library.push(JSON.parse(data))
+                            view.update('media_library')
+
+                            scope.notify('cancel')
+                            resolve(data)
+
+                        }).catch((err)=>{
+                            scope.notify(err,'error').then(()=>{
+                                reject(err)
+                            })
+                        })
+
+                    }
+
+                    reader.readAsDataURL(file);
+
+                }
+
+            })
+            // return new Promise(function(resolve, reject){
+            //
+            //     let payload = {
+            //         base64: data,
+            //         file_name: name.replace(/\s/g,'-').toLowerCase(),
+            //         file_path: path
+            //     }
+            //
+            //     scope.notify('Uploading...',false,'inf')
+            //
+            //     http.post('/api/image/save',payload).then((img_data) => {
+            //
+            //         img_data = img_data.replace(/\"/g,'')
+            //
+            //         scope.media_library.push({url:img_data})
+            //         view.update('media_library')
+            //
+            //         scope.notify('cancel')
+            //         resolve(img_data)
+            //
+            //     }).catch((err)=>{
+            //         scope.notify(err,'error').then(()=>{
+            //             reject(err)
+            //         })
+            //     })
+            //
+            // })
+
+        }
+
         scope.uploadImage = function(base64, obj, path, name){
 
             return new Promise(function(resolve, reject){

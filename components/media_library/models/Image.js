@@ -82,9 +82,20 @@
                 if (err){console.log(err)}
             })
 
-            await DB.create('media_library',{name:this.file_name, thumbnail:this.result, url:this.result, full_path:this.name,type:'image',file_type:this.ext})
+            let ml_payload = {
+                name:this.file_name,
+                url:this.result,
+                full_path:this.name,
+                type:'image',
+                file_type:this.ext,
+                full_size: this.result,
+                medium:'/media/500/80'+this.result,
+                thumbnail:'/media/300/60'+this.result
+            }
 
-            return this.result
+            await DB.create('media_library',ml_payload)
+
+            return ml_payload
 
         }
 

@@ -1,7 +1,7 @@
 <% var obj = item.name.toLowerCase() %>
 
 <%
-    if (typeof obj_prefix != 'undefined' || obj_prefix != false){
+    if (typeof obj_prefix != 'undefined' && obj_prefix != false){
         obj = obj_prefix+'.'+obj
     }
 %>
@@ -10,14 +10,14 @@
 
     <button app-click="showMediaLibrary('new.<%- item.name %>')" class="bg-primary mb-2">Insert or Upload Media to <%- view.functions.parseName(item.name) %></button>
 
-    <div class="grid pb-2 gap-3 col-5 col-m-3 col-s-1 w-100 sortable" style="align-items: start;">
+    <div class="grid pb-2 gap-3 col-5 col-m-3 col-s-1 w-100 sortable" style="align-items: start;" app-sort="new.<%- item.name %>">
         <div class="img_array-img" app-for="<%- obj %> in new.<%- item.name %>">
             <div class="flex icons">
                 <div class="text-left flex-1">
                     <span class="icon sectiongrab grey sortable-handle"></span>
                 </div>
                 <div class="text-right flex-1">
-                    <div class="remove text-right" app-click="splice(new.<%- item.name %>,<%- obj %>)"><span class="icon x primary right"></span></div>
+                    <div class="remove text-right" app-click="splice('new.<%- item.name %>',$index)"><span class="icon x primary right"></span></div>
                 </div>
             </div>
             <img app-src="<%- obj %>.value"class="object-fit">

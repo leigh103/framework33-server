@@ -101,8 +101,8 @@
                                 </div>
                                 <div class="">
                                     <label class="capitalise">Block Background Image</label>
-                                    <label for="block_bg_image" class="clickable"><img src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image"></label>
-                                    <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')">
+                                    <label for="block_bg_image" app-click="showMediaLibrary('view.selected_block.styling.background.image')"><img src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image"></label>
+                                    <!-- <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')"> -->
 
                                         <div class="text-right">
                                             <a class="text-small" app-click="delImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')" app-show="view.selected_block.styling.background.image"><i class="fas fa-times"></i> Remove Image</a>
@@ -126,8 +126,6 @@
                         </div>
 
                     </div>
-
-
 
                     <div class="menu" app-show="view.menu == 'main'">
 
@@ -487,5 +485,7 @@
         </div>
 
     </modal-auto>
+
+    <%- include(config.site.theme_path+'/partials/modals/media_library.ejs',{table:'pages'}); %>
 
 </div>

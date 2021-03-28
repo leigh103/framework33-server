@@ -1,6 +1,11 @@
 
 <modal-auto app-show="view.modal == 'delete_confirm'" data-title="Delete <%- view.functions.parseName(table, true) %>">
 
+        <div class="w-75 w-s-100 mb-1 flex">
+            <span class="icon handstop primary xl left flex-none"></span>
+            <span app-bind="view.modal_text" class="flex-1"></span>
+        </div>
+
         <div class="grid col-4 pb-1 gap-2">
 
             <div class="colspan-2 text-right pt-1 mt-s-3">

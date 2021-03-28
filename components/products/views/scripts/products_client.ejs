@@ -3,7 +3,7 @@
     extend.products = function(){
 
         <% if (typeof product == 'object' && typeof product.image != 'undefined'){ %>
-            scope.view.gallery_image = '<%- product.image %>'
+            scope.view.gallery_image = '<%- product.thumbnail %>'
         <% } else { %>
             scope.view.gallery_image = '/images/Product_Placeholder.svg'
         <% } %>

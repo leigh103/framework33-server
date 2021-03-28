@@ -7,10 +7,9 @@
         <div class="layout">
 
             <div class="gallery">
-                <img src="<%- product.image %>" app-src="view.gallery_image" class="main-image" alt="This is the product image for <%- product.name %>">
+                <img src="<%- product.thumbnail %>" app-src="view.gallery_image" class="main-image" alt="This is the product image for <%- product.name %>">
                 <div class="thumbs">
                     <% if (Array.isArray(product.gallery) && product.gallery.length > 0){ %>
-                        <img src="<%- product.image %>" class="clickable" app-click="selectImage('<%- product.image %>')">
                         <% product.gallery.forEach((image)=>{ %>
                             <img src="<%- image.value %>" class="clickable" app-click="selectImage('<%- image.value %>')">
                         <% }) %>

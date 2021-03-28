@@ -1,7 +1,7 @@
 <a class="block text-center" href="<% if (typeof parent_category == 'object'){ %>/<%- parent_category.slug %><% } %>/<%- category.slug %>/<%- product.slug %>">
 
-    <img src="/media/300/50<%- product.image %>" class="multiply">
-    <h3 class="h5 text-weight-600 slab"><%- category.name %></h2>
+    <img src="/media/300/50<%- product.thumbnail %>" class="multiply">
+    <h3 class="h5 text-weight-600 slab"><%- category.name %></h3>
     <h2 class="h5 text-weight-300"><%- product.name %></h2>
     <h3 class="h6 mt-05 text-weight-600">£<%- functions.getPrice(product.price, product.adjustment) %></h3>
     <% if (product.adjustment){ %>

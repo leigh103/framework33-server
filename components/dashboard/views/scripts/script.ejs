@@ -258,8 +258,8 @@
 
                     let key = scope[collection][scope.view.key]._key
                     scope.closeModal()
-                    console.log(collection, key, scope.view.key)
                     scope.delete(collection,key).then(()=>{
+                        delete scope.view.modal_text
                         view.update(collection)
                         scope.notify('Deleted')
                     }).catch((err)=>{
@@ -313,14 +313,12 @@
 
             }
 
-            scope.splice = function(obj,item){
+            scope.splice = function(obj_name, idx){
 
-                if (obj && obj.length > 0){
-                    obj = obj.filter((itm,i)=>{
-                        return itm.value != item
-                    })
-
-                    evaluate.setValue(this._params[0], obj)
+                let obj = evaluate.getValue(obj_name)
+                if (obj){
+                    obj.splice(idx,1)
+                    view.update(obj_name)
                 }
 
             }
@@ -355,14 +353,17 @@
             }
 
             scope.insertMedia = function(media){
-                console.log(media)
+
+                evaluate.setValue(scope.view.media_obj,media.url)
+                scope.closeModal()
+
             }
 
             scope.showMediaLibrary = function(obj){
 
                 scope.view.media_obj = obj
 
-                scope.get('media_library').then((data)=>{
+                scope.get('media_library'<% if (typeof table != 'undefined'){ %>,'search?str=<%- table %><% } %>').then((data)=>{
 
                     scope.media_library = data
                     scope.openModal('show_media_library')
