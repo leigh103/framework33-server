@@ -14,6 +14,10 @@
                 }
             }
 
+            scope.view.icons = ['alarm','arrowdown','arrowleft','arrowup','arrowright','bell','bin','binoculars','box','bulletlist','calendar','cardpayment','clock','cmslogo','contentbanner','contentbutton','contentfeatures','contenttext','contenttitle','contentvideo','crosshairs','duplicate','edit','envelope','eye','gauge','handstop','help','house','link','mapmarker','mapmarkerundo','megaphone','merge','noentry','note','person','piechart','plus','pricetag','pulse','repeatarrow','rocket','scissors','screen','search','settings','shoppingbasket','shoppingtrolley','sidemenucollapse','sidemenuexpand','signin','signout','speechbubble1','speechbubble2','stopwatch','suppliers','swap','threedots','thumbsdown','thumbsup','tick','tickcircle','unlink','voucher','x','xcircle']
+
+            scope.exec_data = {}
+
             scope.focusSearch = function(el){
 
                 if (el.classList.contains('focused')){
@@ -354,8 +358,12 @@
 
             scope.insertMedia = function(media){
 
-                evaluate.setValue(scope.view.media_obj,media.url)
-                scope.closeModal()
+                if (scope.exec_data.selection){
+                    scope.insertCEMedia(media)
+                } else {
+                    evaluate.setValue(scope.view.media_obj,media.url)
+                    scope.closeModal()
+                }
 
             }
 
@@ -373,6 +381,7 @@
             }
 
             scope.openModal = function(modal){
+
                 document.getElementsByTagName('body')[0].style.overflowY = 'hidden'
                 document.getElementsByTagName('html')[0].style.overflowY = 'hidden'
                 contextCloseAll()
@@ -389,212 +398,11 @@
 
             var savedrange = null;
 
-            function getSelection(){
-                var savedRange;
-                if (window.getSelection && window.getSelection().rangeCount > 0){
-                    savedRange = window.getSelection().getRangeAt(0).cloneRange();
-                } else if (document.selection){
-                    savedRange = document.selection.createRange();
-                }
-                return savedRange;
-            }
-
-            function setCaret(selection) {
-
-                var range = document.createRange()
-                var sel = window.getSelection()
-
-                range.setStart(selection.startContainer, selection.startOffset)
-                range.setEnd(selection.startContainer, selection.endOffset)
-
-                sel.removeAllRanges()
-                sel.addRange(range)
-
-            }
 
             scope.insertTab = function(e) {
                 if (e.keyCode != 9) return // tab key
                 document.execCommand('insertHTML', false, '&#009')
                 e.preventDefault();
-            }
-
-            scope.exec = function(type, data, idx){
-
-                let sup_data, img_node
-
-                if (type.match(/createLink|insertImage|insertIcon/)){ // functions that need input
-
-                    scope.view.exec = {}
-                    scope.view.exec.input_el = idx
-
-                    scope.view.exec.selection = getSelection()
-
-                    scope.view.modal = 'show_input'
-
-                    if (type.match(/createLinkButton/)){
-                        scope.view.exec.title = 'Insert URL'
-                        scope.view.exec.input = 'Add link URL'
-                        scope.view.exec.input_2 = 'Add link text'
-                        scope.view.exec.type = type
-                        scope.view.exec.data = data
-                    } else if (type.match(/createLink/)){
-                        scope.view.exec.title = 'Insert URL'
-                        scope.view.exec.input = 'Add link URL'
-                        scope.view.exec.type = type
-                        scope.view.exec.data = data
-                    } else if (type.match(/insertImage/)){
-                        scope.view.exec.title = 'Insert URL or Upload Image'
-                        scope.view.exec.input = 'Add image URL'
-                        scope.view.exec.input_2 = 'Image name / ALT tag (required)'
-                        scope.view.exec.image = true
-                        scope.view.exec.type = type
-                        scope.view.exec.data = data
-                    } else if (type.match(/insertIcon/)){
-                        scope.view.exec.title = 'Font Awesome or Upload Icon'
-                        scope.view.exec.input = 'Add Font Awesome class, eg. fa-chevron-right'
-                        scope.view.exec.image = true
-                        scope.view.exec.type = type
-                        scope.view.exec.data = data
-                    }
-
-                    return
-
-                } else if (type.match(/insertForm/)){
-
-                    scope.view.exec = {}
-                    scope.view.exec.input_el = idx
-
-                    scope.view.exec.selection = getSelection()
-
-                    scope.view.modal = 'show_form_builder'
-                    return
-
-                } else if (type == 'exec'){
-
-                    if (type.match(/insertImage/) && !scope.view.text_input_2){
-                        scope.notify('Please set an image name. This is used for the image alt tag, and is important for SEO','error')
-                        return false
-                    }
-
-                    scope.view.modal = false
-                    type = scope.view.exec.type
-
-                    if (scope.view.exec.selection){
-                        setCaret(scope.view.exec.selection)
-                    } else if (typeof scope.view.exec.image == 'object'){
-                        img_node = scope.view.exec.image
-                    }
-
-                    if (scope.view.text_input){
-                        data = scope.view.text_input
-                    } else if (scope.view.image_url){
-                        data = scope.view.image_url
-                    } else {
-                        data = scope.view.exec.data
-                    }
-
-                    if (scope.view.text_input_2){
-                        sup_data = scope.view.text_input_2
-                    }
-
-                    delete scope.view.exec
-                    scope.view.text_input = ''
-                    scope.view.image_url = ''
-
-                }
-
-                if (type.match(/insertImage/)){
-
-                    type = 'insertHTML'
-
-                    if (data && data.match(/base64/)){
-
-                        scope.uploadImage(data,false,'content',sup_data).then((img_url)=>{
-
-                            if (typeof img_node == 'object'){
-
-                                let new_img = document.createElement("img")
-                                new_img.setAttribute('src', img_url)
-                                new_img.setAttribute('alt', sup_data)
-
-                                img_node.target.parentNode.replaceChild(new_img, img_node.target)
-                                scope.updateCE()
-
-                            } else {
-                                data = '<img src="'+img_url+'" alt="'+sup_data+'" class="w-100">'
-                                document.execCommand(type,false,data)
-                            }
-
-                        }).catch((err)=>{
-                            scope.notify(err,'error')
-                        })
-
-                    } else {
-
-                        if (typeof img_node == 'object'){
-
-                            let new_img = document.createElement("img")
-                            new_img.setAttribute('src', data)
-                            new_img.setAttribute('alt', sup_data)
-
-                            img_node.target.parentNode.replaceChild(new_img, img_node.target)
-                            scope.updateCE()
-
-                        } else {
-                            data = '<img src="'+data+'" alt="'+sup_data+'" class="w-100">'
-                            document.execCommand(type,false,data)
-                        }
-
-                    }
-
-                    scope.view.text_input_2 = ''
-
-                } else {
-
-                    if (type.match(/insertIcon/)){
-                        type = 'insertHTML'
-
-                        if (data.match(/^fa/)){
-                            data = '<i class="fas '+data+'"></i>'
-                        } else {
-                            data = '<img src="'+data+'" class="icon">'
-                        }
-
-                    }
-
-                    if (type.match(/createLinkButton/)){
-                        type = 'insertHTML'
-                        data = '<a class="btn highlight" href="'+data+'">'+scope.view.text_input_2+'</a>'
-                        scope.view.text_input_2 = ''
-                    }
-
-                    // if (type == 'formatBlock'){
-                    //     let selection = window.getSelection()
-                    //     console.log(selection.toString())
-                    //     selection = scope.stripTags(selection)
-                    //     console.log(selection)
-                    //     type = 'insertHTML'
-                    //     data = '<'+data+'>'+selection+'</'+data+'>'
-                    // }
-
-                    // if (type == 'align'){
-                    //     let selection = window.getSelection()
-                    //     selection = scope.stripTags(selection)
-                    //     type = 'insertHTML'
-                    //     data = '<p class="text-'+data+'">'+selection+'</p>'
-                    // }
-
-                    document.execCommand(type,false,data)
-
-                    if (typeof scope.renderContent == 'function'){
-                        scope.renderContent()
-                    }
-
-                }
-
-
-
-
             }
 
             scope.stripTags = function(str){
@@ -687,10 +495,283 @@
 
             }
 
+            scope.insertCEMedia = function(media){
+
+                scope.exec_data.url = media.url
+                scope.exec('insertImage',scope.exec_data).then(()=>{
+                    if (typeof scope.renderPage == 'function'){
+                        scope.renderPage()
+                    }
+                })
+
+            }
+
+            scope.execModal = function(type, id){
+
+                scope.exec_data = {}
+
+                if (id){
+
+                    let el = document.getElementById(id)
+                    let range = new Range();
+                    range.setStart(el, 0);
+                    range.setEnd(el, 0);
+                    scope.exec_data.selection = range
+                    scope.exec_data.id = id
+                    scope.exec_data.el = el
+                    scope.exec_data.text = scope.stripTags(el.innerHTML)
+                    scope.exec_data.icon = el.dataset.icon
+                    scope.exec_data.classes = el.className
+                    scope.exec_data.title = el.title
+                    scope.exec_data.target = el.getAttribute('target')
+
+                    if (el.hasAttribute('href')){
+                        scope.exec_data.url = el.getAttribute("href")
+                    }
+
+                } else {
+                    scope.exec_data.selection = getCaret()
+                    scope.exec_data.text = getSelectionText()
+                }
+
+                view.update('exec_data')
+
+                if (type == 'insertMedia'){
+                    scope.showMediaLibrary()
+                } else {
+                    scope.openModal(type)
+                }
+
+            }
+
+            scope.exec = function(type, data){
+
+                if (!scope.exec_data.selection){
+                    scope.exec_data = {}
+                    scope.exec_data.selection = getCaret()
+                    scope.exec_data.text = getSelectionText()
+                }
+
+                return new Promise( async (resolve, reject) => {
+
+                    if (scope.exec_data.selection && scope.exec_data.selection !== true){
+                        setCaret(scope.exec_data.selection)
+                    }
+
+                    let icon = ''
+
+                    if (type == 'insertImage'){
+
+                        let style = ''
+                        if (data.align && data.align == 'inline'){
+                            style = 'style="width: auto;"'
+                        }
+
+                        if (scope.exec_data.el){
+
+                            scope.exec_data.el.src = data.url
+
+                            if (data.alt_text){
+                                scope.exec_data.el.setAttribute('alt', data.alt_text)
+                            } else {
+                                scope.exec_data.el.removeAttribute('alt')
+                            }
+
+                            if (data.align){
+                                scope.exec_data.el.className = "ce-img "+data.align
+                            }
+                            document.execCommand('insertHTML',false,'') // needed to trigger a change in the app-model
+                            scope.exec_data.el.removeAttribute('id')
+
+                        } else {
+                            type = 'insertHTML'
+                            data = '<img src="'+data.url+'" class="ce-img '+data.align+'" alt="'+data.alt_text+'" '+style+'>'
+                            document.execCommand(type,false,data)
+                        }
+
+                    } else if (type == 'insertIcon'){
+
+                        if (scope.exec_data.el){
+
+                            var new_span = document.createElement("span")
+                            new_span.className = 'ce-icon icon '+data.icon+' '+data.color+' '+data.size
+                            scope.exec_data.el.parentNode.replaceChild(new_span, scope.exec_data.el)
+                            document.execCommand('insertHTML',false,'')
+
+                        } else {
+
+                            if (data.icon){
+                                icon = '<div class="text-'+data.align+'"><span class="ce-icon icon '+data.icon+' '+data.color+' '+data.size+'"></span></div>'
+                            }
+
+                            type = 'insertHTML'
+                            document.execCommand(type,false,icon)
+
+                        }
+
+                    } else if (type == 'addCTA'){
+
+                        if (scope.exec_data.el){
+
+                            if (data.icon){
+                                data.text += '<span class="icon right '+data.icon+' white"></span>'
+                            }
+
+                            scope.exec_data.el.setAttribute('href', data.url)
+                            scope.exec_data.el.className = data.classes
+                            scope.exec_data.el.innerHTML = data.text
+                            document.execCommand('insertHTML',false,'')
+
+                        } else {
+
+                            if (!data.classes){
+                                data.classes = 'bg-primary'
+                            }
+
+                            if (data.icon){
+                                icon = '<span class="icon right '+data.icon+' white"></span>'
+                            }
+
+                            type = 'insertHTML'
+                            data = '<div class="text-'+data.align+'"><a href="'+data.url+'" data-icon="'+data.icon+'" class="ce-cta btn '+data.classes+'">'+data.text+icon+'</a></div>'
+                            document.execCommand(type,false,data)
+
+                        }
+
+                    } else if (type == 'createLink'){
+
+                        if (scope.exec_data.el){
+
+                            if (data.url){
+
+                                scope.exec_data.el.setAttribute('href', data.url)
+                                scope.exec_data.el.className = data.classes
+                                scope.exec_data.el.innerHTML = data.text
+                                if (data.title){
+                                    scope.exec_data.el.title = data.title
+                                } else {
+                                    scope.exec_data.el.removeAttribute('title')
+                                }
+
+                                if (data.target){
+                                    scope.exec_data.el.setAttribute('target', data.target)
+                                } else {
+                                    scope.exec_data.el.removeAttribute('target')
+                                }
+                                scope.exec_data.el.removeAttribute('id')
+
+                            } else {
+                                var new_span = document.createElement("span")
+                                new_span.innerHTML = data.text
+                                scope.exec_data.el.parentNode.replaceChild(new_span, scope.exec_data.el)
+                            }
+
+                            document.execCommand('insertHTML',false,'<span></span>')
+
+                        } else {
+
+                            let target = '',
+                                title = ''
+
+                            if (data.target){
+                                target = 'target="'+data.target+'"'
+                            }
+
+                            if (data.title){
+                                target = 'title="'+data.title+'"'
+                            }
+
+                            if (data.url){
+                                type = 'insertHTML'
+                                data = '<a href="'+data.url+'" '+target+' '+title+' class="ce-link '+data.classes+'">'+data.text+'</a>'
+                                document.execCommand(type,false,data)
+                            } else {
+                                document.execCommand('unlink',false,false)
+                            }
+
+                        }
+
+                    } else {
+
+                        document.execCommand(type,false,data)
+
+                    }
+
+                    scope.closeModal()
+
+                    if (typeof scope.renderPage == 'function'){
+                        scope.renderPage()
+                    }
+
+                    scope.exec_data = {}
+                    view.update('exec_data')
+                    resolve()
+
+                })
+
+            }
+
             let search_box = document.querySelector('.search input')
             if (search_box){
                 search_box.focus()
             }
+
+            document.addEventListener('click', function(evt){
+
+                let id = Date.now()
+                evt.target.setAttribute('id', id)
+
+                if (evt.target.classList.contains('ce-img')){
+                    scope.execModal('insertMedia',id)
+                } else if (evt.target.classList.contains('ce-link')){
+                    scope.execModal('createLink',id)
+                } else if (evt.target.classList.contains('ce-cta')){
+                    scope.execModal('addCTA',id)
+                } else if (evt.target.classList.contains('ce-icon')){
+                   scope.execModal('insertIcon',id)
+                }
+
+            })
+
+        }
+
+        function getSelectionText() {
+            var text = "";
+            var activeEl = document.activeElement;
+            var activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
+            if (
+                (activeElTagName == "textarea") || (activeElTagName == "input" &&
+                /^(?:text|search|password|tel|url)$/i.test(activeEl.type)) &&
+                (typeof activeEl.selectionStart == "number")
+            ) {
+                text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
+            } else if (window.getSelection) {
+                text = window.getSelection().toString();
+            }
+            return text;
+        }
+
+        function getCaret(){
+            var savedRange = true;
+            if (window.getSelection && window.getSelection().rangeCount > 0){
+                savedRange = window.getSelection().getRangeAt(0).cloneRange();
+            } else if (document.selection){
+                savedRange = document.selection.createRange();
+            }
+            return savedRange;
+        }
+
+
+        function setCaret(selection) {
+
+            var range = document.createRange()
+            var sel = window.getSelection()
+
+            range.setStart(selection.startContainer, selection.startOffset)
+            range.setEnd(selection.startContainer, selection.endOffset)
+
+            sel.removeAllRanges()
+            sel.addRange(range)
 
         }
 

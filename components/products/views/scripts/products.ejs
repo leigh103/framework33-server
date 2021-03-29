@@ -127,11 +127,16 @@
         }
 
         scope.insertMedia = function(media){
-            scope.push(scope.view.media_obj,media.url)
-            scope.saveItem('<%- table %>',scope.new, true)
-            view.update(scope.view.media_obj)
-            scope.closeModal()
-            delete scope.view.media_obj
+
+            if (scope.exec_data.selection){
+                scope.insertCEMedia(media)
+            } else {
+                scope.push(scope.view.media_obj,media.url)
+                scope.saveItem('<%- table %>',scope.new, true)
+                view.update(scope.view.media_obj)
+                scope.closeModal()
+                delete scope.view.media_obj
+            }
         }
 
         scope.showCategoryProducts = function(){

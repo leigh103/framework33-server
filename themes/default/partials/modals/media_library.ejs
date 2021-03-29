@@ -15,11 +15,221 @@
         </div>
     </div>
 
-    <div class="grid-wrap">
-        <div class="grid compact">
-            <div class="grid-item" app-for="media in media_library"><img app-src="media.thumbnail" class="object-fit" app-click="insertMedia(media)"></div>
+    <div app-show="exec_data.selection" class="grid col-2 gap-2">
+        <div>
+            <label>Alt Text</label>
+            <input type="text" app-model="exec_data.alt_text">
+        </div>
+        <div>
+            <label>Alignment</label>
+            <dropdown-select app-model="exec_data.align">
+                <div value="block" class="option">
+                    <div>Full Width</div>
+                </div>
+                <div value="inline" class="option">
+                    <div>Inline</div>
+                </div>
+            </dropdown-select>
         </div>
     </div>
 
+    <div class="grid-wrap">
+        <div class="grid compact">
+            <div class="grid-item" app-for="media in media_library">
+                <img app-src="media.thumbnail" class="object-fit" app-click="insertMedia(media)">
+            </div>
+        </div>
+    </div>
+
+
+</modal-auto>
+
+<modal-auto app-show="view.modal == 'createLink'" data-title="Insert or update a link">
+
+    <div class="grid col-3 gap-2 my-2">
+        <div>
+            <label>URL</label>
+            <input type="text" app-model="exec_data.url">
+        </div>
+        <div>
+            <label>Text</label>
+            <input type="text" app-model="exec_data.text">
+        </div>
+        <div>
+            <label>Target</label>
+            <input type="text" app-model="exec_data.target">
+        </div>
+        <div>
+            <label>Title</label>
+            <input type="text" app-model="exec_data.title">
+        </div>
+        <div class="colspan-2">
+            <label>Classes</label>
+            <input type="text" app-model="exec_data.classes">
+        </div>
+    </div>
+
+    <div class="grid col-4 pb-1 gap-2">
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn bg-white w-100" app-click="closeModal()">
+                Cancel
+            </a>
+        </div>
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn highlight w-100" app-click="exec('createLink',exec_data)">
+                <span app-hide="exec_data.id">Insert</span>
+                <span app-show="exec_data.id">Update</span>
+            </a>
+        </div>
+    </div>
+
+</modal-auto>
+
+<modal-auto app-show="view.modal == 'insertIcon'" data-title="Insert an icon">
+
+    <div class="grid col-2 gap-2 my-2">
+        <div>
+            <label>Icon</label>
+
+            <dropdown-select app-model="exec_data.icon">
+                <div app-for="icon in view.icons" app-attr="{'value':icon}" class="option">
+                    <div><span class="icon right primary" app-class="icon"></span></div>
+                    <div app-bind="icon"></div>
+                </div>
+            </dropdown-select>
+        </div>
+        <div>
+            <label>Alignment</label>
+            <dropdown-select app-model="exec_data.align">
+                <div value="center" class="option">
+                    <div>Center</div>
+                </div>
+                <div value="left" class="option">
+                    <div>Left</div>
+                </div>
+                <div value="right" class="option">
+                    <div>Right</div>
+                </div>
+            </dropdown-select>
+        </div>
+        <div>
+            <label>Size</label>
+            <dropdown-select app-model="exec_data.size">
+                <div value="" class="option">
+                    <div>Regular</div>
+                </div>
+                <div value="sm" class="option">
+                    <div>Small</div>
+                </div>
+                <div value="lg" class="option">
+                    <div>Large</div>
+                </div>
+                <div value="xl" class="option">
+                    <div>X Large</div>
+                </div>
+                <div value="xxl" class="option">
+                    <div>XX Large</div>
+                </div>
+            </dropdown-select>
+        </div>
+        <div>
+            <label>Color</label>
+            <dropdown-select app-model="exec_data.color">
+                <div value="primary" class="option text-primary">
+                    <div>Primary</div>
+                </div>
+                <div value="secondary" class="option text-secondary">
+                    <div>Secondary</div>
+                </div>
+                <div value="white" class="option">
+                    <div>White</div>
+                </div>
+                <div value="grey" class="option text-grey">
+                    <div>Grey</div>
+                </div>
+                <div value="black" class="option text-black">
+                    <div>Black</div>
+                </div>
+
+            </dropdown-select>
+        </div>
+    </div>
+
+    <div class="grid col-4 pb-1 gap-2">
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn bg-white w-100" app-click="closeModal()">
+                Cancel
+            </a>
+        </div>
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn highlight w-100" app-click="exec('insertIcon',exec_data)">
+                <span app-hide="exec_data.id">Insert</span>
+                <span app-show="exec_data.id">Update</span>
+            </a>
+        </div>
+    </div>
+
+</modal-auto>
+
+<modal-auto app-show="view.modal == 'addCTA'" data-title="Insert a call to action">
+
+    <div class="grid col-2 gap-2 my-2">
+        <div>
+            <label>URL</label>
+            <input type="text" app-model="exec_data.url">
+        </div>
+        <div>
+            <label>Button Text</label>
+            <input type="text" app-model="exec_data.text">
+        </div>
+        <div>
+            <label>Alignment</label>
+            <dropdown-select app-model="exec_data.align">
+                <div value="center" class="option">
+                    <div>Center</div>
+                </div>
+                <div value="left" class="option">
+                    <div>Left</div>
+                </div>
+                <div value="right" class="option">
+                    <div>Right</div>
+                </div>
+            </dropdown-select>
+        </div>
+
+        <div>
+            <label>Icon</label>
+            <dropdown-select app-model="exec_data.icon">
+                <div app-for="icon in view.icons" app-attr="{'value':icon}" class="option">
+                    <div><span class="icon right primary" app-class="icon"></span></div>
+                    <div app-bind="icon"></div>
+                </div>
+            </dropdown-select>
+        </div>
+        <div class="colspan-2">
+            <label>Classes</label>
+            <input type="text" app-model="exec_data.classes">
+        </div>
+    </div>
+
+    <div class="grid col-4 pb-1 gap-2">
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn bg-white w-100" app-click="closeModal()">
+                Cancel
+            </a>
+        </div>
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn highlight w-100" app-click="exec('addCTA',exec_data)">
+                <span app-hide="exec_data.id">Insert</span>
+                <span app-show="exec_data.id">Update</span>
+            </a>
+        </div>
+    </div>
 
 </modal-auto>
