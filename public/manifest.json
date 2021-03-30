@@ -1,8 +1,8 @@
 {
- "name": "Dashboard",
+ "name": "Website",
  "display_override": ["window-control-overlay", "minimal-ui"],
  "display":"fullscreen",
- "start_url":"/dashboard",
+ "start_url":"/",
  "scope":"/",
  "icons": [
   {
