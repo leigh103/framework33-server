@@ -49,9 +49,9 @@
                 if (icon){
                     scope.view.notification.icon = icon
                 } else if (type == 'error') {
-                    scope.view.notification.icon = 'fa-times'
+                    scope.view.notification.icon = 'x'
                 } else {
-                    scope.view.notification.icon = 'fa-check'
+                    scope.view.notification.icon = 'tick'
                 }
 
                 view.update('view.notification')
