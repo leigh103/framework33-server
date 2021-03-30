@@ -111,7 +111,7 @@
 
         }
 
-        async all(data, start, end) {
+        async all(data, sort, start, end) {
 
             if (!start){
                 start = 0
@@ -121,12 +121,17 @@
                 end = 999
             }
 
-            if (typeof data == 'string'){
-                this.data = await DB.read(this.settings.collection).orderBy(data,'asc').orderBy('_updated','DESC').limit(start, end).get()
-            } else if (typeof data == 'object' && data.length > 0){
-                this.data = await DB.read(this.settings.collection).where(data).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
+            if (!sort || !sort.field){
+                sort = {
+                    field: '_updated',
+                    dir: 'DESC'
+                }
+            }
+
+            if (typeof data == 'object' && data.length > 0){
+                this.data = await DB.read(this.settings.collection).where(data).orderBy(sort.field,sort.dir).limit(start, end).get() //.omit(['password','password_reset']).get()
             } else {
-                this.data = await DB.read(this.settings.collection).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
+                this.data = await DB.read(this.settings.collection).orderBy(sort.field,sort.dir).limit(start, end).get() //.omit(['password','password_reset']).get()
             }
 
             return this
@@ -136,7 +141,7 @@
         sort(field,dir){
 
             if (Array.isArray(this.data) && this.data.length > 0){
-                console.log(field,dir)
+
                 if (!dir || dir == 'asc'){
                     this.data.sort((a, b) => {
                         if (a[field] && b[field]){
@@ -145,7 +150,7 @@
                     })
                 } else {
                     this.data.sort((a, b) => {
-                        console.log(a[field])
+
                         if (a[field] && b[field]){
 
                             a[field].localeCompare(b[field])
@@ -457,7 +462,14 @@
 
         }
 
-        search(str) {
+        search(str, sort) {
+
+            if (!sort){
+                sort = {
+                    dir: 'DESC',
+                    field: '_updated'
+                }
+            }
 
             if (str.length < 3){
 
@@ -477,7 +489,7 @@
                     filter.push('name like '+str.toLowerCase())
                 }
 
-                this.data = DB.read(this.settings.collection).orWhere(filter).get()
+                this.data = DB.read(this.settings.collection).orWhere(filter).orderBy(sort.field, sort.dir).get()
                 return this
 
             }

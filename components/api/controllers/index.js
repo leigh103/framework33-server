@@ -187,6 +187,7 @@ var express = require('express'),
                 }
 
             }
+
         }
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
@@ -194,7 +195,7 @@ var express = require('express'),
             let model
 
             if (method == 'search'){
-                model = await new global[model_class_name]().search(req.query.str)
+                model = await new global[model_class_name]().search(req.query.str, sort)
             } else if (req.params.id){
                 model = await new global[model_class_name]().find(req.params.id)
             } else {
@@ -202,8 +203,7 @@ var express = require('express'),
                 model = await new global[model_class_name]()
 
                 if (model.all){ // if the class exists and the all function exists
-
-                    await model.all(query, start, end)
+                    await model.all(query, sort, start, end)
                 } else { // else fail
                     res.json(settings.not_found)
                     return false

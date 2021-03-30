@@ -274,12 +274,16 @@
 
         }
 
-        limit(limit, end) {
+        limit(lmt, end) {
+
+            if (typeof lmt == 'object'){ // not sure what's going on here
+                lmt = '0'
+            }
 
             if (end){
-                this.query += 'LIMIT '+limit+', '+end+' '
+                this.query += 'LIMIT '+lmt+', '+end+' '
             } else {
-                this.query += 'LIMIT '+limit+' '
+                this.query += 'LIMIT '+lmt+' '
             }
 
             return this
@@ -297,7 +301,6 @@
         async delete(){
 
             this.query += 'REMOVE '+this.query_key+' IN '+this.collection
-
 
             try {
                 let result = await adb.query(this.query)

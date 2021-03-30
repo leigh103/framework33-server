@@ -98,7 +98,7 @@
 
                         http.post('/api/image/save',payload).then((data) => {
 
-                            scope.media_library.push(JSON.parse(data))
+                            scope.media_library.unshift(JSON.parse(data))
                             view.update('media_library')
 
                             scope.notify('cancel')
