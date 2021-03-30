@@ -1,5 +1,9 @@
 {
- "name": "App",
+ "name": "Dashboard",
+ "display_override": ["window-control-overlay", "minimal-ui"],
+ "display":"fullscreen",
+ "start_url":"/dashboard",
+ "scope":"/",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",

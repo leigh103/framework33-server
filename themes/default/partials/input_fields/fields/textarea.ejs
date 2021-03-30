@@ -7,7 +7,7 @@
 %>
 
 <div class="input-textarea field-<%- item.name %>">
-    <%- max_characters %>
-    <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
-    <textarea app-model="new.<%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></textarea>
+
+    <label><%- max_characters %><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
+    <div><textarea app-model="new.<%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></textarea></div>
 </div>

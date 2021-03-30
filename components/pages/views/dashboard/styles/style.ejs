@@ -31,6 +31,7 @@
         min-height:100vh;
     }
 
+
     #preview .page {
         height: auto;
     }
@@ -355,6 +356,30 @@
     span.icon.triangle-fade-bottom, span.icon.triangle-fade-top, span.icon.curve-top {
         -webkit-mask-image: url('/images/dashboard-icons/Icon-ContentBanner.svg');
         mask-image: url('/images/dashboard-icons/Icon-ContentBanner.svg');
+    }
+
+
+    @media (min-width: 851px) and (max-width: 1180px){
+        #preview {
+            line-height: 0.9rem;
+            zoom:50%
+        }
+    }
+
+
+    @media (max-width: 1180px){
+
+        .menu-wrap {
+            overflow-y:auto;
+            height:100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            display: block;
+        }
+        .menu .fields {
+            height: auto;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
     }
 
 

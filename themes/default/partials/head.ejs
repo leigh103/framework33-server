@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow:hidden">
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="viewport" content = "width = device-width, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
 
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
@@ -18,6 +18,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
     <link rel="manifest" href="/manifest.json">
 
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -28,6 +31,7 @@
     <% if (typeof meta == 'object'){ %>
 
         <% if (meta.title){ %>
+            <meta name="apple-mobile-web-app-title" content="<%= meta.title %>" />
             <meta property="og:title" content="<%= meta.title %>">
             <title><%= meta.title %></title>
         <% } %>
@@ -42,6 +46,7 @@
     <% } else if (typeof view.meta == 'object'){ %>
 
         <title><%= view.meta.title %></title>
+        <meta name="apple-mobile-web-app-title" content="<%= view.meta.title %>" />
         <meta name="description" content="<%= view.meta.description %>">
 
         <meta property="og:title" content="<%= view.meta.title %>">
@@ -52,13 +57,13 @@
 
     <script src="https://kit.fontawesome.com/e7faa1906b.js" crossorigin="anonymous"></script>
 
-    <link href="/style/framework-33/v2.0/framework33.css?v=3.0.55" rel="stylesheet">
+    <link href="/style/framework-33/v2.0/framework33.css?v=3.0.56" rel="stylesheet">
     <link href="/style/fonts.css?v=1614765140082" rel="stylesheet">
 
     <% if (typeof dashboard != 'undefined'){ %>
-        <link href="/style/dashboard.css?v=1617048770213" rel="stylesheet">
+        <link href="/style/dashboard.css?v=1617110246055" rel="stylesheet">
     <% } else { %>
-        <link href="/style/style.css?v=1617046034781" rel="stylesheet">
+        <link href="/style/style.css?v=1617108526494" rel="stylesheet">
     <% } %>
 
     <% if (typeof stripe_id != 'undefined'){ %>

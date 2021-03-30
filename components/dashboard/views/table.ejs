@@ -4,10 +4,6 @@
 
     <%- include(basedir+'/components/dashboard/views/partials/table.ejs') %>
 
-    <div class="fixed bottom left w-100 p-2 hidden-m hidden-d">
-        <button class="btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
-    </div>
-
     <div id="context" class="context dropdown text-left" style="display: none">
 
         <% if (typeof context_menu == 'object'){ %>

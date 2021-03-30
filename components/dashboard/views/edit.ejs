@@ -6,14 +6,12 @@
         </div>
 
         <div class="buttons">
-            <a class="btn bg-white" href="/dashboard/<%- table %>">
-                Cancel
-            </a>
+
             <button class="btn highlight capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
-                <span>Save <%- view.functions.parseName(table,true) %></span>
+                <span>Save <span class="hidden-s">&nbsp;<%- view.functions.parseName(table,true) %></span></span>
             </button>
             <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
-                <span>Add <%- view.functions.parseName(table,true) %></span>
+                <span>Add <span class="hidden-s">&nbsp;<%- view.functions.parseName(table,true) %></span></span>
             </button>
         </div>
     </div>

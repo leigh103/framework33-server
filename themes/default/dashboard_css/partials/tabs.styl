@@ -17,4 +17,28 @@
         border-bottom: 1px solid $dashboard-color-mid-light-grey
     }
 
+    @media $small {
+
+        display: block;
+        white-space: nowrap;
+        font-size: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        a {
+            background-color: #dfe4e9;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 1.5rem;
+            width: auto;
+            border: none;
+            border-top-right-radius: 0px;
+            border-top-left-radius: 0px;
+        }
+
+
+    }
+
 }

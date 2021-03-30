@@ -57,8 +57,8 @@
                     <% } else if (item.input_type && !item.input_type.match(/image/)){ %>
 
                         <% if (item.name == 'name' || item.name == 'title' || item.name == 'full_name'){ %>
-                            <div class="cell middle <%- item.name %> <%- item.input_type %>">
-                                <a app-click="goto('<%- table %>',<%- view.functions.depluralise(table) %>._key)" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></a>
+                            <div class="cell middle <%- item.name %> <%- item.input_type %>" app-click="goto('<%- table %>',<%- view.functions.depluralise(table) %>._key)">
+                                <a app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></a>
                             </div>
                         <% } else { %>
                             <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></div>
@@ -66,6 +66,7 @@
 
                     <% } %>
                 <% }) %>
+                <div class="cell middle thumbnail"><img src="/images/Product_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.thumbnail"></div>
                 <div class="cell middle text-right context-link" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">
 
                     <div class="context-menu context-link btn" app-click="toggleContext('context',$index)">

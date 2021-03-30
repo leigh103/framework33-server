@@ -79,7 +79,7 @@
 
                         <div class="cell middle select-all"><input type="checkbox" app-model="transaction.selected" app-change="showActions()" class="border"></div>
 
-                        <div class="cell middle text" app-click="goto('transactions/edit',transaction._key)">
+                        <div class="cell middle text title" app-click="goto('transactions/edit',transaction._key)">
                             <div class="text-secondary text-bold" app-bind="transaction.reference"></div>
                             <div class="text-light" app-bind="parseDate(transaction._created,'Do MMM h:mma')"></div>
                         </div>
