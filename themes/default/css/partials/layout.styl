@@ -1,3 +1,6 @@
+html, body {
+    overflow-x: hidden;
+}
 
 body {
 
@@ -14,16 +17,16 @@ body {
 
     &.fullscreen {
 
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
+        height: 100vh;
+        height: -webkit-fill-available;
 
         &.no-nav {
             .page {
                 height: 100vh;
+                height: -webkit-fill-available;
 
                 @media $small {
-                    height: 100vh;
-                    height: -webkit-fill-available;
+                    height: auto;
                 }
             }
         }
@@ -43,19 +46,43 @@ body {
 
 }
 
+section.body {
+    min-height: calc(100vh - 4rem - 292px)
+}
+
 figure {
     margin:0;
 }
 
 .contain {
+    max-width: 1400px;
     overflow-y: visible;
     @media $small {
-        padding: 0 2rem;
+        max-width: 100vw;
+        padding-left: 2rem;
+        padding-right: 2rem;
     }
 
     @media $medium {
+        max-width: 100vw;
         padding-left: 2rem;
         padding-right: 2rem;
+    }
+
+    &.thin {
+        max-width: 900px;
+
+        @media $small {
+            max-width: 100vw;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        @media $medium {
+            max-width: 100vw;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
     }
 
 }
@@ -64,6 +91,12 @@ section {
 
 
 
+}
+
+.border {
+    -webkit-box-shadow: inset 0px 0px 0px 1px $color-mid-light-grey;
+    -moz-box-shadow: inset 0px 0px 0px 1px $color-mid-light-grey;
+    box-shadow: inset 0px 0px 0px 1px $color-mid-light-grey;
 }
 
 .border {

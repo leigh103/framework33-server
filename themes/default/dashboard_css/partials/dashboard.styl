@@ -1,21 +1,13 @@
+html, body {
+    overflow-x: hidden;
+}
 
-html {
-    @media $small {
-        -webkit-overflow-scrolling: touch !important;
-    	overflow-y: auto !important;
-    	height: 100vh;
-        height: -webkit-fill-available;
+@media $small {
+    .fullscreen.overflow-hidden {
+        overflow-y: auto !important;
     }
 }
 
-body {
-    @media $small {
-        -webkit-overflow-scrolling: touch !important;
-    	overflow-y: none !important;
-    	height: 100vh;
-        height: -webkit-fill-available;
-    }
-}
 
 .dashboard {
 
@@ -238,6 +230,12 @@ body {
             display: flex;
             align-items: center;
             justify-content: flex-start;
+
+            @media $small {
+                .search {
+                    display: none;
+                }
+            }
         }
 
         .buttons {
@@ -556,10 +554,15 @@ body {
                 &-wrap {
                     border: 1px solid #E3E3E3;
                     padding: 0 0.75rem 0.75rem 0.75rem;
+
                 }
 
                 .contenteditable {
                     min-height: 5rem;
+
+                    img {
+                        margin: 1rem 0;
+                    }
                 }
 
             }
@@ -595,6 +598,9 @@ body {
     .grid-wrap {
 
         padding: 2rem 0;
+        @media $small {
+            padding: 0;
+        }
 
         .grid {
 
@@ -615,6 +621,7 @@ body {
 
             @media $small {
                 grid-template-columns: repeat(1,1fr);
+                padding: 0;
             }
 
             &-item {
@@ -625,10 +632,6 @@ body {
                 display: flex;
                 flex-direction: column;
 
-                @media $small {
-                    height: 10rem;
-                }
-
                 .grid-thumbnail {
                     flex: 1;
                     width: 100%;
@@ -638,6 +641,7 @@ body {
                 .details {
                     flex: 0 0 5rem;
                     display: flex;
+                    align-items: center;
                     background-color: white;
                     padding: 1rem 1.25rem;
                     text-transform: capitalize;

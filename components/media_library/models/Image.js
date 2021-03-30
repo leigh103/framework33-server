@@ -1,5 +1,6 @@
 
-    const bwipjs = require('bwip-js')
+    const bwipjs = require('bwip-js'),
+          sharp = require('sharp')
 
     class Image {
 
@@ -78,8 +79,24 @@
                 await fs.mkdirSync(this.dir_check2);
             }
 
-            await fs.writeFile(this.name, this.base64Data, 'base64', function(err) {
-                if (err){console.log(err)}
+            await fs.writeFile(this.name, this.base64Data, 'base64', async (err) => {
+
+                let imgpath = this.name
+                if (this.ext == 'jpg'){
+                    let sharp_img = await sharp(imgpath)
+                    if ((await sharp_img.metadata()).width > 3000) {
+                        console.log('resizing')
+                        await sharp_img
+                            .rotate()
+                            .resize({ width: 1500, height: 1500, fit: 'cover' })
+                            .toBuffer(function(err, buffer) {
+                                fs.writeFile(imgpath, buffer, function(e) {
+                                })
+                            })
+                        }
+
+                }
+
             })
 
             let ml_payload = {
@@ -96,7 +113,6 @@
             await DB.create('media_library',ml_payload)
 
             return ml_payload
-
         }
 
         async saveAll(obj, prefix, path) {

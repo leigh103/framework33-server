@@ -1,12 +1,12 @@
 <%- layout(config.site.theme+'/fullscreen.ejs') %>
 
     <% if (typeof page_key != 'undefined' && page_key != 'new'){ %>
-        <div class="page-full vh-100 bg-light-grey text-left" app-init="getPage('<%- page_key %>')">
+        <div class="page bg-light-grey text-left" app-init="getPage('<%- page_key %>')">
     <% } else { %>
-        <div class="page-full vh-100 bg-light-grey text-left" app-init="setUpNew()">
+        <div class="page bg-light-grey text-left" app-init="setUpNew()">
     <% } %>
 
-        <div class="h-100 flex flex-row">
+        <div class="h-100 editor-wrap">
 
             <div class="dashboard flex-2 flex-m-4">
 

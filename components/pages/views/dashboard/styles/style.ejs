@@ -1,6 +1,10 @@
 <link href="/style/dashboard.css?v=1614765140082" rel="stylesheet">
 <style>
 
+    .editor-wrap {
+        display: flex;
+    }
+
     div[contenteditable=true], pre {
         width:100%;
         min-height: 10rem;
@@ -360,6 +364,7 @@
 
 
     @media (min-width: 851px) and (max-width: 1180px){
+
         #preview {
             line-height: 0.9rem;
             zoom:50%
@@ -380,6 +385,19 @@
             overflow-x: hidden;
             overflow-y: hidden;
         }
+    }
+
+    @media (max-width: 851px){
+
+        .editor-wrap {
+            display: block;
+        }
+
+        .menu-wrap {
+            height: auto !important;
+            overflow-y:hidden !important;
+        }
+
     }
 
 

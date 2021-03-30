@@ -3,9 +3,25 @@
 <% if (typeof title == 'undefined'){ var title = ''} %>
 <% if (typeof view.current_sub_view == 'undefined'){ view.current_sub_view = ''} %>
 
+    <div class="header-mobile">
+        <div>
+            <div class="burger colspan-1" onclick="toggleMenu('.page')">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        <div>
+            <% if (typeof search_fields == 'object'){ %>
+                <div class="search">
+                    <input type="text" app-change="search('<%- table %>')" placeholder="Search">
+                    <span class="icon search black"></span>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
     <div class="header">
         <div class="title">
-            <h1 class="mr-1"><%- title %></h1><input type="text" class="flex-1" app-change="search('<%- table %>')" placeholder="Search <%- view.functions.parseName(table,true) %>">
+            <h1 class="mr-1"><%- title %></h1><input type="text" class="flex-1 search" app-change="search('<%- table %>')" placeholder="Search <%- view.functions.parseName(table,true) %>">
         </div>
         <div class="buttons">
 
@@ -14,7 +30,7 @@
                     <a <% if (button.href){ %> href="<%- button.href %>"<% } %> <% if (button.click){ %> app-click="<%- button.click %>"<% } %> class="btn <% if (title.toLowerCase() == button.text.toLowerCase() || view.current_sub_view.toLowerCase() == button.text.toLowerCase()){ %>bg-primary<% } else { %>bg-white<% } %>"><%- button.text %></a>
                 <% }) %>
             <% } %>
-            <a class="btn bg-primary" href="/dashboard/<%- table %>/new">Add <%- view.functions.parseName(table,true) %><span class="icon plus right white"></span></a>
+            <a class="btn bg-primary" href="/dashboard/<%- table %>/new">Add <span class="hidden-s">&nbsp;<%- view.functions.parseName(table,true) %></span><span class="icon plus right white"></span></a>
 
         </div>
     </div>
@@ -24,10 +40,6 @@
     <% } else { %>
         <%- include(basedir+'/components/dashboard/views/partials/grid.ejs') %>
     <% } %>
-
-    <div class="fixed bottom left w-100 p-2 hidden-m hidden-d">
-        <button class="btn highlight" app-click="newObj('<%- table %>')">New <%- view.functions.parseName(table,true) %></button>
-    </div>
 
     <div id="context" class="context dropdown text-left" style="display: none">
 

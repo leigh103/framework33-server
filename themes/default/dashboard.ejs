@@ -3,13 +3,14 @@
     <body class="dashboard">
 
         <%- include partials/side_nav.ejs %>
+        <div class="notification" app-show="view.notification.msg" app-click="view.notification = {}" data-animation="{'enter':'slide-left','exit':'slide-left'}" app-class="view.notification.type">
+            <div app-bind="view.notification.msg" class="text pr-2">This is a message</div>
+            <div class="icon"><span class="icon white right" app-class="view.notification.icon"></span></div>
+        </div>
 
         <div class="page">
 
-            <div class="notification" app-show="view.notification.msg" app-click="view.notification = {}" data-animation="{'enter':'slide-left','exit':'slide-left'}" app-class="view.notification.type">
-                <div app-bind="view.notification.msg" class="text pr-2">This is a message</div>
-                <div class="icon"><i class="fas" app-class="view.notification.icon"></i></div>
-            </div>
+
 
             <%- body -%>
         </div>

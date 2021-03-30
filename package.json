@@ -31,6 +31,7 @@
     "querystring": "^0.2.0",
     "redis": "^3.0.2",
     "require-dir": "^1.2.0",
+    "sharp": "^0.28.0",
     "simple-js-sha2-256": "^1.0.7",
     "stripe": "^8.77.0",
     "stylus": "^0.54.8",

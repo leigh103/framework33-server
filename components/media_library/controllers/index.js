@@ -89,6 +89,10 @@ const express = require('express'),
         data.model = new MediaLibrary()
         data.grid_view = 'compact'
 
+        data.context_menu = [
+            {function: "viewImg",text:"View Image", icon:"eye"}
+        ]
+
         data.fields = data.model.settings.fields
         data.search_fields = data.model.settings.search_fields
         res.render(basedir+'/components/dashboard/views/grid.ejs',data)

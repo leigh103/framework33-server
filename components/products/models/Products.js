@@ -19,10 +19,10 @@
                     {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},
                     {name:'sub_category',input_type:'select', option_for:'sub_category in sub_categories',type:'string', required:false},
                     {name:'variants',input_type:'multiselect',option_data:'products', tab:'product_variants', type:'string', required:false},
-                    {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'prices and stock',  required:false},
-                    {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'prices and stock', type:'number', required:false},
                     {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'prices and stock',required: true},
                     {name:'adjustment',input_type:'text',placeholder:'Adjustment', tab:'prices and stock',type:'discount',required: false},
+                    {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'prices and stock',  required:false},
+                    {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'prices and stock', type:'number', required:false},
                     {name:'attributes',input_type:'array', tab:'product_attributes', placeholder:'Attributes',type:'array',required: false, subitems:[
                         {name:'attribute',input_type:'select', option_for:'attribute in product_attributes', type:'string', required:false},
                         {name:'value',input_type:'select', option_for:'value in selected_attribute', type:'string', required:false}

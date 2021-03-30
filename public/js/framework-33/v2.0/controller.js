@@ -72,7 +72,7 @@
 
             return new Promise( async (resolve, reject) => {
 
-                scope.notify('Uploading...',false,'inf')
+                scope.notify('Uploading...',false,'inf','clock')
 
                 var file = this.target.files[0],
                     imageType = /image.*/
@@ -102,6 +102,7 @@
                             view.update('media_library')
 
                             scope.notify('cancel')
+                            scope.notify('Done')
                             resolve(data)
 
                         }).catch((err)=>{
