@@ -1,4 +1,4 @@
-<% layout(basedir+'/themes/default/fullscreen.ejs') -%>
+<% layout(config.site.dashboard_theme+'/fullscreen.ejs') %>
 
     <% if (typeof page_key != 'undefined' && page_key != 'new'){ %>
         <div class="page bg-light-grey text-left" app-init="getPage('<%- page_key %>')">
