@@ -228,7 +228,7 @@
 
 
         .related {
-            background-color: $color-brown;
+            background-color: $color-secondary;
             padding: 6rem;
             text-align: center;
             color: white;
@@ -257,6 +257,11 @@
                 overflow-y: hidden;
                 white-space: nowrap;
                 text-align: left;
+                display: flex;
+
+                & > div {
+                    flex: 0 0 5rem;
+                }
 
                 .product-thumb {
                     display: inline-block;

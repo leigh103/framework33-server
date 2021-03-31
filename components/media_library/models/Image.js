@@ -84,7 +84,7 @@
                 let imgpath = this.name
                 if (this.ext == 'jpg'){
                     let sharp_img = await sharp(imgpath)
-                    if ((await sharp_img.metadata()).width > 3000) {
+                    if ((await sharp_img.metadata()).width > 2000) {
                         console.log('resizing')
                         await sharp_img
                             .rotate()

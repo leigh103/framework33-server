@@ -1,4 +1,4 @@
-<% layout(config.site.theme+'/dashboard.ejs') -%>
+<% layout(basedir+'/themes/default/dashboard.ejs') -%>
 
     <div class="header" app-init="getItem('<%- table %>','<%- key %>')">
         <div class="title">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="edit-wrap edit-<%- table %>">
-            <%- include(config.site.theme_path+'/partials/input_fields/parse_fields.ejs') %>
+            <%- include(basedir+'/themes/default/partials/input_fields/parse_fields.ejs') %>
     </div>
 
     <div class="loader-wrap" app-show="view.loader" data-animation="{'exit':'fade-out'}">

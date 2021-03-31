@@ -1,4 +1,4 @@
-<%- layout(config.site.theme+'/fullscreen.ejs') %>
+<% layout(basedir+'/themes/default/fullscreen.ejs') -%>
 
     <% if (typeof page_key != 'undefined' && page_key != 'new'){ %>
         <div class="page bg-light-grey text-left" app-init="getPage('<%- page_key %>')">
@@ -486,6 +486,6 @@
 
     </modal-auto>
 
-    <%- include(config.site.theme_path+'/partials/modals/media_library.ejs',{table:'pages'}); %>
+    <%- include(basedir+'/themes/default/partials/modals/media_library.ejs',{table:'pages'}); %>
 
 </div>

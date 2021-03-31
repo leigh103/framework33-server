@@ -519,11 +519,13 @@
                     scope.exec_data.selection = range
                     scope.exec_data.id = id
                     scope.exec_data.el = el
+                    scope.exec_data.url = el.getAttribute('src')
                     scope.exec_data.text = scope.stripTags(el.innerHTML)
                     scope.exec_data.icon = el.dataset.icon
                     scope.exec_data.classes = el.className
                     scope.exec_data.title = el.title
                     scope.exec_data.target = el.getAttribute('target')
+                    scope.exec_data.alt_text = el.getAttribute('alt')
 
                     if (el.hasAttribute('href')){
                         scope.exec_data.url = el.getAttribute("href")
@@ -585,8 +587,15 @@
 
                         } else {
                             type = 'insertHTML'
-                            data = '<img src="'+data.url+'" class="ce-img '+data.align+'" alt="'+data.alt_text+'" '+style+'>'
+                            data = '<img src="'+data.url+'" class="ce-img '+data.align+'" alt="'+data.alt_text+'" '+style+'><p></p>'
                             document.execCommand(type,false,data)
+                        }
+
+                    } else if (type == 'removeImage'){
+
+                        if (scope.exec_data.el){
+                            scope.exec_data.el.parentNode.removeChild(scope.exec_data.el)
+                            document.execCommand('insertHTML',false,'')
                         }
 
                     } else if (type == 'insertIcon'){
@@ -722,7 +731,7 @@
                 evt.target.setAttribute('id', id)
 
                 if (evt.target.classList.contains('ce-img')){
-                    scope.execModal('insertMedia',id)
+                    scope.execModal('updateImage',id)
                 } else if (evt.target.classList.contains('ce-link')){
                     scope.execModal('createLink',id)
                 } else if (evt.target.classList.contains('ce-cta')){
