@@ -438,7 +438,6 @@
         scope.parseCurrency = function(input){
 
             if (!isNaN(input)){
-                input = input/100
                 return '£'+input.toFixed(2)
             } else {
                 return '£0.00'

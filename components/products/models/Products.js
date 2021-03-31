@@ -10,7 +10,7 @@
             this.settings = {
                 collection: 'products',
                 fields: [
-                    {name:'gallery',input_type:'img_array',placeholder:'Images', type:'object', tab:'images', required:false},
+                    {name:'gallery',input_type:'img_array',placeholder:'Images', type:'object', tab:'images', thumbnail:true, required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'brand',input_type:'text',placeholder:'Brand', type:'string', required:false},
                     {name:'activated',input_type:'checkbox',type:'boolean',required: false},
@@ -124,17 +124,17 @@
 
         }
 
-        async preSave(){
-
-            if (this.data && Array.isArray(this.data.gallery) && this.data.gallery[0]){
-                this.data.thumbnail = this.data.gallery[0].value
-            }
-
-            if (this.data.gallery_new){
-                delete this.data.gallery_new
-            }
-
-        }
+        // async preSave(){
+        //
+        //     if (this.data && Array.isArray(this.data.gallery) && this.data.gallery[0]){
+        //         this.data.thumbnail = this.data.gallery[0].value
+        //     }
+        //
+        //     if (this.data.gallery_new){
+        //         delete this.data.gallery_new
+        //     }
+        //
+        // }
 
         async getRelated(){
 
@@ -163,7 +163,7 @@
                 resolve({
                     _key: this.data._key,
                     price: this.data.price,
-                    image: this.data.image,
+                    thumbnail: this.data.thumbnail,
                     name: this.data.name,
                     slug: category_slug+this.data.slug,
                     stock: this.data.stock,

@@ -203,6 +203,16 @@
 
                     }
 
+                    if (fields[key].thumbnail === true){
+
+                        if (Array.isArray(this.data[key]) && this.data[key][0] && this.data[key][0].value){
+                            this.data.thumbnail = this.data[key][0].value
+                        } else if (this.data[key].match(/^\/image/i)) {
+                            this.data.thumbnail = this.data[key]
+                        }
+
+                    }
+
                 }
 
             }
