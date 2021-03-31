@@ -150,7 +150,7 @@ var express = require('express'),
                     data.transaction = await new Transactions(data.cart).save()
 
                     if (data.transaction.data){
-                        new global.Events('send_receipt').trigger(data.transaction.data)
+                        new global.Automations('send_receipt').trigger(data.transaction.data)
                         res.render(settings.views+'/success.ejs',data)
                     } else {
                         data.type = '400'

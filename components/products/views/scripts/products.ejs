@@ -89,6 +89,17 @@
                         })
                     }
 
+                    scope.new.price = (scope.new.price/100).toFixed(2)
+
+                    if (scope.new.adjustment){
+                        if (typeof scope.new.adjustment == 'string' && scope.new.adjustment.match(/%/)){
+
+                        } else {
+                            console.log(scope.new.adjustment)
+                            scope.new.adjustment = scope.new.adjustment/100
+                        }
+                    }
+
                     if (!scope.new.gallery){
                         scope.new.gallery = []
                     }

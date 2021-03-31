@@ -123,7 +123,7 @@
 
                 this.data.customer.billing_address = this.data.billing_address
                 this.data.customer.shipping_address = this.data.shipping_address
-                let user = await new User(this.data.customer).findOrSave()
+                let user = await new Customers(this.data.customer).findOrSave()
                 this.data.customer._key = user.data._key
                 save = true
 

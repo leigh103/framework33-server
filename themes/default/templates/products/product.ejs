@@ -39,15 +39,15 @@
 
                 <div class="info">
                     <h1 class="slab title" title="This product is called <%- product.name %>"><span><%- name.trim() %></span><span class="ml-05 text-weight-200"><%- end_name.trim() %></span></h1>
-                    <h2 class="price" title="The price for <%- product.name %> is £<%- functions.getPrice(product) %>">
-                        £<%- functions.getPrice(product) %>
+                    <h2 class="price" title="The price for <%- product.name %> is <%- view.functions.getPrice(product, true) %>">
+                        <%- view.functions.getPrice(product, true) %>
                         <% if (product.adjustment){ %>
                             <br>
                             <span class="previous-price"><%- view.functions.parseCurrency(product.original_price) %></span>
                             <% if (typeof product.adjustment == 'string' && product.adjustment.match(/%/)){ %>
-                                <span class="discount-price"><%- Math.abs(product.adjustment.replace(/%/g,'')) %>% off</span>
+                                <span class="discount-price"><%- product.adjustment_value %></span>
                             <% } else { %>
-                                <span class="discount-price">£<%- Math.abs(product.adjustment).toFixed(2) %> off!</span>
+                                <span class="discount-price">£<%- product.adjustment_value %> off!</span>
                             <% } %>
                         <% } %>
                     </h2>

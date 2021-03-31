@@ -221,9 +221,56 @@
 
             },
 
+            getPrice: (item, parse) => {
+
+                if (item.adjustment){
+
+                    if (item.original_price){
+                        item.price = item.original_price
+                    }
+
+                    if (typeof item.adjustment == 'string' && item.adjustment.match(/%/)){
+
+                        item.adjustment_value = item.adjustment.replace(/\$|\£|\#|p/,'')
+
+                        item.adjustment_value = parseInt(item.adjustment_value.replace(/%/,''))
+                        item.adjustment_value = (item.price/100)*item.adjustment_value
+                        item.original_price = item.price
+                        item.price = parseInt(item.price)+item.adjustment_value
+
+                        item.adjustment_value = item.adjustment
+
+                    } else {
+
+                        item.original_price = item.price
+                        item.adjustment_value = parseInt(item.adjustment)
+                        item.price = parseInt(item.price)+parseInt(item.adjustment)
+
+                        if (item.adjustment_value < 0){
+                            item.adjustment_value = Math.abs(item.adjustment_value)
+                        }
+
+                        item.adjustment_value = (item.adjustment_value/100).toFixed(2)
+
+                    }
+
+
+
+                }
+
+                if (parse){
+                    return view.functions.parseCurrency(item.price)
+                } else {
+                    return parseInt(item.price)
+                }
+
+
+            },
+
             parseCurrency:(price)=>{
-                if (!isNaN(price)){
-                    return '£'+parseFloat(price).toFixed(2)
+                let price_int = parseInt(price)
+                if (price_int){
+                    return '£'+(price_int/100).toFixed(2)
                 } else {
                     return '£0.00'
                 }

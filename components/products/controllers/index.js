@@ -31,41 +31,6 @@ const express = require('express'),
 
     functions = {
 
-        getPrice: (item) => {
-
-            if (typeof item.price != 'string'){
-                item.price = item.price/100
-            }
-
-            if (item.adjustment){
-
-                if (item.original_price){
-                    item.price = item.original_price
-                }
-
-                if (typeof item.adjustment == 'string' && item.adjustment.match(/%/)){
-
-                    item.adjustment = item.adjustment.replace(/\$|\£|\#|p/,'')
-
-                    item.adjustment_value = parseFloat(item.adjustment.replace(/%/,''))
-                    item.adjustment_value = parseFloat((item.price/100)*item.adjustment_value)
-                    item.original_price = item.price
-                    item.price = (parseFloat(item.price)+item.adjustment_value).toFixed(2)
-
-                } else {
-
-                    item.original_price = item.price
-                    item.adjustment_value = parseFloat(item.price)+parseFloat(item.adjustment)
-                    item.price = parseFloat(item.price)+parseFloat(item.adjustment)
-
-                }
-
-            }
-
-            return parseFloat(item.price).toFixed(2)
-
-        },
-
         getSlug: async (product) => {
 
             return await new ProductCategories().slug(product)

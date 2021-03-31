@@ -3,7 +3,7 @@
     <img src="/media/300/50<%- product.thumbnail %>" class="multiply">
     <h3 class="h5 text-weight-600 slab"><%- category.name %></h3>
     <h2 class="h5 text-weight-300"><%- product.name %></h2>
-    <h3 class="h6 mt-05 text-weight-600">£<%- functions.getPrice(product) %></h3>
+    <h3 class="h6 mt-05 text-weight-600"><%- view.functions.getPrice(product, true) %></h3>
     <% if (product.adjustment){ %>
         <span class="text-small strikethrough text-33-blue"><%- view.functions.parseCurrency(product.original_price) %></span>
     <% } %>

@@ -19,7 +19,7 @@
 <div class="input-contenteditable field-<%- obj_prefix %><%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
     <div class="input-contenteditable-wrap">
-        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:'blog'}) %>
+        <%- include(view.basedir+'/themes/default/partials/editor_buttons.ejs',{editor_button_type:'blog'}) %>
         <div class="large resize contenteditable" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" contenteditable="true"></div>
     </div>
 </div>

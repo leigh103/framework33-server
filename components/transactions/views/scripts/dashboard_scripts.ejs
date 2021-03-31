@@ -5,6 +5,22 @@
         scope.view.selected = false
         scope.view.all_action_text = 'Select Bulk Actions'
 
+        scope.getItem = function(collection, key){
+
+            if (key != 'new'){
+                setTimeout(function(){
+                    http.get('/api/'+collection+'/'+key).then((data)=>{
+                        scope.new = JSON.parse(data)
+                        view.update('new')
+                        view.update('new.shipping_address')
+                        view.update('new.billing_address')
+                        view.update('new.customer')
+                    })
+                },500)
+            }
+
+        }
+
         scope.setRefund = function(item){
             item.refund = true
             item.refund_qty = item.quantity

@@ -1,4 +1,5 @@
 
+
     class Model {
 
         constructor(data){
@@ -45,30 +46,6 @@
                 this.data = await DB.read(this.settings.collection)
                                     .where(query)
                                     .first()
-
-                if (typeof this.data.price != 'undefined'){
-                    this.data.price = (this.data.price/100).toFixed(2)
-                }
-
-                if (typeof this.data.adjustment != 'undefined'){
-
-                    if (typeof this.data.adjustment == 'string' && this.data.adjustment.match(/%/)){
-
-                    } else if (typeof this.data.adjustment == 'number'){
-
-                        this.data.adjustment = this.data.adjustment/100
-                        if (this.data.adjustment < 0){
-                            this.data.adjustment = Math.abs(this.data.adjustment)
-                            this.data.adjustment = '-'+this.data.adjustment.toFixed(2)
-                        } else {
-                            this.data.adjustment = this.data.adjustment.toFixed(2)
-                        }
-
-                    } else {
-                        this.data.adjustment = ''
-                    }
-
-                }
 
                 if (this.data.length > 0 || Object.keys(this.data).length > 0){
                     this.data.guard = this.settings.collection
@@ -281,17 +258,12 @@
 
                     return (value == 'true' || value === true)
 
-                } else if (field.type == 'price' && parseFloat(value).toFixed(2)){
+                } else if (field.type == 'price'){
 
-                    if (typeof value == 'string'){
-                        value = parseFloat(value)
-                    }
-
-                    if (Number(value) === value && value % 1 !== 0 || Number(value) === value){
-                        return value*100
-                    } else {
-                        return value
-                    }
+                    let gbp = toGBP(value)
+                    gbp = parseFloat(gbp)*100
+                    
+                    return gbp
 
                 } else if (field.type == 'discount'){
 

@@ -20,7 +20,7 @@
                 delete this.data.password_conf
             }
 
-            let existing = await new User().find(['email == '+this.data.email])
+            let existing = await new Customers().find(['email == '+this.data.email])
 
             if (existing && existing.data.email && this.data.email == existing.data.email){
 
@@ -28,7 +28,7 @@
                     existing.sendReset()
                 }
 
-                return existing // don't return 'this' here, it causes recursion 
+                return existing // don't return 'this' here, it causes recursion
 
             } else {
 
