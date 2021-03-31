@@ -12,7 +12,7 @@
             <% max_characters = '<div class="float-right text-small pr-1"><span app-bind="new.'+ item.name +'.length"></span>/'+item.truncate+' chars</div>' %>
         <% } %>
 
-        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, obj_prefix:item.name}) %>
+        <%- include(view.basedir+'/themes/default/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, obj_prefix:item.name}) %>
 
     <% }) %>
 
