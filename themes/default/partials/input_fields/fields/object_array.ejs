@@ -1,65 +1,22 @@
 <% var obj = item.name.toLowerCase(); var colspan = 2; %>
 
 <div class="input-object-array field-<%- item.name %>">
-    <label><%- view.functions.parseName(item.name) %></label>
+    <div class="array-item-title"><%- view.functions.parseName(item.name) %></div>
     <div class="mb-2 w-100 input-object-array-wrap">
 
-        <div class="input-object-array-item grid col-5 gap-1" app-for="<%- obj %> in new.<%- item.name %>">
+        <div class="array-item" app-for="<%- obj %> in new.<%- item.name %>">
 
-            <div class="colspan-5 text-right">
-                <a app-click="splice('new.<%- item.name %>', <%- obj %>)">Remove&nbsp;&nbsp;<i class="fas fa-times"></i></a>
+            <div class="array-item-remove">
+                <a app-click="splice('new.<%- item.name %>', <%- obj %>)">Remove<span class="icon x right primary"></span></a>
             </div>
 
             <% item.subitems.forEach((subitem,i)=>{ %>
 
-                <% if (subitem.colspan){ colspan = subitem.colspan } %>
+                <div class="array-item-input">
 
-                <% if (subitem.input_type == 'text'){ %>
+                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, obj_prefix: obj, array_obj:true}) %>
 
-                    <div class="colspan-<%- colspan %>">
-                        <%- max_characters %>
-                        <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
-                        <input type="text" app-model="<%- obj %>.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>">
-                    </div>
-
-                <% } else if (subitem.input_type == 'checkbox'){ %>
-
-                    <div class="">
-                        <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
-                        <input type="checkbox" app-model="<%- obj %>.<%- subitem.name %>">
-                    </div>
-
-                <% } else if (subitem.input_type == 'textarea'){ %>
-
-                    <div class="colspan-4">
-                        <%- max_characters %>
-                        <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
-                        <textarea app-model="<%- obj %>.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>"></textarea>
-                    </div>
-
-                <% } else if (subitem.input_type == 'contenteditable'){ %>
-
-                    <div class="colspan-4">
-                        <label><%- view.functions.parseName(subitem.name) %></label>
-                        <div class="large resize contenteditable" app-model="<%- obj %>.<%- subitem.name %>"></div>
-                    </div>
-
-                <% } else if (subitem.input_type == 'image'){ %>
-
-                    <div class="rowspan-4">
-                        <label><%- view.functions.parseName(subitem.name) %></label>
-                        <label for="block_bg_image" app-click="showMediaLibrary('<%- obj %>.<%- subitem.name %>')"><img src="/images/Product_Placeholder.svg" app-src="<%- obj %>.<%- subitem.name %>" class="<%- subitem.name %>"></label>
-                    </div>
-
-                <% } else if (subitem.input_type == 'select'){ %>
-
-                    <div class="colspan-<%- colspan %>">
-
-                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/select.ejs',{item:subitem, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj}) %>
-
-                    </div>
-
-                <% } %>
+                </div>
 
             <% }) %>
 
@@ -67,69 +24,22 @@
 
     </div>
 
-    <div class="p-2 bg-33-light-grey rounded mb-1 grid col-5 gap-1">
+    <div class="input-object-array-new">
+
+        <div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
 
         <% item.subitems.forEach((subitem,i)=>{ %>
 
-            <% if (subitem.input_type == 'text'){ %>
+            <div class="array-item-input">
 
-                <div class="colspan-<%- colspan %>">
-                    <%- max_characters %>
-                    <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
-                    <input type="text" app-model="new.new_array.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>">
-                </div>
+                <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, array_obj:'new_array'}) %>
 
-            <% } else if (subitem.input_type == 'checkbox'){ %>
-
-                <div class="">
-                    <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
-                    <input type="checkbox" app-model="new.new_array.<%- subitem.name %>">
-                </div>
-
-            <% } else if (subitem.input_type == 'textarea'){ %>
-
-                <div class="colspan-4">
-                    <%- max_characters %>
-                    <label><%- view.functions.parseName(subitem.name) %><%- max_chars_text %></label>
-                    <textarea app-model="new.new_array.<%- subitem.name %>" placeholder="Add new <%- view.functions.depluralise(subitem.name) %>"></textarea>
-                </div>
-
-            <% } else if (subitem.input_type == 'contenteditable'){ %>
-
-                <div class="colspan-4">
-                    <label><%- view.functions.parseName(subitem.name) %></label>
-                    <div class="large resize contenteditable" app-model="new.new_array.<%- subitem.name %>"></div>
-                </div>
-
-            <% } else if (subitem.input_type == 'image'){ %>
-
-                <div class="rowspan-4">
-                    <label><%- view.functions.parseName(subitem.name) %></label>
-                    <label for="block_bg_image" app-click="showMediaLibrary('new.new_array.<%- subitem.name %>')"><img src="/images/Product_Placeholder.svg" app-src="new.new_array.<%- subitem.name %>" class="<%- subitem.name %>"></label>
-                </div>
-
-            <% } else if (subitem.input_type == 'select'){ %>
-
-                <div class="colspan-<%- colspan %>">
-
-                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/input_fields/fields/select.ejs',{item:subitem, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj}) %>
-
-                </div>
-
-            <% } else if (item.input_type){ %>
-
-                <div class="">
-                    <%- max_characters %>
-                    <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
-                    <input type="<%- item.input_type %>" app-model="new.<%- item.name %>" placeholder="<%- item.placeholder %>">
-                </div>
-
-            <% } %>
+            </div>
 
         <% }) %>
 
-        <div class="colspan-5 text-right">
-            <button class="btn bg-primary" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
+        <div class="array-item-button">
+            <button class="btn bg-primary" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
         </div>
 
     </div>

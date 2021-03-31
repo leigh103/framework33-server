@@ -1,8 +1,18 @@
 <%
+    var new_prefix = 'new.'
+
     if (typeof obj_prefix == 'undefined' || obj_prefix == false){
         obj_prefix = ''
     } else {
         obj_prefix = obj_prefix+'.'
+    }
+
+    if (typeof array_obj != 'undefined'){
+        if (array_obj === true){
+            new_prefix = ''
+        } else if (typeof array_obj == 'string'){
+            new_prefix = 'new.'+array_obj+'.'
+        }
     }
 %>
 
@@ -10,5 +20,5 @@
 <div class="input-<%- item.input_type %> field-<%- obj_prefix %><%- item.name %>">
     <%- max_characters %>
     <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
-    <div><input type="<%- item.input_type %>" app-model="new.<%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></div>
+    <div><input type="<%- item.input_type %>" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></div>
 </div>

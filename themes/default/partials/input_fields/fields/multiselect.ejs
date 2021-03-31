@@ -8,6 +8,20 @@
     }
 %>
 
+<%
+    var new_prefix = 'new.'
+
+    if (typeof obj_prefix == 'undefined' || obj_prefix == false){
+        obj_prefix = ''
+    } else {
+        obj_prefix = obj_prefix+'.'
+    }
+
+    if (typeof array_obj != 'undefined' && array_obj === true){
+        new_prefix = ''
+    }
+%>
+
 <div class="relative layer-2 field-<%- obj_prefix %><%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
     <div class="tag-wrap bg-33-white p-1 w-100" app-click="view.dropdown<%- obj_prefix_snake %><%- item.name %> = !view.dropdown<%- obj_prefix_snake %><%- item.name %>">

@@ -1,0 +1,127 @@
+.dashboard {
+
+    .grid-wrap {
+
+        padding: 2rem 0;
+        @media $small {
+            padding: 0;
+        }
+
+        .grid {
+
+            grid-template-columns: repeat(4,1fr);
+            grid-gap: 2rem;
+
+            @media $desktop-4k {
+                grid-template-columns: repeat(6,1fr);
+            }
+
+            @media $desktop-1080p {
+                grid-template-columns: repeat(5,1fr);
+            }
+
+            @media $medium {
+                grid-template-columns: repeat(3,1fr);
+            }
+
+            @media $small {
+                grid-template-columns: repeat(1,1fr);
+                padding: 0;
+            }
+
+            &-item {
+                background-color: rgba(255,255,255,0.5);
+                border-radius: $border-radius;
+                height: 20rem;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+
+                .grid-thumbnail {
+                    flex: 1;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                .details {
+                    flex: 0 0 5rem;
+                    display: flex;
+                    align-items: center;
+                    background-color: white;
+                    padding: 1rem 1.25rem;
+                    text-transform: capitalize;
+
+                    div {
+                        flex: 1;
+                        &.context-link {
+                            flex: none
+                        }
+                    }
+
+                }
+
+            }
+
+            &.compact {
+                grid-template-columns: repeat(8,1fr);
+                grid-gap: 0;
+
+                @media $desktop-4k {
+                    grid-template-columns: repeat(10,1fr);
+                }
+
+                @media $desktop-1080p {
+                    grid-template-columns: repeat(8,1fr);
+                }
+
+                @media $medium {
+                    grid-template-columns: repeat(5,1fr);
+                }
+
+                @media $small {
+                    grid-template-columns: repeat(3,1fr);
+                }
+
+                .grid-item {
+                    background-color: rgba(255,255,255,0.5);
+                    border-radius: 0 !important;
+                    height: 12rem;
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+
+                    @media $small {
+                        height: 6rem;
+                    }
+
+                    .grid-thumbnail {
+                        flex: 1;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .details {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        opacity: 0;
+                        transition: opacity 0.5s ease;
+                    }
+
+                    &:hover .details {
+                        opacity: 1;
+                    }
+
+                }
+
+            }
+
+
+        }
+
+    }
+
+
+}

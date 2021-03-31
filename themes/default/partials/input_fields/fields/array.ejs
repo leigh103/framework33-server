@@ -1,21 +1,32 @@
-<% var obj = item.name.toLowerCase() %>
+<% var obj = view.functions.depluralise(item.name.toLowerCase()) %>
 
 <%
-    if (typeof obj_prefix != 'undefined' || obj_prefix != false){
+
+    var new_prefix = 'new.'
+
+    if (typeof obj_prefix != 'undefined' && obj_prefix != false){
         obj = obj_prefix+'.'+obj
+    }
+
+    if (typeof array_obj != 'undefined'){
+        if (array_obj === true){
+            new_prefix = ''
+        } else if (typeof array_obj == 'string'){
+            new_prefix = 'new.'+array_obj+'.'
+        }
     }
 %>
 
-<div class="colspan-2">
+<div class="input-array field-<%- item.name %> <%- obj %> in <%- new_prefix %><%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
-    <div class="mb-2 grid col-4 gap-1" app-show="new.<%- item.name %>">
-        <div class="flex flex-row" app-for="<%- obj %> in new.<%- item.name %>">
-            <input type="text" app-model="<%- obj %>.value" placeholder="<%- item.placeholder %>">
-            <button class="btn bg-33-white text-33-red" app-click="splice(new.<%- item.name %>,<%- obj %>.value)"><i class="fas fa-times"></i></button>
+    <div class="input-array-wrap">
+        <div class="input-array-item" app-for="item in <%- new_prefix %><%- item.name %>">
+            <button class="" app-click="splice(<%- new_prefix %><%- item.name %>,item.value)"><span class="icon x primary"></span></button>
+            <input type="text" app-model="item.value" placeholder="<%- item.placeholder %>">
         </div>
     </div>
-    <div class="flex flex-row">
+    <div class="input-array-new">
         <input type="text" app-model="new.<%- item.name %>_new" placeholder="Add new <%- view.functions.depluralise(item.name) %>">
-        <button class="btn bg-33-blue text-33-white" app-click="push('new.<%- item.name %>',new.<%- item.name %>_new,'new.<%- item.name %>_new')"><i class="fas fa-plus"></i></button>
+        <button class="bg-primary" app-click="push('<%- new_prefix %><%- item.name %>',<%- new_prefix %><%- item.name %>_new,'<%- new_prefix %><%- item.name %>_new')">Add <span class="icon plus right white"></span></button>
     </div>
 </div>

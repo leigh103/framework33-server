@@ -11,6 +11,7 @@
                 collection: 'product_attributes',
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Attribute', type:'string', required:true},
+                    {name:'free_text_input',input_type:'checkbox',placeholder:'', type:'boolean', required:false},
                     {name:'options',input_type:'array',placeholder:'Options', type:'object', required:false}
                 ]
             }
