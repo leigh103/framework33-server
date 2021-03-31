@@ -47,7 +47,7 @@
                             <% if (typeof product.adjustment == 'string' && product.adjustment.match(/%/)){ %>
                                 <span class="discount-price"><%- Math.abs(product.adjustment.replace(/%/g,'')) %>% off</span>
                             <% } else { %>
-                                <span class="discount-price">£<%- Math.abs(product.adjustment/100).toFixed(2) %> off!</span>
+                                <span class="discount-price">£<%- Math.abs(product.adjustment).toFixed(2) %> off!</span>
                             <% } %>
                         <% } %>
                     </h2>

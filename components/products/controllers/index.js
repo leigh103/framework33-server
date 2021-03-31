@@ -55,14 +55,14 @@ const express = require('express'),
                 } else {
 
                     item.original_price = item.price
-                    item.adjustment_value = item.adjustment
-                    item.price = item.price+item.adjustment
+                    item.adjustment_value = parseFloat(item.price)+parseFloat(item.adjustment)
+                    item.price = parseFloat(item.price)+parseFloat(item.adjustment)
 
                 }
 
             }
 
-            return item.price
+            return parseFloat(item.price).toFixed(2)
 
         },
 
