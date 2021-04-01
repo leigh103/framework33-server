@@ -13,7 +13,7 @@
         <div class="grid col-5 gap-1 my-2" app-for="item in cart.items">
             <div><img src="/images/Product_Placeholder.svg" app-src="item.thumbnail"></div>
             <div class="colspan-2 text-weight-700 flex-middle-left"><a app-attr="{'href':item.slug}" app-bind="item.name"></a></div>
-            <div class="text-center flex-middle" app-bind="item.quantity"></div>
+            <div class="text-center flex-middle"><button class="decrease-item" app-click="removeFromCart(item)">-</button><input type="text" class="item-quantity" app-model="item.quantity"><button class="increase-item" app-click="addToCart(item)">+</button></div>
             <div class="text-right text-weight-700 flex-middle-right"><span app-bind="parseCurrency(item.price)"></span></div>
         </div>
     </div>

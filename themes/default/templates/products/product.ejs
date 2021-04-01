@@ -59,15 +59,18 @@
                     <% } %>
 
                     <div class="actions">
-                        <div class="quantity">
-                            <button class="remove" app-click="quantity('minus')" title="Reduce quantity"><i class="fas fa-minus"></i></button>
-                            <input type="text" class="number" app-model="view.add_item.quantity" title="Add this amout to your basket">
-                            <button class="add" app-click="quantity('add')" title="Increase quantity"><i class="fas fa-plus"></i></button>
-                        </div>
-                        <% if (product.stock){ %>
-                            <button class="buy" title="Add <%- product.name %> to your basket" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Oh go on then</button>
+
+                        <% if (product.stock && product.stock > 0 && product.activated === true){ %>
+                            <div class="quantity">
+                                <button class="remove" app-click="quantity('minus')" title="Reduce quantity"><i class="fas fa-minus"></i></button>
+                                <input type="text" class="number" app-model="view.add_item.quantity" title="Add this amout to your basket">
+                                <button class="add" app-click="quantity('add')" title="Increase quantity"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <button class="buy" title="Add <%- product.name %> to your basket" app-click="addToCart('<%- product._key %>','<%- product.guard %>')">Add to Cart</button>
+                        <% } else if (!product.activated){ %>
+                            <button class="out-of-stock" app-click="notify('This product is currently unavailable','error')" title="<%- product.name %> is no longer available">Not Available</button>
                         <% } else { %>
-                            <button class="out-of-stock" title="<%- product.name %> are out of stock">Out of stock</button>
+                            <button class="out-of-stock" app-click="notify('This product is currently out of stock','error')" title="<%- product.name %> are out of stock">Out of stock</button>
                         <% } %>
                     </div>
 

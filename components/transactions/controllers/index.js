@@ -46,7 +46,7 @@ const express = require('express'),
 
 
     let data = {
-        include_styles: [settings.views+'/styles/style.ejs'],
+        include_styles: [settings.views+'/styles/style.ejs', settings.views+'/styles/cart.ejs'],
         cart_name: view.functions.capitalise(cart_name),
         model: new Transactions().settings,
         query: ''

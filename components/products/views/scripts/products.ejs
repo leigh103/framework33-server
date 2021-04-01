@@ -111,31 +111,6 @@
 
         }
 
-        scope.uploadImg = function(image, obj, input){
-
-            let payload = {
-                base64: image,
-                file_name: "test-image-upload",
-                file_path: "products"
-            }
-
-            scope.view.upload_text = 'Uploading...'
-            view.update('view.upload_text')
-
-            http.post('/api/image',payload).then((data) => {
-
-                if (obj){
-                    scope.push(obj,data)
-                    scope.saveItem('<%- table %>',scope.new, true)
-                    view.update(obj)
-                }
-                scope.view.upload_text = 'Upload Image'
-                view.update('view.upload_text')
-            }).catch((err)=>{
-                scope.notify(err,'error')
-            })
-
-        }
 
         scope.insertMedia = function(media){
 
@@ -143,7 +118,11 @@
                 scope.insertCEMedia(media)
             } else {
                 scope.push(scope.view.media_obj,media.url)
-                scope.saveItem('<%- table %>',scope.new, true)
+
+                if (scope.new._key){
+                    scope.saveItem('<%- table %>',scope.new, true)
+                }
+
                 view.update(scope.view.media_obj)
                 scope.closeModal()
                 delete scope.view.media_obj

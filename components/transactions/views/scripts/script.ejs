@@ -7,6 +7,8 @@
             scope.view.use_billing_address = true
             scope.view.delivery_options = []
 
+            let cart_menu_item = document.getElementById('menu-cart')
+
             <% if (typeof cart != 'undefined' && cart._key) { %>
 
                 watch['cart.notification_method'] = function(){
@@ -40,6 +42,19 @@
                 }
 
                 scope.cart = <%- JSON.stringify(cart) %>
+
+                scope.setCartCounter = function(items){
+                    scope.view.cart_counter.innerHTML = items.reduce((acc, item)=>{
+                        return acc + item.quantity
+                    }, 0)
+                }
+
+                if (cart_menu_item && scope.cart && scope.cart.items){
+                    scope.view.cart_counter = document.createElement("SPAN")
+                    scope.view.cart_counter.setAttribute('id','cart-counter')
+                    scope.setCartCounter(scope.cart.items)
+                    cart_menu_item.appendChild(scope.view.cart_counter)
+                }
 
                 if (!scope.cart.billing_address){
                     scope.cart.billing_address = {}
@@ -97,16 +112,34 @@
 
                 }
 
-                scope.addToCart = function(item_key, type){
+                scope.addToCart = function(item, type){
 
-                    let payload = {
-                        _key: '<%- cart._key %>',
-                        item_key: item_key,
-                        type: type,
-                        quantity: scope.view.add_item.quantity
+                    let qty = 1,
+                        payload
+                    if (scope.view.add_item && scope.view.add_item.quantity){
+                        qty = scope.view.add_item.quantity
+                    }
+
+                    if (typeof item == 'object'){
+                        payload = {
+                            _key: '<%- cart._key %>',
+                            item_key: item._key,
+                            type: item.type,
+                            quantity: qty
+                        }
+                    } else {
+                        payload = {
+                            _key: '<%- cart._key %>',
+                            item_key: item,
+                            type: type,
+                            quantity: qty
+                        }
                     }
 
                     scope.post('cart/add-item',payload).then((cart)=>{
+                        scope.cart = cart
+                        scope.setCartCounter(cart.items)
+                        view.update('cart')
                         scope.notify('Item Added! <a href="/<%- view.ecommerce.cart_name.toLowerCase() %>">View <%- view.ecommerce.cart_name %></a>')
                     }).catch((err)=>{
                         console.log(err)
@@ -115,19 +148,16 @@
 
                 }
 
-                scope.removeFromCart = function(item_key){
-
-                    if (item_key == 'item._key'){
-                        item_key = 0
-                    }
+                scope.removeFromCart = function(item){
 
                     let payload = {
                         _key: '<%- cart._key %>',
-                        item_key: item_key
+                        item_key: item._key
                     }
 
                     scope.post('cart/remove-item',payload).then((cart)=>{
                         scope.cart = cart
+                        scope.setCartCounter(scope.cart.items)
                         view.update('cart')
                         scope.notify('Item Removed')
                     }).catch((err)=>{
@@ -144,6 +174,7 @@
 
                     scope.post('cart/empty',payload).then((cart)=>{
                         scope.cart = cart
+                        scope.setCartCounter(scope.cart.items)
                         view.update('cart')
                         scope.notify('Cart Emptied')
                     }).catch((err)=>{

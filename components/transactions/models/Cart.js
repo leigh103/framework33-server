@@ -216,6 +216,7 @@
         async removeItem(item_data){
 
             let item_idx = this.data.items.findIndex((cart_item,i)=>{
+                console.log(cart_item._key, item_data.item_key)
                 return cart_item._key == item_data.item_key
             })
 
