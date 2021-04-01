@@ -63,7 +63,7 @@
             margin-bottom: 1.375rem;
             font-size: 0.875rem;
             overflow: visible !important;
-            border-bottom: 2px solid #F4F6F8;
+            border-bottom: $dashboard-row-border;
 
             @media $small {
                 margin-bottom: 0;
@@ -276,6 +276,12 @@
 
         &-wrap {
             background: none;
+
+            @media $small {
+                & > .table.table-header {
+                    display: none;
+                }
+            }
 
         }
 
