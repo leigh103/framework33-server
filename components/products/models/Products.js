@@ -13,7 +13,7 @@
                     {name:'gallery',input_type:'img_array',placeholder:'Images', type:'object', tab:'images', thumbnail:true, required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'brand',input_type:'text',placeholder:'Brand', type:'string', required:false},
-                    {name:'activated',input_type:'checkbox',type:'boolean',required: false},
+                    {name:'active',input_type:'checkbox',type:'boolean',required: false},
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
                     {name:'barcode',input_type:'text',placeholder:'barcode', type:'barcode', required:false, barcode_type:'ean13'},
                     {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},

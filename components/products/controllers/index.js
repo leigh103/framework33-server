@@ -281,7 +281,7 @@ const express = require('express'),
 
                 data.slug = req.params.product
 
-                data.product = await new Products().find(['slug == '+data.slug])
+                data.product = await new Products().find(['slug == '+data.slug, 'activated == true'])
                 data.related = await data.product.getRelated()
                 data.product = data.product.get()
 
@@ -328,7 +328,7 @@ const express = require('express'),
 
                     data.slug = req.params.sub_category
 
-                    data.product = await new Products().find(['slug == '+data.slug])
+                    data.product = await new Products().find(['slug == '+data.slug, 'activated == true'])
                     data.related = await data.product.getRelated()
                     data.product = data.product.get()
 

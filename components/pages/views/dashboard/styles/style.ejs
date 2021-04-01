@@ -216,6 +216,14 @@
   }
 }
 
+    .dashboard {
+        flex: 0 0 35rem;
+    }
+
+    .preview-wrap {
+        flex: 5;
+    }
+
     .menu-link {
         height: 71px;
         padding: 0 1rem;
@@ -251,6 +259,7 @@
     }
 
     .input-contenteditable {
+        max-width: 32.6rem;
         border: 1px solid #f2f2f2;
         padding: 0 1rem 1rem 1rem;
     }
@@ -365,6 +374,14 @@
 
     @media (min-width: 851px) and (max-width: 1180px){
 
+        .preview-wrap {
+            flex: 2;
+        }
+
+        .dashboard {
+            flex: 2;
+        }
+
         #preview {
             line-height: 0.9rem;
             zoom:50%
@@ -373,6 +390,10 @@
 
 
     @media (max-width: 1180px){
+
+        .input-contenteditable {
+            max-width: calc(50vw - 2rem);
+        }
 
         .menu-wrap {
             overflow-y:auto;
@@ -388,6 +409,10 @@
     }
 
     @media (max-width: 851px){
+
+        .preview-wrap {
+            display: none;
+        }
 
         .editor-wrap {
             display: block;

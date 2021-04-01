@@ -20,5 +20,5 @@
 <div class="input-<%- item.input_type %> field-<%- obj_prefix %><%- item.name %>">
     <%- max_characters %>
     <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
-    <div><input type="<%- item.input_type %>" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></div>
+    <div <% if (item.type == 'price'){ %>app-init="fromPrice100('<%- new_prefix %><%- obj_prefix %><%- item.name %>')"<% } %>><input type="<%- item.input_type %>" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></div>
 </div>

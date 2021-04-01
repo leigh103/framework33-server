@@ -77,7 +77,7 @@
             setTimeout(function(){
                 http.get('/api/'+collection+'/'+key).then((data)=>{
                     scope.new = JSON.parse(data)
-
+                    // scope.setPageTitle(scope.new)
                     if (scope.new.category){
                         let sub_cat = scope.new.sub_category+''
                         scope.get('product_categories/'+scope.new.category).then((category)=>{
@@ -89,7 +89,7 @@
                         })
                     }
 
-                    scope.new.price = (scope.new.price/100).toFixed(2)
+                    // scope.new.price = (scope.new.price/100).toFixed(2)
 
                     if (scope.new.adjustment){
                         if (typeof scope.new.adjustment == 'string' && scope.new.adjustment.match(/%/)){

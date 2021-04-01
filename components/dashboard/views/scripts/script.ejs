@@ -183,10 +183,48 @@
                     setTimeout(function(){
                         http.get('/api/'+collection+'/'+key).then((data)=>{
                             scope.new = JSON.parse(data)
+
+                            scope.setPageTitle(scope.new)
+
                             view.update('new')
                         })
                     },500)
                 }
+
+            }
+
+            scope.setPageTitle = function(obj){
+
+                if (typeof obj == 'object'){
+                    if (obj.name){
+                        scope.view.page_title = obj.name
+                    } else if (obj.title){
+                        scope.view.page_title = obj.title
+                    } else if (obj.full_name){
+                        scope.view.page_title = obj.full_name
+                    }
+                } else {
+                    scope.view.page_title = obj
+                }
+
+                view.update('view.page_title')
+            }
+
+            scope.fromPrice100 = function(var_str){
+
+                if (!scope.view.prices_changed){
+                    scope.view.prices_changed = []
+                }
+                scope.view.prices_changed.push(var_str)
+                setTimeout(function(){
+
+                    let val = evaluate.getValue(var_str)
+                    if (typeof val == 'number'){
+                        val = (val/100).toFixed(2)
+                        view.set(var_str, val)
+                    }
+
+                },1000)
 
             }
 
@@ -233,7 +271,7 @@
                     //     scope.closeModal()
                     // }
 
-                    scope.notify('Updated')
+                    scope.notify('Done')
 
                 }).catch((err)=>{
                     console.log(err)
@@ -318,7 +356,7 @@
             }
 
             scope.splice = function(obj_name, idx){
-
+console.log(obj_name, idx)
                 let obj = evaluate.getValue(obj_name)
                 if (obj){
                     obj.splice(idx,1)

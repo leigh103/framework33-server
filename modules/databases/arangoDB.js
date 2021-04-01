@@ -166,7 +166,7 @@
         where(filters){
 
             if (typeof filters == 'object' && filters.length > 0){
-                this.query += 'FILTER '
+                this.query += 'FILTER !'+this.query_key+'._deleted && '
             }
 
             filters.map((filter) => {

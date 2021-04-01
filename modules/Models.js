@@ -260,18 +260,23 @@
 
                 } else if (field.type == 'price'){
 
-                    let gbp = toGBP(value)
-                    gbp = parseFloat(gbp)*100
-                    
-                    return gbp
+                    if (typeof value == 'string'){
+                        let gbp = toGBP(value)
+                        gbp = parseFloat(gbp)*100
+                        return gbp
+                    } else {
+                        return value
+                    }
 
                 } else if (field.type == 'discount'){
 
-                    if (value && value.match(/^-?[0-9]{1,2}%$/)){
+                    if (typeof value == 'number'){
+                        return value*100
+                    } else if (typeof value == 'string' && value.match(/^-?[0-9]{1,2}%$/)){
                         return value
-                    } else if (value && value.match(/^-?[0-9]+(.[0-9]{2})?$/)){
+                    } else if (typeof value == 'string' && value.match(/^-?[0-9]+(.[0-9]{2})?$/)){
                         return parseFloat(value)*100
-                    } else if (value){
+                    } else if (typeof value == 'string' && value.length > 0){
                         this.error = 'Invalid adjustment value. Should be a positive or negative number, or a positive or negative percentage'
                         return ''
                     } else {
@@ -487,7 +492,10 @@
                 }
             }
 
-            this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
+        //    this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
+
+            this.data._deleted = moment().toISOString()
+            this.save()
 
             if (this.data.length > 0){
                 this.error = 'Not deleted'

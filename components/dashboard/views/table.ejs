@@ -2,6 +2,25 @@
 
     <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
 
+
+    <div class="actions">
+
+        <div class="tabs">
+            <% if (typeof tabs != 'undefined'){ %>
+                <% tabs.forEach(tab => { %>
+                    <a href="<%- tab.href %>" class="<% if (title.toLowerCase() == tab.text.toLowerCase() || view.current_sub_view.toLowerCase() == tab.text.toLowerCase()){ %>active<% } %>"><%- tab.text %></a>
+                <% }) %>
+            <% } %>
+        </div>
+
+        <% if (typeof search_fields == 'object'){ %>
+            <div class="search">
+                <span class="icon search black"></span>
+                <input type="text" app-change="search('<%- table %>')" placeholder="Search <%- title %>">
+            </div>
+        <% } %>
+    </div>
+
     <%- include(basedir+'/components/dashboard/views/partials/table.ejs') %>
 
     <div id="context" class="context dropdown text-left" style="display: none">
