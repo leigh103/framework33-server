@@ -19,7 +19,7 @@
 
                 <form method="post" action="/login/<%- guard %>/send-reset" class="w-100">
                     <div class="colspan-2">
-                        <input type="text" name="email" placeholder="Email Address" class="rounded">
+                        <input type="text" name="email" placeholder="Email Address" class="rounded placeholder-normal">
                     </div>
                     <div>
                         <input type="submit" class="btn highlight thick w-100 mt-2" value="Send">
@@ -44,10 +44,10 @@
 
                 <form method="post" action="/login/<%- guard %>/reset-password" class="grid col-1 gap-1 w-100">
                     <div class="">
-                        <input type="text" name="email" placeholder="Email Address" class="rounded">
+                        <input type="text" name="email" placeholder="Email Address" class="rounded placeholder-normal">
                     </div>
                     <div class="">
-                        <input type="password" name="password" placeholder="Password" class="rounded">
+                        <input type="password" name="password" placeholder="Password" class="rounded placeholder-normal">
                     </div>
                     <div class="">
                         <input type="password" name="password_confirmation" placeholder="Confirm Password" class="rounded">

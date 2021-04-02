@@ -30,18 +30,31 @@ html, body {
         }
     }
 
-    .placeholder-italic {
+    ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        font-style: italic;
+    }
+    ::-moz-placeholder { /* Firefox 19+ */
+        font-style: italic;
+    }
+    :-ms-input-placeholder { /* IE 10+ */
+        font-style: italic;
+    }
+    :-moz-placeholder { /* Firefox 18- */
+        font-style: italic;
+    }
+
+    .placeholder-normal {
         ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-            font-style: italic;
+            font-style: normal;
         }
         ::-moz-placeholder { /* Firefox 19+ */
-            font-style: italic;
+            font-style: normal;
         }
         :-ms-input-placeholder { /* IE 10+ */
-            font-style: italic;
+            font-style: normal;
         }
         :-moz-placeholder { /* Firefox 18- */
-            font-style: italic;
+            font-style: normal;
         }
     }
 
