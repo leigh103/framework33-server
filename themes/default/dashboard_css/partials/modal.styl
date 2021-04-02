@@ -7,7 +7,7 @@ modal {
             border-radius: $border-radius;
 
             header {
-                background-color: $dashboard-bg-light-grey;
+                background-color: $dashboard-color-light-grey2;
                 border-bottom: none;
                 flex: 0 0 5rem;
 
@@ -18,14 +18,34 @@ modal {
             }
 
             section.body {
-                padding-top:0;
-                background-color: $dashboard-bg-light-grey;
+                padding:0 2rem 2rem 2rem;
+                background-color: $dashboard-color-light-grey;
+
+                .tabs {
+                    background-color: $dashboard-color-light-grey;
+                }
 
                 @media $small {
                     padding-bottom: 8rem;
                 }
             }
 
+        }
+
+        &.tabbed {
+            & > section {
+                section.body {
+                    padding: 0;
+                }
+            }
+        }
+
+        &.body-white {
+            & > section {
+                section.body {
+                    background-color:white;
+                }
+            }
         }
 
     }

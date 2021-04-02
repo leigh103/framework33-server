@@ -18,45 +18,23 @@
     font-size: 1rem;
     z-index: 1;
     color: $dashboard-color-grey;
+    flex: 0 0 $dashboard-side-nav-width;
+    transition: width 0.5s ease;
 
-    transition: all 0.5s ease;
-
-    @media $desktop {
-        flex: 0 0 18rem;
-    }
-
-    @media $medium {
-        flex: 0 0 12rem;
-    }
-
-    @media $small {
-
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 15vw;
-
-    }
-
-    &.collapse {
-        @media $desktop {
-            flex: 0 0 4.375rem;
-        }
-
-        @media $medium {
-            flex: 0 0 4.375rem;
-        }
-
-        .text {
-            display: none;
-        }
-
+    &.expand {
+        flex:0 0 $dashboard-side-nav-width-open;
     }
 
     .header {
-        flex: 0 0 4.0625rem;
+        display: none;
         padding: 0 1.35rem;
+        background-color: $dashboard-color-light-grey2;
+
+        @media $small {
+            display: flex;
+            flex: 0 0 $dashboard-mobile-row-height;
+        }
+
         span.icon {
             background-color: $dashboard-color-grey;
         }
@@ -66,27 +44,42 @@
         flex: 1;
         overflow-x: hidden;
         overflow-y: auto;
+        padding-top: 0.5rem;
+
+        @media $small {
+            padding-top:0;
+        }
 
         .link {
 
             a {
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: flex-start;
                 width:100%;
-                height: 3.4375rem;
+                height: 3.35rem;
                 padding: 0 1.35rem;
-                color: $dashboard-color-grey;
+                color: $dashboard-color-black;
+                cursor: pointer;
 
                 @media $medium {
                     padding: 0 1rem;
                 }
 
-                cursor: pointer;
+                @media $small {
+                    height: $dashboard-mobile-row-height;
+                    padding: 0 1.5rem;
+                    background: $dashboard-color-white;
+                    border-bottom:$dashboard-row-border;
+                }
+
 
                 span.icon {
                     background-color: $dashboard-color-grey;
                     margin: 0;
+                    @media $small {
+                        background-color: $dashboard-color-primary;
+                    }
                 }
 
                 &:hover {
@@ -98,7 +91,7 @@
                 }
 
                 &.active {
-                    background-color: $bg-light-grey;
+
                     color: $dashboard-color-primary;
                     // border-left: 3px solid $dashboard-color-primary;
                     span.icon {
@@ -111,7 +104,14 @@
                     height: auto;
                 }
 
+                .text {
+                    padding-left: 1rem;
+                    display: none;
 
+                    @media $small {
+                        display: block;
+                    }
+                }
 
                 div.count {
                     position: absolute;
@@ -146,30 +146,74 @@
     }
 
     .profile {
-        flex: 0 0 4.7rem;
+        flex: 0 0 $dashboard-header-height;
         display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        padding-bottom: 1.15rem;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 1.2rem;
+        background-color: $dashboard-color-light-grey2;
+
+        @media $small {
+            background: none;
+            flex: 0 0 $dashboard-mobile-tabs-height;
+        }
         .avatar {
-            height: 2.5rem;
-            width: 2.5rem;
 
-            @media $medium {
-                height: 2rem;
-                width: 2rem;
+            flex: 0 0 2.5rem;
+            margin: 0 1rem 0 0;
+
+            img {
+                height: 2.5rem;
+                width: 2.5rem;
             }
+        }
 
-            @media $small {
-                height: 2rem;
-                width: 2rem;
+        .text {
+
+            flex: 1;
+            display: flex;
+
+            a {
+                flex: 1;
+                &:last-child {
+                    text-align: right;
+                }
+
             }
         }
     }
 
     a {
         display: block;
-        color: $text-black;
+        color: $dashboard-text-black;
+    }
+
+
+    @media $desktop {
+        flex: 0 0 $dashboard-side-nav-width;
+        .text {
+            display: none;
+        }
+
+        &.expand {
+            .links .link a .text {
+                display: flex;
+            }
+        }
+    }
+
+    @media $small {
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+
+        &.expand {
+            width: 100vw;
+        }
+
     }
 
 }

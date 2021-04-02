@@ -66,7 +66,8 @@
 
                     <% } %>
                 <% }) %>
-                <div class="cell middle thumbnail"><img src="/images/Product_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.thumbnail"></div>
+                <div class="cell middle thumbnail" app-show="<%- view.functions.depluralise(table) %>.thumbnail"><img src="/images/Product_Placeholder.svg" app-src="<%- view.functions.depluralise(table) %>.thumbnail"></div>
+                <div class="cell middle arrow-link" app-class="{'visible':<%- view.functions.depluralise(table) %>.thumbnail}"></div>
                 <div class="cell middle text-right context-link" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">
 
                     <div class="context-menu context-link btn" app-click="toggleContext('context',$index)">

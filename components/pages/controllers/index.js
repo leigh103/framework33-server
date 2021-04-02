@@ -296,7 +296,13 @@ const express = require('express'),
     let data = {
         shop: view.ecommerce.shop,
         meta: {},
-        model: new Pages().settings
+        model: new Pages().settings,
+        tabs: [
+            {href:'/dashboard/pages', text: 'Pages'},
+            {href:'/dashboard/pages/settings/page-types', text: 'Page Types'},
+            {href:'/dashboard/pages/settings/menus', text: 'Menus'},
+            {href:'/dashboard/pages/settings/links', text: 'Links'}
+        ]
     },
     blocks = []
 
@@ -441,21 +447,11 @@ const express = require('express'),
             title: config.site.name+' | Page Settings',
         }
 
-        view.current_sub_view = 'details'
+        view.current_sub_view = req.params.page
 
         if (req.params.page){
             view.current_sub_view = req.params.page
         }
-
-        data.tabs = [
-            {href:'/dashboard/pages/settings', text: 'Details'},
-            {href:'/dashboard/pages/settings/page-types', text: 'Page Types'},
-            {href:'/dashboard/pages/settings/media', text: 'Media'},
-            {href:'/dashboard/pages/settings/menus', text: 'Menus'},
-            {href:'/dashboard/pages/settings/links', text: 'Links'}
-        ]
-
-        data.action_buttons = [{href:'/dashboard/pages', text: 'Back'}]
 
         view.current_view = 'pages'
         data.title = 'Page Settings'
@@ -486,6 +482,7 @@ const express = require('express'),
         }
 
         view.current_view = 'pages'
+        view.current_sub_view = 'pages'
         data.title = 'Pages'
         data.table = 'pages'
         data.page_type = req.params.type
@@ -504,13 +501,13 @@ const express = require('express'),
     routes.get('/dashboard/pages', async(req, res) => {
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/dashboard/scripts/dashboard_scripts.ejs']
-        data.action_buttons = [{href:'/dashboard/pages/settings', text: 'Settings'}]
 
         data.meta = {
             title: config.site.name+' | Pages',
         }
 
         view.current_view = 'pages'
+        view.current_sub_view = 'pages'
         data.title = 'Pages'
         data.table = 'pages'
         data.pages_type = req.params.type
@@ -524,7 +521,7 @@ const express = require('express'),
 
         data.option_data = await view.functions.getOptionData('page_types')
 
-        res.render(basedir+'/components/dashboard/views/grid.ejs',data)
+        res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
     })
 

@@ -14,8 +14,16 @@
 
                     <div class="menu" app-show="view.menu == 'edit'">
 
-                        <div class="menu-link">
-                            <a app-click="showMenu('main')" class="text-black"><span class="icon arrowleft left black"></span><span app-bind="view.selected_block.name"></span></a>
+                        <div class="header">
+                            <div class="burger colspan-1" app-click="view.side_nav = !view.side_nav">
+                                <a app-click="showMenu('main')"><span class="icon arrowleft left black"></span></a>
+                            </div>
+                            <div class="title">
+                                <h1><a app-click="showMenu('main')" class="text-black"><span app-bind="view.selected_block.name"></span></a></h1>
+                            </div>
+                            <div class="buttons">
+                                <button class="btn" app-click="renderPage(true)"><span class="icon screen white"></span></button>
+                            </div>
                         </div>
 
                         <div class="tabs flex-none flex">
@@ -26,7 +34,7 @@
                         <div app-show="view.tab == 'content'" class="fields">
 
                             <div>
-                                <div class="mb-1" app-for="field in view.editor">
+                                <div class="field" app-for="field in view.editor">
 
 
                                     <div app-if="field.input == 'text'">
@@ -83,41 +91,42 @@
 
                         <div app-show="view.tab == 'block_styling'" class="fields">
 
-                            <div class="mb-2">
+                            <div class="field">
                                 <label class=" capitalise">Block Name</label>
                                 <input type="text" app-model="view.selected_block.name">
                             </div>
 
-                            <div class="mb-1-children">
-                                <div>
-                                    <label class=" capitalise"><input type="checkbox" app-model="view.selected_block.styling.carousel">Carousel this block</label>
+                            <div class="">
+                                <div class="field">
+                                    <label class="capitalise">Carousel this block</label>
+                                    <input type="checkbox" class="border" app-model="view.selected_block.styling.carousel">
                                 </div>
-                                <div>
+                                <div class="field">
                                     <label class=" capitalise">Block Background Color</label>
 
                                     <div class="color_picker" app-model="view.selected_block.styling.background.color">
                                         <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
                                     </div>
                                 </div>
-                                <div class="">
+                                <div class="field">
                                     <label class="capitalise">Block Background Image</label>
-                                    <label for="block_bg_image" app-click="showMediaLibrary('view.selected_block.styling.background.image')"><img src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image"></label>
+                                    <div class="bg-image-wrap" app-click="showMediaLibrary('view.selected_block.styling.background.image')">
+                                        <img class="bg-image" src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image">
+                                        <a class="bg-image-remove" app-click="delImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')" app-show="view.selected_block.styling.background.image"><span class="icon x secondary"></span></a>
+                                    </div>
                                     <!-- <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')"> -->
 
-                                        <div class="text-right">
-                                            <a class="text-small" app-click="delImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')" app-show="view.selected_block.styling.background.image"><i class="fas fa-times"></i> Remove Image</a>
-                                        </div>
 
                                 </div>
-                                <div>
+                                <div class="field">
                                     <label class=" capitalise">Block Classes</label>
                                     <input type="text" app-model="view.selected_block.styling.background.class">
                                 </div>
-                                <div>
+                                <div class="field">
                                     <label class=" capitalise">Container Classes</label>
                                     <input type="text" app-model="view.selected_block.styling.container.class">
                                 </div>
-                                <div>
+                                <div class="field">
                                     <label class=" capitalise">Text Color</label>
                                     <input type="text" app-model="view.selected_block.styling.text.color">
                                 </div>
@@ -129,59 +138,57 @@
 
                     <div class="menu" app-show="view.menu == 'main'">
 
-
-                        <div class="menu-link">
-                            <a href="/dashboard/pages" class="text-black"><span class="icon arrowleft left black"></span>All Pages</a>
+                        <div class="header">
+                            <div class="burger colspan-1" app-click="view.side_nav = !view.side_nav">
+                                <a href="/dashboard/pages"><span class="icon arrowleft left black"></span></a>
+                            </div>
+                            <div class="title">
+                                <h1><a href="/dashboard/pages" class="text-black">All Pages</a></h1>
+                            </div>
+                            <div class="buttons">
+                                <button class="btn" app-click="renderPage(true)"><span class="icon screen white"></span></button>
+                            </div>
                         </div>
 
                         <div class="tabs flex-none flex">
                             <a app-click="view.tab = 'blocks'" app-class="{'active':view.tab == 'blocks'}" class="flex-1">Blocks</a>
-                            <a app-click="view.tab = 'page_settings'" app-class="{'active':view.tab == 'page_settings'}" class="flex-1">Settings</a>
+                            <a app-click="view.tab = 'details'" app-class="{'active':view.tab == 'details'}" class="flex-1">Details</a>
+                            <a app-click="view.tab = 'notification'" app-class="{'active':view.tab == 'notification'}" class="flex-1">Notification</a>
+                            <a app-click="view.tab = 'seo'" app-class="{'active':view.tab == 'seo'}" class="flex-1">SEO</a>
+                            <a app-click="view.tab = 'options'" app-class="{'active':view.tab == 'options'}" class="flex-1">Options</a>
                         </div>
 
-                        <div app-show="view.tab == 'page_settings'" class="fields">
+                        <div app-show="view.tab == 'details'" class="fields">
 
-                            <div class="grid col-2 mb-1 mt-2 bg-light-grey p-1" app-click="view.show_details = !view.show_details">
-                                <span class="text-bold">Details</span>
-                                <div class="flex-middle-right">
-                                    <span class="icon arrowup right grey" app-hide="view.show_details"></span>
-                                    <span class="icon arrowdown right grey" app-show="view.show_details"></span>
-                                </div>
-                            </div>
+                            <div class="layer-1">
 
-                            <div class="layer-1" app-show="view.show_details" data-animation="{'enter':'drop-down','exit':'drop-up'}">
-
-                                <div class="my-1">
+                                <div class="field">
                                     <label class="">Page Title</label>
                                     <input type="text" app-model="view.pages.title">
                                 </div>
 
-                                <div class="my-1">
+                                <div class="field">
                                     <label class="">Page URL</label>
                                     <input type="text" app-model="view.pages.slug">
                                 </div>
 
-                                <div class="relative my-1 layer-5">
+                                <div class="relative layer-5">
 
-                                    <div class="">
-                                        <label class="">Published</label>
+                                    <div class="field">
+                                        <label class="">Status</label>
                                         <select app-model="view.pages.status">
                                             <option value="draft">Draft</option>
                                             <option value="published">Published</option>
                                         </select>
                                     </div>
 
-                                    <div class="my-1">
-                                        <label class="checkbox"><input type="checkbox" class="border" app-model="view.pages.hide_top_nav"> Hide site nav bar</label>
-                                    </div>
-
-                                    <div class="">
+                                    <div class="field">
                                         <label class="">Publish On</label>
                                         <date-picker app-model="view.pages.publish_on" class="mb-2 layer-3">
                                         </date-picker>
                                     </div>
 
-                                    <div class="">
+                                    <div class="field">
                                         <label class="">Unpublish On</label>
                                         <date-picker app-model="view.pages.unpublish_on" class="mb-2 layer-3">
                                         </date-picker>
@@ -191,16 +198,10 @@
 
                             </div>
 
-                            <div class="grid col-2 mb-1 mt-2 bg-light-grey p-1" app-click="view.add_notification = !view.add_notification">
-                                <span class="text-bold">Notification</span>
-                                <div class="flex-middle-right">
-                                    <span class="icon arrowup right grey" app-hide="view.add_notification"></span>
-                                    <span class="icon arrowdown right grey" app-show="view.add_notification"></span>
-                                </div>
-                            </div>
+                        </div>
+                        <div app-show="view.tab == 'notification'" class="fields">
 
-
-                            <div class="layer-1" app-show="view.add_notification" data-animation="{'enter':'drop-down','exit':'drop-up'}">
+                            <div class="layer-1 field">
 
                                 <label class=" capitalise">Add a notification to this page (400 chars. max)</label>
 
@@ -217,32 +218,31 @@
                                 </div>
                             </div>
 
-                            <div class="grid col-2 mb-1 mt-2 bg-light-grey p-1" app-click="view.show_seo = !view.show_seo">
-                                <span class="text-bold">SEO</span>
-                                <div class="flex-middle-right">
-                                    <span class="icon arrowup right grey" app-hide="view.show_seo"></span>
-                                    <span class="icon arrowdown right grey" app-show="view.show_seo"></span>
-                                </div>
+                        </div>
+                        <div app-show="view.tab == 'seo'" class="fields">
+
+                            <div class="field">
+                                <label class="">Title</label>
+                                <input type="text" placeholder="SEO Page Title" app-model="view.pages.meta.title">
                             </div>
 
-                            <div app-show="view.show_seo" data-animation="{'enter':'drop-down','exit':'drop-up'}">
-
-                                <div class="my-1">
-                                    <label class="">Title</label>
-                                    <input type="text" app-model="view.pages.meta.title">
-                                </div>
-
-                                <div class="my-1">
-                                    <div class="float-right text-small pr-1" app-bind="view.pages.meta.description.length"></div>
-                                    <label class="">Descripton (160 chars. max)</label>
-                                    <textarea app-model="view.pages.meta.description"></textarea>
-                                </div>
-
+                            <div class="field">
+                                <div class="float-right text-small pr-1" app-bind="view.pages.meta.description.length"></div>
+                                <label class="">Descripton (160 chars. max)</label>
+                                <textarea app-model="view.pages.meta.description" placeholder="SEO Meta Description"></textarea>
                             </div>
 
                         </div>
 
-                        <div app-show="view.tab == 'blocks'" class="fields">
+                        <div app-show="view.tab == 'options'" class="fields">
+                            <div class="field">
+                                <label>Hide site nav bar</label>
+                                <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-model="view.pages.hide_top_nav"> Select this option to hide the menu at the top of the page</label>
+                            </div>
+                        </div>
+
+
+                        <div app-show="view.tab == 'blocks'" class="blocks">
 
                             <div class="sortable" app-sorted="renderPage()">
                                 <div class="list-block" app-for="block in view.pages.blocks" app-click="loadBlock(block,$index)" app-class="{'carousel':block.styling.carousel == true}">
@@ -254,7 +254,7 @@
                             <div class="">
 
                                 <div class="list-block no-border" app-click="addNewSection(true)">
-                                    <span class="flex-none icon xl plus grey left"></span>
+                                    <span class="flex-none icon lg plus grey left"></span>
                                     <div class="flex-1">Add block</div>
                                     <span class=""></span>
                                 </div>
@@ -266,12 +266,14 @@
                     </div>
 
 
-                    <div class="w-100 bg-light-grey flex-none p-1 grid col-12">
+                    <div class="w-100 bg-light-grey flex-none py-1 px-15 grid col-12">
                         <div class="colspan-5">
-                            <button app-show="view.selected_block" class="btn bg-white w-100" app-click="removeBlock(true)">Remove Block<span class="icon bin black right"></span></button>
+                            <button app-show="view.selected_block" class="btn bg-white" app-click="removeBlock(true)">Remove Block</button>
                         </div>
                         <div class="colspan-2"></div>
-                        <button class="btn bg-primary w-100 colspan-5" app-click="savePage()">Keep It<span class="icon thumbsup white right"></span></button>
+                        <div class="colspan-5 text-right">
+                            <button class="btn bg-primary" app-click="savePage()">Save</button>
+                        </div>
                     </div>
 
                 </div>
@@ -311,7 +313,7 @@
 
 <div class="dashboard">
 
-    <modal-auto app-show="view.modal == 'show_sections'" data-title="Add New Section" class="modal-auto-medium">
+    <modal-auto app-show="view.modal == 'show_sections'" data-title="Add New Section" class="modal-auto-medium tabbed body-white">
 
         <div class="tabs">
             <!-- <a app-click="view.modal_tab = 'recents'" app-class="{'active':view.modal_tab == 'recent'}" class="flex-1">Recent</a> -->
@@ -319,7 +321,7 @@
             <a app-click="view.modal_tab = 'separators'" app-class="{'active':view.modal_tab == 'separators'}" class="flex-1">Separators</a>
             <a app-click="view.modal_tab = 'advanced'" app-class="{'active':view.modal_tab == 'advanced'}" class="flex-1">Advanced</a>
         </div>
-        <div class="bg-white rounded p-2">
+        <div class="bg-white p-2 h-100">
 
             <div class="grid col-3 col-s-1 gap-2">
                 <% for (var i in blocks){ %>

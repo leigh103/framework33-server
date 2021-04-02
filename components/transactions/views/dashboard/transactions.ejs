@@ -1,14 +1,30 @@
 <% layout(config.site.dashboard_theme+'/dashboard.ejs') %>
 
-        <div class="header">
+
+        <div class="header" app-class="{'search-expand':view.show_search == true}">
+            <div class="burger colspan-1" app-click="view.side_nav = !view.side_nav">
+                <i class="fas fa-bars"></i>
+            </div>
             <div class="title">
                 <h1><%- title %></h1>
             </div>
             <div class="buttons">
+                <% if (typeof action_buttons != 'undefined'){ %>
+                    <% action_buttons.forEach(button => { %>
+                        <a <% if (button.href){ %> href="<%- button.href %>"<% } %> <% if (button.click){ %> app-click="<%- button.click %>"<% } %> class="btn"><span class="text"><%- button.text %><span><span class="icon <%- button.icon %> white"></span></a>
+                    <% }) %>
+                <% } %>
+                <a class="btn <% if (status == 'completed'){ %>bg-primary<% } else { %>bg-white<% } %>" href="/dashboard/transactions/archive"><span class="text">Archive<span><span class="icon threedots white"></span></a>
 
-                <a class="btn <% if (status == 'completed'){ %>bg-primary<% } else { %>bg-white<% } %>" href="/dashboard/transactions/archive">Archive</a>
-                <!-- <a class="btn bg-primary" href="/dashboard/transactions/edit/new">Add <%- view.functions.parseName(table,true) %><i class="fa fa-plus ml-05"></i></a> -->
             </div>
+            <% if (typeof search_fields == 'object'){ %>
+                <div class="search">
+                    <div class="search-wrap">
+                        <input type="text" app-change="search('<%- table %>')" placeholder="Search">
+                        <span app-click="view.show_search = !view.show_search" class="icon search black"></span>
+                    </div>
+                </div>
+            <% } %>
         </div>
 
         <div class="actions">

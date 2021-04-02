@@ -8,16 +8,34 @@
     div[contenteditable=true], pre {
         width:100%;
         min-height: 10rem;
+        padding: 0;
+        border: none;
     }
 
     pre, code {
         background-color: #41454d;
         color: white;
-        font-size: 0.7rem;
+        font-size: 0.875rem;
     }
 
-    input, textarea {
-        border: 1px solid #f2f2f2 !important;
+    input {
+    }
+
+    .fields input, .fields textarea {
+        border: none !important;
+        padding: 0 !important;
+        font-size: 1rem !important;
+        margin-top: -0.5rem;
+    }
+
+    .fields input[type=checkbox] {
+        width: 2.5rem;
+    }
+
+    .fields label {
+        font-weight: 600;
+        font-size: 0.75rem;
+        margin-bottom: 1.3125rem;
     }
 
     ul li, ol li {
@@ -217,7 +235,7 @@
 }
 
     .dashboard {
-        flex: 0 0 35rem;
+        flex: 0 0 360px;
     }
 
     .preview-wrap {
@@ -225,8 +243,9 @@
     }
 
     .menu-link {
-        height: 71px;
+        height: 5rem;
         padding: 0 1rem;
+        font-weight: 600;
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -251,45 +270,87 @@
 
     .menu .fields {
         background-color: white;
-        padding: 1rem;
+        padding: 0;
         height: 100%;
         overflow-x: hidden;
         overflow-y: auto;
         flex: 1;
     }
 
+    .menu .fields .field {
+        padding: 1.5rem;
+        border-bottom: 1px solid #EAEAEA;
+    }
+
+    .menu .fields .field .bg-image-wrap {
+        position: relative;
+    }
+
+    .menu .fields .field .bg-image {
+        position: relative;
+        border-radius: 6px;
+    }
+
+    .menu .fields .field .bg-image-remove {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 1rem;
+        right: 1rem;
+        background-color: white;
+        height: 2rem;
+        width: 2rem;
+        border-radius: 1rem;
+    }
+
+    .menu .blocks {
+        background-color: white;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .tabs {
+        height: 3.35rem;
+    }
+
+    .tabs a {
+        background: none;
+        border-bottom: 0;
+        height: 3.35rem;
+        margin:0;
+        padding: 0.85rem 1.5rem;
+        color: #383f47;
+    }
+
+    .tabs a.active {
+        background-color: white;
+        border: none;
+        font-weight: 600;
+    }
+
     .input-contenteditable {
         max-width: 32.6rem;
-        border: 1px solid #f2f2f2;
-        padding: 0 1rem 1rem 1rem;
     }
 
     .list-block {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        height: 4.375rem;
+        height: 4rem;
         padding: 0 1.25rem;
-        border: 1px solid #DDDDDD;
+        border-bottom: 1px solid #EAEAEA;
+    }
+
+    modal-auto .list-block {
+        border: 1px solid #EAEAEA;
         border-radius: 6px;
-        margin-bottom: 1rem;
     }
 
     .list-block.carousel {
-        margin-left: 2rem;
-        width: calc(100% - 2rem);
-        position: relative;
-    }
-
-    .list-block.carousel:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -2rem;
-        display: block;
-        width: 0.25rem;
-        height: 100%;
-        background: #98538e;
+        border-left: 3px solid #98538e
     }
 
     .list-block.no-border {
@@ -374,14 +435,6 @@
 
     @media (min-width: 851px) and (max-width: 1180px){
 
-        .preview-wrap {
-            flex: 2;
-        }
-
-        .dashboard {
-            flex: 2;
-        }
-
         #preview {
             line-height: 0.9rem;
             zoom:50%
@@ -390,10 +443,6 @@
 
 
     @media (max-width: 1180px){
-
-        .input-contenteditable {
-            max-width: calc(50vw - 2rem);
-        }
 
         .menu-wrap {
             overflow-y:auto;
@@ -421,6 +470,11 @@
         .menu-wrap {
             height: auto !important;
             overflow-y:hidden !important;
+        }
+
+        .menu-link {
+            height: 3.75rem;
+            border-bottom: 1px solid #EAEAEA
         }
 
     }

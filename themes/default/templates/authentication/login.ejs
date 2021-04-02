@@ -1,52 +1,42 @@
-<% layout(config.site.theme+'/fullscreen.ejs') -%>
+<% layout(config.site.dashboard_theme+'/dashboard-fullscreen.ejs') -%>
 
-<div class="page grid col-2 col-s-1">
+<div class="authentication wrapper">
 
-    <div class="flex flex-middle-left flex-column px-9 px-s-2">
+    <div class="col-form">
 
-        <div class="flex-none grid col-2 w-100 mt-4 text-left">
+        <div class="form">
 
-            <div>
-                <a href="/" class="block"><% if (typeof view != 'undefined' && view.logo){ %><img src="<%- view.logo %>" class="logo"><% } %></a>
-            </div>
-            <div class="flex flex-middle-right">
-                <% if (view.users.allow_registration === true){ %>
-                    <a href="/sign-up">Sign Up</a>
-                <% } %>
-            </div>
-
-        </div>
-
-        <div class="flex-5 flex flex-column flex-middle-left w-100 mb-4 text-left">
-
-            <h1 class="text-light capitalise mb-2"><%- guard %> Login</h1>
+            <h1 class="h4 text-light capitalise my-4"><%- guard %> Login</h1>
 
             <% if (typeof error != 'undefined'){ %>
-                <div class="mb-2 text-33-red">
+                <div class="error">
                     <%- error %>
                 </div>
             <% } %>
 
-            <form method="post" action="/login/<%- guard %>" class="w-100 grid col-1 gap-1">
-                <div class="">
-                    <input type="text" name="email" placeholder="Email Address" class="underline">
+            <form method="post" action="/login/<%- guard %>" class="w-100">
+                <div class="mb-15">
+                    <input type="text" name="email" class="rounded" placeholder="Email Address">
                 </div>
                 <div class="">
-                    <input type="password" name="password" placeholder="Password" class="underline">
+                    <input type="password" class="rounded" name="password" placeholder="Password">
+                    <a class="text-grey mt-15 block" href="/login/<%- guard %>/reset">Forgot password?</a>
                 </div>
-                <div class="mt-2">
+                <div class="mt-3 mb-15">
                     <input type="submit" class="btn highlight thick w-100" value="Login">
                 </div>
                 <div class="text-center">
-                    <a class="" href="/login/<%- guard %>/reset">Forgot password?</a>
+                    <a class="btn bg-white w-100 text-bold" href="/login/register">Sign Up</a>
                 </div>
             </form>
+
+            <span class="icon cmslogo grey xl"></span>
 
         </div>
 
     </div>
 
-    <div class="bg-33-dream flex flex-middle-left flex-column p-6 p-s-2">
+    <div class="col-image">
 
 
 

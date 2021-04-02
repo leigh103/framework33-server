@@ -2,12 +2,6 @@ html, body {
     overflow-x: hidden;
 }
 
-@media $small {
-    .fullscreen.overflow-hidden {
-        overflow-y: auto !important;
-    }
-}
-
 
 .dashboard {
 
@@ -26,21 +20,32 @@ html, body {
     flex-direction: row;
 
     @media $small {
+        font-size: 14px;
         display: block;
     }
 
-    ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-        font-style: italic;
+    @media $small {
+        &.fullscreen {
+            overflow-y: hidden !important;
+        }
     }
-    ::-moz-placeholder { /* Firefox 19+ */
-        font-style: italic;
+
+    .placeholder-italic {
+        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+            font-style: italic;
+        }
+        ::-moz-placeholder { /* Firefox 19+ */
+            font-style: italic;
+        }
+        :-ms-input-placeholder { /* IE 10+ */
+            font-style: italic;
+        }
+        :-moz-placeholder { /* Firefox 18- */
+            font-style: italic;
+        }
     }
-    :-ms-input-placeholder { /* IE 10+ */
-        font-style: italic;
-    }
-    :-moz-placeholder { /* Firefox 18- */
-        font-style: italic;
-    }
+
+
 
     button, .btn {
 
@@ -71,20 +76,79 @@ html, body {
         position: relative;
         z-index: 2;
         height: 100vh;
-        min-height: -webkit-fill-available;
+        min-height: 100vh;
+
+        background-color: $dashboard-bg-light-grey;
+        flex:1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0;
+        text-align: left;
+        transition: transform 0.5s ease;
+
+        @media $desktop-4k {
+
+        }
+        @media $desktop-1080p {
+
+        }
+
+        @media $desktop {
+
+        }
+
+        @media $medium {
+
+        }
 
         @media $small {
-            height: auto !important;
+
+            height:auto;
+            min-height: 100vh;
+            flex: 0 0 100vw;
             display: block;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            padding: 0rem 0rem 5rem 0;
+            transition: transform 0.3s ease;
+            transform: translateX(0);
+
+            &.expand {
+                transform: translateX(100vw);
+            }
+
         }
+
+        .actions {
+            flex: 0 1 auto;
+            height: $dashboard-mobile-tabs-height;
+
+            @media $small {
+                height: auto;
+                flex: none;
+                max-height: none;
+            }
+        }
+
+        .table-wrap, .edit-wrap, .grid-wrap, .list-wrap {
+            flex: 1;
+        }
+
+        &-full {
+            margin: -2rem;
+            height: 100vh;
+        }
+
     }
 
     h1 {
-        font-size: 1.5rem;
+        font-size: 22px;
         font-weight: bold;
 
         @media $small {
-            font-size: 1.125rem;
+            font-size: 18px;
         }
     }
 
@@ -147,64 +211,71 @@ html, body {
     }
 
     .header {
-        display: flex;
 
-        &-mobile {
+        display: flex;
+        background:none;
+        color: $dashboard-text-black;
+        background-color: $dashboard-color-light-grey2;
+
+        flex: 0 0 $dashboard-header-height;
+
+        h1, h1 a {
+
+        }
+
+        @media $desktop {
+            padding: 0 2rem 0 1.5rem;
+        }
+
+        @media $medium {
+            padding:0 1.5rem;
+        }
+
+        @media $small {
+            flex: 0 0 $dashboard-mobile-row-height;
+            height: $dashboard-mobile-row-height;
+            padding: 0 1.5rem;
+        }
+
+        .burger {
 
             display: none;
+            overflow: hidden;
 
             @media $small {
-
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                padding: 0 1.5rem;
-                height: $dashboard-mobile-row-height;
-                border-bottom: $dashboard-row-border;
-
-                & > div:first-child {
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-start;
-                }
-
-                & > div:last-child {
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                }
-
-                .search {
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-
-                    input {
-                        font-size: 1rem;
-                        background: none;
-                        text-align: right;
-                    }
-
-                    .icon {
-                        height: 2rem;
-                        width: 2rem;
-                        background-color: #878787;
-                    }
-
-                }
+                flex: 0 0 2.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
             }
+
         }
 
         .title {
-            flex: 2;
+            flex: auto;
             display: flex;
             align-items: center;
             justify-content: flex-start;
+            overflow: hidden;
+
+            a {
+                color: $dashboard-text-black;
+            }
 
             @media $small {
                 .search {
                     display: none;
                 }
             }
+
+            .burger {
+                display: block;
+                color: white;
+                font-size: 1.25rem;
+                margin-right: 1.2rem;
+
+            }
+
         }
 
         .buttons {
@@ -214,23 +285,113 @@ html, body {
             align-items: center;
             justify-content: flex-end;
 
+            overflow: hidden;
+
             .btn {
-                margin-left: 1.25rem
+                margin-left: 0;
+                margin-left: 0.875rem;
+                background-color: $dashboard-color-primary;
+
+                .icon {
+                    margin-left:0.5rem;
+                }
+
+                @media $small {
+
+                    padding: 0;
+                    display: inline-flex;
+                    width: 2.5rem;
+
+                    .text {
+                        display: none;
+                    }
+
+                    .icon {
+                        height: 1.3rem;
+                        width: 1.3rem;
+                        margin:0;
+                    }
+
+                }
             }
+
         }
 
-        @media $small {
-            padding: 0 1.5rem;
-            border-bottom: $dashboard-row-border
+
+        .search {
+
+            flex: 0 0 2.5rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            text-align: right;
+            margin-left: 0.875rem;
+
+            &-wrap {
+                height: 2.5rem;
+                width: 100%;
+                background-color: $dashboard-color-white;
+                border-radius: 1.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                text-align: right;
+            }
+
+            input {
+                display: none;
+                width: 100%;
+                padding: 0 0 0 1rem;
+                border-top-left-radius: 1.5rem;
+                border-bottom-left-radius: 1.5rem;
+            }
+
+            .icon {
+                height: 1.3rem;
+                width: 1.3rem;
+                flex: 0 0 2.5rem;
+                background-color: $dashboard-color-secondary;
+            }
+
         }
+
+        &.search-expand {
+
+            .burger {
+                flex: 0 0 0;
+            }
+
+            .title {
+                flex: 0 0 0;
+            }
+
+            .buttons {
+                flex: 0 0 0;
+            }
+
+            & > .search {
+                flex: 0 0 100%;
+                margin-left: 0;
+
+                @media $small {
+                    flex: 0 0 100%;
+                }
+
+                input {
+                    display: block;
+                }
+            }
+
+
+        }
+
     }
 
     .actions {
 
         display: flex;
         flex-direction: row;
-
-
 
         & > .search {
             flex: 0 0 17.5rem;
@@ -292,80 +453,72 @@ html, body {
         }
     }
 
-    .page {
-        background-color: $dashboard-bg-light-grey;
-        height: 100vh;
-        flex:1;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 0 2rem 1.775rem 2rem;
-        text-align: left;
-        z-index: 2;
+    .authentication {
 
-        @media $desktop-4k {
+        &.wrapper {
 
-        }
-        @media $desktop-1080p {
-
-        }
-
-        @media $desktop {
-
-        }
-
-        @media $medium {
-            padding: 0 2rem 0 1rem;
-        }
-
-        @media $small {
-
-            flex: 0 0 100vw;
-            display: block;
-            overflow-y: hidden;
-            overflow-x: hidden;
-            padding: 0rem 0rem 5rem 0;
-            transition: transform 0.3s ease;
-            transform: translateX(0);
-
-            &.open {
-                transform: translateX(15vw);
-            }
-
-            .burger {
-                color: #aaa;
-                font-size: 1.5rem;
-            }
-
-        }
-
-        .header {
-            flex: 0 0 5rem;
-            @media $small {
-                height: $dashboard-mobile-row-height;
-            }
-        }
-
-        .actions {
-            flex: 0 1 auto;
-            max-height: 2.8125rem;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-color: $dashboard-color-light-grey;
 
             @media $small {
-                height: auto;
-                flex: none;
-                max-height: none;
+                grid-template-columns: 1fr;
             }
+
         }
 
-        .table-wrap, .edit-wrap, .grid-wrap, .list-wrap {
-            flex: 1;
-        }
+        .col-form {
 
-        &-full {
-            margin: -2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             height: 100vh;
+            position: relative;
+
+            .form {
+                position: relative;
+                text-align: center;
+                width: 360px;
+                height: 80vh;
+                margin: 0 auto;
+
+                .error {
+                    display: block;
+                    background-color: $dashboard-color-red;
+                    padding: 1rem 2rem;
+                    border-radius: $border-radius;
+                    color: white;
+                    margin-bottom: 2rem;
+                }
+
+                .cmslogo {
+                    position: absolute;
+                    bottom: 0;
+                    left: calc(50% - 1rem);
+                }
+            }
+
+
+
+            @media $small {
+                align-items: flex-start;
+                justify-content: flex-start;
+                padding: 0 1.5rem;
+                .form {
+                    width:100%;
+                    height: 90vh;
+                }
+            }
+
         }
+
+        .col-image {
+            background-color: white;
+            background-position: center center;
+            background-size: cover;
+        }
+
     }
 
 }

@@ -1,27 +1,32 @@
-    <div class="side-nav collapse">
+    <div class="side-nav" app-class="{'expand':view.side_nav == true}">
+
+        <div class="header">
+            <div class="title">
+                <div class="burger colspan-1" app-click="view.side_nav = !view.side_nav">
+                    <span class="icon x white"></span>
+                </div>
+            </div>
+        </div>
 
         <div class="profile">
-
-            <% if (user.avatar){ %>
-                <img src="<%- user.avatar %>" class="avatar">
-            <% } else if (typeof view != 'undefined' && view.logo){ %>
-                <img src="<%- view.logo %>" class="avatar">
-            <% } else { %>
-                <img src="/images/Profile_Placeholder.svg" class="avatar">
-            <% } %>
+            <div class="avatar">
+                <% if (user.avatar){ %>
+                    <img src="<%- user.avatar %>" >
+                <% } else if (typeof view != 'undefined' && view.logo){ %>
+                    <img src="<%- view.logo %>">
+                <% } else { %>
+                    <img src="/images/Profile_Placeholder.svg">
+                <% } %>
+            </div>
 
             <div class="text">
-                <p class="h5 text-weight-600 mb-0"><%- view.functions.getTimeOfDay() %> <% if(typeof user.full_name != 'undefined'){ %><%- view.functions.getFirstName(user.full_name) %><% } %></p>
-                <p class="text-small transparent-2 mt-0">Logged in as <%- user.guard %></p>
+                <a>My Profile</a>
+                <a href="/logout">Sign Out</a>
             </div>
         </div>
 
         <div class="links">
             <%- include(config.site.theme_path+'/partials/menu.ejs',{menu:view.menus.side_nav}) %>
-        </div>
-
-        <div class="header">
-            <span class="icon cmslogo xl"></span>
         </div>
 
     </div>

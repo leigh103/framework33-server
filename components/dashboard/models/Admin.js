@@ -10,7 +10,7 @@
             this.settings = {
                 collection: 'admin',
                 fields: [
-                    {name:'avatar',input_type:'image',placeholder:'Profile Picture', type:'image', required:false},
+                    {name:'avatar',input_type:'image',placeholder:'Profile Picture', type:'image', thumbnail:true, required:false},
                     {name:'full_name',input_type:'text',placeholder:'Full name', type:'name', required:true},
                     {name:'password',input_type:'hidden', type:'password', required:false},
                     {name:'email',input_type:'email',placeholder:'Email address', type:'email', required:true},
