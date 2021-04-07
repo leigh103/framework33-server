@@ -65,6 +65,8 @@
             logo: '/images/logo.svg',
             theme: 'default',
             theme_path: global.basedir+'/themes/default',
+            dashboard_theme: 'default',
+            dashboard_theme_path: global.basedir+'/themes/default',
             not_found_redirect:'/',
             meta_description: '',
     		form_settings: {

@@ -37,21 +37,27 @@ const express = require('express'),
 
     routes.get('/login/:guard/:password_reset?', async (req, res) => {
 
-        let guards = config.users.guards
+        let guards = config.users.guards,
+            theme_path = config.site.theme_path
+
+        if (req.params.guard == 'admin'){
+            theme_path = config.site.dashboard_theme_path
+        }
+
         if (guards.indexOf(req.params.guard) >= 0 && req.params.password_reset){ // if password reset key has been given
 
             let time_diff = moment().diff(moment.unix(req.params.password_reset/1000),'minutes'),
                 timestamp_hash = DB.hash('password-reset'+req.body.password_reset)
 
             if (time_diff > config.users.password_reset_timeout){
-                res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard:req.params.guard,error:'For security reasons, password reset tokens are only valid for '+config.users.password_reset_timeout+' minutes. Please try again.'})
+                res.render(theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard:req.params.guard,error:'For security reasons, password reset tokens are only valid for '+config.users.password_reset_timeout+' minutes. Please try again.'})
             } else {
-                res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:req.params.password_reset,guard:req.params.guard})
+                res.render(theme_path+'/templates/authentication/reset.ejs', {type:req.params.password_reset,guard:req.params.guard})
             }
 
         } else if (guards.indexOf(req.params.guard) >= 0 && req.params.password_reset == 'reset'){ // if password reset key is being requested
 
-            res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:req.params.guard,guard:req.params.guard})
+            res.render(theme_path+'/templates/authentication/reset.ejs', {type:req.params.guard,guard:req.params.guard})
 
         } else if (req.params.guard == 'activate' && req.params.password_reset){ // if a user is attempting activation
 
@@ -63,7 +69,7 @@ const express = require('express'),
                 let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash]),
                     auth_data = user.deleteReset()
 
-                res.render(config.site.theme_path+'/templates/authentication/activate.ejs', {error:'For security reasons, activation tokens are only valid for '+config.users.password_reset_timeout+' minutes. Please try again.'})
+                res.render(theme_path+'/templates/authentication/activate.ejs', {error:'For security reasons, activation tokens are only valid for '+config.users.password_reset_timeout+' minutes. Please try again.'})
 
             } else {
 
@@ -74,9 +80,9 @@ const express = require('express'),
                 } else {
                     auth_data = user.activate()
                     if (auth_data.error){
-                        res.render(config.site.theme_path+'/templates/authentication/activate.ejs', {error:auth_data.error})
+                        res.render(theme_path+'/templates/authentication/activate.ejs', {error:auth_data.error})
                     } else {
-                        res.render(config.site.theme_path+'/templates/authentication/activate.ejs', {user:auth_data})
+                        res.render(theme_path+'/templates/authentication/activate.ejs', {user:auth_data})
                     }
                 }
 
@@ -84,7 +90,7 @@ const express = require('express'),
 
         } else { // redirect to login
 
-            res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:req.params.guard})
+            res.render(theme_path+'/templates/authentication/login.ejs', {guard:req.params.guard})
 
         }
 
