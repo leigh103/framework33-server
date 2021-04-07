@@ -52,7 +52,7 @@
                 postmark.sendEmailWithTemplate(payload, async (error, email_res) => {
                     if(error) {
                         log('Mail error: '+JSON.stringify(error))
-                        let user = await new User().find({email: payload.To})
+                        let user = await new Customers().find({email: payload.To})
                         if (user.data && user.data.email){
                             user.notificationFailure('email', payload.To)
                         }
@@ -69,7 +69,7 @@
                 postmark.sendEmail(payload, async (error, email_res) => {
                     if(error) {
                         log('Mail error: '+JSON.stringify(error))
-                        let user = await new User().find({email: payload.To})
+                        let user = await new Customers().find({email: payload.To})
                         if (user.data && user.data.email){
                             user.notificationFailure('email', payload.To)
                         }
