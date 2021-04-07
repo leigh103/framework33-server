@@ -400,6 +400,10 @@ console.log(obj_name, idx)
                     scope.insertCEMedia(media)
                 } else {
                     evaluate.setValue(scope.view.media_obj,media.url)
+
+                    if (typeof scope.renderPage == 'function'){
+                        scope.renderPage()
+                    }
                     scope.closeModal()
                 }
 

@@ -166,7 +166,8 @@
         where(filters){
 
             if (typeof filters == 'object' && filters.length > 0){
-                this.query += 'FILTER !'+this.query_key+'._deleted && '
+            //    this.query += 'FILTER !'+this.query_key+'._deleted && '
+                this.query += 'FILTER '
             }
 
             filters.map((filter) => {
@@ -469,7 +470,7 @@
                 }
 
                 this.query = this.query.replace(/FILTER RETURN/,'RETURN')
-//    console.log(this.query)
+
                 try {
 
                     let result = await adb.query(this.query)

@@ -48,6 +48,7 @@
                                     .first()
 
                 if (this.data.length > 0 || Object.keys(this.data).length > 0){
+                    this.error = false
                     this.data.guard = this.settings.collection
                     return this
                 } else {
@@ -486,16 +487,17 @@
         async delete(){
 
             if (typeof this.preDelete == 'function'){
+
                 await this.preDelete()
                 if (this.error){
                     return this
                 }
             }
 
-        //    this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
+            this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).delete()
 
-            this.data._deleted = moment().toISOString()
-            this.save()
+            // this.data._deleted = moment().toISOString()
+            // this.save()
 
             if (this.data.length > 0){
                 this.error = 'Not deleted'

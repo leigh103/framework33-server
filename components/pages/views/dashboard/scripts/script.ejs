@@ -50,20 +50,47 @@
 
             }
 
-            scope.selectColor = function(field){
+            scope.selectColor = function(){
 
                 let style = getComputedStyle(this.target),
-                    idx = this.target.parentNode._app.index,
-                    scope_obj = this.target.parentNode._app.scope_obj
+                    data = this.target.parentNode._app
+                    // scope_obj = this.target.parentNode._app.scope_obj
 
-                let obj = evaluate.getValue(scope_obj)
-                let idx2 = obj.findIndex((item)=>{
-                    return item.input == 'color_picker'
-                })
-                obj[idx2].value = style.backgroundColor
-                evaluate.setValue(scope_obj, obj)
+                let obj = evaluate.getValue(data.color.exp)
+
+                if (typeof obj == 'object'){
+                    obj.value = style.backgroundColor
+                    evaluate.setValue(data.color.exp, obj)
+                } else {
+                    evaluate.setValue(data.color.exp, style.backgroundColor)
+                }
+
                 scope.renderPage()
 
+            }
+
+            scope.addClass = function(field, cls){
+
+                if (!field || !field.class){
+                    return
+                }
+
+                let re = RegExp(cls,'i')
+                if (field.class.match(re)){
+                    field.class = field.class.replace(re,'')
+                } else {
+                    field.class = field.class+" "+cls
+                }
+                scope.renderPage()
+            }
+
+            scope.chkClass = function(field, cls){
+
+                let re = RegExp(cls,'i')
+                if (field && field.class && field.class.match(re)){
+                    console.log('here')
+                    return true
+                }
             }
 
 
@@ -95,7 +122,7 @@
                 }
                 view.update('view.menu')
                 view.update('view.tab')
-
+                view.update('view.colours')
             }
 
             scope.showMenu('init')
@@ -219,6 +246,7 @@
 
                         view.update('view.editor')
                         view.update('view.blocks')
+                        view.update('view.colors')
                         view.update('view.selected_block')
                         view.update('view.selected_block.styling.carousel')
                         view.update('view.selected_block.styling.container')
@@ -441,12 +469,14 @@
 // console.log(section_box)
 //                 section_insert.style.top = pos+'px'
 //                 section_insert.style.display = 'flex'
-                    section_insert.style.display = 'flex'
-                    if (section && section.parentNode){
-                        section.parentNode.insertBefore(section_insert, section.nextSibling)
+
+                    if (section_insert && section_insert.style){
+                        section_insert.style.display = 'flex'
                     }
 
-
+                    if (section instanceof Element && section.parentNode instanceof Element && section.nextSibling instanceof Element){
+                        section.parentNode.insertBefore(section_insert, section.nextSibling)
+                    }
 
             }
 
@@ -586,11 +616,10 @@ console.log(payload)
             //
             // }
 
-            scope.delImg = function(base64, obj, path, name){
+            scope.removeImage = function(field){
 
-                scope.deleteImage(base64, obj, path, name).then(()=>{
-                    scope.savePage()
-                })
+                field.image = false
+                scope.renderPage()
 
             }
 

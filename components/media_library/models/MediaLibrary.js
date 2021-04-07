@@ -49,7 +49,7 @@
 
         async preDelete(){
 
-            if (this.data && this.data.type && this.data.type == 'image'){
+            if (this.data && this.data.url){
                 await image.delete(this.data.url)
             }
 

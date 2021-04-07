@@ -52,12 +52,12 @@
                     },
                     post: {
                         save:['admin'],
-                        delete:['admin']
+                        preDelete:['admin']
                     },
                     put: {
                         save:['admin']
                     },
-                    delete: {
+                    preDelete: {
 
                     }
                 }
@@ -105,9 +105,15 @@
                 full_path:this.name,
                 type:'image',
                 file_type:this.ext,
-                full_size: this.result,
-                medium:'/media/500/80'+this.result,
-                thumbnail:'/media/300/60'+this.result
+                full_size: this.result
+            }
+
+            if (this.ext == 'svg'){
+                ml_payload.medium = this.result,
+                ml_payload.thumbnail = this.result
+            } else {
+                ml_payload.medium = '/media/500/80'+this.result,
+                ml_payload.thumbnail = '/media/300/60'+this.result
             }
 
             await DB.create('media_library',ml_payload)

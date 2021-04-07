@@ -329,7 +329,7 @@ const express = require('express'),
 
         let article = await new Pages().find(['slug == homepage','status == published'])
 
-        if (article.data.length == 0 || article.error){
+        if (!article.data || article.error){
 
             next()
 

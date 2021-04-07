@@ -50,7 +50,7 @@
                                     <div app-if="field.input == 'color_picker'">
                                         <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
 
-                                        <div class="color_picker" app-model="$parent">
+                                        <div class="color_picker" app-color="field">
                                             <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
                                         </div>
                                     </div>
@@ -61,8 +61,7 @@
 
                                             <div class="input-contenteditable-wrap">
                                                 <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs') %>
-
-                                                <div class="large resize contenteditable" app-model="field.value" contenteditable="true"></div>
+                                                <div class="contenteditable" app-model="field.value" contenteditable="true"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -97,39 +96,42 @@
                             </div>
 
                             <div class="">
-                                <div class="field">
-                                    <label class="capitalise">Carousel this block</label>
-                                    <input type="checkbox" class="border" app-model="view.selected_block.styling.carousel">
-                                </div>
-                                <div class="field">
-                                    <label class=" capitalise">Block Background Color</label>
 
-                                    <div class="color_picker" app-model="view.selected_block.styling.background.color">
+                                <div class="field">
+                                    <label class=" capitalise">Text Color</label>
+                                    <div class="color_picker" app-color="view.selected_block.styling.text.color">
                                         <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
                                     </div>
                                 </div>
                                 <div class="field">
-                                    <label class="capitalise">Block Background Image</label>
-                                    <div class="bg-image-wrap" app-click="showMediaLibrary('view.selected_block.styling.background.image')">
-                                        <img class="bg-image" src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image">
-                                        <a class="bg-image-remove" app-click="delImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')" app-show="view.selected_block.styling.background.image"><span class="icon x secondary"></span></a>
+                                    <label class=" capitalise">Background Color</label>
+
+                                    <div class="color_picker" app-color="view.selected_block.styling.background.color">
+                                        <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
                                     </div>
+                                </div>
+                                <div class="field">
+                                    <label class="capitalise">Background Image</label>
+                                    <div class="bg-image-wrap mb-1" app-click="showMediaLibrary('view.selected_block.styling.background.image')">
+                                        <img class="bg-image" src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image">
+                                        <a class="bg-image-remove" app-click="removeImage(view.selected_block.styling.background)" app-show="view.selected_block.styling.background.image"><span class="icon x secondary"></span></a>
+                                    </div>
+                                    <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-click="addClass(view.selected_block.styling.background, 'bg-text-dark')"> Darken the background for clearer text</label>
                                     <!-- <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')"> -->
-
-
                                 </div>
                                 <div class="field">
                                     <label class=" capitalise">Block Classes</label>
-                                    <input type="text" app-model="view.selected_block.styling.background.class">
+                                    <input type="text" app-model="view.selected_block.styling.background.class" placeholder="Add additional CSS classes here">
                                 </div>
                                 <div class="field">
                                     <label class=" capitalise">Container Classes</label>
-                                    <input type="text" app-model="view.selected_block.styling.container.class">
+                                    <input type="text" app-model="view.selected_block.styling.container.class" placeholder="Add additional CSS classes here">
                                 </div>
                                 <div class="field">
-                                    <label class=" capitalise">Text Color</label>
-                                    <input type="text" app-model="view.selected_block.styling.text.color">
+                                    <label class="capitalise">Carousel this block</label>
+                                    <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-model="view.selected_block.styling.carousel"> Select this option to add this block to a sliding carousel</label>
                                 </div>
+
                             </div>
 
                         </div>
@@ -177,6 +179,7 @@
                                     <div class="field">
                                         <label class="">Status</label>
                                         <select app-model="view.pages.status">
+                                            <option value="" disabled selected>Select...</option>
                                             <option value="draft">Draft</option>
                                             <option value="published">Published</option>
                                         </select>
