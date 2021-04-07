@@ -222,7 +222,7 @@
                 //    let email = new Notification(this.data).useEmailTemplate(notification_type).email()
                     this.data.link = config.site.url+'/login/'+this.settings.collection+'/'+this.data.timestamp
                     this.data.link_text = 'Reset Your Password'
-                    await new Events(notification_type).trigger(this.data)
+                    await new Automations(notification_type).trigger(this.data)
                 } catch (error) {
                     console.log(error)
                     this.error = error
