@@ -11,9 +11,11 @@
                 password: ''
             },
             load: [
-                'Image',
                 'Barcode',
                 'functions/isSet',
+                'functions/toGBP',
+                'functions/savePageHistory',
+                'functions/getPageHistory',
                 'localStorage',
                 'notifications/Notification',
                 'view',
@@ -28,11 +30,14 @@
             load: [
                 'api',
                 'authentication',
-                'content',
+                'media_library',
+                'pages',
                 'dashboard',
+                'automations',
                 'default_routes',
-                //'products',
-                //'transactions'
+            //    'products',
+            //    'transactions',
+            //    'marketing'
             ]
         },
 
@@ -44,7 +49,7 @@
         websocket:{
             port:6430,
             secret: 'ssshhh',
-            url: ""
+            url: ''
         },
 
         http:{
