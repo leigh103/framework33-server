@@ -1,10 +1,13 @@
 
-    const bwipjs = require('bwip-js'),
+    const Files = require(basedir+'/modules/Files'),
+          bwipjs = require('bwip-js'),
           sharp = require('sharp')
 
-    class Image {
+    class Image extends Files {
 
         constructor(base64, file_name, file_path){
+
+            super()
 
             if (!base64){
                 // this.error = "No data provided"
@@ -30,14 +33,17 @@
                     this.ext = 'jpg'
                 }
 
-                this.base64Data = base64.replace(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i, "")
                 this.time = Date.now()+''
+
+                this.file_data = base64.replace(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i, "")
+                this.file_name = file_name+'-'+this.time+'.'+this.ext
+                this.file_type = 'base64'
+
                 this.dir1 = this.time.substr(0,3)
                 this.dir2 = this.time.substr(3,1)
-                this.path_check = global.basedir+'/public/images/'+file_path
-                this.dir_check1 = global.basedir+'/public/images/'+file_path+'/'+this.dir1
-                this.dir_check2 = this.dir_check1+'/'+this.dir2
-                this.name = this.dir_check2+'/'+file_name+'-'+this.time+'.'+this.ext
+
+                this.path = ['public','images', file_path, this.dir1, this.dir2]
+
                 this.result = '/images/'+file_path+'/'+this.dir1+'/'+this.dir2+'/'+file_name+'-'+this.time+'.'+this.ext
 
             }
@@ -67,53 +73,34 @@
 
         async save(){
 
-            if (!fs.existsSync(this.path_check)){
-                await fs.mkdirSync(this.path_check);
+            try {
+                await this.saveToDisk()
+                await this.getFileStats()
+            }
+            catch(err){
+                log(err)
+                this.error = err
+                return this
             }
 
-            if (!fs.existsSync(this.dir_check1)){
-                await fs.mkdirSync(this.dir_check1);
-            }
-
-            if (!fs.existsSync(this.dir_check2)){
-                await fs.mkdirSync(this.dir_check2);
-            }
-
-            await fs.writeFile(this.name, this.base64Data, 'base64', async (err) => {
-
-                let imgpath = this.name
-                if (this.ext == 'jpg'){
-                    let sharp_img = await sharp(imgpath)
-                    if ((await sharp_img.metadata()).width > 2000) {
-                        console.log('resizing')
-                        await sharp_img
-                            .rotate()
-                            .resize({ width: 1500, height: 1500, fit: 'cover' })
-                            .toBuffer(function(err, buffer) {
-                                fs.writeFile(imgpath, buffer, function(e) {
-                                })
-                            })
-                        }
-
-                }
-
-            })
+            await this.compress(80)
 
             let ml_payload = {
-                name:this.file_name,
-                url:this.result,
-                full_path:this.name,
+                name: this.file_name,
+                url: this.url,
+                full_path: this.full_path,
+                file_path: this.file_path,
                 type:'image',
-                file_type:this.ext,
-                full_size: this.result
+                file_type: this.ext,
+                file_stats: this.file_stats
             }
 
             if (this.ext == 'svg'){
-                ml_payload.medium = this.result,
-                ml_payload.thumbnail = this.result
+                ml_payload.medium = this.url,
+                ml_payload.thumbnail = this.url
             } else {
-                ml_payload.medium = '/media/500/80'+this.result,
-                ml_payload.thumbnail = '/media/300/60'+this.result
+                ml_payload.medium = '/media/500/80'+this.url,
+                ml_payload.thumbnail = '/media/300/60'+this.url
             }
 
             await DB.create('media_library',ml_payload)
@@ -129,6 +116,60 @@
                 }
             }
             return obj
+
+        }
+
+        async compress(quality){
+
+            return new Promise( async (resolve, reject) => {
+
+                let sharp_img = await sharp(this.full_path),
+                    full_path = this.full_path,
+                    self = this
+
+                if (this.ext == 'jpg'){
+
+                    if ((await sharp_img.metadata()).width > 2000) {
+                        await sharp_img
+                            .rotate()
+                            .resize({ width: 1500, height: 1500, fit: 'cover' })
+                            .jpeg({quality: quality})
+                            .toBuffer( async (err, buffer) => {
+                                this.file_data = buffer
+                                await self.saveToDisk()
+                            })
+                    } else if (this.file_stats.size >= 1000000){
+                        await sharp_img
+                            .rotate()
+                            .jpeg({quality: quality})
+                            .toBuffer( async (err, buffer) => {
+                                this.file_data = buffer
+                                await self.saveToDisk()
+                            })
+                    }
+
+                }
+
+                if (this.ext == 'png'){
+
+                    if (this.file_stats.size >= 1000000){
+                        await sharp_img
+                            .rotate()
+                            .png({ compressionLevel: 9,
+                                adaptiveFiltering: true,
+                                force: true,
+                                quality: 80, })
+                            .toBuffer( async (err, buffer) => {
+                                this.file_data = buffer
+                                await self.saveToDisk()
+                            })
+                    }
+
+                }
+
+                resolve()
+
+            })
 
         }
 

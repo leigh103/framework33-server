@@ -50,7 +50,6 @@
 
             scope.toggleContext = function(type, key){
 
-
                 let el = document.getElementById(type),
                     target = this.target
 
@@ -58,16 +57,15 @@
                     target = target.parentNode
                 }
 
-                if (el && el.style && el.style.display != 'none'){
-                    view.exitView(el).then(()=>{
-                    })
-                } else {
-                    contextCloseAll()
-                }
+                // if (el && el.style && el.style.display != 'none'){
+                //     view.exitView(el).then(()=>{
+                //     })
+                // } else {
+                //    contextCloseAll()
+                // }
 
                 let table_wrap = document.querySelector('.table-inner-wrap')
                 if (table_wrap){
-                    console.log('no scroll')
                     table_wrap.style.overflowY = 'hidden'
                 }
 
