@@ -80,12 +80,21 @@
             menus.menu.nav = [
                 {link:view.ecommerce.shop.name, weight:1, subitems:[]}
             ]
+            menus.menu.product_categories = []
 
             let cats = await new ProductCategories().all()
             cats.data = await cats.data
 
             cats.data.map((category,i)=>{
                 menus.menu.nav[0].subitems.push({link:category.name, slug: '/'+category.slug, weight:i})
+                menus.menu.product_categories.push({link:category.name, slug: '/'+category.slug, weight:i, subitems:[]})
+
+                if (category.sub_categories){
+                    category.sub_categories.map((sub_category,ii)=>{
+                        menus.menu.product_categories[menus.menu.product_categories.length-1].subitems.push({link:sub_category.name, slug: '/'+sub_category.slug, weight:ii})
+                    })
+                }
+
             })
 
             global.addMenu(menus)
