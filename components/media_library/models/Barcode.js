@@ -1,9 +1,12 @@
 
-    const bwipjs = require('bwip-js')
+    const Files = require(basedir+'/modules/Files'),
+          bwipjs = require('bwip-js')
 
-    class Barcode {
+    class Barcode extends Files {
 
-        constructor(data, type){
+        constructor(data, type, name){
+
+            super()
 
             if (!data){
                 // this.error = "No data provided"
@@ -12,11 +15,13 @@
             } else {
 
                 if (typeof data == 'object'){
-                    this.code = data.code
+                    this.code = data.code+''
                     this.type = data.type
+                    this.name = data.name
                 } else {
-                    this.code = data
+                    this.code = data+''
                     this.type = type
+                    this.name = name
                 }
 
                 this.result
@@ -66,6 +71,21 @@
         async save(){
 
             this.save = true
+            this.time = Date.now()+''
+            this.dir1 = this.time.substr(0,3)
+            this.dir2 = this.time.substr(3,1)
+            this.path = ['public','images','codes', this.dir1, this.dir2]
+
+            if (this.name){
+                this.file_name = this.name
+            } else {
+                this.file_name = ''
+            }
+
+            this.file_name = this.file_name+''+this.time+'.png'
+            this.ext = 'png'
+            this.file_type = 'base64'
+
             await this.generateCodeImage()
 
             if (!this.result && !this.error){
@@ -152,11 +172,11 @@
                 })
                 .then(async (buffer) => {
 
-                    let base64 = `data:image/png;base64,${buffer.toString('base64')}`,
-                        output
+                    this.file_data = buffer.toString('base64')
 
                     if (this.save){
-                        this.result = await new Image(base64,'code-'+this.code,'codes').save()
+                        await this.saveToDisk()
+                        this.result = this.url
                     } else {
                         this.result = base64
                     }
@@ -165,6 +185,7 @@
 
                 })
                 .catch(err => {
+                    console.log(err)
                     this.error = JSON.stringify(err, Object.getOwnPropertyNames(err))
                 //    this.error = this.error.split('\\n')[0].replace('{"stack":"','')
                     resolve()

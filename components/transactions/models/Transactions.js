@@ -146,11 +146,13 @@
             if (this.data.reference && !this.data.barcode){
 
                 let barcode_data = {
-                    code: this.data.reference,
-                    type: 'qrcode'
+                    code: config.site.url+'/dashboard/transactions/edit/'+this.data._key,
+                    type: 'qrcode',
+                    name: this.data.reference
                 }
-            //    this.data.barcode = await new Barcode(barcode_data).save()
+                this.data.barcode = await new Barcode(barcode_data).save()
                 save = true
+
             }
 
             if (save === true){

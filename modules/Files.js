@@ -26,7 +26,7 @@
                         reject(err)
                     } else {
                         await this.getFileStats()
-                        resolve()
+                        resolve(this.full_path)
                     }
 
                 })

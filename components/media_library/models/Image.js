@@ -1,6 +1,5 @@
 
     const Files = require(basedir+'/modules/Files'),
-          bwipjs = require('bwip-js'),
           sharp = require('sharp')
 
     class Image extends Files {
