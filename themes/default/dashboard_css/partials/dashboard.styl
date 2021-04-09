@@ -252,8 +252,10 @@ html, body {
 
         .burger {
 
-            display: none;
-            overflow: hidden;
+            flex: 0 0 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
 
             @media $small {
                 flex: 0 0 2.5rem;
@@ -303,7 +305,7 @@ html, body {
             .btn {
                 margin-left: 0;
                 margin-left: 0.875rem;
-                background-color: $dashboard-color-primary;
+                
 
                 .icon {
                     margin-left:0.5rem;
