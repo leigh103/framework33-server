@@ -207,7 +207,7 @@
                     msg.TemplateModel.transactions.shipping_total = (data.shipping_total/100).toFixed(2)
                 }
 
-                console.log(msg)
+            //    console.log(msg)
 
             }
 
