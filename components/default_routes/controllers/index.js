@@ -57,6 +57,17 @@ var express = require('express'),
 
     })
 
+    routes.get('/testbarcode', async (req,res) => {
+
+        if (getGuard(req) == 'admin'){
+            let barcode = await new Barcode(23423453423,'qrcode').save()
+            res.sendFile(barcode)
+        } else {
+            res.redirect('/login/admin')
+        }
+
+    })
+
     routes.get('/testevent', async (req,res) => {
 
         if (getGuard(req) == 'admin'){
