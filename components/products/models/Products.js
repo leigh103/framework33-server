@@ -107,9 +107,13 @@
 
                 if (item.data && item.data.stock){
 
-                    item.data.stock = parseInt(item.data.stock)-parseInt(quantity)
-                    item.data.price = item.data.price/100
-                    item.save()
+                    let payload = {
+                        _key: item.data._key,
+                        stock: parseInt(item.data.stock)-parseInt(quantity)
+                    }
+                //    item.data.stock = parseInt(item.data.stock)-parseInt(quantity)
+
+                    item.save(payload)
 
                     if (item.data.stock < 1){
                         new Automations().trigger('out_of_stock')

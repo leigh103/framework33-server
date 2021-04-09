@@ -123,6 +123,15 @@
 
                 this.data.customer.billing_address = this.data.billing_address
                 this.data.customer.shipping_address = this.data.shipping_address
+
+                if (this.data.tel){
+                    this.data.customer.tel = this.data.tel
+                }
+
+                if (this.data.email){
+                    this.data.customer.email = this.data.email
+                }
+
                 let user = await new Customers(this.data.customer).findOrSave()
                 this.data.customer._key = user.data._key
                 save = true
@@ -140,7 +149,7 @@
                     code: this.data.reference,
                     type: 'qrcode'
                 }
-                this.data.barcode = await new Barcode(barcode_data).save()
+            //    this.data.barcode = await new Barcode(barcode_data).save()
                 save = true
             }
 
