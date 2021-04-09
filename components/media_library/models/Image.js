@@ -5,7 +5,7 @@
 
     class Image extends Files {
 
-        constructor(base64, file_name, file_path){
+        constructor(base64, file_name, file_path, tags){
 
             super()
 
@@ -43,8 +43,15 @@
                 this.dir2 = this.time.substr(3,1)
 
                 this.path = ['public','images', file_path, this.dir1, this.dir2]
+                this.compression = 80
 
                 this.result = '/images/'+file_path+'/'+this.dir1+'/'+this.dir2+'/'+file_name+'-'+this.time+'.'+this.ext
+
+                if (tags){
+                    this.tags = tags
+                } else {
+                    this.tags = ''
+                }
 
             }
 
@@ -71,6 +78,39 @@
 
         }
 
+        resize(width, height, fit){
+
+            if (!width){
+                return this
+            }
+
+            if (!height){
+                height = width
+            }
+
+            if (!fit){
+                fit = 'cover'
+            }
+
+            this.resize = {
+                width: width,
+                height: height,
+                fit: fit
+            }
+            return this
+
+        }
+
+        compression(level){
+
+            if (!level){
+                this.compression = 80
+            } else {
+                this.compression = level
+            }
+            return this
+        }
+
         async save(){
 
             try {
@@ -83,7 +123,7 @@
                 return this
             }
 
-            await this.compress(80)
+            await this.process()
 
             let ml_payload = {
                 name: this.file_name,
@@ -92,7 +132,8 @@
                 file_path: this.file_path,
                 type:'image',
                 file_type: this.ext,
-                file_stats: this.file_stats
+                file_stats: this.file_stats,
+                tags: this.tags
             }
 
             if (this.ext == 'svg'){
@@ -119,21 +160,26 @@
 
         }
 
-        async compress(quality){
+        async process(){
 
             return new Promise( async (resolve, reject) => {
 
                 let sharp_img = await sharp(this.full_path),
                     full_path = this.full_path,
-                    self = this
+                    self = this,
+                    resize = { width: 1500, height: 1500, fit: 'cover' }
+
+                if (this.resize){
+                    resize = this.resize
+                }
 
                 if (this.ext == 'jpg'){
 
-                    if ((await sharp_img.metadata()).width > 2000) {
+                    if ((await sharp_img.metadata()).width > 2000 || this.resize) {
                         await sharp_img
                             .rotate()
-                            .resize({ width: 1500, height: 1500, fit: 'cover' })
-                            .jpeg({quality: quality})
+                            .resize(resize)
+                            .jpeg({quality: this.compression})
                             .toBuffer( async (err, buffer) => {
                                 this.file_data = buffer
                                 await self.saveToDisk()
@@ -152,13 +198,25 @@
 
                 if (this.ext == 'png'){
 
-                    if (this.file_stats.size >= 1000000){
+                    if ((await sharp_img.metadata()).width > 2000 || this.resize) {
+                        await sharp_img
+                            .rotate()
+                            .resize(resize)
+                            .png({ compressionLevel: 9,
+                                adaptiveFiltering: true,
+                                force: true,
+                                quality: this.compression })
+                            .toBuffer( async (err, buffer) => {
+                                this.file_data = buffer
+                                await self.saveToDisk()
+                            })
+                    } else if (this.file_stats.size >= 1000000){
                         await sharp_img
                             .rotate()
                             .png({ compressionLevel: 9,
                                 adaptiveFiltering: true,
                                 force: true,
-                                quality: 80, })
+                                quality: this.compression })
                             .toBuffer( async (err, buffer) => {
                                 this.file_data = buffer
                                 await self.saveToDisk()

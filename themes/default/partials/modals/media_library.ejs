@@ -17,7 +17,7 @@
 
     <div class="grid-wrap">
         <div class="grid compact">
-            <div class="grid-item" app-for="media in media_library">
+            <div class="grid-item" app-for="media in media_library" app-class="media.file_type">
                 <img app-src="media.thumbnail" class="object-fit" app-click="insertMedia(media)">
             </div>
         </div>

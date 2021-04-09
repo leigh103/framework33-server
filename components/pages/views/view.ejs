@@ -2,7 +2,16 @@
 
 <% var carousel = false; var h1 = false %>
 
-<div class="">
+<% if (typeof pages != 'undefined' && pages.notification && pages.notification.length > 0) { %>
+    <section class="page-notification">
+        <div class="contain">
+            <%- pages.notification %>
+        </div>
+    </section>
+<% } %>
+
+
+<div class="page">
 
     <% for (var i in pages.blocks){ %>
 

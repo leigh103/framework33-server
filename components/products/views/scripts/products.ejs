@@ -103,6 +103,7 @@
                     if (!scope.new.gallery){
                         scope.new.gallery = []
                     }
+                    console.log(scope.new)
                     scope.view.loader = false
                     view.update('view.loader')
                     view.update('new')
@@ -113,14 +114,14 @@
 
 
         scope.insertMedia = function(media){
-
+console.log(scope.new)
             if (scope.exec_data.selection){
                 scope.insertCEMedia(media)
             } else {
                 scope.push(scope.view.media_obj,media.url)
 
                 if (scope.new._key){
-                    scope.saveItem('<%- table %>',scope.new, true)
+                //    scope.saveItem('<%- table %>',scope.new, true)
                 }
 
                 view.update(scope.view.media_obj)

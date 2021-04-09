@@ -47,7 +47,13 @@ const express = require('express'),
         shop: view.ecommerce.shop,
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
-        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products?activated=false', text:'Inactive'},{href: '/dashboard/products?activated=false', text:'Deleted'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
+        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products?active=false', text:'Inactive'},{href: '/dashboard/products?active=false', text:'Deleted'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
+    }
+
+    let models = {
+        products: new Products(),
+        categories: new ProductCategories(),
+        attributes: new ProductAttributes()
     }
 
     routes.get('*', async (req, res, next) => {
@@ -91,7 +97,7 @@ const express = require('express'),
         data.table = 'product_categories'
 
 
-        data.model = new ProductCategories()
+        data.model = models.categories
 
         if (req.params.key){
             data.key = req.params.key
@@ -119,7 +125,7 @@ const express = require('express'),
         data.title = 'Product Attributes'
         data.table = 'product_attributes'
 
-        data.model = new ProductAttributes()
+        data.model = models.attributes
 
         if (req.params.key){
             data.key = req.params.key
@@ -170,7 +176,7 @@ const express = require('express'),
 
         data.query = '?limit=30'
 
-        data.model = new Products()
+        data.model = models.products
 
         data.key = 'new'
         data.option_data = await view.functions.getOptionData('product_categories')
@@ -195,13 +201,13 @@ const express = require('express'),
 
         data.query = '?limit=30'
 
-        data.model = new Products()
+        data.model = models.products
 
         if (req.params.key == 'category' && req.params.cat){
 
             if (req.params.cat == 'inactive'){
                 view.current_sub_view = 'inactive'
-                data.query += '&activated=false'
+                data.query += '&active=false'
             } else if (req.params.cat == 'sale'){
                 view.current_sub_view = 'sale'
                 data.query += '&adjustment=has_value'
@@ -263,7 +269,7 @@ const express = require('express'),
 
         data.include_scripts = ['transactions/views/scripts/script.ejs','products/views/scripts/products_client.ejs']
 
-        data.category = await new ProductCategories().find(['slug == '+req.params.category])
+        data.category = await models.categories.find(['slug == '+req.params.category])
 
         if (!data.category || data.category && data.category.data && !data.category.data.name){ // if a cateoory is not found, go on to try other routes
 
@@ -281,7 +287,7 @@ const express = require('express'),
 
                 data.slug = req.params.product
 
-                data.product = await new Products().find(['slug == '+data.slug, 'activated == true'])
+                data.product = await models.products.find(['slug == '+data.slug, 'active == true'])
                 data.related = await data.product.getRelated()
                 data.product = data.product.get()
 
@@ -320,7 +326,7 @@ const express = require('express'),
                     if (data.sub_category.description){
                         data.meta.description = data.sub_category.description.substring(0,160)
                     }
-                    data.products = await new Products().all(['category like '+data.parent_category._key, 'sub_category like '+data.sub_category._key, 'activated == true']).get()
+                    data.products = await models.products.all(['category == '+data.parent_category._key, 'sub_category == '+data.sub_category._key, 'active == true']).get()
 
                     res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
@@ -328,7 +334,7 @@ const express = require('express'),
 
                     data.slug = req.params.sub_category
 
-                    data.product = await new Products().find(['slug == '+data.slug, 'activated == true'])
+                    data.product = await models.products.find(['slug == '+data.slug, 'active == true'])
                     data.related = await data.product.getRelated()
                     data.product = data.product.get()
 
@@ -353,7 +359,7 @@ const express = require('express'),
                 if (data.category.description){
                     data.meta.description = data.category.description.substring(0,160)
                 }
-                data.products = await new Products().all(['category like '+data.category._key,'sub_category NOT EXISTS', 'activated == true']).get()
+                data.products = await models.products.all(['category like '+data.category._key,'sub_category NOT EXISTS', 'active == true']).get()
                 // data.products = data.products.data
                 res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 

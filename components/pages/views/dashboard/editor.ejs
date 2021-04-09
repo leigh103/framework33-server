@@ -39,12 +39,12 @@
 
                                     <div app-if="field.input == 'text'">
                                         <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
-                                        <input type="text" app-model="field.value">
+                                        <input type="text" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
                                     </div>
 
                                     <div app-if="field.input == 'number'">
                                         <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
-                                        <input type="number" app-model="field.value">
+                                        <input type="number" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
                                     </div>
 
                                     <div app-if="field.input == 'color_picker'">
@@ -60,7 +60,7 @@
                                         <div class="input-contenteditable field-content">
 
                                             <div class="input-contenteditable-wrap">
-                                                <%- include(view.basedir+'/themes/'+config.site.dashboard_theme+'/partials/editor_buttons.ejs') %>
+                                                <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs') %>
                                                 <div class="contenteditable" app-model="field.value" contenteditable="true"></div>
                                             </div>
                                         </div>
@@ -211,7 +211,7 @@
                                 <div class="input-contenteditable field-content">
 
                                     <div class="input-contenteditable-wrap">
-                                        <%- include(view.basedir+'/themes/'+config.site.dashboard_theme+'/partials/editor_buttons.ejs',{editor_button_type:"simple"}) %>
+                                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:"simple"}) %>
                                         <div id="pages_notification" class="large resize contenteditable" app-model="view.pages.notification" contenteditable="true"></div>
                                     </div>
                                 </div>

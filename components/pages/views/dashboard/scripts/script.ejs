@@ -170,7 +170,7 @@
             }
 
             scope.selectBlock = function(block_name){
-
+console.log('here')
                 scope.get('/dashboard/pages/get-blocks/'+block_name).then((block)=>{
                     scope.view.modal = false
                     scope.view.selected_block = block

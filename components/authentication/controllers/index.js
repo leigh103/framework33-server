@@ -97,15 +97,15 @@ const express = require('express'),
     })
 
     routes.get('/login', (req, res) => {
-        res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:'user'})
+        res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:'customer'})
     })
 
     routes.get('/sign-up', (req, res) => {
 
         if (!config.users.allow_registration){
-            res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:'user',error:'New account registrations are currently disabled'})
+            res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:'customer',error:'New account registrations are currently disabled'})
         } else {
-            res.render(config.site.theme_path+'/templates/authentication/register.ejs', {guard:'user'})
+            res.render(config.site.theme_path+'/templates/authentication/register.ejs', {guard:'customer'})
         }
 
     })

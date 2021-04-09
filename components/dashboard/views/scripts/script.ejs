@@ -411,12 +411,16 @@ console.log(obj_name, idx)
 
                 scope.view.media_obj = obj
 
-                scope.get('media_library'<% if (typeof table != 'undefined'){ %>,'search?str=<%- table %>&sort=_created&desc=true'<% } else { %>,'?sort=_created&desc=true'<% } %>).then((data)=>{
+                if (!scope.media_library){
+                    scope.get('media_library'<% if (typeof table != 'undefined'){ %>,'search?str=<%- table %>&sort=_created&desc=true'<% } else { %>,'?sort=_created&desc=true'<% } %>).then((data)=>{
 
-                    scope.media_library = data
+                        scope.media_library = data
+                        scope.openModal('show_media_library')
+
+                    })
+                } else {
                     scope.openModal('show_media_library')
-
-                })
+                }
 
             }
 
@@ -579,7 +583,12 @@ console.log(obj_name, idx)
                 view.update('exec_data')
 
                 if (type == 'insertMedia'){
-                    scope.showMediaLibrary()
+                    if (scope.exec_data.selection === true){
+                        scope.notify('Please select where you would like the image to be placed in the text area, before adding any media','error')
+                    } else {
+                        scope.showMediaLibrary()
+                    }
+
                 } else {
                     scope.openModal(type)
                 }
@@ -751,9 +760,9 @@ console.log(obj_name, idx)
                     if (typeof scope.renderPage == 'function'){
                         scope.renderPage()
                     }
-
-                    scope.exec_data = {}
-                    view.update('exec_data')
+                    //
+                    // scope.exec_data = {}
+                    // view.update('exec_data')
                     resolve()
 
                 })

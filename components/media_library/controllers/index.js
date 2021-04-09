@@ -98,7 +98,50 @@ const express = require('express'),
         res.render(basedir+'/components/dashboard/views/grid.ejs',data)
 
     })
-
+    // setTimeout(async () => {
+    //
+    //
+    //     await glob(global.basedir+'/product_images/**/***/*.*', async (er, files) => {
+    //
+    //         for (let file of files){
+    // console.log(file)
+    //
+    //             var file_data = false
+    //             if (file.match(/png|jpg|jpeg|svg$/)){
+    //
+    //                 try {
+    //                     file_data = await functions.readFile(file)
+    //                 }
+    //
+    //                 catch(err){
+    //                     file_data = false
+    //                     console.log(err)
+    //                     continue;
+    //                 }
+    //
+    //                 if (!file_data){
+    //                     console.log('no file data')
+    //                     continue;
+    //                 }
+    //
+    //                 let file_split = file.split('/'),
+    //                     file_name = file_split[file_split.length-1]
+    //
+    //                 let file_ext = file_name.split('.').pop(),
+    //                     tags = "products,"+file_split[file_split.length-2].toLowerCase()+","+file_split[file_split.length-3].toLowerCase()
+    //
+    //                 file_name = file_name.split('.')[0].toLowerCase()
+    // console.log(file_ext,file_name, tags)
+    //                 await new Image("data:image/"+file_ext+";base64,"+file_data, file_name, 'products', tags).resize(1000).save()
+    //
+    //
+    //             }
+    //
+    //         }
+    //         console.log('done')
+    //     })
+    //
+    // },2000)
 
 
 // export
