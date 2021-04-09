@@ -112,9 +112,9 @@
                     item.save()
 
                     if (item.data.stock < 1){
-                        new Events().trigger('out_of_stock')
+                        new Automations().trigger('out_of_stock')
                     } else if (item.data.stock < 6){
-                        new Events().trigger('low_stock')
+                        new Automations().trigger('low_stock')
                     }
 
                 }
