@@ -1,14 +1,14 @@
 <div app-show="view.page == 'gateways'">
 
-    <h2 class="h4 text-weight-500">Select Payment Method</h2>
+    <h2 class="h4">Select Payment Method</h2>
 
-    <div style="margin-top: -0.3rem" class="mt-4">
+    <div style="margin-top: -0.3rem" class="mt-5">
 
         <% transactions.payment_methods.forEach((gateway)=>{ %>
 
             <% if (gateway.name == 'Stripe'){ %>
 
-                <a class="btn bg-secondary w-100 mb-1" href="/checkout/stripe"><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></a>                
+                <a class="btn bg-secondary w-100 mb-1" href="/checkout/stripe"><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></a>
 
             <% } else { %>
                 <button class="btn w-100 mb-1"<% if (gateway.url){ %>href="<%- gateway.url %>" target="payment"<% } %>><% if (gateway.button_text){ %><%- gateway.button_text %><% } else { %><%- gateway.name %><% } %></button>

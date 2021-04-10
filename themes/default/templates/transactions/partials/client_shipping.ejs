@@ -1,12 +1,10 @@
 <div app-show="view.page == 'shipping'">
 
-    <h2 class="h4 text-weight-500">Shipping</h2>
+    <h2 class="h4">Shipping</h2>
 
-    <form autocomplete="on" style="margin-top: -0.3rem" class="mt-4 mt-s-1">
+    <form autocomplete="on" style="margin-top: -0.3rem" class="mt-5 mt-s-1">
 
-
-
-        <label><input type="checkbox" app-click="shippingSameAsDelivery()" app-model="view.use_billing_address"> Use billing address</label>
+        <label><input type="checkbox" class="border" app-click="shippingSameAsDelivery()" app-model="view.use_billing_address"> Use billing address</label>
 
         <div app-hide="view.use_billing_address">
             <input type="text" placeholder="Address Line 1 *" class="underline" name="address_line1" app-model="cart.shipping_address.address_line1">
@@ -24,14 +22,14 @@
 
     <label class="mt-2">Delivery Method</label>
     <div class="relative">
-        <select app-model="cart.delivery_method" class="mb-2 relative" app-change="setDelivery()">
-            <option value="" selected>Select Shipping...</option>
+        <select app-model="cart.delivery_method" class="mb-2 relative rounded border" app-change="setDelivery()">
+            <option value="" selected disabled>Select Shipping...</option>
             <option app-for="optn in view.delivery_options" app-attr="{'value':optn._key}" app-bind="parseDeliveryOption(optn)"></option>
         </select>
     </div>
 
-    <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700" app-show="cart.delivery_method" app-click="payment()">Payment <i class="fas fa-chevron-right ml-1"></i></button>
-    <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700 transparent" app-hide="cart.delivery_method">Select Delivery Method <i class="fas fa-chevron-right ml-1"></i></button>
-    <a class="btn bg-none mt-5 mt-s-1 text-left text-secondary w-100" app-click="view.page = 'billing'"><i class="fas fa-chevron-left mr-1"></i>Your Details</a>
+    <button class="btn bg-secondary thick w-100 mt-1 text-weight-700" app-show="cart.delivery_method" app-click="payment()">Payment <span class="icon arrowright right white"></span></button>
+    <button class="btn bg-secondary thick w-100 mt-1 text-weight-700 transparent" app-hide="cart.delivery_method">Select Delivery Method</button>
+    <a class="btn bg-none mt-5 mt-s-1 text-left text-secondary w-100" app-click="view.page = 'billing'"><span class="icon arrowleft left primary"></span>Your Details</a>
 
 </div>

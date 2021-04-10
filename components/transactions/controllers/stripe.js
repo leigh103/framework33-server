@@ -137,7 +137,7 @@ var express = require('express'),
 
                     data.type = '400'
                     data.error = err
-                    res.render(settings.views+'/checkout.ejs',data)
+                    res.render(config.site.theme_path+'/templates/transactions/gateways/stripe.ejs',data)
 
                 } else if (paymentIntent.status == 'succeeded'){
 
@@ -147,15 +147,16 @@ var express = require('express'),
                     data.cart.status_logs = {
                         paid: moment().toISOString()
                     }
+
                     data.transaction = await new Transactions(data.cart).save()
 
                     if (data.transaction.data){
-                        new global.Automations('send_receipt').trigger(data.transaction.data)
-                        res.render(settings.views+'/success.ejs',data)
+                        new Automations('send_receipt').trigger(data.transaction.data)
+                        res.render(config.site.theme_path+'/templates/transactions/success.ejs',data)
                     } else {
                         data.type = '400'
                         data.error = 'There has been an issue processing your transaction'
-                        res.render(settings.views+'/gateways/stripe.ejs',data)
+                        res.render(config.site.theme_path+'/templates/transactions/gateways/stripe.ejs',data)
                     }
 
 
@@ -163,13 +164,13 @@ var express = require('express'),
 
                     data.type = '400'
                     data.error = 'Your transaction has been canceled'
-                    res.render(settings.views+'/gateways/stripe.ejs',data)
+                    res.render(config.site.theme_path+'/templates/transactions/gateways/stripe.ejs',data)
 
                 } else {
 
                     data.type = '402'
                     data.error = 'We are sorry, there was an issue processing your payment. Please try again using a different payment method'
-                    res.render(settings.views+'/gateways/stripe.ejs',data)
+                    res.render(config.site.theme_path+'/templates/transactions/gateways/stripe.ejs',data)
 
                 }
 
@@ -193,7 +194,7 @@ var express = require('express'),
         let data = {
             title:"Stripe Checkout",
             include_scripts: [settings.views+'/scripts/script.ejs'],
-            include_styles: [settings.views+'/styles/stripe.ejs']
+            include_styles: [settings.views+'/styles/stripe.ejs',settings.views+'/styles/cart.ejs']
         }
 
         data.cart = await new Cart().init(req)
@@ -211,7 +212,7 @@ var express = require('express'),
             data.stripe_id = global.view.transactions.stripe_public_key
             req.session.intent = paymentIntent.id
 
-            res.render(settings.views+'/gateways/stripe.ejs', data)
+            res.render(config.site.theme_path+'/templates/transactions/gateways/stripe.ejs', data)
 
         } else {
 
@@ -219,7 +220,7 @@ var express = require('express'),
             data.intent = {}
             data.type = '400'
             data.error = 'Please add items before submitting payment'
-            res.render(settings.views+'/gateways/stripe.ejs',data)
+            res.render(config.site.theme_path+'/templates/transactions/gateways/stripe.ejs',data)
 
         }
 

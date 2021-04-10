@@ -68,7 +68,7 @@ const express = require('express'),
         data.cart = await new Cart().init(req)
         data.cart.delivery_options = global.view.transactions.delivery_options
 
-        res.render(settings.views+'/cart.ejs',data)
+        res.render(config.site.theme_path+'/templates/transactions/cart.ejs',data)
 
     })
 

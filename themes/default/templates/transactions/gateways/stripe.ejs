@@ -1,0 +1,18 @@
+<% layout(config.site.theme+'/page.ejs') -%>
+
+<section class="page">
+
+    <div class="contain text-left h-100 pt-2">
+
+        <section class="grid col-5 col-s-1 gap-5 gap-s-1 h-100 mb-s-3">
+
+            <%- include('../partials/client_items.ejs') %>
+
+            <div class="colspan-2 h-100 bg-white p-s-0">
+                <%- include('../partials/stripe_form.ejs') %>
+            </div>
+
+        </section>
+    </div>
+
+</section>

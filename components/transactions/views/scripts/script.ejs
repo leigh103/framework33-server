@@ -43,10 +43,14 @@
 
                 scope.cart = <%- JSON.stringify(cart) %>
 
-                scope.setCartCounter = function(items){
-                    scope.view.cart_counter.innerHTML = items.reduce((acc, item)=>{
+                scope.getTotalItems = function(){
+                    return scope.cart.items.reduce((acc, item)=>{
                         return acc + item.quantity
                     }, 0)
+                }
+
+                scope.setCartCounter = function(items){
+                    scope.view.cart_counter.innerHTML = scope.getTotalItems()
                 }
 
                 if (cart_menu_item && scope.cart && scope.cart.items){

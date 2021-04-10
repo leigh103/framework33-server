@@ -108,6 +108,8 @@
                     this.data.shipping_address = req.session.user.shipping_address
                 }
 
+                this.data.delivery_method = ''
+
                 await this.setReference().save()
                 return this.data
 

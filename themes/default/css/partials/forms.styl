@@ -1,8 +1,16 @@
+
+
 label {
     font-size: 0.8rem;
     color: $text-black;
     display: block;
     margin-bottom: 0.3rem;
+
+    @media $small {
+        font-size: 1rem;
+        color: $text-black;
+        margin-bottom: 0;
+    }
 
     &.checkbox {
         display: flex;
@@ -17,18 +25,30 @@ label {
     }
 }
 
+input, select, textarea {
+    &.rounded {
+        border-radius: $border-radius;
+    }
+    &.border {
+        border: 1px solid $color-light-grey;
+    }
+    &.underline {
+        background: none;
+        text-decoration: none !important;
+        border-bottom: 1px solid $color-light-grey;
+        padding: 0 !important;
+        height: 3.5rem !important;
+    }
+}
+
+div[type=color]:not([class*=h-]), div[type=date]:not([class*=h-]), div[type=datetime-local]:not([class*=h-]), div[type=email]:not([class*=h-]), div[type=file]:not([class*=h-]), div[type=month]:not([class*=h-]), div[type=number]:not([class*=h-]), div[type=password]:not([class*=h-]), div[type=range]:not([class*=h-]), div[type=search]:not([class*=h-]), div[type=tel]:not([class*=h-]), div[type=text]:not([class*=h-]), div[type=time]:not([class*=h-]), div[type=url]:not([class*=h-]), div[type=week]:not([class*=h-]), input[type=color]:not([class*=h-]), input[type=date]:not([class*=h-]), input[type=datetime-local]:not([class*=h-]), input[type=email]:not([class*=h-]), input[type=file]:not([class*=h-]), input[type=month]:not([class*=h-]), input[type=number]:not([class*=h-]), input[type=password]:not([class*=h-]), input[type=range]:not([class*=h-]), input[type=search]:not([class*=h-]), input[type=tel]:not([class*=h-]), input[type=text]:not([class*=h-]), input[type=time]:not([class*=h-]), input[type=url]:not([class*=h-]), input[type=week]:not([class*=h-]){
+    height: 2.5rem;
+}
+
 input[type="file"] {
     position: fixed;
     right: 100%;
     bottom: 100%;
-}
-
-input.underline, select.underline, textarea.underline {
-    background: none;
-    text-decoration: none !important;
-    border-bottom: 1px solid $color-mid-light-grey;
-    padding: 0 !important;
-    height: 3.5rem !important;
 }
 
 input[type=number] {
@@ -62,8 +82,9 @@ input[type=checkbox] {
 
     flex: none;
     position: relative;
-    width: 1.70rem;
-    height: 1.70rem;
+    margin: 0 1.5rem 0 0;
+    width: auto;
+    height: auto;
     vertical-align: middle;
 
     &:after {
@@ -76,6 +97,7 @@ input[type=checkbox] {
         height: 1.75rem;
         border-radius: 0.25rem;
         left: -1px;
+        top: -0.45rem;
         background-color: white;
         color: $text-primary;
         font-size: 1.1em;
