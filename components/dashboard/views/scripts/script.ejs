@@ -583,9 +583,11 @@ console.log(obj_name, idx)
                 view.update('exec_data')
 
                 if (type == 'insertMedia'){
-                    if (scope.exec_data.selection === true){
+
+                    if (scope.exec_data.selection === true && !scope.exec_data.el){
                         scope.notify('Please select where you would like the image to be placed in the text area, before adding any media','error')
                     } else {
+
                         scope.showMediaLibrary()
                     }
 

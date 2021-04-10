@@ -15,8 +15,8 @@ const express = require('express'),
         views: 'transactions/views',
         menu: {
             side_nav: [
-                {link:'Orders',slug: '/dashboard/transactions/paid', icon:'<span class="icon shoppingtrolley"></span>', weight:4, subitems:[
-                    {link:'Incomplete Carts',slug: '/dashboard/transactions/new', icon:'<span class="icon shoppingtrolley"></span>', weight:9},
+                {link:'Orders',slug: '/dashboard/transactions/new', icon:'<span class="icon shoppingtrolley"></span>', weight:4, subitems:[
+                    {link:'Incomplete Carts',slug: '/dashboard/transactions/incomplete', icon:'<span class="icon shoppingtrolley"></span>', weight:9},
                     // {link:'New',slug: '/dashboard/transactions/paid', weight:2},
                     // {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
                     // {link:'Shipped',slug: '/dashboard/transactions/shipped', weight:4},
@@ -171,19 +171,28 @@ const express = require('express'),
         }
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs', settings.views+'/scripts/dashboard_scripts.ejs']
+        data.tabs = [
+            {href: '/dashboard/transactions/new', text:'New', counter:'new'},
+            {href: '/dashboard/transactions/processing', text:'Processing', counter:'processing'},
+            {href: '/dashboard/transactions/shipped', text:'Shipped', counter:'shipped'},
+            {href: '/dashboard/transactions/incomplete', text:'Incomplete'},
+            {href: '/dashboard/transactions/completed', text:'Completed'},
+            {href: '/dashboard/transactions/refund', text:'Refund'},
+            {href: '/dashboard/transactions/deleted', text:'Deleted'}
+        ]
 
         view.current_view = 'orders'
 
         data.status_count = await DB.read('transactions').where(['status != completed','status != deleted']).collect('status')
 
-        if (req.params.status == 'new'){
+        if (req.params.status == 'incomplete'){
 
             data.model = new Cart()
-            data.status = 'paid'
-            data.title = 'Orders'
+            data.statuses = []
+            data.title = 'Incomplete Carts'
             data.table = 'cart'
-            view.current_sub_view = 'new'
-            data.query = false
+            view.current_sub_view = 'incomplete'
+            data.query = '?limit=60'
             data.fields = data.model.settings.fields
             data.search_fields = data.model.settings.search_fields
 
@@ -191,19 +200,21 @@ const express = require('express'),
 
             data.model = new Transactions()
 
-            data.statuses = data.model.statuses
             data.title = 'Orders'
             data.table = 'transactions'
             view.current_sub_view = data.status
             data.query = '?status='+data.status
-
+            data.statuses = data.model.statuses
             data.fields = data.model.settings.fields
             data.search_fields = data.model.settings.search_fields
+
+            if (!data.status.match(/paid|shipped|processing/)){
+                data.query += '&limit=60'
+            }
+
         }
 
-        if (!data.status.match(/paid|shipped|processing/)){
-            data.query += '&limit=60'
-        }
+
 
         res.render(settings.views+'/dashboard/transactions.ejs',data)
 

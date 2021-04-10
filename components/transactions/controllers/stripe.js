@@ -143,7 +143,7 @@ var express = require('express'),
 
                     req.session.intent = false
                     req.session.cart_id = false
-                    data.cart.status = 'paid'
+                    data.cart.status = 'new'
                     data.cart.status_logs = {
                         paid: moment().toISOString()
                     }

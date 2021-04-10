@@ -20,5 +20,18 @@
 <div class="input-<%- item.input_type %> field-<%- obj_prefix %><%- item.name %>">
     <%- max_characters %>
     <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
-    <div <% if (item.type == 'price'){ %>app-init="fromPrice100('<%- new_prefix %><%- obj_prefix %><%- item.name %>')"<% } %>><input type="<%- item.input_type %>" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></div>
+
+    <% if (item.input_type == 'disabled'){ %>
+
+        <% if (item.type == 'price'){ %>
+            <div app-bind="parseCurrency(<%- new_prefix %><%- obj_prefix %><%- item.name %>)"></div>
+        <% } else if (item.type == 'date'){ %>
+            <div app-bind="parseDate(<%- new_prefix %><%- obj_prefix %><%- item.name %>,'DD/MM/YY h:mma')"></div>
+        <% } else { %>
+            <div app-bind="<%- new_prefix %><%- obj_prefix %><%- item.name %>"></div>
+        <% } %>
+
+    <% } else { %>
+        <div <% if (item.type == 'price'){ %>app-init="fromPrice100('<%- new_prefix %><%- obj_prefix %><%- item.name %>')"<% } %>><input type="<%- item.input_type %>" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></div>
+    <% } %>
 </div>

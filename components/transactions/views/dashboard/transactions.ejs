@@ -1,160 +1,120 @@
 <% layout(config.site.dashboard_theme+'/dashboard.ejs') %>
 
+    <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
 
-        <div class="header" app-class="{'search-expand':view.show_search == true}">
-            <div class="burger colspan-1" app-click="view.side_nav = !view.side_nav">
-                <i class="fas fa-bars"></i>
+    <div class="table-wrap rounded">
+
+        <% if (status.match(/new|processing|shipped/)){ %>
+        <div class="table button-overlay" app-show="view.selected" data-animation="{'enter':'fade-in','exit':'fade-out'}">
+            <div class="row table-header">
+                <div class="cell middle text-left select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"></div>
+                <div class="cell middle text-left">
+                    <div class="flex button-wrap">
+                        <div class="context-link btn border text-black pr-1" app-click="toggleContext('change-status')" style="width: 13rem;">
+                            <span app-bind="view.all_action_text" class="flex-1"></span>
+                            <span class="icon arrowdown primary right float-right" class="flex-none"></span>
+                        </div>
+                        <button app-click="processAllAction()" class="bg-primary">Apply</button>
+                    </div>
+                </div>
+                <div class="cell middle text-right">
+
+                    <% if (status == 'paid'){ %><button class="bg-secondary" app-click="updateAll('processing')">Print and Process<span class="icon arrowright white right"></span></button><% } %>
+                    <% if (status == 'processing'){ %><button class="bg-secondary" app-click="updateAll('shipped')">Mark as Shipped<span class="icon arrowright white right"></span></button><% } %>
+                    <% if (status == 'shipped'){ %><button class="bg-secondary" app-click="updateAll('completed')">Mark as Complete<span class="icon arrowright white right"></span></button><% } %>
+
+                </div>
             </div>
-            <div class="title">
-                <h1><%- title %></h1>
-            </div>
-            <div class="buttons">
-                <% if (typeof action_buttons != 'undefined'){ %>
-                    <% action_buttons.forEach(button => { %>
-                        <a <% if (button.href){ %> href="<%- button.href %>"<% } %> <% if (button.click){ %> app-click="<%- button.click %>"<% } %> class="btn"><span class="text"><%- button.text %><span><span class="icon <%- button.icon %> white"></span></a>
-                    <% }) %>
+        </div>
+        <% } %>
+
+
+        <div class="table" app-init="get('<%- table %><% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
+            <div class="row table-header">
+
+                <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"><% } %></div>
+                <div class="cell middle text">Ref / Date</div>
+                <div class="cell middle">Customer / <% if (status == 'processing'){ %>Shipping<% } else { %>Email<% } %></div>
+                <% if (status == 'processing'){ %>
+                    <div class="cell middle text-left" style="width:40%">Delivery / Tracking</div>
                 <% } %>
-                <a class="btn <% if (status == 'completed'){ %>bg-primary<% } else { %>bg-white<% } %>" href="/dashboard/transactions/archive"><span class="text">Archive<span><span class="icon threedots white"></span></a>
+                <div class="cell middle price text-right">Total</div>
+                <div class="cell middle status text-right">Status</div>
+                <div class="cell middle text-right action"></div>
 
             </div>
-            <% if (typeof search_fields == 'object'){ %>
-                <div class="search">
-                    <div class="search-wrap">
-                        <input type="text" app-change="search('<%- table %>')" placeholder="Search">
-                        <span app-click="view.show_search = !view.show_search" class="icon search black"></span>
-                    </div>
-                </div>
-            <% } %>
+
         </div>
 
-        <div class="actions">
+        <div class="table-inner-wrap">
+            <div class="table">
 
-            <div class="tabs">
+                <div class="row" app-for="transaction in <%- table %>" app-class="{'transparent-2':transaction.status != '<%- status %>'}">
 
-                <a class="<% if (status == 'paid'){ %>active<% } %>" href="/dashboard/transactions/paid">New <span class="counter" app-show="view.status_count_obj.paid">(<span app-bind="view.status_count_obj.paid"></span>)</span></a>
-                <a class="<% if (status == 'processing'){ %>active<% } %>" href="/dashboard/transactions/processing">Processing <span class="counter" app-show="view.status_count_obj.processing">(<span app-bind="view.status_count_obj.processing"></span>)</span></a>
-                <a class="<% if (status == 'shipped'){ %>active<% } %>" href="/dashboard/transactions/shipped">Shipped <span class="counter" app-show="view.status_count_obj.shipped">(<span app-bind="view.status_count_obj.shipped"></span>)</span></a>
+                    <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="transaction.selected" app-change="showActions()" class="border"><% } %></div>
 
-            </div>
-
-            <% if (typeof search_fields == 'object'){ %>
-                <div class="search">
-                    <span class="icon search black"></span>
-                    <input type="text" app-change="search('<%- table %>')" placeholder="Search <%- title %>">
-                </div>
-            <% } %>
-        </div>
-
-
-        <div class="table-wrap rounded">
-
-            <div class="table button-overlay" app-show="view.selected" data-animation="{'enter':'fade-in','exit':'fade-out'}">
-                <div class="row table-header">
-                    <div class="cell middle text-left select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"></div>
-                    <div class="cell middle text-left">
-                        <div class="flex button-wrap">
-                            <div class="context-link btn border text-black pr-1" app-click="toggleContext('change-status')" style="width: 13rem;">
-                                <span app-bind="view.all_action_text" class="flex-1"></span>
-                                <span class="icon arrowdown primary right float-right" class="flex-none"></span>
-                            </div>
-                            <button app-click="processAllAction()" class="bg-primary">Apply</button>
-                        </div>
+                    <div class="cell middle text title" app-click="goto('transactions/edit',transaction._key)">
+                        <div class="text-secondary text-bold"><span app-bind="transaction.reference"></span> - <span app-bind="transaction.customer.full_name"></span></div>
+                        <div class="text-light" app-bind="parseDate(transaction._created,'Do MMM h:mma')"></div>
                     </div>
-                    <div class="cell middle text-right">
-
-                        <% if (status == 'paid'){ %><button class="bg-secondary" app-click="updateAll('processing')">Print and Process<span class="icon arrowright white right"></span></button><% } %>
-                        <% if (status == 'processing'){ %><button class="bg-secondary" app-click="updateAll('shipped')">Mark as Shipped<span class="icon arrowright white right"></span></button><% } %>
-                        <% if (status == 'shipped'){ %><button class="bg-secondary" app-click="updateAll('completed')">Mark as Complete<span class="icon arrowright white right"></span></button><% } %>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="table" app-init="get('<%- table %><% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
-                <div class="row table-header">
-
-                    <div class="cell middle select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"></div>
-                    <div class="cell middle text">Ref / Date</div>
-                    <div class="cell middle">Customer / <% if (status == 'processing'){ %>Shipping<% } else { %>Email<% } %></div>
-                    <% if (status == 'processing'){ %>
-                        <div class="cell middle text-left" style="width:40%">Delivery / Tracking</div>
-                    <% } %>
-                    <div class="cell middle price text-right">Total</div>
-                    <div class="cell middle status text-right">Status</div>
-                    <div class="cell middle text-right action"></div>
-
-                </div>
-
-            </div>
-
-            <div class="table-inner-wrap">
-                <div class="table">
-
-                    <div class="row" app-for="transaction in transactions" app-class="{'transparent-2':transaction.status != '<%- status %>'}">
-
-                        <div class="cell middle select-all"><input type="checkbox" app-model="transaction.selected" app-change="showActions()" class="border"></div>
-
-                        <div class="cell middle text title" app-click="goto('transactions/edit',transaction._key)">
-                            <div class="text-secondary text-bold" app-bind="transaction.reference"></div>
-                            <div class="text-light" app-bind="parseDate(transaction._created,'Do MMM h:mma')"></div>
-                        </div>
-                        <div class="cell middle">
-                            <div app-bind="transaction.customer.full_name" class="text-bold capitalise"></div>
-
-                            <% if (status == 'processing'){ %>
-                                <span class="mr-05" app-bind="transaction.shipping_method"></span>(<span app-bind="parseCurrency(transaction.shipping_total)"></span>)
-                            <% } else { %>
-                                <span class="mr-1" app-bind="transaction.customer.email"></span><span app-bind="transaction.customer.tel"></span>
-                            <% } %>
-
-                        </div>
+                    <div class="cell middle">
+                        <div app-bind="transaction.customer.full_name" class="text-bold capitalise"></div>
 
                         <% if (status == 'processing'){ %>
-                            <div class="cell middle action text-right pr-2" style="width:40%">
-                                <div class="grid col-6">
-                                    <select app-model="transaction.shipping_company" app-attr="{'id':transaction._key}" placeholder="Select Courier..." class="colspan-2 bg-light-grey2" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
-                                        <option value="" selected>Select Courier...</option>
-                                        <option value="dpd">DPD</option>
-                                        <option value="royal_mail">Royal Mail</option>
-                                        <option value="yodel">Yodel</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                    <div class="colspan-4 flex">
-                                        <input type="text" app-model="transaction.shipping_reference" app-change="checkTracking($index)" style="border-top-left-radius: 0;border-bottom-left-radius: 0; border-left:0">
-                                        <button app-show="transaction.shipping_reference" class="btn bg-white btn-field" app-click="addTracking(transaction)"><span class="icon tick primary"></span></button>
-                                    </div>
-                                </div>
-                            </div>
-
+                            <span class="mr-05" app-bind="transaction.shipping_method"></span>(<span app-bind="parseCurrency(transaction.shipping_total)"></span>)
+                        <% } else { %>
+                            <span class="mr-1" app-bind="transaction.customer.email"></span><span app-bind="transaction.customer.tel"></span>
                         <% } %>
 
-                        <div class="cell middle price text-right text-bold" app-bind="parseCurrency(transaction.total)"></div>
-                        <div class="cell middle text-right status"><div class="status" app-class="transaction.status" app-bind="transaction.status" app-click="goto('transactions',transaction.status)"></div></div>
-                        <div class="cell middle text-right context-link" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">
+                    </div>
 
+                    <% if (status == 'processing'){ %>
+                        <div class="cell middle action text-right pr-2" style="width:40%">
+                            <div class="grid col-6">
+                                <select app-model="transaction.shipping_company" app-attr="{'id':transaction._key}" placeholder="Select Courier..." class="colspan-2 bg-light-grey2" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                    <option value="" selected>Select Courier...</option>
+                                    <option value="dpd">DPD</option>
+                                    <option value="royal_mail">Royal Mail</option>
+                                    <option value="yodel">Yodel</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="colspan-4 flex">
+                                    <input type="text" app-model="transaction.shipping_reference" app-change="checkTracking($index)" style="border-top-left-radius: 0;border-bottom-left-radius: 0; border-left:0">
+                                    <button app-show="transaction.shipping_reference" class="btn bg-white btn-field" app-click="addTracking(transaction)"><span class="icon tick primary"></span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    <% } %>
+
+                    <div class="cell middle price text-right text-bold" app-bind="parseCurrency(transaction.total)"></div>
+                    <div class="cell middle text-right status"><div class="status" app-class="transaction.status" app-bind="transaction.status" app-click="goto('transactions',transaction.status)"></div></div>
+                    <div class="cell middle text-right context-link" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">
+                        <% if (status.match(/new|processing|shipped/)){ %>
                             <div class="context-menu context-link btn" app-click="toggleContext('context',$index)">
                                 <span class="icon threedots black context-link"></span>
                             </div>
-
-                        </div>
-
+                        <% } %>
                     </div>
+
                 </div>
             </div>
         </div>
+    </div>
 
     <div id="change-status" class="context dropdown from-button text-left" style="display: none" data-animation="{'enter':'fade-in','exit':'fade-out'}">
         <div class="link text-bold" app-bind="view.all_action_text"></div>
-        <% statuses.forEach((status,i)=>{ %>
+        <% if (typeof statuses != 'undefined'){ %>
+            <% statuses.forEach((status,i)=>{ %>
 
-            <% if (status.value != 'new'){ %>
-                <div class="link" app-click="selectAllAction('<%- status.value %>','Mark as <%- status.text %>')">
-                    Mark as <%- status.text %>
-                </div>
-            <% } %>
+                <% if (status.value != 'new'){ %>
+                    <div class="link" app-click="selectAllAction('<%- status.value %>','Mark as <%- status.text %>')">
+                        Mark as <%- status.text %>
+                    </div>
+                <% } %>
 
-        <% }) %>
+            <% }) %>
+        <% } %>
         <div class="link" app-click="selectAllAction('print', 'Print Selected')">
             Print Selected
         </div>
@@ -208,11 +168,13 @@
 
                     <label class="within">Status</label>
                     <select app-model="new.status">
+                        <% if (typeof statuses != 'undefined'){ %>
                         <% statuses.forEach((status,i)=>{ %>
                             <% if (status.value != 'new'){ %>
                                 <option value="<%- status.value %>"><%- status.text %></option>
                             <% } %>
                         <% }) %>
+                        <% } %>
                     </select>
 
 

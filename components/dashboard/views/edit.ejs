@@ -2,7 +2,7 @@
 
     <div class="header" app-init="getItem('<%- table %>','<%- key %>')">
 
-        <div class="burger colspan-1">
+        <div class="burger visible">
             <a href="/dashboard/<%- table %>"><span class="icon arrowleft black"></span></a>
         </div>
         <div class="title">
@@ -34,7 +34,7 @@
     </div>
 
     <div class="edit-wrap edit-<%- table %>">
-            <%- include(basedir+'/themes/default/partials/input_fields/parse_fields.ejs') %>
+        <%- include(basedir+'/themes/default/partials/input_fields/parse_fields.ejs') %>
     </div>
 
     <div class="loader-wrap" app-show="view.loader" data-animation="{'exit':'fade-out'}">

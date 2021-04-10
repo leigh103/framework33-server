@@ -8,14 +8,14 @@
 
         <div class="h-100 editor-wrap">
 
-            <div class="dashboard">
+            <div class="dashboard loaded">
 
                 <div class="menu-wrap">
 
                     <div class="menu" app-show="view.menu == 'edit'">
 
                         <div class="header">
-                            <div class="burger colspan-1" app-click="view.side_nav = !view.side_nav">
+                            <div class="burger visible" app-click="view.side_nav = !view.side_nav">
                                 <a app-click="showMenu('main')"><span class="icon arrowleft left black"></span></a>
                             </div>
                             <div class="title">
@@ -141,7 +141,7 @@
                     <div class="menu" app-show="view.menu == 'main'">
 
                         <div class="header">
-                            <div class="burger colspan-1" app-click="view.side_nav = !view.side_nav">
+                            <div class="burger visible" app-click="view.side_nav = !view.side_nav">
                                 <a href="/dashboard/pages"><span class="icon arrowleft left black"></span></a>
                             </div>
                             <div class="title">
