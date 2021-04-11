@@ -1,5 +1,6 @@
-<section class="py-2 <%- styling.background.class %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="hero" app-block-description="This is a hero block">
+<section class="block-text-hero" style="<%- functions.parseStyle(styling,'no-bg') %>" app-block="hero" app-block-description="This is a hero block">
 
+    <div class="background" style="background-image:url(<%- styling.background.image %>)"  data-parallax="0.3" data-parallax_direction="down"></div>
     <div class="contain vh-50 vh-s-70 flex-middle flex-column" data-parallax="0.2">
         <div class="<%- styling.container.class %> flex-column">
             <% if (!h1){ %>

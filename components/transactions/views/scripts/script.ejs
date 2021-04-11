@@ -7,7 +7,8 @@
             scope.view.use_billing_address = true
             scope.view.delivery_options = []
 
-            let cart_menu_item = document.getElementById('menu-cart')
+            let cart_menu_item = document.getElementById('menu-cart'),
+                mobile_cart_menu_item = document.getElementById('menu-cart-mobile')
 
             <% if (typeof cart != 'undefined' && cart._key) { %>
 
@@ -58,6 +59,11 @@
                     scope.view.cart_counter.setAttribute('id','cart-counter')
                     scope.setCartCounter(scope.cart.items)
                     cart_menu_item.appendChild(scope.view.cart_counter)
+                    
+                    if (mobile_cart_menu_item){
+                        mobile_cart_menu_item.appendChild(scope.view.cart_counter)
+                    }
+
                 }
 
                 if (!scope.cart.billing_address){

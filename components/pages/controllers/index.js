@@ -37,18 +37,21 @@ const express = require('express'),
         //                     });
         // },
 
-        parseStyle:(style) => {
+        parseStyle:(style, option) => {
 
             let str = ''
 
-            if (style.background){
-                if (style.background.color){
-                    str += 'background: '+style.background.color+';'
-                }
-                if (style.background.image){
-                    str += 'background-image: url('+style.background.image+');background-size:cover;background-repeat: no-repeat; background-position:center center;'
+            if (!option || option && option != 'no-bg'){
+                if (style.background){
+                    if (style.background.color){
+                        str += 'background: '+style.background.color+';'
+                    }
+                    if (style.background.image){
+                        str += 'background-image: url('+style.background.image+');background-size:cover;background-repeat: no-repeat; background-position:center center;'
+                    }
                 }
             }
+
             if (style.text){
                 if (style.text.color){
                     str += 'color: '+style.text.color+';'

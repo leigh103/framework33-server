@@ -1,15 +1,27 @@
+$separator_height = 2.5rem
+
 section {
 
     &.separator {
         position: absolute !important;
         width:100%;
-        height: 2.5rem;
-        margin-top:-1px;
+        height: $separator_height;
         z-index:100;
+        margin-top:1px;
+        transform: 'translateY(-%s)' % $separator_height
 
-        &.upper {
-            margin-top:calc(-2.5rem + 2px);
+        &.flip-vertical {
+            margin-top:-1px;
+            transform: translateY(0) scaleY(-1)
+        }
 
+        &.flip-horizontal {
+            transform: 'translateY(-%s) scaleX(-1)' % $separator_height;
+        }
+
+        &.flip-horizontal.flip-vertical {
+            margin-top:-1px;
+            transform: scale(-1) translateY(0);
         }
 
     }

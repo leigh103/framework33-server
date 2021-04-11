@@ -53,6 +53,7 @@
                                         <div class="color_picker" app-color="field">
                                             <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
                                         </div>
+                                        <input type="text" app-model="field.value" app-attr="{'placeholder':'Add hex or RGB value'}" class="text-small mt-1">
                                     </div>
 
                                     <div app-if="field.input == 'textarea'">
@@ -64,6 +65,10 @@
                                                 <div class="contenteditable" app-model="field.value" contenteditable="true"></div>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div app-if="field.input == 'checkbox'">
+                                        <label><input type="checkbox" app-model="field.value" class="border" app-change="renderPage()"><span class=" capitalise" app-bind="parseSnakeCase(field.field)"></span></label>
                                     </div>
 
                                     <div app-if="field.input == 'code'">
@@ -249,7 +254,7 @@
 
                             <div class="sortable" app-sorted="renderPage()">
                                 <div class="list-block" app-for="block in view.pages.blocks" app-click="loadBlock(block,$index)" app-class="{'carousel':block.styling.carousel == true}">
-                                    <span app-class="block.block" class="flex-none icon xl primary left"></span>
+                                    <span app-class="getBlockIcon(block)" class="flex-none icon lg primary left"></span>
                                     <div class="flex-1" app-bind="block.name"></div>
                                     <span class="flex-none icon sectiongrab grey sortable-handle"></span>
                                 </div>
@@ -314,7 +319,7 @@
 
 </div>
 
-<div class="dashboard">
+<div class="dashboard loaded">
 
     <modal-auto app-show="view.modal == 'show_sections'" data-title="Add New Section" class="modal-auto-medium tabbed body-white">
 
@@ -341,7 +346,9 @@
     </modal-auto>
 
 
-    <modal-auto app-show="view.modal == 'show_del_block_confirm'" data-title="Delete this block?">
+    <modal-auto app-show="view.modal == 'show_del_block_confirm'" data-title="Delete block">
+
+        <div class="mb-2">Ok to delete the <span app-bind="view.selected_block.name"></span> block?</div>
         <div class="grid col-2 gap-2">
             <button class="btn bg-white w-100">Cancel</button>
             <button class="btn bg-primary w-100" app-click="removeBlock()">Delete</button>

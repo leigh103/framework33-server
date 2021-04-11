@@ -1,0 +1,32 @@
+.block {
+
+    &-text-hero {
+
+        position: relative;
+        min-height: 600px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+        overflow: hidden;
+
+        .background {
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        @media $small {
+            height: 80vh;
+        }
+
+        .btn {
+            background-color: $color-primary;
+            height: 50px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+    }
+
+}

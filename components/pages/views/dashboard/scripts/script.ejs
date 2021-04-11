@@ -50,6 +50,12 @@
 
             }
 
+            scope.getBlockIcon = function(block){
+
+                return block.block+' '+block.folder
+
+            }
+
             scope.selectColor = function(){
 
                 let style = getComputedStyle(this.target),
@@ -165,12 +171,12 @@
                 }
 
             //    scope.checkSaved().then(()=>{
-                    scope.openModal('show_sections')
+                scope.openModal('show_sections')
 
             }
 
             scope.selectBlock = function(block_name){
-console.log('here')
+
                 scope.get('/dashboard/pages/get-blocks/'+block_name).then((block)=>{
                     scope.view.modal = false
                     scope.view.selected_block = block
@@ -291,12 +297,6 @@ console.log('here')
 
                 if (scope.view.selected_block){
 
-                    scope.view.editor.map((field)=>{
-                        if (!field.value){
-                            field.value = capitalise(field.field.replace(/_/g,' '))+" goes here"
-                        }
-                    })
-
                     let pages = {
                         name: scope.view.selected_block.name,
                         styling: scope.view.selected_block.styling,
@@ -351,6 +351,7 @@ console.log('here')
                 } else {
 
                     if (scope.view.selected_block.index >= 0){
+
                         scope.view.pages.blocks.splice(scope.view.selected_block.index,1)
                         view.update('view.pages.blocks')
                         scope.renderPage()
