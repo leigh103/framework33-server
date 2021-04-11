@@ -100,7 +100,7 @@
                                 <input type="text" app-model="view.selected_block.name">
                             </div>
 
-                            <div class="">
+                            <div class="" app-hide="view.selected_block.disable_styling">
 
                                 <div class="field">
                                     <label class=" capitalise">Text Color</label>
@@ -121,7 +121,7 @@
                                         <img class="bg-image" src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image">
                                         <a class="bg-image-remove" app-click="removeImage(view.selected_block.styling.background)" app-show="view.selected_block.styling.background.image"><span class="icon x secondary"></span></a>
                                     </div>
-                                    <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-click="addClass(view.selected_block.styling.background, 'bg-text-dark')"> Darken the background for clearer text</label>
+                                    <!-- <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-click="addClass(view.selected_block.styling.background, 'bg-text-dark')"> Darken the background for clearer text</label> -->
                                     <!-- <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')"> -->
                                 </div>
                                 <div class="field">

@@ -138,7 +138,13 @@ window.onscroll = function() {
 
     if (nav_el){
         var currentScrollPos = window.pageYOffset;
-        if (prevScrollpos > currentScrollPos) {
+
+        if (currentScrollPos > 80 && !nav_el.classList.contains('auto-hide-shown')){
+            nav_el.classList.add('auto-hide-shown')
+        } else if (currentScrollPos < 1 && nav_el.classList.contains('auto-hide-shown')){
+            nav_el.classList.remove('auto-hide-shown')
+        }
+        if (currentScrollPos < 60 || prevScrollpos > currentScrollPos) {
             nav_el.style.top = "0";
         } else {
             nav_el.style.top = "-100%";

@@ -51,9 +51,9 @@
             }
 
             scope.getBlockIcon = function(block){
-
-                return block.block+' '+block.folder
-
+                if (typeof block == 'object' && block.block){
+                    return block.block+' '+block.folder
+                }
             }
 
             scope.selectColor = function(){

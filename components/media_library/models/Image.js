@@ -20,6 +20,8 @@
                     base64 = base64.base64
                 }
 
+                file_name = file_name.replace(/\s+/,'_').replace(/[";\\/|+=')(*&^%$£@!.,><?`~]+/,'')
+
                 this.base64 = base64
                 this.file_name = file_name
                 this.ext = base64.match(/^data:image\/(png|jpg|jpeg|svg\+xml);base64,/i)[1]
@@ -91,7 +93,7 @@
                 fit = 'cover'
             }
 
-            this.resize = {
+            this.file_resize = {
                 width: width,
                 height: height,
                 fit: fit
@@ -168,8 +170,8 @@
                     self = this,
                     resize = { width: 1500, height: 1500, fit: 'cover' }
 
-                if (this.resize){
-                    resize = this.resize
+                if (this.file_resize){
+                    resize = this.file_resize
                 }
 
                 if (this.ext == 'jpg'){

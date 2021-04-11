@@ -86,6 +86,8 @@ const express = require('express'),
                         blocks[block_name].html = data.replace(/\r|\n/g,'').replace(/app\-field\=['"]/g,'id="'+block_name+'-')
                         blocks[block_name].block = block_name
                         blocks[block_name].name = data.match(/app\-block\=['"](.*?)['"]/)
+                        blocks[block_name].disable_styling = data.match(/app\-disable\-styling\=['"](.*?)['"]/)
+
                         if (blocks[block_name].name){
                             blocks[block_name].name = blocks[block_name].name[1].charAt(0).toUpperCase() + blocks[block_name].name[1].slice(1)
                         } else {
@@ -113,6 +115,8 @@ const express = require('express'),
                             },
                             carousel:false
                         }
+
+
                         blocks[block_name].inputs = data.match(/app\-input\=['"](.*?)['"]/g)
                         blocks[block_name].fields = data.match(/app\-field\=['"](.*?)['"]/g)
                         blocks[block_name].element_style = data.match(/app\-styling\=['"](.*?)['"]/g)
