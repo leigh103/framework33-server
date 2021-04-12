@@ -1,16 +1,21 @@
 
 .nav {
 
-    position: sticky;
+    position: absolute;
     top:0;
     width: 100vw;
     height: $top-nav-height;
     z-index: 600;
+
     transition: top 0.3s ease, background-color 0.5s ease;
     background-color: rgba(255,255,255,0);
 
     &.auto-hide-shown {
-        background-color: white;
+        position: fixed;
+    }
+
+    &.no-auto-hide {
+        position: relative;
     }
 
     .links {
@@ -37,10 +42,6 @@
             justify-content: center;
             height: 100%;
             padding: 0 1.2rem;
-
-            &:hover {
-                color: inherit;
-            }
         }
 
         .logo {
@@ -60,7 +61,7 @@
         }
 
         .subitems {
-            background-color: white;
+
             display: block !important;
             position: absolute;
             text-align: left;
@@ -112,7 +113,6 @@
         text-align: left;
         top:0;
         left:0;
-        background-color: $bg-primary;
         transition: transform 0.3s ease;
         transform: translateX(-100vw);
         height: 100vh;

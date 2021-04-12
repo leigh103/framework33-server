@@ -41,7 +41,7 @@
 
                             <div class="slide">
                                 <%- include(config.site.theme_path+'/templates/blocks/'+pages.blocks[i].folder+'/'+pages.blocks[i].block+'.ejs', {data:pages.blocks[i].pages, styling:pages.blocks[i].styling, h1: h1}) %>
-                                <% if (pages.blocks[i].pages.h1){ h1 = true } %>
+                                <% if (pages.blocks[i].pages.heading){ h1 = true } %>
                             </div>
 
             <% if (!pages.blocks[next] || pages.blocks[next] && !pages.blocks[next].styling || pages.blocks[next].styling && !pages.blocks[next].styling.carousel){ %>
@@ -63,7 +63,7 @@
         <% } else { %>
 
             <%- include(config.site.theme_path+'/templates/blocks/'+pages.blocks[i].folder+'/'+pages.blocks[i].block+'.ejs', {data:pages.blocks[i].pages, styling:pages.blocks[i].styling, h1: h1}) %>
-            <% if (pages.blocks[i].pages.h1){ h1 = true } %>
+            <% if (pages.blocks[i].pages.heading){ h1 = true } %>
 
         <% } %>
 

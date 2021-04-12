@@ -2,14 +2,26 @@
 
     <div class="contain <%- styling.container.class %>" app-input="none" app-field="container" app-styling="container_class">
 
-        <div class="grid col-2 col-s-1 <%- data.grid_classes %>" app-input="none" app-field="grid" app-styling="grid_class">
-            <div class="text-pre-line <%- data.text_left_classes %>" app-input="textarea" app-field="text_left" app-styling="left_class" anim="{'enter':'move-up'}">
+        <% if (data.heading){ %><h2 app-input="text" app-field="heading"><%- data.heading %></h2><% } %>
+
+        <% if (data.sub_heading){ %><h4 class="my-1" app-input="text" app-field="sub_heading"><%- data.sub_heading %></h4><% } %>
+
+        <div class="grid col-2 col-s-1 gap-3">
+            <div class="text-pre-line" app-input="textarea" app-field="text_left">
                 <%- data.text_left %>
             </div>
-            <div class="text-pre-line <%- data.text_right_classes %>" app-input="textarea" app-field="text_right" app-styling="right_class" anim="{'enter':'move-up'}">
+            <div class="text-pre-line" app-input="textarea" app-field="text_right">
                 <%- data.text_right %>
             </div>
         </div>
+
+        <% if (data.call_to_action_link){ %>
+            <a class="btn bg-primary" href="<%- data.call_to_action_link %>" app-input="text" app-field="call_to_action_link">
+                <span app-field="call_to_action_text" app-input="text"><%- data.call_to_action_text %></span>
+                <% if (data.call_to_action_icon){ %><span class="icon right white <%- data.call_to_action_icon %>" app-field="call_to_action_icon" app-input="icon"></span><% } %>
+            </a>
+        <% } %>
+
 
     </div>
 

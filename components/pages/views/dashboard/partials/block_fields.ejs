@@ -1,0 +1,63 @@
+<div>
+    <div class="field" app-for="field in view.editor">
+
+
+        <div app-if="field.input == 'text'">
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+            <input type="text" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
+        </div>
+
+        <div app-if="field.input == 'number'">
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+            <input type="number" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
+        </div>
+
+        <div app-if="field.input == 'color_picker'">
+            <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
+
+            <div class="color_picker" app-color="field">
+                <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
+            </div>
+            <input type="text" app-model="field.value" app-attr="{'placeholder':'Add hex or RGB value'}" class="text-small mt-1">
+        </div>
+
+        <div app-if="field.input == 'textarea'">
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+            <div class="input-contenteditable field-content">
+
+                <div class="input-contenteditable-wrap">
+                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:'simple'}) %>
+                    <div class="contenteditable" app-model="field.value" contenteditable="true"></div>
+                </div>
+            </div>
+        </div>
+
+        <div app-if="field.input == 'checkbox'">
+            <label><input type="checkbox" app-model="field.value" class="border" app-change="renderPage()"><span class=" capitalise" app-bind="parseSnakeCase(field.field)"></span></label>
+        </div>
+
+        <div app-if="field.input == 'icon'">
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+            <label app-click="selectIcon($index)"><span class="icon xxl primary" app-class="field.value" app-show="field.value"></span><span class="placeholder" app-hide="field.value">Add an icon</span></label>
+        </div>
+
+
+        <div app-if="field.input == 'code'">
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+            <pre><code class="html contenteditable" contenteditable="true" app-model="field.value"></code></pre>
+        </div>
+
+        <div app-if="field.input == 'image'">
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+        </div>
+
+        <div app-if="field.input == 'none'">
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+        </div>
+
+        <input app-show="field.styling == 'true'" class="mt-05 transparent-3" type="text" app-model="field.classes" placeholder="Add element classes...">
+
+    </div>
+</div>
+
+<div app-show="view.editor == false" class="p-1 text-italic transparent-3 text-small">This block has no editable content</div>

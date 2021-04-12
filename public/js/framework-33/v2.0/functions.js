@@ -132,8 +132,9 @@ document.addEventListener("click", function (e) {
 
 });
 
-var prevScrollpos = window.pageYOffset;
-var nav_el = document.querySelector(".nav.auto-hide")
+var prevScrollpos = window.pageYOffset,
+    nav_el = document.querySelector(".nav.auto-hide")
+
 window.onscroll = function() {
 
     if (nav_el){

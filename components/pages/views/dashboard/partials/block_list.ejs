@@ -1,0 +1,16 @@
+<div class="sortable" app-sorted="renderPage()">
+    <div class="list-block" app-for="block in view.pages.blocks" app-click="loadBlock(block,$index)" app-class="{'carousel':block.styling.carousel == true}">
+        <span app-class="getBlockIcon(block)" class="flex-none icon lg primary left"></span>
+        <div class="flex-1" app-bind="block.name"></div>
+        <span class="flex-none icon sectiongrab grey sortable-handle"></span>
+    </div>
+</div>
+<div class="">
+
+    <div class="list-block no-border" app-click="addNewSection(true)">
+        <span class="flex-none icon lg plus grey left"></span>
+        <div class="flex-1">Add block</div>
+        <span class=""></span>
+    </div>
+
+</div>

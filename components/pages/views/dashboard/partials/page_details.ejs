@@ -1,0 +1,38 @@
+<div class="layer-1">
+
+    <div class="field">
+        <label class="">Page Title</label>
+        <input type="text" app-model="view.pages.title">
+    </div>
+
+    <div class="field">
+        <label class="">Page URL</label>
+        <input type="text" app-model="view.pages.slug">
+    </div>
+
+    <div class="relative layer-5">
+
+        <div class="field">
+            <label class="">Status</label>
+            <select app-model="view.pages.status">
+                <option value="" disabled selected>Select...</option>
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label class="">Publish On</label>
+            <date-picker app-model="view.pages.publish_on" class="mb-2 layer-3">
+            </date-picker>
+        </div>
+
+        <div class="field">
+            <label class="">Unpublish On</label>
+            <date-picker app-model="view.pages.unpublish_on" class="mb-2 layer-3">
+            </date-picker>
+        </div>
+
+    </div>
+
+</div>

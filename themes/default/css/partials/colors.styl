@@ -6,7 +6,48 @@ a {
     }
 }
 
+.btn {
+
+    &.highlight {
+        background-color: $color-primary
+    }
+
+    &.border {
+        background: none;
+        border: 1px solid $color-primary;
+        color: $color-primary;
+    }
+
+    &.bg-primary,&.bg-secondary {
+        &:hover {
+            color: $text-white;
+        }
+    }
+}
+
+.nav {
+    a {
+        color: $text-white;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+
+        &:hover {
+            color: $text-primary
+        }
+    }
+
+    &.auto-hide-shown {
+        background-color: $bg-primary;
+    }
+
+    &.no-auto-hide {
+        background-color: $bg-primary;
+    }
+}
+
 .mega-menu {
+
+    background-color: $bg-primary;
     a:not(.btn) {
         color: $text-white;
 
@@ -116,15 +157,98 @@ a {
     }
 }
 
-.btn {
 
-    &.highlight {
-        background-color: $color-primary
+
+
+.secondary-theme {
+
+    a {
+        color: $secondary-color-secondary;
+
+        &:hover {
+            color: $secondary-color-primary;
+        }
     }
 
-    &.border {
-        background: none;
-        border: 1px solid $color-primary;
-        color: $color-primary;
+    .btn {
+
+        &.bg-primary {
+            color: white;
+        }
+
+        &.highlight {
+            background-color: $secondary-color-primary
+        }
+
+        &.border {
+            background: none;
+            border: 1px solid $color-primary;
+            color: $color-primary;
+        }
     }
+
+    .nav {
+        a {
+            color: $text-white;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+
+            &:hover {
+                color: $secondary-color-primary
+            }
+        }
+
+        &.auto-hide-shown {
+            background-color: $secondary-color-primary;
+        }
+
+        &.no-auto-hide {
+            background-color: $secondary-color-primary;
+        }
+    }
+
+    .mega-menu {
+
+        background-color: $secondary-color-primary;
+        a:not(.btn) {
+            color: $text-white;
+
+            &:hover {
+                color: $secondary-color-secondary;
+            }
+        }
+
+        .btn {
+            color: $secondary-color-primary;
+
+            &:hover {
+                color: $secondary-color-secondary;
+            }
+        }
+    }
+
+    .text {
+
+        &-primary {
+            color: $secondary-color-primary;
+        }
+        &-secondary {
+            color: $secondary-color-secondary;
+        }
+
+    }
+
+    .bg {
+
+        &-primary {
+            background-color: $secondary-color-primary;
+        }
+
+        &-secondary {
+            background-color: $secondary-color-secondary;
+        }
+
+    }
+
+
 }

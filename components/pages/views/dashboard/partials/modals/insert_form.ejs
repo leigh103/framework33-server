@@ -1,0 +1,81 @@
+<div class="modal" app-show="view.modal == 'show_form_builder'" anim="{'enter':'fade-in'}">
+
+    <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
+
+        <div class="grid col-2 pb-1 gap-2" style="width:50vw">
+            <div class="pb-1">
+                <h4 class="text-light capitalise">
+                    Insert Form
+                </h4>
+            </div>
+            <div></div>
+        </div>
+
+        <div class="grid col-3 gap-2 mb-2">
+            <div>
+                <label>Form Name</label>
+                <input type="text" app-model="view.form.details.name">
+            </div>
+            <div>
+                <label>Post Route</label>
+                <input type="text" app-model="view.form.details.url">
+            </div>
+            <div>
+                <label>Button Text</label>
+                <input type="text" app-model="view.form.details.button_text">
+            </div>
+        </div>
+
+        <div>
+
+            <div class="grid col-3 pb-1 gap-2">
+
+                <div>
+                    <label>Input Label</label>
+                </div>
+                <div>
+                    <label>Input Type</label>
+                </div>
+                <div>
+                    <label>Options</label>
+                </div>
+
+            </div>
+
+            <div class="grid col-3 pb-1 gap-2" app-for="input in view.form.inputs">
+
+                <div>
+                    <input type="text" app-model="input.label">
+                </div>
+                <div>
+                    <select app-model="input.type">
+                        <option>Text</option>
+                        <option>Textarea</option>
+                        <option>Email</option>
+                        <option>Tel</option>
+                        <option>Select</option>
+                        <option>Checkbox</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="checkbox"><input type="checkbox" app-model="input.required"> Required</label>
+                </div>
+
+            </div>
+        </div>
+        <div class="grid col-2 pb-1">
+            <div></div>
+            <div class="text-right">
+                <button class="btn highlight" app-click="addInput()"><i class="fas fa-plus mr-05"></i> Add Input</button>
+            </div>
+        </div>
+
+        <div class="grid col-2 pb-1">
+            <div></div>
+            <div class="text-right">
+                <button class="btn highlight" app-click="insertForm()">Insert Form</button>
+            </div>
+        </div>
+    </div>
+
+</div>

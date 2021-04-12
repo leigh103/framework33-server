@@ -1,0 +1,23 @@
+<modal-auto app-show="view.modal == 'show_sections'" data-title="Add New Section" class="modal-auto-medium tabbed body-white">
+
+    <div class="tabs">
+        <!-- <a app-click="view.modal_tab = 'recents'" app-class="{'active':view.modal_tab == 'recent'}" class="flex-1">Recent</a> -->
+        <a app-click="view.modal_tab = 'basics'" app-class="{'active':view.modal_tab == 'basics'}" class="flex-1">Basics</a>
+        <a app-click="view.modal_tab = 'separators'" app-class="{'active':view.modal_tab == 'separators'}" class="flex-1">Separators</a>
+        <a app-click="view.modal_tab = 'advanced'" app-class="{'active':view.modal_tab == 'advanced'}" class="flex-1">Advanced</a>
+    </div>
+    <div class="bg-white p-2 h-100">
+
+        <div class="grid col-3 col-s-1 gap-2">
+            <% for (var i in blocks){ %>
+
+                <div class="list-block mb-0" app-show="view.modal_tab == '<%- blocks[i].folder %>'" app-click="selectBlock('<%- blocks[i].block %>')">
+                    <span class="flex-none icon xl primary left <%- blocks[i].block %>"></span>
+                    <div class="flex-1"><%- blocks[i].name %></div>
+                </div>
+            <% } %>
+        </div>
+
+    </div>
+
+</modal-auto>

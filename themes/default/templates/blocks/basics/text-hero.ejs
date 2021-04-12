@@ -1,16 +1,21 @@
 <section class="block-text-hero" style="<%- functions.parseStyle(styling,'no-bg') %>" app-block="hero" app-block-description="This is a hero block" app-allow-styling="true">
 
-    <div class="background" style="background-image:url(<%- styling.background.image %>)"  data-parallax="0.3" data-parallax_direction="down"></div>
-    <div class="contain vh-50 vh-s-70 flex-middle flex-column" data-parallax="0.2">
-        <div class="<%- styling.container.class %> flex-column">
+    <div class="background" style="background-image:url(<%- styling.background.image %>)"  <% if (styling.add_parallax){ %>data-parallax="0.3" data-parallax_direction="down"<% } %>></div>
+    <div class="contain <% if (styling.container.alignment){ %><%- styling.container.alignment %><% } else { %>align-center<% } %>" <% if (styling.add_parallax){ %>data-parallax="0.2"<% } %>>
+        <div class="<%- styling.container.class %>">
             <% if (!h1){ %>
-                <h1 class="" app-input="text" app-field="h1" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.h1 %></h1>
+                <h1 class="mb-2" app-input="text" app-field="heading" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.heading %></h1>
                 <% h1 = true; %>
             <% } else { %>
-                <h2 class="h1" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.h1 %></h2>
+                <h2 class="mb-2 h1" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.heading %></h2>
             <% } %>
-            <h4 class="my-1" data-animation="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1s'}" app-input="text" app-field="h4"><%- data.h4 %></h4>
-            <div class="text-light <%- data.link_classes %>" data-animation="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1.3s'}" app-input="textarea" app-field="link"><%- data.link %></div>
+            <h4 class="mb-2" data-animation="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1s'}" app-input="text" app-field="sub_heading"><%- data.sub_heading %></h4>
+            <% if (data.call_to_action_link){ %>
+                <a class="btn bg-primary" href="<%- data.call_to_action_link %>" data-animation="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1.3s'}" app-input="text" app-field="call_to_action_link">
+                    <span app-field="call_to_action_text" app-input="text"><%- data.call_to_action_text %></span>
+                    <% if (data.call_to_action_icon){ %><span class="icon right white <%- data.call_to_action_icon %>" app-field="call_to_action_icon" app-input="icon"></span><% } %>
+                </a>
+            <% } %>
         </div>
     </div>
 

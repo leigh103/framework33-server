@@ -1,0 +1,55 @@
+<div class="field">
+    <label class=" capitalise">Block Name</label>
+    <input type="text" app-model="view.selected_block.name">
+</div>
+
+<div class="" app-hide="view.selected_block.disable_styling">
+
+    <div class="field">
+        <label class=" capitalise">Text Color</label>
+        <div class="color_picker" app-color="view.selected_block.styling.text.color">
+            <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
+        </div>
+    </div>
+    <div class="field">
+        <label class=" capitalise">Background Color</label>
+
+        <div class="color_picker" app-color="view.selected_block.styling.background.color">
+            <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
+        </div>
+    </div>
+    <div class="field">
+        <label class="capitalise">Background Image</label>
+        <div class="bg-image-wrap mb-1" app-click="showMediaLibrary('view.selected_block.styling.background.image')">
+            <img class="bg-image" src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image">
+            <a class="bg-image-remove" app-click="removeImage(view.selected_block.styling.background)" app-show="view.selected_block.styling.background.image"><span class="icon x secondary"></span></a>
+        </div>
+        <!-- <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-click="addClass(view.selected_block.styling.background, 'bg-text-dark')"> Darken the background for clearer text</label> -->
+        <!-- <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')"> -->
+    </div>
+    <div class="field">
+        <label class="capitalise">Alignment</label>
+        <select app-model="view.selected_block.styling.container.alignment" app-change="renderPage()">
+            <option value="align-left" selected>Left</option>
+            <option value="align-center" selected>Center</option>
+            <option value="align-right" selected>Right</option>
+        </select>
+    </div>
+    <div class="field">
+        <label class=" capitalise">Block Classes</label>
+        <input type="text" app-model="view.selected_block.styling.background.class" placeholder="Add additional CSS classes here">
+    </div>
+    <div class="field">
+        <label class=" capitalise">Container Classes</label>
+        <input type="text" app-model="view.selected_block.styling.container.class" placeholder="Add additional CSS classes here">
+    </div>
+    <div class="field">
+        <label class="capitalise">Carousel this block</label>
+        <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-model="view.selected_block.styling.carousel"> Select this option to add this block to a sliding carousel</label>
+    </div>
+    <div class="field">
+        <label class="capitalise">Add Parallax Effect</label>
+        <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-model="view.selected_block.styling.add_parallax"> Select this option to add a parallax effect when scrolling</label>
+    </div>
+
+</div>

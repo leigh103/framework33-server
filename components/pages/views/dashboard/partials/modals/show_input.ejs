@@ -1,0 +1,32 @@
+<modal-auto app-show="view.modal == 'show_input'" data-title="Input" class="modal-auto-large">
+
+    <div class="grid col-2 pb-1 gap-2" style="width:50vw">
+        <div class="pb-1">
+            <h4 class="text-light capitalise" app-bind="view.exec.title">
+
+            </h4>
+        </div>
+        <div></div>
+        <div app-show="view.exec.image">
+            <label>Upload Image</label>
+            <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="view.image_url" class="w-100"></label>
+            <input id="image_1" type="file" app-model="view.image_url">
+        </div>
+        <div app-show="view.exec.input">
+            <label app-bind="view.exec.input"></label>
+            <input type="text" app-model="view.text_input">
+        </div>
+        <div app-show="view.exec.input_2">
+            <label app-bind="view.exec.input_2"></label>
+            <input type="text" app-model="view.text_input_2">
+        </div>
+    </div>
+
+    <div class="grid col-2 pb-1">
+        <div></div>
+        <div class="text-right">
+            <button class="btn highlight" app-click="exec('exec')">Submit</button>
+        </div>
+    </div>
+
+</modal-auto>

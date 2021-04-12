@@ -1,7 +1,7 @@
 <div class="editor-buttons">
 
     <% if (typeof editor_button_type == "undefined"){ %>
-        <% editor_button_type = "full" %>
+        <% editor_button_type = "simple" %>
     <% } %>
 
     <% if (editor_button_type == "full") { %>
@@ -28,6 +28,13 @@
 
         <div class="spacer"></div>
 
+    <% } else if (editor_button_type == "simple") { %>
+
+        <button app-click="exec('formatBlock','<blockquote>')"><span class="icon speechbubble2 black m-0"></span></button>
+        <button app-click="exec('removeFormat')"><i class="fas fa-remove-format"></i></button>
+
+        <div class="spacer"></div>
+
     <% } else { %>
 
         <button app-click="exec('removeFormat')"><i class="fas fa-remove-format"></i></button>
@@ -38,21 +45,23 @@
     <button app-click="exec('italic')" class="text-italic">I</button>
     <button app-click="execModal('createLink')"><span class="icon link black m-0"></span></button>
 
-
+    <% if (editor_button_type != "simple") { %>
         <button app-click="execModal('addCTA')"><span class="icon contentbutton black m-0"></span></button>
         <button app-click="execModal('insertMedia')"><i class="fas fa-image"></i></button>
         <!-- <button app-click="execModal('insertIcon')"><i class="fas fa-icons"></i></button> -->
         <div class="spacer"></div>
+    <% } %>
         <button app-click="exec('insertUnorderedList')"><span class="icon bulletlist black m-0"></span></button>
         <button app-click="exec('insertOrderedList')"><span class="icon bulletlist black m-0"></span></button>
         <div class="spacer"></div>
 
 
+    <% if (editor_button_type != "simple") { %>
     <button app-click="exec('justifyLeft')"><span class="icon sidemenucollapse black m-0"></span></button>
     <button app-click="exec('justifyCenter')"><i class="fas fa-align-center"></i></button>
     <button app-click="exec('justifyRight')"><span class="icon sidemenuexpand black m-0"></span></button>
     <button app-click="exec('justifyFull')"><i class="fas fa-align-justify"></i></button>
-
+    <% } %>
     <% if (editor_button_type == "full") { %>
         <div class="spacer"></div>
         <button app-click="exec('insertForm')"><span class="icon contenttitle black m-0"></span></button>

@@ -1,0 +1,20 @@
+<modal-auto app-show="view.modal == 'show_icons'" data-title="Add or change icon" class="modal-auto-medium">
+
+
+    <div class="bg-white p-2 h-100">
+
+        <div class="grid col-6 col-s-1 gap-2">
+
+            <div class="list-block mb-0 text-center flex-middle" app-click="selectIcon(false,'none')">
+                <span>No Icon</span>
+            </div>
+
+            <div class="list-block mb-0 text-center flex-middle" app-click="selectIcon(false,icon)" app-for="icon in view.icons">
+                <span class="icon xxl primary left" app-class="icon"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+</modal-auto>

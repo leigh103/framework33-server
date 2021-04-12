@@ -33,111 +33,13 @@
 
                         <div app-show="view.tab == 'content'" class="fields">
 
-                            <div>
-                                <div class="field" app-for="field in view.editor">
-
-
-                                    <div app-if="field.input == 'text'">
-                                        <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
-                                        <input type="text" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
-                                    </div>
-
-                                    <div app-if="field.input == 'number'">
-                                        <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
-                                        <input type="number" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
-                                    </div>
-
-                                    <div app-if="field.input == 'color_picker'">
-                                        <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
-
-                                        <div class="color_picker" app-color="field">
-                                            <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
-                                        </div>
-                                        <input type="text" app-model="field.value" app-attr="{'placeholder':'Add hex or RGB value'}" class="text-small mt-1">
-                                    </div>
-
-                                    <div app-if="field.input == 'textarea'">
-                                        <label class=" capitalise" app-bind="field.field"></label>
-                                        <div class="input-contenteditable field-content">
-
-                                            <div class="input-contenteditable-wrap">
-                                                <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs') %>
-                                                <div class="contenteditable" app-model="field.value" contenteditable="true"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div app-if="field.input == 'checkbox'">
-                                        <label><input type="checkbox" app-model="field.value" class="border" app-change="renderPage()"><span class=" capitalise" app-bind="parseSnakeCase(field.field)"></span></label>
-                                    </div>
-
-                                    <div app-if="field.input == 'code'">
-                                        <label class=" capitalise" app-bind="field.field"></label>
-                                        <pre><code class="html contenteditable" contenteditable="true" app-model="field.value"></code></pre>
-                                    </div>
-
-                                    <div app-if="field.input == 'image'">
-                                        <label class=" capitalise" app-bind="field.field"></label>
-                                    </div>
-
-                                    <div app-if="field.input == 'none'">
-                                        <label class=" capitalise" app-bind="field.field"></label>
-                                    </div>
-
-                                    <input app-show="field.styling == 'true'" class="mt-05 transparent-3" type="text" app-model="field.classes" placeholder="Add element classes...">
-
-                                </div>
-                            </div>
-
-                            <div app-show="view.editor == false" class="p-1 text-italic transparent-3 text-small">This block has no editable content</div>
+                            <%- include('partials/block_fields.ejs') %>
 
                         </div>
 
                         <div app-show="view.tab == 'block_styling'" class="fields">
 
-                            <div class="field">
-                                <label class=" capitalise">Block Name</label>
-                                <input type="text" app-model="view.selected_block.name">
-                            </div>
-
-                            <div class="" app-hide="view.selected_block.disable_styling">
-
-                                <div class="field">
-                                    <label class=" capitalise">Text Color</label>
-                                    <div class="color_picker" app-color="view.selected_block.styling.text.color">
-                                        <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class=" capitalise">Background Color</label>
-
-                                    <div class="color_picker" app-color="view.selected_block.styling.background.color">
-                                        <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="capitalise">Background Image</label>
-                                    <div class="bg-image-wrap mb-1" app-click="showMediaLibrary('view.selected_block.styling.background.image')">
-                                        <img class="bg-image" src="/images/Product_Placeholder.svg" app-src="view.selected_block.styling.background.image">
-                                        <a class="bg-image-remove" app-click="removeImage(view.selected_block.styling.background)" app-show="view.selected_block.styling.background.image"><span class="icon x secondary"></span></a>
-                                    </div>
-                                    <!-- <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-click="addClass(view.selected_block.styling.background, 'bg-text-dark')"> Darken the background for clearer text</label> -->
-                                    <!-- <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')"> -->
-                                </div>
-                                <div class="field">
-                                    <label class=" capitalise">Block Classes</label>
-                                    <input type="text" app-model="view.selected_block.styling.background.class" placeholder="Add additional CSS classes here">
-                                </div>
-                                <div class="field">
-                                    <label class=" capitalise">Container Classes</label>
-                                    <input type="text" app-model="view.selected_block.styling.container.class" placeholder="Add additional CSS classes here">
-                                </div>
-                                <div class="field">
-                                    <label class="capitalise">Carousel this block</label>
-                                    <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-model="view.selected_block.styling.carousel"> Select this option to add this block to a sliding carousel</label>
-                                </div>
-
-                            </div>
+                            <%- include('partials/block_styling.ejs') %>
 
                         </div>
 
@@ -167,107 +69,30 @@
 
                         <div app-show="view.tab == 'details'" class="fields">
 
-                            <div class="layer-1">
-
-                                <div class="field">
-                                    <label class="">Page Title</label>
-                                    <input type="text" app-model="view.pages.title">
-                                </div>
-
-                                <div class="field">
-                                    <label class="">Page URL</label>
-                                    <input type="text" app-model="view.pages.slug">
-                                </div>
-
-                                <div class="relative layer-5">
-
-                                    <div class="field">
-                                        <label class="">Status</label>
-                                        <select app-model="view.pages.status">
-                                            <option value="" disabled selected>Select...</option>
-                                            <option value="draft">Draft</option>
-                                            <option value="published">Published</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="field">
-                                        <label class="">Publish On</label>
-                                        <date-picker app-model="view.pages.publish_on" class="mb-2 layer-3">
-                                        </date-picker>
-                                    </div>
-
-                                    <div class="field">
-                                        <label class="">Unpublish On</label>
-                                        <date-picker app-model="view.pages.unpublish_on" class="mb-2 layer-3">
-                                        </date-picker>
-                                    </div>
-
-                                </div>
-
-                            </div>
+                            <%- include('partials/page_details.ejs') %>
 
                         </div>
                         <div app-show="view.tab == 'notification'" class="fields">
 
-                            <div class="layer-1 field">
-
-                                <label class=" capitalise">Add a notification to this page (400 chars. max)</label>
-
-                                <div class="input-contenteditable field-content">
-
-                                    <div class="input-contenteditable-wrap">
-                                        <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:"simple"}) %>
-                                        <div id="pages_notification" class="large resize contenteditable" app-model="view.pages.notification" contenteditable="true"></div>
-                                    </div>
-                                </div>
-
-                                <div class="text-right text-small mt-05">
-                                    <a app-click="removeNotification()"><i class="fas fa-times"></i> Remove Notification</a>
-                                </div>
-                            </div>
+                            <%- include('partials/notification.ejs') %>
 
                         </div>
                         <div app-show="view.tab == 'seo'" class="fields">
 
-                            <div class="field">
-                                <label class="">Title</label>
-                                <input type="text" placeholder="SEO Page Title" app-model="view.pages.meta.title">
-                            </div>
-
-                            <div class="field">
-                                <div class="float-right text-small pr-1" app-bind="view.pages.meta.description.length"></div>
-                                <label class="">Descripton (160 chars. max)</label>
-                                <textarea app-model="view.pages.meta.description" placeholder="SEO Meta Description"></textarea>
-                            </div>
+                            <%- include('partials/seo.ejs') %>
 
                         </div>
 
                         <div app-show="view.tab == 'options'" class="fields">
-                            <div class="field">
-                                <label>Hide site nav bar</label>
-                                <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-model="view.pages.hide_top_nav"> Select this option to hide the menu at the top of the page</label>
-                            </div>
+
+                            <%- include('partials/page_options.ejs') %>
+
                         </div>
 
 
                         <div app-show="view.tab == 'blocks'" class="blocks">
 
-                            <div class="sortable" app-sorted="renderPage()">
-                                <div class="list-block" app-for="block in view.pages.blocks" app-click="loadBlock(block,$index)" app-class="{'carousel':block.styling.carousel == true}">
-                                    <span app-class="getBlockIcon(block)" class="flex-none icon lg primary left"></span>
-                                    <div class="flex-1" app-bind="block.name"></div>
-                                    <span class="flex-none icon sectiongrab grey sortable-handle"></span>
-                                </div>
-                            </div>
-                            <div class="">
-
-                                <div class="list-block no-border" app-click="addNewSection(true)">
-                                    <span class="flex-none icon lg plus grey left"></span>
-                                    <div class="flex-1">Add block</div>
-                                    <span class=""></span>
-                                </div>
-
-                            </div>
+                            <%- include('partials/block_list.ejs') %>
 
                         </div>
 
@@ -288,7 +113,7 @@
 
             </div>
 
-            <div class="preview-wrap vh-100 overflow-y relative">
+            <div class="preview-wrap vh-100 overflow-y relative" app-class="{'secondary-theme':view.pages.secondary_theme === true}">
 
                 <div class="fixed top right p-2 layer-3">
                     <button class="btn bg-white flex-none shadow" app-click="renderPage()"><span class="icon cycle black"></span></button>
@@ -312,191 +137,23 @@
 
             </div>
 
-
-
-
     </div>
 
 </div>
 
 <div class="dashboard loaded">
 
-    <modal-auto app-show="view.modal == 'show_sections'" data-title="Add New Section" class="modal-auto-medium tabbed body-white">
-
-        <div class="tabs">
-            <!-- <a app-click="view.modal_tab = 'recents'" app-class="{'active':view.modal_tab == 'recent'}" class="flex-1">Recent</a> -->
-            <a app-click="view.modal_tab = 'basics'" app-class="{'active':view.modal_tab == 'basics'}" class="flex-1">Basics</a>
-            <a app-click="view.modal_tab = 'separators'" app-class="{'active':view.modal_tab == 'separators'}" class="flex-1">Separators</a>
-            <a app-click="view.modal_tab = 'advanced'" app-class="{'active':view.modal_tab == 'advanced'}" class="flex-1">Advanced</a>
-        </div>
-        <div class="bg-white p-2 h-100">
-
-            <div class="grid col-3 col-s-1 gap-2">
-                <% for (var i in blocks){ %>
-
-                    <div class="list-block mb-0" app-show="view.modal_tab == '<%- blocks[i].folder %>'" app-click="selectBlock('<%- blocks[i].block %>')">
-                        <span class="flex-none icon xl primary left <%- blocks[i].block %>"></span>
-                        <div class="flex-1"><%- blocks[i].name %></div>
-                    </div>
-                <% } %>
-            </div>
-
-        </div>
-
-    </modal-auto>
-
-
-    <modal-auto app-show="view.modal == 'show_del_block_confirm'" data-title="Delete block">
-
-        <div class="mb-2">Ok to delete the <span app-bind="view.selected_block.name"></span> block?</div>
-        <div class="grid col-2 gap-2">
-            <button class="btn bg-white w-100">Cancel</button>
-            <button class="btn bg-primary w-100" app-click="removeBlock()">Delete</button>
-        </div>
-    </modal-auto>
-
-
-    <modal-auto app-show="view.modal == 'show_input'" data-title="Input" class="modal-auto-large">
-
-        <div class="grid col-2 pb-1 gap-2" style="width:50vw">
-            <div class="pb-1">
-                <h4 class="text-light capitalise" app-bind="view.exec.title">
-
-                </h4>
-            </div>
-            <div></div>
-            <div app-show="view.exec.image">
-                <label>Upload Image</label>
-                <label for="image_1" class="clickable"><img src="/images/Profile_Placeholder.svg" app-src="view.image_url" class="w-100"></label>
-                <input id="image_1" type="file" app-model="view.image_url">
-            </div>
-            <div app-show="view.exec.input">
-                <label app-bind="view.exec.input"></label>
-                <input type="text" app-model="view.text_input">
-            </div>
-            <div app-show="view.exec.input_2">
-                <label app-bind="view.exec.input_2"></label>
-                <input type="text" app-model="view.text_input_2">
-            </div>
-        </div>
-
-        <div class="grid col-2 pb-1">
-            <div></div>
-            <div class="text-right">
-                <button class="btn highlight" app-click="exec('exec')">Submit</button>
-            </div>
-        </div>
-
-    </modal-auto>
-
-    <div class="modal" app-show="view.modal == 'show_form_builder'" anim="{'enter':'fade-in'}">
-
-        <div class="modal-body" anim="{'enter':'move-up','duration':'0.2'}">
-
-            <div class="grid col-2 pb-1 gap-2" style="width:50vw">
-                <div class="pb-1">
-                    <h4 class="text-light capitalise">
-                        Insert Form
-                    </h4>
-                </div>
-                <div></div>
-            </div>
-
-            <div class="grid col-3 gap-2 mb-2">
-                <div>
-                    <label>Form Name</label>
-                    <input type="text" app-model="view.form.details.name">
-                </div>
-                <div>
-                    <label>Post Route</label>
-                    <input type="text" app-model="view.form.details.url">
-                </div>
-                <div>
-                    <label>Button Text</label>
-                    <input type="text" app-model="view.form.details.button_text">
-                </div>
-            </div>
-
-            <div>
-
-                <div class="grid col-3 pb-1 gap-2">
-
-                    <div>
-                        <label>Input Label</label>
-                    </div>
-                    <div>
-                        <label>Input Type</label>
-                    </div>
-                    <div>
-                        <label>Options</label>
-                    </div>
-
-                </div>
-
-                <div class="grid col-3 pb-1 gap-2" app-for="input in view.form.inputs">
-
-                    <div>
-                        <input type="text" app-model="input.label">
-                    </div>
-                    <div>
-                        <select app-model="input.type">
-                            <option>Text</option>
-                            <option>Textarea</option>
-                            <option>Email</option>
-                            <option>Tel</option>
-                            <option>Select</option>
-                            <option>Checkbox</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="checkbox"><input type="checkbox" app-model="input.required"> Required</label>
-                    </div>
-
-                </div>
-            </div>
-            <div class="grid col-2 pb-1">
-                <div></div>
-                <div class="text-right">
-                    <button class="btn highlight" app-click="addInput()"><i class="fas fa-plus mr-05"></i> Add Input</button>
-                </div>
-            </div>
-
-            <div class="grid col-2 pb-1">
-                <div></div>
-                <div class="text-right">
-                    <button class="btn highlight" app-click="insertForm()">Insert Form</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
     <a href="/dashboard/pages/render/preview" id="preview-link" target="preview" class="hidden"></a>
 
-    <modal-auto app-show="view.modal == 'set_up'" data-title="Create a new page" required>
+    <%- include('partials/modals/show_icons.ejs') %>
 
-        <div class="grid pb-2 gap-1 col-2 col-s-1" style="align-items: start;">
+    <%- include('partials/modals/show_sections.ejs') %>
 
-            <div class="my-1">
-                <label class="">Page Title</label>
-                <input type="text" onchange="scope.view.pages.title = this.value">
-            </div>
+    <%- include('partials/modals/del_block_confirm.ejs') %>
 
-            <div class="my-1">
-                <label class="">Page URL</label>
-                <input type="text" onchange="scope.view.pages.slug = this.value">
-            </div>
+    <%- include('partials/modals/insert_form.ejs') %>
 
-        </div>
-
-        <div class="flex flex-middle-right">
-            <button class="btn highlight capitalise" app-click="savePage()">
-                <span>Create Page</span>
-            </button>
-
-        </div>
-
-    </modal-auto>
+    <%- include('partials/modals/set_up.ejs') %>
 
     <%- include(basedir+'/themes/default/partials/modals/media_library.ejs',{table:'pages'}); %>
 

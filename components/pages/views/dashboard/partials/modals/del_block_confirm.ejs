@@ -1,0 +1,8 @@
+<modal-auto app-show="view.modal == 'show_del_block_confirm'" data-title="Delete block">
+
+    <div class="mb-2">Ok to delete the <span app-bind="view.selected_block.name"></span> block?</div>
+    <div class="grid col-2 gap-2">
+        <button class="btn bg-white w-100">Cancel</button>
+        <button class="btn bg-primary w-100" app-click="removeBlock()">Delete</button>
+    </div>
+</modal-auto>

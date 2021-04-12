@@ -15,6 +15,7 @@
             scope.view.modal_tab = 'basics'
 
             scope.view.colors = ['bg-primary', 'bg-secondary', 'bg-palette-1', 'bg-palette-2', 'bg-palette-3', 'bg-palette-4', 'bg-palette-5', 'bg-palette-6', 'bg-palette-7', 'bg-palette-8', 'bg-white','bg-grey']
+            scope.view.icons = ['alarm', 'arrowdown', 'arrowleft', 'arrowup', 'arrowright', 'bell', 'bin', 'binoculars', 'box', 'bulletlist', 'calendar', 'cardpayment', 'clock', 'cmslogo', 'contentbanner', 'contentbutton', 'contentfeatures', 'contenttext', 'contenttitle', 'contentvideo', 'crosshairs', 'cycle', 'duplicate', 'edit', 'envelope', 'eye', 'gauge', 'handstop', 'help', 'house', 'link', 'mapmarker', 'mapmarkerundo', 'megaphone', 'merge', 'noentry', 'note', 'person', 'piechart', 'plus', 'pricetag', 'pulse', 'repeatarrow', 'rocket', 'scissors', 'screen', 'search', 'settings', 'sectiongrab', 'shoppingbasket', 'shoppingtrolley', 'sidemenucollapse', 'sidemenuexpand', 'signin', 'signout', 'speechbubble1', 'speechbubble2', 'stopwatch', 'suppliers', 'swap', 'threedots', 'thumbsdown', 'thumbsup', 'tick', 'tickcircle', 'unlink', 'voucher', 'x', 'xcircle']
 
             document.onkeyup = function (e) {
 
@@ -72,6 +73,27 @@
                 }
 
                 scope.renderPage()
+
+            }
+
+            scope.selectIcon = function(idx,icon){
+
+                if (idx){
+                    scope.view.field_idx = idx
+                    scope.openModal('show_icons')
+                }
+
+                if (icon){
+
+                    if (icon == 'none'){
+                        icon = false
+                    }
+
+                    evaluate.setValue('view.editor['+scope.view.field_idx+'].value', icon)
+                    view.update('view.editor['+scope.view.field_idx+']')
+                    scope.closeModal()
+                    scope.renderPage()
+                }
 
             }
 
@@ -254,6 +276,7 @@
                         view.update('view.blocks')
                         view.update('view.colors')
                         view.update('view.selected_block')
+                        view.update('view.selected_block.styling.add_parallax')
                         view.update('view.selected_block.styling.carousel')
                         view.update('view.selected_block.styling.container')
                         view.update('view.selected_block.styling.background')

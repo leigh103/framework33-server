@@ -1,5 +1,5 @@
 
-<section class="nav bg-33-frosted-light auto-hide">
+<section class="nav <% if (typeof pages != 'undefined' && pages.hide_top_nav && pages.hide_top_nav === true) { %> auto-hide" app-class="{'auto-hide-shown':view.sub_0 == true}"<% } else { %>no-auto-hide"<% } %>>
 
     <div class="contain h-100 grid col-4">
 
