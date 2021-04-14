@@ -26,7 +26,7 @@
             <div class="input-contenteditable field-content">
 
                 <div class="input-contenteditable-wrap">
-                    <%- include(view.basedir+'/themes/'+config.site.theme+'/partials/editor_buttons.ejs',{editor_button_type:'simple'}) %>
+                    <%- include(view.basedir+'/themes/'+config.site.dashboard_theme+'/partials/editor_buttons.ejs',{editor_button_type:'simple'}) %>
                     <div class="contenteditable" app-model="field.value" contenteditable="true"></div>
                 </div>
             </div>
@@ -49,6 +49,7 @@
 
         <div app-if="field.input == 'image'">
             <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+            <label for="block_bg_image" app-click="showMediaLibrary('view.editor[$index].value')"><img src="/images/Product_Placeholder.svg" app-src="field.value" class=""></label>
         </div>
 
         <div app-if="field.input == 'none'">

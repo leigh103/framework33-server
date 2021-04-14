@@ -549,7 +549,19 @@ const express = require('express'),
 
         if (typeof pages_type == 'object' && pages_type.data && pages_type.data._key){ // found pages type and find the article data
 
-            let article = await new Pages().find(['slug == '+slug,'type == '+pages_type.data._key, 'status == published'])
+            let article
+
+            try {
+                article = await new Pages().find(['slug == '+slug,'type == '+pages_type.data._key, 'status == published'])
+            }
+
+            catch(err){
+                console.log(err)
+                article = {
+                    data:''
+                }
+            }
+
 
             if (article.data.length == 0 || article.error){
                 //console.log("article not found")
@@ -584,10 +596,21 @@ const express = require('express'),
 
             } else { // if it's not a pages type, check for page pages
 
-                let article = await new Pages().find(['slug == '+slug, 'type NOT EXISTS', 'status == published'])
+                let article
 
-                if (article.data.length == 0 || article.error){
+                try {
+                    article = await new Pages().find(['slug == '+slug, 'status == published'])
+                }
 
+                catch(err){
+                    console.log(err)
+                    article = {
+                        data:''
+                    }
+                }
+
+                if (Object.keys(article).length == 0 || article.error){
+console.log('next')
                     next()
 
                 } else {

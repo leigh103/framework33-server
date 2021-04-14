@@ -128,17 +128,15 @@
 
         }
 
-        // async preSave(){
-        //
-        //     if (this.data && Array.isArray(this.data.gallery) && this.data.gallery[0]){
-        //         this.data.thumbnail = this.data.gallery[0].value
-        //     }
-        //
-        //     if (this.data.gallery_new){
-        //         delete this.data.gallery_new
-        //     }
-        //
-        // }
+        async preSave(){
+
+            let category_slug = await new ProductCategories().slug(this.data)
+
+            if (category_slug){
+                this.data.url = category_slug+this.data.slug
+            }
+
+        }
 
         async getRelated(){
 

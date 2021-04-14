@@ -191,6 +191,10 @@ const express = require('express'),
 
                     if (index >= config.components.load.length - 1){
                         app.set('views', views)
+
+                        app.get('*',(req, res, next)=>{
+                            res.render(basedir+'/components/default_routes/views/404.ejs')
+                        })
                     }
 
                 })
@@ -212,7 +216,7 @@ const express = require('express'),
                 } else {
 
                     app.use('/'+global.component[name].settings.default_route+'/?*?', function (req, res, next) {
-                        
+
                         if (isSet(global.component[name],'settings','protected_guards') && req.session.user && global.component[name].settings.protected_guards.indexOf(req.session.user.guard) >=0){
                             next()
                         } else if (isSet(global.component[name],'settings','protected_guards')){

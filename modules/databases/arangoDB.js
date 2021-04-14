@@ -395,7 +395,7 @@
 
                 this.query = this.query.replace(/FILTER RETURN/,'RETURN')
 
-                //console.log(this.query)
+                // console.log(this.query)
                 try {
                     let result = await adb.query(this.query)
                     this.result = result._result
@@ -470,7 +470,7 @@
                 }
 
                 this.query = this.query.replace(/FILTER RETURN/,'RETURN')
-
+   
                 try {
 
                     let result = await adb.query(this.query)

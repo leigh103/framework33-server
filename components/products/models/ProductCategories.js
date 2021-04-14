@@ -116,8 +116,16 @@
                         slug += this.data.slug+'/'
                     }
 
-                    if (product_data.sub_category.match(/^\d+$/) && this.data.sub_categories.length > 0 && this.data.sub_categories[product_data.sub_category]){
-                        slug += this.data.sub_categories[product_data.sub_category].slug+'/'
+                    if (this.data.sub_categories && this.data.sub_categories.length > 0){
+
+                        let sub_category = this.data.sub_categories.find((sub_cat)=>{
+                            return sub_cat._key == product_data.sub_category
+                        })
+
+                        if (sub_category && sub_category.slug){
+                            slug = slug+sub_category.slug+'/'
+                        }
+
                     }
 
                 } else {

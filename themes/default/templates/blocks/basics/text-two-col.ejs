@@ -1,27 +1,40 @@
-<section class="<% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Text Two Column" app-block-description="This is a two column text block" app-allow-styling="true">
+<section class="block-text-two-col <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Text Two Column" app-block-description="This is a two column text block">
 
-    <div class="contain <%- styling.container.class %>" app-input="none" app-field="container" app-styling="container_class">
+    <div class="contain <%- styling.container.class %> <% if (styling.container.alignment){ %><%- styling.container.alignment %><% } else { %>align-center<% } %>">
 
-        <% if (data.heading){ %><h2 app-input="text" app-field="heading"><%- data.heading %></h2><% } %>
-
-        <% if (data.sub_heading){ %><h4 class="my-1" app-input="text" app-field="sub_heading"><%- data.sub_heading %></h4><% } %>
 
         <div class="grid col-2 col-s-1 gap-3">
-            <div class="text-pre-line" app-input="textarea" app-field="text_left">
-                <%- data.text_left %>
-            </div>
-            <div class="text-pre-line" app-input="textarea" app-field="text_right">
-                <%- data.text_right %>
-            </div>
+
+            <% if (data.image_left){ %>
+                <div class="col col-left" app-input="image" app-field="image_left">
+                    <img src="<%- data.image_left %>" class="">
+                </div>
+            <% } else { %>
+                <div class="col col-left">
+                    <div>
+                        <% if (data.heading_left){ %><h2 app-input="text" app-field="heading_left" class=""><%- data.heading_left %></h2><% } %>
+                        <% if (data.sub_heading_left){ %><h3 app-input="text" app-field="sub_heading_left" class=""><%- data.sub_heading_left %></h3><% } %>
+                        <div class="" app-input="textarea" app-field="text_left" anim="{'enter':'move-up'}"><%- data.text_left %></div>
+                    </div>
+                </div>
+            <% } %>
+
+            <% if (data.image_right){ %>
+                <div class="col col-right" app-input="image" app-field="image_right">
+                    <img src="<%- data.image_right %>" class="">
+                </div>
+            <% } else { %>
+                <div class="col col-right" anim="{'enter':'move-up'}">
+                    <div>
+                        <% if (data.heading_right){ %><h2 app-input="text" app-field="heading_right" class=""><%- data.heading_right %></h2><% } %>
+                        <% if (data.sub_heading_right){ %><h3 app-input="text" app-field="sub_heading_right" class=""><%- data.sub_heading_right %></h3><% } %>
+                        <div app-input="textarea" app-field="text_right"><%- data.text_right %></div>
+                    </div>
+                </div>
+            <% } %>
+
+
         </div>
-
-        <% if (data.call_to_action_link){ %>
-            <a class="btn bg-primary" href="<%- data.call_to_action_link %>" app-input="text" app-field="call_to_action_link">
-                <span app-field="call_to_action_text" app-input="text"><%- data.call_to_action_text %></span>
-                <% if (data.call_to_action_icon){ %><span class="icon right white <%- data.call_to_action_icon %>" app-field="call_to_action_icon" app-input="icon"></span><% } %>
-            </a>
-        <% } %>
-
 
     </div>
 
