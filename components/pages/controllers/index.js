@@ -160,118 +160,6 @@ const express = require('express'),
 
                 })
 
-
-
-
-                // fs.readdir(config.site.theme_path+'/templates/blocks', (err, folders) => {
-                //
-                //     if (err){
-                //         reject(err)
-                //     } else {
-                //
-                //         folders.forEach(async (folder, index) => {
-                //
-                //             fs.readdir(config.site.theme_path+'/templates/blocks/'+folder, (err, files) => {
-                //
-                //                 files.forEach(async (file, i) => {
-                //
-                //                     await fs.readFile(config.site.theme_path+'/templates/blocks/'+folder+'/'+file, function read(err, data) {
-                //                             if (err) {
-                //                                 throw err;
-                //                             }
-                //                             data = data+''
-                //                             block_name = file.replace(/\.[a-z]+$/,'').replace(/\s/g,'-')
-                //                             console.log(block_name)
-                //                             blocks[block_name] = {}
-                //                             blocks[block_name].html = data.replace(/\r|\n/g,'').replace(/app\-field\=['"]/g,'id="'+block_name+'-')
-                //                             blocks[block_name].block = block_name
-                //                             blocks[block_name].name = data.match(/app\-block\=['"](.*?)['"]/)
-                //                             if (blocks[block_name].name){
-                //                                 blocks[block_name].name = blocks[block_name].name[1].charAt(0).toUpperCase() + blocks[block_name].name[1].slice(1)
-                //                             } else {
-                //                                 blocks[block_name].name = ''
-                //                             }
-                //
-                //                             blocks[block_name].description = data.match(/app\-block-description\=['"](.*?)['"]/)
-                //                             if (blocks[block_name].description){
-                //                                 blocks[block_name].description = blocks[block_name].description[1]
-                //                             } else {
-                //                                 blocks[block_name].description = ''
-                //                             }
-                //
-                //                             blocks[block_name].styling = {
-                //                                 background:{
-                //                                     image:'',
-                //                                     color:'',
-                //                                     class:''
-                //                                 },
-                //                                 text:{
-                //                                     color:''
-                //                                 },
-                //                                 container:{
-                //                                     class:''
-                //                                 }
-                //                             }
-                //                             blocks[block_name].inputs = data.match(/app\-input\=['"](.*?)['"]/g)
-                //                             blocks[block_name].fields = data.match(/app\-field\=['"](.*?)['"]/g)
-                //                             blocks[block_name].element_style = data.match(/app\-styling\=['"](.*?)['"]/g)
-                //                             blocks[block_name].editor = []
-                //
-                //                             if (blocks[block_name].inputs && blocks[block_name].fields){
-                //
-                //                                 for (var i in blocks[block_name].fields){
-                //
-                //                                     if (blocks[block_name].fields[i] && blocks[block_name].inputs[i]){
-                //
-                //                                         let field_match = blocks[block_name].fields[i].match(/app\-field\=['"](.*?)['"]/)
-                //                                         if (field_match && field_match[1]){
-                //                                             blocks[block_name].fields[i] = field_match[1]
-                //                                         }
-                //
-                //                                         let input_match = blocks[block_name].inputs[i].match(/app\-input\=['"](.*?)['"]/)
-                //                                         if (input_match && input_match[1]){
-                //                                             blocks[block_name].inputs[i] = input_match[1]
-                //                                         }
-                //
-                //                                         blocks[block_name].editor[i] = {field:blocks[block_name].fields[i], input:blocks[block_name].inputs[i], value:''}
-                //
-                //                                         if (blocks[block_name].element_style && blocks[block_name].element_style[i]){
-                //                                             let styling_match = blocks[block_name].element_style[i].match(/app\-styling\=['"](.*?)['"]/)
-                //                                             if (styling_match && styling_match[1]){
-                //                                                 blocks[block_name].editor[i].styling = 'true'
-                //                                                 blocks[block_name].editor[i].classes = ''
-                //                                             }
-                //                                         }
-                //
-                //                                     }
-                //
-                //                                 }
-                //
-                //                             }
-                //
-                //
-                //                         });
-                //
-                //                     });
-                //
-                //                 });
-                //
-                //
-                //                 if (index >= folders.length-1){
-                //                     console.log('done')
-                //                     resolve(blocks)
-                //                 }
-                //
-                //             });
-                //
-                //         }
-                //
-                //         })
-                //
-                // //    }
-                //
-                // })
-
             })
 
         },
@@ -307,8 +195,10 @@ const express = require('express'),
         tabs: [
             {href:'/dashboard/pages', text: 'Pages'},
             {href:'/dashboard/pages/settings/page-types', text: 'Page Types'},
+            {href:'/dashboard/pages/settings/forms', text: 'Forms'},
             {href:'/dashboard/pages/settings/menus', text: 'Menus'},
-            {href:'/dashboard/pages/settings/links', text: 'Links'}
+            {href:'/dashboard/pages/settings/testimonials', text: 'Testimonials'},
+            {href:'/dashboard/pages/settings/faqs', text: 'FAQs'}
         ]
     },
     blocks = []
@@ -429,21 +319,59 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/pages/settings/page-types/:key', async(req, res) => {
+    routes.get('/dashboard/pages/settings/:page/:key', async(req, res) => {
 
-        view.current_view = 'pages'
-        view.current_sub_view = 'Page Types'
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
-
         data.query = ''
-        data.title = 'Page Types'
-        data.table = 'page_types'
+        view.current_view = 'pages'
 
+        let title_prefix = 'New'
+        if (req.params.key != 'new'){
+             title_prefix = 'Edit'
+        }
 
-        data.model = new PageTypes()
+        if (req.params.page == 'page-types'){
 
-        data.key = req.params.key
-        data.fields = data.model.parseEditFields()
+            data.title = title_prefix+' Page Types'
+            data.table = 'page_types'
+            data.model = new PageTypes()
+            data.key = req.params.key
+            data.fields = await data.model.parseEditFields()
+
+        } else if (req.params.page == 'forms'){
+
+            data.title = title_prefix+' Forms'
+            data.table = 'page_forms'
+            data.model = new PageForms()
+            data.key = req.params.key
+            data.fields = await data.model.parseEditFields()
+
+        } else if (req.params.page == 'menus'){
+
+            data.title = title_prefix+' Menus'
+            data.table = 'page_menus'
+            data.model = new PageMenus()
+            data.key = req.params.key
+            data.fields = await data.model.parseEditFields()
+
+        } else if (req.params.page == 'faqs'){
+
+            data.title = title_prefix+' Frequently Asked Questions'
+            data.table = 'page_faqs'
+            data.model = new PageFAQs()
+            data.key = req.params.key
+            data.fields = await data.model.parseEditFields()
+
+        } else if (req.params.page == 'testimonials'){
+
+            data.title = title_prefix+' Testimonial'
+            data.table = 'page_testimonials'
+            data.model = new PageTestimonials()
+            data.key = req.params.key
+            data.fields = await data.model.parseEditFields()
+
+        }
+
         res.render(basedir+'/components/dashboard/views/edit.ejs',data)
 
     })
@@ -461,18 +389,72 @@ const express = require('express'),
         }
 
         view.current_view = 'pages'
-        data.title = 'Page Settings'
 
         if (req.params.page == 'page-types'){
+
+            data.title = 'Page Types'
             data.model = new PageTypes().settings
             data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
             data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
             view.current_sub_view = 'Page Types'
             data.table = 'page_types'
+            data.edit_link = 'pages/settings/page-types'
             data.fields = data.model.fields
             data.search_fields = data.model.search_fields
-
             res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+        } else if (req.params.page == 'forms'){
+
+            data.title = 'Forms'
+            data.model = new PageForms().settings
+            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
+            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            view.current_sub_view = 'Forms'
+            data.table = 'page_forms'
+            data.edit_link = 'pages/settings/forms'
+            data.fields = data.model.fields
+            data.search_fields = data.model.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+        } else if (req.params.page == 'menus'){
+
+            data.title = 'Menus'
+            data.model = new PageMenus().settings
+            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
+            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            view.current_sub_view = 'Menus'
+            data.table = 'page_menus'
+            data.edit_link = 'pages/settings/menus'
+            data.fields = data.model.fields
+            data.search_fields = data.model.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+        } else if (req.params.page == 'faqs'){
+
+            data.title = 'Frequently Asked Questions'
+            data.model = new PageFAQs().settings
+            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
+            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            view.current_sub_view = 'FAQs'
+            data.table = 'page_faqs'
+            data.edit_link = 'pages/settings/faqs'
+            data.fields = data.model.fields
+            data.search_fields = data.model.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+        } else if (req.params.page == 'testimonials'){
+
+            data.title = 'Testimonials'
+            data.model = new PageTestimonials().settings
+            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
+            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            view.current_sub_view = 'Testimonials'
+            data.table = 'page_testimonials'
+            data.fields = data.model.fields
+            data.edit_link = 'pages/settings/testimonials'
+            data.search_fields = data.model.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
         } else {
             res.render(settings.views+'/dashboard/settings.ejs',data)
         }
@@ -492,16 +474,15 @@ const express = require('express'),
         view.current_sub_view = 'pages'
         data.title = 'Pages'
         data.table = 'pages'
-        data.page_type = req.params.type
         data.page_key = req.params.key
         data.model = new Pages()
-        data.fields = data.model.parseEditFields()
-        data.option_data = await view.functions.getOptionData('page_types')
+        data.fields = await data.model.parseEditFields()
+    //    data.option_data = await view.functions.getOptionData('page_types')
 
         blocks = await functions.parseBlocks()
         data.blocks = blocks
 
-        res.render(settings.views+'/dashboard/editor.ejs',data)
+        res.render(settings.views+'/dashboard/editor.ejs',data,{async: true})
 
     })
 
@@ -512,6 +493,8 @@ const express = require('express'),
         data.meta = {
             title: config.site.name+' | Pages',
         }
+
+        delete data.edit_link
 
         view.current_view = 'pages'
         view.current_sub_view = 'pages'
@@ -610,7 +593,7 @@ const express = require('express'),
                 }
 
                 if (Object.keys(article).length == 0 || article.error){
-console.log('next')
+
                     next()
 
                 } else {

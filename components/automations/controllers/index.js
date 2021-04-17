@@ -83,7 +83,7 @@ const express = require('express'),
 
         if (req.params.key){
             data.key = req.params.key
-            data.fields = data.model.parseEditFields()
+            data.fields = await data.model.parseEditFields()
             res.render(basedir+'/components/dashboard/views/edit.ejs',data)
         } else {
             data.fields = data.model.settings.fields

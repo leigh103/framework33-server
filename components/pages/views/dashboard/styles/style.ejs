@@ -3,12 +3,12 @@
 
     .editor-wrap {
         display: flex;
+        height:100vh;
     }
 
-    div[contenteditable=true], pre {
+    div[contenteditable=true]:not(.small), pre {
         min-height: 10rem;
         padding: 0;
-        border: none;
     }
 
     pre, code {
@@ -17,11 +17,29 @@
         font-size: 0.875rem;
     }
 
-    input {
+    input[type=text] {
+        border-bottom: 1px solid #EFEFEF;
+        padding: 0;
+        padding-bottom: 0.7rem;
+    }
+
+    input[type=checkbox] {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    textarea {
+        border-bottom: 1px solid #EFEFEF;
+        padding: 0;
+        padding-bottom: 0.7rem;
+    }
+
+    a.clear-placeholder {
+        font-size: 0.7rem;
+        margin-bottom: 1rem;
     }
 
     .fields input, .fields textarea {
-        border: none !important;
         padding: 0 !important;
         font-size: 1rem !important;
         margin-top: -0.5rem;
@@ -49,7 +67,9 @@
     #preview {
         background-color: white;
         position: relative;
-        min-height:100vh;
+        height:100%;
+        overflow-y: scroll;
+        padding-bottom: 10rem;
     }
 
     #preview section {
@@ -70,7 +90,20 @@
         position: relative;
     }
 
-    #preview *[app-block]:hover:after, #preview .add-new-section:hover:after {
+    #preview *[app-block]:hover:after, #preview .add-new-section:hover:after, #preview section.editor-selected:after {
+        /* content:'';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -webkit-box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,1);
+        -moz-box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,1);
+        box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,1); */
+    }
+
+    #preview section.editor-not-selected:after {
         content:'';
         display: block;
         position: absolute;
@@ -78,9 +111,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        -webkit-box-shadow: inset 0px 0px 0px 4px rgba(58,164,196,1);
-        -moz-box-shadow: inset 0px 0px 0px 4px rgba(58,164,196,1);
-        box-shadow: inset 0px 0px 0px 4px rgba(58,164,196,1);
+        z-index: 999;
+        background-color: rgba(0,0,0,0.5)
     }
 
     #insert-new-section {
@@ -238,7 +270,7 @@
 }
 
     .dashboard {
-        flex: 0 0 470px;
+        flex: 0 0 400px;
     }
 
     .preview-wrap {
@@ -255,12 +287,12 @@
     }
 
     .menu-wrap {
-        width: 100%;
+        width: 400px;
         height: 100vh;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        border-right: 2px solid #f2f2f2;
+border-right: 1px solid #EFEFEF;
     }
 
     .menu {
@@ -269,6 +301,13 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        font-size: 0.875rem;
+    }
+
+    .menu .contenteditable {
+        font-size: 1rem;
+        border-bottom: 1px solid #EFEFEF;
+        padding-bottom: 0.7rem;
     }
 
     .menu .fields {
@@ -281,17 +320,24 @@
     }
 
     .menu .fields .field {
-        padding: 1.5rem;
-        border-bottom: 1px solid #EAEAEA;
+        padding: 2rem 1.5rem 0 1.5rem;
+    }
+
+    .menu .fields .field:last-child {
+        padding: 2rem 1.5rem 3rem 1.5rem;
     }
 
     .menu .fields .field .bg-image-wrap {
         position: relative;
+        background-color: #f4f6f8;
+        border-radius: 6px;
     }
 
     .menu .fields .field .bg-image {
         position: relative;
         border-radius: 6px;
+        height: 8rem;
+        object-fit: cover;
     }
 
     .menu .fields .field .bg-image-remove {
@@ -343,9 +389,17 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        height: 4rem;
+        height: 4.375rem;
         padding: 0 1.25rem;
         border-bottom: 1px solid #EAEAEA;
+    }
+
+    .list-block span.icon:not(.sortable-handle) {
+        margin-right: 1.3rem;
+    }
+
+    .list-block span.icon.sortable-handle {
+        background-color: rgba(56, 63, 71, 0.20);
     }
 
     modal-auto .list-block {
@@ -477,6 +531,7 @@
         }
 
         .menu-wrap {
+            width: 100vw;
             height: auto !important;
             overflow-y:hidden !important;
         }

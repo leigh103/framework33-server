@@ -32,7 +32,7 @@ var express = require('express'),
                     user_id = false
 
                 if (req.session && req.session.user && req.session.user){
-                    user_id = req.session.user._id
+                    user_id = user_id
                     guard = req.session.user.guard
                 } else if (req.cookies['connect.sid']){
                     user_id = req.cookies['connect.sid']
@@ -122,6 +122,56 @@ var express = require('express'),
 
 
 // routes
+
+    let user_id
+
+    routes.get('*', async (req, res, next) => {
+
+        if (req && req.session && req.session.user && req.session.user._id){
+            user_id = req.session.user._id
+        } else {
+            user_id = 'guest'
+        }
+
+        next()
+
+    })
+
+    routes.post('*', async (req, res, next) => {
+
+        if (req && req.session && req.session.user && req.session.user._id){
+            user_id = req.session.user._id
+        } else {
+            user_id = 'guest'
+        }
+
+        next()
+
+    })
+
+    routes.put('*', async (req, res, next) => {
+
+        if (req && req.session && req.session.user && req.session.user._id){
+            user_id = req.session.user._id
+        } else {
+            user_id = 'guest'
+        }
+
+        next()
+
+    })
+
+    routes.delete('*', async (req, res, next) => {
+
+        if (req && req.session && req.session.user && req.session.user._id){
+            user_id = req.session.user._id
+        } else {
+            user_id = 'guest'
+        }
+
+        next()
+
+    })
 
 
     routes.get('/:collection/:id?/:function?/:fid?', async (req,res)=>{
@@ -266,7 +316,11 @@ var express = require('express'),
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-            let model
+            let model, log_method = 'create'
+
+            if (req.body && req.body._key){
+                log_method = 'update'
+            }
 
             if (method == 'save'){
                 model = await new global[model_class_name](req.body)
@@ -278,8 +332,10 @@ var express = require('express'),
 
             if (!model){
                 res.status(405).json(settings.not_allowed)
+                new Log(user_id, log_method+' not_allowed', req.body, 'Method not allowed on '+model_class_name, req.headers['x-forwarded-for']).save()
                 return
             } else if (model && !model[method]){
+                new Log(user_id, log_method+' not_allowed', req.body, 'Method not allowed on '+model_class_name, req.headers['x-forwarded-for']).save()
                 res.status(405).json(settings.not_allowed)
                 return
             }
@@ -297,16 +353,19 @@ var express = require('express'),
                 if (result.error){
                     res.status(500).send(result.error)
                 } else if (result.data) {
+                    new Log(user_id, log_method, result.data._id, 'Document '+log_method+'d', req.headers['x-forwarded-for'], result.data).save()
                     res.json(result.data)
                 } else if (result){
                     res.json(result)
                 } else {
+                    new Log(user_id, log_method+' not_allowed', req.body, 'Method not allowed on '+model_class_name, req.headers['x-forwarded-for']).save()
                     res.status(405).json(settings.not_allowed)
                 }
 
             }).catch((err)=>{
 
                 if (err.status){
+                    new Log(user_id, log_method+' '+err.status, req.body, err.status+' on '+model_class_name, req.headers['x-forwarded-for']).save()
                     res.status(err.status).json(err)
                 } else {
                     log(err)
@@ -316,7 +375,7 @@ var express = require('express'),
             })
 
         } else {
-
+            new Log(user_id, log_method+' not_allowed', req.body, 'Method not allowed on '+model_class_name, req.headers['x-forwarded-for']).save()
             res.status(405).json(settings.not_allowed)
 
         }
@@ -337,9 +396,11 @@ var express = require('express'),
             let model = new global[model_class_name](req.body)
 
             if (!model){
+                new Log(user_id, 'create not_allowed', req.body, 'Method not allowed on '+model_class_name, req.headers['x-forwarded-for']).save()
                 res.status(405).json(settings.not_allowed)
                 return
             } else if (model && !model[method]){
+                new Log(user_id, 'create not_allowed', req.body, 'Method not allowed on '+model_class_name, req.headers['x-forwarded-for']).save()
                 res.status(405).json(settings.not_allowed)
                 return
             }
@@ -359,6 +420,7 @@ var express = require('express'),
                 if (result.error){
                     res.status(500).send(result.error)
                 } else if (result.data) {
+                    new Log(user_id, 'create', result.data._id, 'Document created', req.headers['x-forwarded-for'], result.data).save()
                     res.json(result.data)
                 } else if (result){
                     res.json(result)
@@ -415,8 +477,10 @@ var express = require('express'),
                 if (result.error){
                     res.status(500).send(result.error)
                 } else if (result.data){
+                    new Log(user_id, 'delete', result.data._id, 'Document deleted', req.headers['x-forwarded-for'], result.data).save()
                     res.json(result.data)
                 } else {
+                    new Log(user_id, 'delete', model.data._id, 'Document deleted', req.headers['x-forwarded-for'], model.data).save()
                     res.json(result)
                 }
 

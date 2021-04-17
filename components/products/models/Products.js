@@ -16,7 +16,7 @@
                     {name:'active',input_type:'checkbox',type:'boolean',required: false},
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
                     {name:'barcode',input_type:'text',placeholder:'barcode', type:'barcode', required:false, barcode_type:'ean13'},
-                    {name:'category',input_type:'select',option_data:'product_categories', type:'string', required:false},
+                    {name:'category',input_type:'select',option_data:'ProductCategories', type:'string', required:false},
                     {name:'sub_category',input_type:'select', option_for:'sub_category in sub_categories',type:'string', required:false},
                     {name:'variants',input_type:'multiselect',option_data:'products', tab:'product_variants', type:'string', required:false},
                     {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'prices and stock',required: true},

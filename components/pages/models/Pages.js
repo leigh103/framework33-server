@@ -14,7 +14,7 @@
                     {name:'slug',input_type:'text',placeholder:'Page URL', type:'slug', required:true},
                     {name:'notification',placeholder:'Page Notificaton', type:'string', required:false, truncate:400},
                     {name:'blocks',type:'object',required:false},
-                    {name:'type',input_type:'select',option_data:'page_types', options:[{text:'None', value:''}], type:'string', required:false},
+                    {name:'type',input_type:'select',option_data:'page_types', type:'string', required:false},
                     {name:'tags',placeholder:'Tags', type:'string', required:false},
                     {name:'status',input_type:'select',options:[{text:'Draft',value:'draft'},{text:'Published',value:'published'}],placeholder:'Status', type:'string', required:true},
                     {name:'publish_date',placeholder:'Publish Date', type:'date', required:false},

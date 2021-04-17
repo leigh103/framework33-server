@@ -129,6 +129,8 @@ const express = require('express'),
 
             let user = await new Customers(req.body).findOrSave()
 
+             new Log(user.data._id, 'registration', user.data._id, 'User created', req.headers['x-forwarded-for']).save()
+
             if (!user || user.error){
 
                 res.render(config.site.theme_path+'/templates/authentication/register.ejs', {guard:req.body.guard,error:user.error})
@@ -170,6 +172,7 @@ const express = require('express'),
             auth_data = await user.authenticate(req.body)
 
         if (auth_data && auth_data.error){
+            new Log(uauth_data._id, req.params.guard+'_auth_failed', auth_data._id, auth_data.error, req.headers['x-forwarded-for']).save()
             res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:req.params.guard,error:auth_data.error})
         } else if (auth_data && auth_data._id){
             req.session.user = auth_data
@@ -178,8 +181,10 @@ const express = require('express'),
                 user.data.ws_id = req.cookies['connect.sid']
                 user.save()
             }
+            new Log(auth_data._id, req.params.guard+'_logged_in', auth_data._id, req.params.guard+' successfully authenticated', req.headers['x-forwarded-for']).save()
             res.redirect(user.routes.redirects.logged_in)
         } else {
+            new Log(false, req.params.guard+'_auth_failed', user.data, auth_data.error, req.headers['x-forwarded-for']).save()
             res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard:req.params.guard,error:'There has been an issue resetting your password, please try again'})
         }
 

@@ -25,8 +25,8 @@
             <% }) %>
         <% } %>
         <% if (item.option_data){ %>
-            <% if (Array.isArray(option_data)){ %>
-                <% option_data.forEach((option)=>{ %>
+            <% if (Array.isArray(item.option_data)){ %>
+                <% item.option_data.forEach((option)=>{ %>
                     <option class="capitalise" value="<%- option._key %>"><%- option.name %></option>
                 <% }) %>
             <% } %>

@@ -19,16 +19,13 @@
                                 <a app-click="showMenu('main')"><span class="icon arrowleft left black"></span></a>
                             </div>
                             <div class="title">
-                                <h1><a app-click="showMenu('main')" class="text-black"><span app-bind="view.selected_block.name"></span></a></h1>
-                            </div>
-                            <div class="buttons">
-                                <button class="btn" app-click="renderPage(true)"><span class="icon screen white"></span></button>
+                                <h1><a app-click="showMenu('main')" class=""><span app-bind="view.selected_block.name"></span></a></h1>
                             </div>
                         </div>
 
                         <div class="tabs flex-none flex">
-                            <a app-click="view.tab = 'content'" app-class="{'active':view.tab == 'content'}" class="flex-1">Content</a>
-                            <a app-click="view.tab = 'block_styling'" app-class="{'active':view.tab == 'block_styling'}" class="flex-1">Styling</a>
+                            <a app-click="view.tab = 'content'" app-class="{'active':view.tab == 'content'}" class="flex-none">Section Content</a>
+                            <a app-click="view.tab = 'block_styling'" app-class="{'active':view.tab == 'block_styling'}" class="flex-none">Section Styling</a>
                         </div>
 
                         <div app-show="view.tab == 'content'" class="fields">
@@ -52,19 +49,16 @@
                                 <a href="/dashboard/pages"><span class="icon arrowleft left black"></span></a>
                             </div>
                             <div class="title">
-                                <h1><a href="/dashboard/pages" class="text-black">All Pages</a></h1>
-                            </div>
-                            <div class="buttons">
-                                <button class="btn" app-click="renderPage(true)"><span class="icon screen white"></span></button>
+                                <h1><a href="/dashboard/pages" class="" app-bind="view.pages.title"></a></h1>
                             </div>
                         </div>
 
                         <div class="tabs flex-none flex">
-                            <a app-click="view.tab = 'blocks'" app-class="{'active':view.tab == 'blocks'}" class="flex-1">Blocks</a>
-                            <a app-click="view.tab = 'details'" app-class="{'active':view.tab == 'details'}" class="flex-1">Details</a>
-                            <a app-click="view.tab = 'notification'" app-class="{'active':view.tab == 'notification'}" class="flex-1">Notification</a>
-                            <a app-click="view.tab = 'seo'" app-class="{'active':view.tab == 'seo'}" class="flex-1">SEO</a>
-                            <a app-click="view.tab = 'options'" app-class="{'active':view.tab == 'options'}" class="flex-1">Options</a>
+                            <a app-click="view.tab = 'blocks'" app-class="{'active':view.tab == 'blocks'}" class="flex-none">Page Sections</a>
+                            <a app-click="view.tab = 'details'" app-class="{'active':view.tab == 'details'}" class="flex-none">Pages Details</a>
+                            <a app-click="view.tab = 'notification'" app-class="{'active':view.tab == 'notification'}" class="flex-none">Notification</a>
+                            <a app-click="view.tab = 'seo'" app-class="{'active':view.tab == 'seo'}" class="flex-none">SEO</a>
+                            <a app-click="view.tab = 'options'" app-class="{'active':view.tab == 'options'}" class="flex-none">Options</a>
                         </div>
 
                         <div app-show="view.tab == 'details'" class="fields">
@@ -99,12 +93,11 @@
                     </div>
 
 
-                    <div class="w-100 bg-light-grey flex-none py-1 px-15 grid col-12">
-                        <div class="colspan-5">
+                    <div class="w-100 bg-light-grey flex-none py-1 px-15 flex col-12">
+                        <div class="flex-1">
                             <button app-show="view.selected_block" class="btn bg-white" app-click="removeBlock(true)">Remove Block</button>
                         </div>
-                        <div class="colspan-2"></div>
-                        <div class="colspan-5 text-right">
+                        <div class="flex-none text-right">
                             <button class="btn bg-primary" app-click="savePage()">Save</button>
                         </div>
                     </div>

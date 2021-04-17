@@ -24,22 +24,26 @@
 
     </div>
 
+    <div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
     <div class="input-object-array-new">
 
-        <div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
+        <div class="array-item">
 
-        <% item.subitems.forEach((subitem,i)=>{ %>
 
-            <div class="array-item-input">
+            <% item.subitems.forEach((subitem,i)=>{ %>
 
-                <%- include(view.basedir+'/themes/default/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, array_obj:'new_array'}) %>
+                <div class="array-item-input">
 
+                    <%- include(view.basedir+'/themes/default/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, array_obj:'new_array'}) %>
+
+                </div>
+
+            <% }) %>
+
+            <div class="array-item-button">
+                <button class="btn bg-primary" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
             </div>
 
-        <% }) %>
-
-        <div class="array-item-button">
-            <button class="btn bg-primary" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add New <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
         </div>
 
     </div>

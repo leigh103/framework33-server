@@ -101,7 +101,7 @@ const express = require('express'),
 
         if (req.params.key){
             data.key = req.params.key
-            data.fields = data.model.parseEditFields()
+            data.fields = await data.model.parseEditFields()
             res.render(basedir+'/components/dashboard/views/edit.ejs',data)
         } else {
             data.fields = data.model.settings.fields
@@ -129,7 +129,7 @@ const express = require('express'),
 
         if (req.params.key){
             data.key = req.params.key
-            data.fields = data.model.parseEditFields()
+            data.fields = await data.model.parseEditFields()
             res.render(basedir+'/components/dashboard/views/edit.ejs',data)
         } else {
             data.fields = data.model.settings.fields
@@ -179,8 +179,9 @@ const express = require('express'),
         data.model = models.products
 
         data.key = 'new'
-        data.option_data = await view.functions.getOptionData('product_categories')
-        data.fields = data.model.parseEditFields()
+    //    data.option_data = await view.functions.getOptionData('product_categories')
+        data.fields = await data.model.parseEditFields()
+
         res.render(basedir+'/components/dashboard/views/edit.ejs',data)
 
     })
@@ -219,19 +220,23 @@ const express = require('express'),
             data.fields = data.model.settings.fields
             data.search_fields = data.model.settings.search_fields
 
-            res.render(settings.views+'/dashboard/products.ejs',data)
+            return res.render(settings.views+'/dashboard/products.ejs',data)
 
         } else if (req.params.key){
+
             data.key = req.params.key
             view.current_sub_view = 'details'
-            data.option_data = await view.functions.getOptionData('product_categories')
-            data.fields = data.model.parseEditFields()
-            res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+        //    data.option_data = await view.functions.getOptionData('product_categories')
+            data.fields = await data.model.parseEditFields()
+
+            return res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+
         } else {
+
             view.current_sub_view = 'active'
             data.fields = data.model.settings.fields
             data.search_fields = data.model.settings.search_fields
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+            return res.render(basedir+'/components/dashboard/views/table.ejs',data)
         }
 
         //res.render(basedir+'/components/dashboard/views/table.ejs',data)
@@ -257,7 +262,7 @@ const express = require('express'),
         delete data.parent_category
 
         if (req.params.category == view.ecommerce.cart_name){
-            console.log(req.params.category,view.ecommerce.cart_name)
+        //    console.log(req.params.category,view.ecommerce.cart_name)
             next()
             return
         }

@@ -8,8 +8,15 @@
         </div>
 
         <div class="my-1">
-            <label class="">Page URL</label>
-            <input type="text" onchange="scope.view.pages.slug = this.value">
+            <label class="">Page Type</label>
+            <select onchange="scope.view.pages.type = this.value">
+                <option value="" selected>None</option>
+                <% if (typeof option_data != 'undefined'){ %>
+                    <% option_data.forEach((option)=>{ %>
+                        <option class="capitalise" value="<%- option._key %>"><%- option.name %></option>
+                    <% }) %>
+                <% } %>
+            </select>
         </div>
 
     </div>

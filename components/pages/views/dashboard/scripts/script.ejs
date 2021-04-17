@@ -13,6 +13,7 @@
             scope.view.saved = true
             scope.view.show_details = true
             scope.view.modal_tab = 'basics'
+            scope.view.textarea_placeholder = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id eu nisl nunc mi ipsum faucibus. Ac turpis egestas integer eget. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus. Euismod quis viverra nibh cras pulvinar mattis."
 
             scope.view.colors = ['bg-primary', 'bg-secondary', 'bg-palette-1', 'bg-palette-2', 'bg-palette-3', 'bg-palette-4', 'bg-palette-5', 'bg-palette-6', 'bg-palette-7', 'bg-palette-8', 'bg-white','bg-grey']
             scope.view.icons = ['alarm', 'arrowdown', 'arrowleft', 'arrowup', 'arrowright', 'bell', 'bin', 'binoculars', 'box', 'bulletlist', 'calendar', 'cardpayment', 'clock', 'cmslogo', 'contentbanner', 'contentbutton', 'contentfeatures', 'contenttext', 'contenttitle', 'contentvideo', 'crosshairs', 'cycle', 'duplicate', 'edit', 'envelope', 'eye', 'gauge', 'handstop', 'help', 'house', 'link', 'mapmarker', 'mapmarkerundo', 'megaphone', 'merge', 'noentry', 'note', 'person', 'piechart', 'plus', 'pricetag', 'pulse', 'repeatarrow', 'rocket', 'scissors', 'screen', 'search', 'settings', 'sectiongrab', 'shoppingbasket', 'shoppingtrolley', 'sidemenucollapse', 'sidemenuexpand', 'signin', 'signout', 'speechbubble1', 'speechbubble2', 'stopwatch', 'suppliers', 'swap', 'threedots', 'thumbsdown', 'thumbsup', 'tick', 'tickcircle', 'unlink', 'voucher', 'x', 'xcircle']
@@ -23,6 +24,7 @@
                 clearTimeout(scope.view.auto_update)
 
                 scope.view.auto_update = setTimeout(function(){
+                    console.log(scope.view.editor)
                     scope.renderPage()
                 },500)
 
@@ -136,21 +138,54 @@
 
 // pages functions
 
+
+            scope.selectPreviewSection = function(id){
+
+                let preview_section = document.querySelector(id),
+                    preview_sections = document.querySelectorAll('#preview section'),
+                    preview = document.querySelector('#preview')
+
+                if (preview_sections){
+                    for (var i=0;i<preview_sections.length;i++){
+
+                        if (preview_sections[i] == preview_section){
+                            preview_sections[i].classList.remove('editor-not-selected')
+                            preview_sections[i].classList.add('editor-selected')
+                        } else if (!preview_section){
+                            preview_sections[i].classList.remove('editor-selected')
+                            preview_sections[i].classList.remove('editor-not-selected')
+                        } else {
+                            preview_sections[i].classList.remove('editor-selected')
+                            preview_sections[i].classList.add('editor-not-selected')
+                        }
+
+                    }
+                }
+
+                if (preview_section && preview){
+                    scrollToElm(preview, preview_section, 150)
+                }
+
+            }
+
             scope.showMenu = function(section){
 
                 scope.view.menu = section
 
                 if (section == 'main'){
                     scope.view.tab = 'blocks'
+                    scope.selectPreviewSection('none')
                 } else if (section == 'init'){
                     scope.view.menu = 'main'
                     scope.view.tab = 'blocks'
+
                 } else if (section == 'edit'){
                     scope.view.tab = 'content'
                 }
                 view.update('view.menu')
                 view.update('view.tab')
                 view.update('view.colours')
+
             }
 
             scope.showMenu('init')
@@ -237,6 +272,8 @@
 
             //    scope.checkSaved().then(()=>{
 
+                scope.selectPreviewSection('#preview_pages_block_'+index)
+
                     scope.get('/dashboard/pages/get-blocks/'+pages.block).then((block)=>{
 
                         scope.view.selected_block = block
@@ -316,9 +353,56 @@
 
             }
 
+            scope.clearPlaceholder = function(field){
+                if (field.input == 'text' && field.value == "This is the "+capitalise(field.field.replace(/_/g,' '))){
+                    scope.clearBlock(field, this._params[0])
+                } else if (field.input == 'textarea' && field.value == scope.view.textarea_placeholder){
+                    scope.clearBlock(field, this._params[0])
+                }
+            }
+
+            scope.clearBlock = function(field, update_str){
+
+                if (scope.view.selected_block){
+
+                    if (field){
+                        field.value = ''
+
+                        if (update_str){
+                            view.update(update_str)
+                        } else {
+                            view.update('view.editor')
+                        }
+
+                    } else {
+                        scope.view.editor.map((field)=>{
+                            field.value = ''
+                        })
+                        view.update('view.editor')
+                    }
+
+
+                    scope.renderPage()
+                }
+            }
+
             scope.addBlock = function(){
 
                 if (scope.view.selected_block){
+
+                    scope.view.editor.map((field)=>{
+                        if (!field.value){
+
+                            if (field.input == 'text'){
+                                field.value = "This is the "+capitalise(field.field.replace(/_/g,' '))
+                            } else if (field.input == 'textarea'){
+                                field.value = scope.view.textarea_placeholder
+                            } else if (field.input == 'icon'){
+                                field.value = 'cmslogo'
+                            }
+
+                        }
+                    })
 
                     let pages = {
                         name: scope.view.selected_block.name,
@@ -331,7 +415,6 @@
                     if (scope.view.selected_block.index){
 
                         scope.view.pages.blocks[scope.view.selected_block.index] = pages
-
                         scope.view.selected_block = {}
                         scope.view.blocks = true
                         scope.view.add = true
@@ -521,7 +604,6 @@
                         preview.innerHTML = html
                     }
 
-
                     let preview_blocks = document.querySelectorAll('#preview *[app-block]')
 
                     for (var i in preview_blocks){
@@ -529,14 +611,14 @@
                             let id = "preview_pages_block_"+i
                             preview_blocks[i].setAttribute('id',id)
                             preview_blocks[i].addEventListener('click',function(){
-                                scope.loadBlock(id)
+                                scope.loadBlock(id, i)
                             })
-                            preview_blocks[i].addEventListener('mouseover',function(){
-                                scope.showInsertSecton(id)
-                            })
-                            preview_blocks[i].addEventListener('mouseout',function(){
-                            //    document.getElementById('insert-new-section').style.display = 'none'
-                            })
+                            // preview_blocks[i].addEventListener('mouseover',function(){
+                            //     scope.showInsertSecton(id)
+                            // })
+                            // preview_blocks[i].addEventListener('mouseout',function(){
+                            // //    document.getElementById('insert-new-section').style.display = 'none'
+                            // })
                         }
                     }
 
@@ -574,7 +656,7 @@
                         } else {
                             payload.slug = scope.view.pages.title
                         }
-console.log(payload)
+
                         scope.post('pages', payload).then((pages)=>{
 
                             if (scope.window.path_obj.pop() == 'new'){
@@ -675,5 +757,7 @@ console.log(payload)
 
 
         }
+
+
 
     </script>

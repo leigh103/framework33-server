@@ -13,7 +13,9 @@ const express = require('express'),
         default_route: 'dashboard',
         views: 'media_library/views',
         menu: {
-
+            side_nav: [
+                {link:'Media Library',slug: '/dashboard/media-library', weight:20, icon:'<span class="icon screen"></span>'}
+            ]
         }
     },
 
@@ -33,7 +35,7 @@ const express = require('express'),
 
     let data = {
         meta: {},
-        tabs: [{href: '/dashboard/media-library/images', text:'Images'},{href: '/dashboard/media-library/images', text:'Videos'}]
+        tabs: [{href: '/dashboard/media-library', text:'Images'},{href: '/dashboard/media-library/videos', text:'Videos'},{href: '/dashboard/media-library/files', text:'Files'}]
     }
 
     routes.get('*', async (req, res, next) => {
@@ -61,16 +63,22 @@ const express = require('express'),
         }
 
         view.current_view = 'media_library'
-        view.current_sub_view = ''
-        data.include_scripts = ['media_library/views/scripts/script.ejs']
+        view.current_sub_view = req.params.key
+        data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/scripts/script.ejs']
 
         data.title = 'Media library'
         data.table = 'media_library'
         data.model = new MediaLibrary()
+        data.grid_view = 'compact'
+        data.query = '?type='+req.params.key
 
-        data.key = req.params.key
-        data.fields = data.model.parseEditFields()
-        res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+        // data.context_menu = [
+        //     {function: "viewImg",text:"View Image", icon:"eye"}
+        // ]
+
+        data.fields = data.model.settings.fields
+        data.search_fields = data.model.settings.search_fields
+        res.render(basedir+'/components/dashboard/views/grid.ejs',data)
 
     })
 
@@ -81,12 +89,13 @@ const express = require('express'),
         }
 
         view.current_view = 'media_library'
-        view.current_sub_view = ''
+        view.current_sub_view = 'images'
         data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/scripts/script.ejs']
 
         data.title = 'Media library'
         data.table = 'media_library'
         data.model = new MediaLibrary()
+        data.query = '?type=image'
         data.grid_view = 'compact'
 
         data.context_menu = [

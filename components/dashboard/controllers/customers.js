@@ -41,7 +41,7 @@ const express = require('express'),
         }
     })
 
-    routes.get('/:key?', (req, res) => {
+    routes.get('/:key?', async (req, res) => {
 
         view.current_view = 'people'
         view.current_sub_view = 'customers'
@@ -51,7 +51,7 @@ const express = require('express'),
 
         if (req.params.key){
             data.key = req.params.key
-            data.fields = data.model.parseEditFields()
+            data.fields = await data.model.parseEditFields()
             res.render(settings.views+'/edit.ejs',data)
         } else {
             data.fields = data.model.settings.fields

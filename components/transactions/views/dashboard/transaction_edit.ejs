@@ -73,7 +73,7 @@
                 <div></div>
             </div>
 
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/select.ejs',{item:{name:'shipping_method', options: [{text:'Next Day',value:'Next Day'}], type:'string'}, max_characters:'', max_chars_text:''}) %>
+            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/select.ejs',{item:{name:'shipping_method', option_data: delivery_options, type:'string'}, max_characters:'', max_chars_text:''}) %>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'address_line1', input_type:'text', type:'text'}, max_characters:'', max_chars_text:'', obj_prefix:'shipping_address'}) %>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'address_line2', input_type:'text', type:'text'}, max_characters:'', max_chars_text:'', obj_prefix:'shipping_address'}) %>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'address_level1', input_type:'text', type:'text'}, max_characters:'', max_chars_text:'', obj_prefix:'shipping_address'}) %>

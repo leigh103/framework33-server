@@ -301,7 +301,7 @@
 
         async delete(){
 
-            this.query += 'REMOVE '+this.query_key+' IN '+this.collection
+            this.query += 'REMOVE '+this.query_key+' IN '+this.collection+ ' RETURN OLD'
 
             try {
                 let result = await adb.query(this.query)
@@ -314,7 +314,6 @@
                 this.result = []
             }
 
-            this.result = []
             return this.result
 
         }
@@ -341,21 +340,16 @@
 
         show(fields){
 
-            // this.result = this.result.map((item,i) => {
-            //
-            //     let new_item = {}
-            //
-            //     fields.map((field)=>{
-            //
-            //         if (field && item[field]){
-            //             new_item[field] = item[field]
-            //         }
-            //
-            //     })
-            //
-            //     return new_item
-            //
-            // })
+            if (Array.isArray(fields)){
+
+                this.show_fields = ''
+                fields.map((field,i)=>{
+                    this.show_fields += field+':'+this.query_key+'.'+field+','
+                })
+
+                this.show_fields = '{'+this.show_fields.replace(/,$/,'')+'}'
+
+            }
 
             return this
 
@@ -390,7 +384,13 @@
             } else {
 
                 if (!this.query.match(/^RETURN/)){
-                    this.query += 'RETURN '+this.query_key
+
+                    if (this.show_fields){
+                        this.query += 'RETURN '+this.show_fields
+                    } else {
+                        this.query += 'RETURN '+this.query_key
+                    }
+
                 }
 
                 this.query = this.query.replace(/FILTER RETURN/,'RETURN')
@@ -407,7 +407,7 @@
                     this.result = []
                 }
 
-
+                this.show_fields = ''
                 return this.result
 
             }
@@ -445,6 +445,7 @@
                     this.result = {}
                 }
 
+                this.show_fields = ''
                 this.query = ''
                 return this.result
 
@@ -466,11 +467,15 @@
             } else if (typeof this.query == 'string') {
 
                 if (!this.query.match(/^RETURN/)){
-                    this.query += 'RETURN '+this.query_key
+                    if (this.show_fields){
+                        this.query += 'RETURN '+this.show_fields
+                    } else {
+                        this.query += 'RETURN '+this.query_key
+                    }
                 }
 
                 this.query = this.query.replace(/FILTER RETURN/,'RETURN')
-   
+
                 try {
 
                     let result = await adb.query(this.query)
@@ -488,6 +493,7 @@
                     this.result = {}
                 }
 
+                this.show_fields = ''
                 this.query = ''
                 return this.result
 

@@ -8,7 +8,8 @@
                 host:'',
                 name: '',
                 username: '',
-                password: ''
+                password: '',
+                log_rotate: 30
             },
             load: [
                 'functions/isSet',
@@ -73,7 +74,9 @@
     			to:'lee@reformedreality.com'
     		},
             tel: '',
-            self_serve:true
+            self_serve:true,
+            testimonial_types:[{text:'Customer',value:'customer'}],
+    		faq_types:[{text:'Customer',value:'customer'}]
         },
 
         tax_amount: 1.20,

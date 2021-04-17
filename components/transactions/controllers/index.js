@@ -110,15 +110,12 @@ const express = require('express'),
         data.title = 'Transaction Settings'
         data.table = 'transaction_settings'
 
-        data.fields = new TransactionSettings().settings.fields
-        data.delivery_options = data.fields.find((item)=>{
-            return item.name == 'delivery_options'
-        })
-        data.free_delivery = data.fields.find((item)=>{
-            return item.name == 'free_delivery'
-        })
+        data.model = new TransactionSettings()
+        data.fields = await data.model.parseEditFields()
 
-        res.render(settings.views+'/dashboard/transaction_settings.ejs',data)
+        data.key = 0
+
+        res.render(basedir+'/components/dashboard/views/edit.ejs',data)
 
     })
 
@@ -132,7 +129,8 @@ const express = require('express'),
         data.table = 'transactions'
         data.model = new Transactions()
         data.statuses = data.model.statuses
-        data.fields = data.model.parseEditFields()
+    //    data.fields = data.model.parseEditFields()
+        data.delivery_options = await new TransactionSettings().delivery()
 
         res.render(settings.views+'/dashboard/transaction_edit.ejs',data)
 
@@ -175,10 +173,7 @@ const express = require('express'),
             {href: '/dashboard/transactions/new', text:'New', counter:'new'},
             {href: '/dashboard/transactions/processing', text:'Processing', counter:'processing'},
             {href: '/dashboard/transactions/shipped', text:'Shipped', counter:'shipped'},
-            {href: '/dashboard/transactions/incomplete', text:'Incomplete'},
-            {href: '/dashboard/transactions/completed', text:'Completed'},
-            {href: '/dashboard/transactions/refund', text:'Refund'},
-            {href: '/dashboard/transactions/deleted', text:'Deleted'}
+            {href: '/dashboard/transactions/settings', text:'Settings'}
         ]
 
         view.current_view = 'orders'

@@ -60,9 +60,8 @@
                         return
                     }
                     resolve(email_res)
+                    return
                 })
-
-                resolve()
 
             } else {
 
@@ -77,8 +76,8 @@
                         return
                     }
                     resolve(email_res)
+                    return
                 })
-                resolve()
 
             }
 

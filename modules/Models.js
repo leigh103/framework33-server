@@ -141,6 +141,18 @@
 
         }
 
+        async allFields(fields) {
+
+            if (!fields){
+                return this
+            }
+
+            this.data = await DB.read(this.settings.collection).show(fields).get() //.omit(['password','password_reset']).get()
+
+            return this
+
+        }
+
         async validate(){
 
             let fields = {},
@@ -499,12 +511,12 @@
             // this.data._deleted = moment().toISOString()
             // this.save()
 
-            if (this.data.length > 0){
-                this.error = 'Not deleted'
-                return this
-            } else {
+            // if (this.data.length > 0){
+            //     this.error = 'Not deleted'
+            //     return this
+            // } else {
                 return this.data
-            }
+            // }
 
         }
 
@@ -541,36 +553,55 @@
 
         }
 
-        parseEditFields(){
+        async parseEditFields(){
 
-            let tabs = {details: []}
+        //    return new Promise( async (resolve, reject) => {
 
-            this.settings.fields.map((field)=>{
-                if (!field.tab){
-                    tabs.details.push(field)
-                } else {
-                    if (!tabs[field.tab]){
-                        tabs[field.tab] = []
+                let tabs = {details: []}
+
+                // this.settings.fields.map( async (field)=>{
+                for (let field of this.settings.fields){
+
+                    if (field.option_data){
+
+                        if (field.option_data && global[field.option_data] && typeof global[field.option_data] == 'function'){
+
+                            let data = await new global[field.option_data]().allFields(['_key','name'])
+                            field.option_data = data.data
+
+                        } else {
+                            field.option_data = []
+                        }
+
                     }
-                    tabs[field.tab].push(field)
+
+                    if (!field.tab){
+                        tabs.details.push(field)
+                    } else {
+                        if (!tabs[field.tab]){
+                            tabs[field.tab] = []
+                        }
+                        tabs[field.tab].push(field)
+                    }
+
                 }
-            })
+            //    })
 
-            let keys = Object.keys(tabs),
-                i,
-                len = keys.length,
-                sorted_tabs = {details: tabs['details']}
+                let keys = Object.keys(tabs),
+                    i,
+                    len = keys.length,
+                    sorted_tabs = {details: tabs['details']}
 
-            keys.sort();
+                keys.sort();
 
-            for (i = 0; i < len; i++) {
-                if (keys[i] != 'details'){
-                    sorted_tabs[keys[i]] = tabs[keys[i]]
+                for (i = 0; i < len; i++) {
+                    if (keys[i] != 'details'){
+                        sorted_tabs[keys[i]] = tabs[keys[i]]
+                    }
+
                 }
 
-            }
-
-            return sorted_tabs
+                return sorted_tabs
 
         }
 

@@ -192,9 +192,11 @@ const express = require('express'),
                     if (index >= config.components.load.length - 1){
                         app.set('views', views)
 
-                        app.get('*',(req, res, next)=>{
-                            res.render(basedir+'/components/default_routes/views/404.ejs')
+                        app.get(/^(?!\/dashboard).+/,(req, res)=>{
+                            return res.render(basedir+'/components/default_routes/views/404')
                         })
+
+                        log(index+' Components loaded')
                     }
 
                 })
@@ -238,7 +240,7 @@ const express = require('express'),
             }
             global.component[name].loaded = true
             global.component[name].error = ''
-            // log('Component loaded: '+file)
+            log('Adding routes for '+file)
 
         }
 

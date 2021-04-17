@@ -11,6 +11,17 @@
     </div>
 
     <div class="relative layer-5">
+        <div class="field">
+            <label class="">Page Type</label>
+            <select app-model="view.pages.type">
+                <option value="" selected>None</option>
+                <% if (typeof option_data != 'undefined'){ %>
+                    <% option_data.forEach((option)=>{ %>
+                        <option class="capitalise" value="<%- option._key %>"><%- option.name %></option>
+                    <% }) %>
+                <% } %>
+            </select>
+        </div>
 
         <div class="field">
             <label class="">Status</label>

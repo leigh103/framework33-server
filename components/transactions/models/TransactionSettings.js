@@ -115,6 +115,13 @@
 
         }
 
+        async delivery(){
+
+            this.data = await DB.read(this.settings.collection).where(['_key == 0']).first()
+            return this.data.delivery_options
+
+        }
+
     }
 
     new TransactionSettings().init()

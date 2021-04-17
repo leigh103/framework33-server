@@ -779,15 +779,18 @@ console.log(obj_name, idx)
             document.addEventListener('click', function(evt){
 
                 let id = Date.now()
-                evt.target.setAttribute('id', id)
 
                 if (evt.target.classList.contains('ce-img')){
+                    evt.target.setAttribute('id', id)
                     scope.execModal('updateImage',id)
                 } else if (evt.target.classList.contains('ce-link')){
+                    evt.target.setAttribute('id', id)
                     scope.execModal('createLink',id)
                 } else if (evt.target.classList.contains('ce-cta')){
+                    evt.target.setAttribute('id', id)
                     scope.execModal('addCTA',id)
                 } else if (evt.target.classList.contains('ce-icon')){
+                    evt.target.setAttribute('id', id)
                    scope.execModal('insertIcon',id)
                 }
 
