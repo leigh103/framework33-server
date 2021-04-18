@@ -251,30 +251,37 @@
 
             //    const editordata = editor.getData()
 
-                if (scope.view.key){
-                    scope[collection][scope.view.key] = obj
-                }
+                return new Promise( async (resolve, reject) => {
 
-                scope.notify('Saving...')
+                    if (scope.view.key){
+                        scope[collection][scope.view.key] = obj
+                    }
 
-                if (typeof obj.content != 'undefined'){
-                //    obj.content = contented.getData()
-                }
+                    scope.notify('Saving...')
 
-                scope.post(collection, obj).then((data)=>{
-                    // console.log(collection, data, scope.view.key)
-                    // scope[collection][scope.view.key] = data
-                    // view.update(collection+'['+scope.view.key+']')
-                    // if (!keep_open){
-                    //     scope.closeModal()
-                    // }
+                    if (typeof obj.content != 'undefined'){
+                    //    obj.content = contented.getData()
+                    }
 
-                    scope.notify('Done')
+                    scope.post(collection, obj).then((data)=>{
+                        // console.log(collection, data, scope.view.key)
+                        // scope[collection][scope.view.key] = data
+                        // view.update(collection+'['+scope.view.key+']')
+                        // if (!keep_open){
+                        //     scope.closeModal()
+                        // }
+                        resolve()
+                        scope.notify('Done')
 
-                }).catch((err)=>{
-                    console.log(err)
-                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                    }).catch((err)=>{
+                        console.log(err)
+                        reject(err)
+                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                    })
+
+
                 })
+
 
             }
 
@@ -313,6 +320,16 @@
 
             }
 
+            scope.addToCollection = function(obj,item,input){
+
+                scope.push(obj,item,input)
+                <% if (typeof key != 'undefined' && typeof table != 'undefined'){ %>
+                scope.saveItem('<%- table %>',scope.new).then(()=>{
+                    scope.get('<%- table %>','<%- key %>/get-items','collection_items')
+                })
+                <% } %>
+            }
+
             scope.push = function(obj,item,input){
 
                 if (!item){
@@ -328,7 +345,7 @@
 
                 if (!obj || obj == null){
                     evaluate.setValue(obj_string,[])
-                    obj = evaluate.getValue(obj_string)
+                    obj = []
                 }
 
                 if (typeof item == 'string'){
@@ -338,6 +355,8 @@
                     }
                 } else if (typeof item == 'object'){
                     item._key = Date.now()
+                } else {
+                    item = item+''
                 }
 
                 if (input){
@@ -353,15 +372,27 @@
 
             }
 
-            scope.splice = function(obj_name, idx){
-console.log(obj_name, idx)
+            scope.splice = function(obj_name, idx, update){
+
                 let obj = evaluate.getValue(obj_name)
+
                 if (obj){
                     obj.splice(idx,1)
+                }
+
+                if (update){
+                    let obj_update = evaluate.getValue(update)
+
+                    if (obj_update){
+                        obj_update.splice(idx,1)
+                    }
+                    view.update(update)
+                } else {
                     view.update(obj_name)
                 }
 
             }
+
 
             scope.getMailbox = function(user_id){
                 scope.get('admin',user_id+'/get_messages').then((data)=>{

@@ -10,8 +10,8 @@
 
         <div class="profile">
             <div class="avatar">
-                <% if (user.avatar){ %>
-                    <img src="<%- user.avatar %>" >
+                <% if (view.user.avatar){ %>
+                    <img src="<%- view.user.avatar %>" >
                 <% } else if (typeof view != 'undefined' && view.logo){ %>
                     <img src="<%- view.logo %>">
                 <% } else { %>

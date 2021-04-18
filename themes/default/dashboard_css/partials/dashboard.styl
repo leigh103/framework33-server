@@ -320,7 +320,13 @@ html, body {
             .btn {
                 margin-left: 0;
                 margin-left: 0.875rem;
+                background-color: fadeOut($dashboard-color-white, 0.1);
+                color: $dashboard-text-white;
+                transition: background-color 0.5s ease;
 
+                &:hover {
+                    background-color: fadeOut($dashboard-color-white, 0.3);
+                }
 
                 .icon {
                     margin-left:0.5rem;
@@ -381,7 +387,7 @@ html, body {
                 height: 1.3rem;
                 width: 1.3rem;
                 flex: 0 0 2.5rem;
-                background-color: $dashboard-color-secondary;
+                background-color: $dashboard-color-primary;
             }
 
         }

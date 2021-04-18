@@ -55,13 +55,13 @@ input[type=number] {
 }
 
 div[contenteditable=true]:not(.small){
-    background-color: white;
+
     width: 100%;
 
 }
 
 div[contenteditable=true]:hover {
-    background-color: white;
+    background: none;
 }
 
 input.invalid, textarea.invalid, select.invalid {
@@ -110,6 +110,8 @@ input[type=checkbox] {
     &:checked {
         &:after {
             content:'\2713';
+            background-color: $dashboard-color-secondary;
+            color: $dashboard-text-white;
             // border: 1px solid $dashboard-color-primary;
         }
     }

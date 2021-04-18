@@ -22,9 +22,10 @@
                     {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'prices and stock',required: true},
                     {name:'adjustment',input_type:'text',placeholder:'Adjustment', tab:'prices and stock',type:'discount',required: false},
                     {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'prices and stock',  required:false},
+                    {name:'sku',input_type:'text',placeholder:'Unique Product Code', tab:'prices and stock',type:'string',required: false},
                     {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'prices and stock', type:'number', required:false},
                     {name:'attributes',input_type:'array', tab:'product_attributes', placeholder:'Attributes',type:'array',required: false, subitems:[
-                        {name:'attribute',input_type:'select', option_for:'attribute in product_attributes', type:'string', required:false},
+                        {name:'attribute',input_type:'select', option_data:'ProductAttributes', type:'string', required:false},
                         {name:'value',input_type:'select', option_for:'value in selected_attribute', type:'string', required:false}
                     ]},
                     {name:'customisation',input_type:'array',placeholder:'Customisation', tab:'product_customisation', type:'object',required: false},

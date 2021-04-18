@@ -14,7 +14,7 @@
                             <span app-bind="view.all_action_text" class="flex-1"></span>
                             <span class="icon arrowdown primary right float-right" class="flex-none"></span>
                         </div>
-                        <button app-click="processAllAction()" class="bg-primary">Apply</button>
+                        <button app-click="processAllAction()" class="bg-secondary">Apply</button>
                     </div>
                 </div>
                 <div class="cell middle text-right">
@@ -54,7 +54,7 @@
                     <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="transaction.selected" app-change="showActions()" class="border"><% } %></div>
 
                     <div class="cell middle text title" app-click="goto('transactions/edit',transaction._key)">
-                        <div class="text-secondary text-bold"><span app-bind="transaction.reference"></span> - <span app-bind="transaction.customer.full_name"></span></div>
+                        <div class="text-secondary text-bold"><span app-bind="transaction.reference"></span><span class="hidden-d hidden-m"> - <span app-bind="transaction.customer.full_name"></span></span></div>
                         <div class="text-light" app-bind="parseDate(transaction._created,'Do MMM h:mma')"></div>
                     </div>
                     <div class="cell middle">
@@ -63,7 +63,7 @@
                         <% if (status == 'processing'){ %>
                             <span class="mr-05" app-bind="transaction.shipping_method"></span>(<span app-bind="parseCurrency(transaction.shipping_total)"></span>)
                         <% } else { %>
-                            <span class="mr-1" app-bind="transaction.customer.email"></span><span app-bind="transaction.customer.tel"></span>
+                            <span class="mr-1" app-show="transaction.customer.email" app-bind="transaction.customer.email"></span><span app-bind="transaction.customer.tel"></span>
                         <% } %>
 
                     </div>

@@ -178,7 +178,7 @@
                             for (let subidx of this.data[key]) {
                                 for (let [subkey, subvalue] of Object.entries(subidx)) {
 
-                                    if (!subkey.match(/^_/)){
+                                    if (!subkey.match(/^_/) && subfields[subkey]){
                                         subidx[subkey] = await this.validateField(subfields[subkey], subkey, subvalue)
                                     }
 
@@ -212,6 +212,10 @@
         }
 
         async validateField(field, key, value){
+
+            if (typeof field != 'object'){
+                return value
+            }
 
             if (field.required === true && value == ''){
 
@@ -567,10 +571,31 @@
                         if (field.option_data && global[field.option_data] && typeof global[field.option_data] == 'function'){
 
                             let data = await new global[field.option_data]().allFields(['_key','name'])
-                            field.option_data = data.data
+                            field.options = data.data
 
                         } else {
-                            field.option_data = []
+                            field.options = []
+                        }
+
+                    }
+
+                    if (Array.isArray(field.subitems)){
+
+                        for (let sub_field of field.subitems){
+
+                            if (sub_field.option_data){
+
+                                if (sub_field.option_data && global[sub_field.option_data] && typeof global[sub_field.option_data] == 'function'){
+
+                                    let data = await new global[sub_field.option_data]().allFields(['_key','name'])
+                                    sub_field.options = data.data
+
+                                } else {
+                                    sub_field.options = []
+                                }
+
+                            }
+
                         }
 
                     }

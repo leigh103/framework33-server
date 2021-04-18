@@ -1,0 +1,50 @@
+<% var obj = view.functions.depluralise(item.name.toLowerCase()); var colspan = 2; %>
+
+<div class="input-object-array field-<%- item.name %>">
+    <div class="array-item-title"><%- view.functions.parseName(item.name) %></div>
+    <div class="mb-2 w-100 input-model-array-wrap" app-init="get('<%- table %>','<%- key %>/get-items','collection_items')">
+
+        <div class="array-item" app-for="<%- obj %> in collection_items">
+
+            <div class="array-item-remove">
+                <a app-click="splice('new.<%- item.name %>', $index,'collection_items')">Remove<span class="icon x right primary"></span></a>
+            </div>
+
+            <% item.subitems.forEach((subitem,i)=>{ %>
+
+                <div class="array-item-input">
+
+                    <% if (subitem.type == 'image'){ %>
+                        <img src="/images/Product_Placeholder.svg" app-src="<%- obj %>.<%- subitem.name %>">
+                    <% } else { %>
+                        <p class="text-bold" app-bind="<%- obj %>.<%- subitem.name %>"></p>
+                    <% } %>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    </div>
+
+    <div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
+    <div class="input-object-array-new">
+
+        <div class="array-item">
+
+
+
+                <div class="relative">
+                    <dropdown-search placeholder="Search items..." app-model="new.<%- item.name %>_new" data-url="/api/<%- model.settings.collection_of %>/search?str=" data-bind="name" data-value="_key" class="mb-2 layer-2">
+                    </dropdown-search>
+                </div>
+                <button class="btn bg-primary" app-click="addToCollection('new.<%- item.name %>',new.<%- item.name %>_new,'new.<%- item.name %>_new')">Add <span class="icon plus right white"></span></button>
+
+        </div>
+
+    </div>
+
+
+
+</div>

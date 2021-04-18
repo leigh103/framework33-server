@@ -8,7 +8,8 @@
 
         scope.get('product_attributes')
 
-        watch['new.attributes.attribute'] = function(data){
+        watch['new.new_array.attribute'] = function(data){
+            console.log(data)
             if (scope.product_attributes){
                 scope.selected_attribute = scope.product_attributes.filter((item)=>{
                     return item._key == data

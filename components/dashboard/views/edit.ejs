@@ -3,11 +3,11 @@
     <div class="header" app-init="getItem('<%- table %>','<%- key %>')">
 
         <div class="burger visible">
-            <a href="/dashboard/<%- table %>"><span class="icon arrowleft black"></span></a>
+            <a href="<%- view.functions.getModelBackLink() %>"><span class="icon arrowleft black"></span></a>
         </div>
         <div class="title">
-            <h1 app-hide="new._id" class="capitalise"><a href="/dashboard/<%- table %>">Cancel</a></h1>
-            <h1 app-show="new._id" class="capitalise"><a href="/dashboard/<%- table %>" app-bind="new.name">Back</a></h1>
+            <h1 app-hide="new._id" class="capitalise"><a href="<%- view.functions.getModelBackLink() %>">Cancel</a></h1>
+            <h1 app-show="new._id" class="capitalise"><a href="<%- view.functions.getModelBackLink() %>" app-bind="new.name">Back</a></h1>
         </div>
 
         <div class="buttons">

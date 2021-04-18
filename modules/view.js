@@ -31,6 +31,12 @@
                 return path.dirname(__filename)
             },
 
+            getModelBackLink: () => {
+                view.current_back_link = view.current_url.split('/')
+                view.current_back_link.pop()
+                return view.current_back_link.join('/')
+            },
+
             isPlural:(input)=>{
                 if (input && typeof input == 'string'){
                     return input.match(/(s|ies)$/)
@@ -114,16 +120,13 @@
                 return moment(date).format(format)
             },
 
-            getOptionData: async (table)=>{
+            getOptionData: async (field)=>{
 
-                table = parseClassName(table)
-
-                if (table && global[table] && typeof global[table] == 'function'){
-                    let data = await new global[table]().all()
-                    return data.data
-                } else {
-                    return []
+                let data = []
+                if (field.option_data && global[field.option_data] && typeof global[field.option_data] == 'function'){
+                    data = await new global[field.option_data]().allFields(['_key','name'])
                 }
+                return data
 
             },
 

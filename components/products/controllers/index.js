@@ -47,24 +47,16 @@ const express = require('express'),
         shop: view.ecommerce.shop,
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
-        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products?active=false', text:'Inactive'},{href: '/dashboard/products?active=false', text:'Deleted'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'}]
+        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products?active=false', text:'Inactive'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'},{href: '/dashboard/products/collections', text:'Collections'}]
     }
 
     let models = {
         products: new Products(),
         categories: new ProductCategories(),
+        collections: new ProductCollections(),
         attributes: new ProductAttributes()
     }
 
-    routes.get('*', async (req, res, next) => {
-        if (req.session && req.session.user && req.session.user.guard){
-            data.user = req.session.user
-        } else {
-            data.user = {}
-        }
-
-        next()
-    })
 
     routes.get('/dashboard/product_categories/:key?', async(req, res) => {
         let url = '/dashboard/products/categories'
@@ -126,6 +118,34 @@ const express = require('express'),
         data.table = 'product_attributes'
 
         data.model = models.attributes
+
+        if (req.params.key){
+            data.key = req.params.key
+            data.fields = await data.model.parseEditFields()
+            res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+        } else {
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        }
+
+    })
+
+    routes.get('/dashboard/products/collections/:key?', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Product Collections'
+        }
+
+        view.current_view = 'products'
+        view.current_sub_view = 'collections'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
+
+        data.query = ''
+        data.title = 'Product Collections'
+        data.table = 'product_collections'
+
+        data.model = models.collections
 
         if (req.params.key){
             data.key = req.params.key

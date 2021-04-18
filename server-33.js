@@ -34,6 +34,8 @@ const express = require('express'),
         global.DB = new dbModule()
 
         global.log = require('./modules/functions/log')
+        global.getTemplateData = require('./modules/functions/getTemplateData')
+
         global.moment = require('moment')
         global.websocket = {}
         global.websocket.clients = {}
@@ -56,13 +58,14 @@ const express = require('express'),
 
         app.use(bodyParser.json({limit: '50mb'}))
         app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}))
-        app.use(cookieParser());
-        app.use(busboy());
+        app.use(cookieParser())
+        app.use(busboy())
         app.engine('ejs', engine)
         app.set('view engine', 'ejs')
         app.set('trust proxy', 1)
         app.use(cors());
-        app.use(sessionParser);
+        app.use(sessionParser)
+        app.use(getTemplateData)
 
         if (global.config.site.self_serve === true){
             app.use(express.static('public'))

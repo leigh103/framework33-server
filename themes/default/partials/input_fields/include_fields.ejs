@@ -35,6 +35,11 @@
 
     <%- include(view.basedir+'/themes/default/partials/input_fields/fields/array.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj_prefix, array_obj: array_obj}) %>
 
+<% } else if (item.input_type == 'model_array'){ %>
+
+    <%- include(view.basedir+'/themes/default/partials/input_fields/fields/model_array.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj_prefix, array_obj: array_obj}) %>
+
+
 <% } else if (item.input_type == 'img_array'){ %>
 
     <%- include(view.basedir+'/themes/default/partials/input_fields/fields/img_array.ejs',{item:item, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj_prefix, array_obj: array_obj}) %>

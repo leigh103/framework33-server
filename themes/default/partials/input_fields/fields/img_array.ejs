@@ -8,16 +8,20 @@
 
 <div class="input-img_array field-<%- item.name %>">
 
-    <button app-click="showMediaLibrary('new.<%- item.name %>')" class="bg-primary mb-2">Insert or Upload Media to <%- view.functions.parseName(item.name) %></button>
+    <button app-click="showMediaLibrary('new.<%- item.name %>')" class="bg-secondary mb-2">Insert or Upload Media to <%- view.functions.parseName(item.name) %></button>
 
     <div class="img_array-wrap sortable" app-sort="new.<%- item.name %>">
         <div class="img_array-img" app-for="<%- obj %> in new.<%- item.name %>">
             <div class="flex icons">
-                <div class="text-left flex-1">
-                    <span class="icon sectiongrab grey sortable-handle"></span>
+                <div class="text-left flex-1 relative">
+                    <div class="icon-wrap">
+                        <span class="icon sectiongrab black sortable-handle"></span>
+                    </div>
                 </div>
-                <div class="text-right flex-1">
-                    <div class="remove text-right" app-click="splice('new.<%- item.name %>',$index)"><span class="icon x primary right"></span></div>
+                <div class="text-right flex-1 relative">
+                    <div class="icon-wrap" app-click="splice('new.<%- item.name %>',$index)">
+                        <span class="icon x primary"></span>
+                    </div>
                 </div>
             </div>
             <img app-src="<%- obj %>.value"class="object-fit">

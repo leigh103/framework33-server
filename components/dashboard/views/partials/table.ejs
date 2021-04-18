@@ -57,7 +57,7 @@
                     <% } else if (item.input_type && !item.input_type.match(/image/)){ %>
 
                         <% if (item.name == 'name' || item.name == 'title' || item.name == 'full_name' || item.name == 'question'){ %>
-                            <div class="cell middle <%- item.name %> <%- item.input_type %>" app-click="goto('<% if (typeof edit_link != 'undefined'){ %><%- edit_link %><% } else { %><%- table %><% } %>',<%- view.functions.depluralise(table) %>._key)">
+                            <div class="cell middle <%- item.name %> <%- item.input_type %>" app-click="goto('<%- view.current_dashboard_url %>',<%- view.functions.depluralise(table) %>._key)">
                                 <a app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></a>
                             </div>
                         <% } else { %>
@@ -71,7 +71,7 @@
                 <div class="cell middle text-right context-link" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">
 
                     <div class="context-menu context-link btn" app-click="toggleContext('context',$index)">
-                        <span class="icon threedots black context-link"></span>
+                        <span class="icon arrowdown black context-link"></span>
                     </div>
 
                 </div>

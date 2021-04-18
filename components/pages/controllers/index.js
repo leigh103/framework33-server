@@ -482,7 +482,7 @@ const express = require('express'),
         blocks = await functions.parseBlocks()
         data.blocks = blocks
 
-        res.render(settings.views+'/dashboard/editor.ejs',data,{async: true})
+        res.render(settings.views+'/dashboard/editor.ejs',data)
 
     })
 

@@ -26,7 +26,21 @@
         </div>
     </div>
     <div class="input-array-new">
-        <input type="text" app-model="new.<%- item.name %>_new" placeholder="Add new <%- view.functions.depluralise(item.name) %>">
-        <button class="btn bg-primary" app-click="push('<%- new_prefix %><%- item.name %>',<%- new_prefix %><%- item.name %>_new,'<%- new_prefix %><%- item.name %>_new')">Add <span class="icon plus right white"></span></button>
+
+        <% if (Array.isArray(item.options)){ %>
+            <select app-model="new.<%- item.name %>_new">
+
+                <% if (item.option_data && Array.isArray(item.options)){ %>
+                    <% item.options.forEach((option)=>{ %>
+                        <option class="capitalise" value="<%- option._key %>"><%- option.name %></option>
+                    <% }) %>
+                <% } %>
+
+            </select>
+            <button class="btn bg-primary" app-click="push('<%- new_prefix %><%- item.name %>',<%- new_prefix %><%- item.name %>_new,'<%- new_prefix %><%- item.name %>_new')">Add <span class="icon plus right white"></span></button>
+        <% } else { %>
+            <input type="text" app-model="new.<%- item.name %>_new" placeholder="Add new <%- view.functions.depluralise(item.name) %>">
+            <button class="btn bg-primary" app-click="push('<%- new_prefix %><%- item.name %>',<%- new_prefix %><%- item.name %>_new,'<%- new_prefix %><%- item.name %>_new')">Add <span class="icon plus right white"></span></button>
+        <% } %>
     </div>
 </div>

@@ -1,8 +1,9 @@
 <% var obj = view.functions.depluralise(item.name.toLowerCase()); var colspan = 2; %>
 
 <div class="input-object-array field-<%- item.name %>">
-    <div class="array-item-title"><%- view.functions.parseName(item.name) %></div>
+    <!-- <div class="array-item-title"><%- view.functions.parseName(item.name) %></div> -->
     <div class="mb-2 w-100 input-object-array-wrap">
+
 
         <div class="array-item" app-for="<%- obj %> in new.<%- item.name %>">
 
@@ -22,32 +23,32 @@
 
         </div>
 
-    </div>
 
-    <div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
-    <div class="input-object-array-new">
-
-        <div class="array-item">
+        <div class="input-object-array-new">
 
 
-            <% item.subitems.forEach((subitem,i)=>{ %>
+            <div class="array-item">
 
-                <div class="array-item-input">
+<div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
+                <% item.subitems.forEach((subitem,i)=>{ %>
 
-                    <%- include(view.basedir+'/themes/default/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, array_obj:'new_array'}) %>
+                    <div class="array-item-input">
 
+                        <%- include(view.basedir+'/themes/default/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, array_obj:'new_array'}) %>
+
+                    </div>
+
+                <% }) %>
+
+                <div class="array-item-button">
+                    <button class="btn bg-primary" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
                 </div>
 
-            <% }) %>
-
-            <div class="array-item-button">
-                <button class="btn bg-primary" app-click="push('new.<%- item.name %>',new.new_array,'new.new_array')">Add <%- view.functions.parseName(obj,true) %> <i class="ml-1 fas fa-plus"></i></button>
             </div>
 
         </div>
 
     </div>
-
 
 
 </div>

@@ -49,7 +49,7 @@
                                 <a href="/dashboard/pages"><span class="icon arrowleft left black"></span></a>
                             </div>
                             <div class="title">
-                                <h1><a href="/dashboard/pages" class="" app-bind="view.pages.title"></a></h1>
+                                <h1><a href="/dashboard/pages" class="capitalise" app-bind="view.pages.title"></a></h1>
                             </div>
                         </div>
 
@@ -93,12 +93,12 @@
                     </div>
 
 
-                    <div class="w-100 bg-light-grey flex-none py-1 px-15 flex col-12">
+                    <div class="w-100 bg-primary text-white flex-none py-1 px-15 flex col-12">
                         <div class="flex-1">
                             <button app-show="view.selected_block" class="btn bg-white" app-click="removeBlock(true)">Remove Block</button>
                         </div>
                         <div class="flex-none text-right">
-                            <button class="btn bg-primary" app-click="savePage()">Save</button>
+                            <button class="btn bg-secondary" app-click="savePage()">Save</button>
                         </div>
                     </div>
 
