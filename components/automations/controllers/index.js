@@ -12,6 +12,10 @@ const express = require('express'),
     settings = {
         default_route: 'dashboard',
         views: 'automations/views',
+        dashboard:{
+            link: 'automations',
+            label: 'Edit website notifications'
+        },
         menu: {
             side_nav: [
                 {link:'Automations',slug: '/dashboard/automations', icon:'<span class="icon cycle"></span>', weight:5}

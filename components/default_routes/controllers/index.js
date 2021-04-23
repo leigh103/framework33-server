@@ -71,10 +71,10 @@ var express = require('express'),
     routes.get('/testevent', async (req,res) => {
 
         if (getGuard(req) == 'admin'){
-            let transaction = await new Transactions().find('21522707')
+            let transaction = await new Products().find('16302173')
 
             if (transaction.data){
-                new Automations('send_receipt').trigger(transaction.data)
+                new Automations('low_stock').trigger(transaction.data)
             }
 
             // let user_data = {
@@ -121,9 +121,9 @@ var express = require('express'),
     routes.get('/testnotification', async (req,res) => {
 
         if (getGuard(req) == 'admin'){
-            let admin = await new Admin().find(0)
-            let user = await new User().find(0)
-            let sms = await new Notification().setContent('Notification','This is a test notification').mailbox(user.data)
+            // let admin = await new Admin().find(0)
+            // let user = await new Customer().find(0)
+            let sms = await new Notification().setContent('Notification','This is a test notification').mailbox()
             res.send(sms)
         } else {
             res.redirect('/login/admin')

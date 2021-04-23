@@ -1,0 +1,44 @@
+
+<% layout(config.site.dashboard_theme+'/dashboard.ejs') %>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+<div class="header">
+
+    <div class="burger visible">
+        <a href="<%- view.functions.getModelBackLink() %>"><span class="icon arrowleft black"></span></a>
+    </div>
+    <div class="title">
+        <h1 class="capitalise"><a href="<%- view.functions.getModelBackLink() %>"><%- report.name %></a></h1>
+    </div>
+
+    <div class="buttons">
+        <a href="/dashboard/reports/results/<%- key %>/download" class="btn bg-primary"><span class="text">Download CSV</span><span class="icon note white"></span></a>
+    </div>
+</div>
+
+
+<div class="p-15 report">
+
+    <div class="header">
+        <div class="heading">
+            <%- report.description %>
+        </div>
+        <div class="dates">
+            <%- moment(report.date_from).format('Do MMMM YYYY') %> - <%- moment(report.date_to).format('Do MMMM YYYY') %>
+        </div>
+    </div>
+
+    <div class="results">
+
+        <% report.result.forEach((result,i)=>{ %>
+
+            <% if (result.type){ %>
+                <%- include('partials/'+result.type+'.ejs', result) %>
+            <% } %>
+
+        <% }) %>
+
+    </div>
+
+</div>

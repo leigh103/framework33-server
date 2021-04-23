@@ -23,7 +23,7 @@
     <label class="mt-2">Delivery Method</label>
     <div class="relative">
         <select app-model="cart.delivery_method" class="mb-2 relative rounded border" app-change="setDelivery()">
-            <option value="" selected disabled>Select Shipping...</option>
+            <option value="" selected>Select Shipping...</option>
             <option app-for="optn in view.delivery_options" app-attr="{'value':optn._key}" app-bind="parseDeliveryOption(optn)"></option>
         </select>
     </div>

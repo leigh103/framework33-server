@@ -1,14 +1,14 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class Message extends Models {
+    class Mailbox extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'messages',
+                collection: 'mailbox',
                 fields: [
                     {name:'subject',input_type:'string',placeholder:'Subject', type:'string', required:false},
                     {name:'text',input_type:'string',placeholder:'Message', type:'string', required:true},
@@ -22,24 +22,49 @@
                 },
                 private: { // auth'd routes
                     get: {
-                        search:['self'],
-                        find:['self']
+                        all:['admin','self'],
+                        search:['admin','self'],
+                        find:['admin','self'],
+                        open:['admin','self']
                     },
                     post: {
-                        save:['self']
+                        save:['admin','self']
                     },
                     put: {
-                        save:['self']
+                        save:['admin','self']
                     },
                     delete: {
-                        delete:['self']
+                        delete:['admin','self']
                     }
                 }
             }
 
         }
 
+        open(){
+
+            this.data.read = true
+            this.save()
+            return this.data
+
+        }
+
+        async registerMenus(){
+
+            let menus = {
+                menu: {
+                    dashboard: [
+                        {link:'Mailbox',slug:'/dashboard/mailbox', weight:1, query:'/dashboard/stats'}
+                    ]
+                }
+            }
+
+            global.addMenu(menus)
+            return this
+
+        }
+
 
     }
 
-    module.exports = Message
+    module.exports = Mailbox

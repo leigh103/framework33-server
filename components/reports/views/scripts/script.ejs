@@ -1,0 +1,55 @@
+
+<script>
+
+    extend.reports = function(){
+
+        scope.report = {
+            date_from:'',
+            date_to:''
+        }
+
+        scope.runReport = function(query, id, confirm){
+
+            if (confirm){
+
+                let inputs = document.querySelector('#'+id)
+
+                if (inputs.dataset && inputs.dataset.inputs){
+                    scope.view.report_inputs = JSON.parse(inputs.dataset.inputs)
+                }
+                scope.view.report_query = query
+                scope.view.report_id = id
+                scope.openModal('report_confirm', 'Select the start and end dates and click Run to run the report. Selecting no dates will normally get data from the last 30 days. Results may take a few minutes to process, depending on the data being processed')
+                view.update('view.report_inputs')
+
+            } else {
+
+                scope.closeModal()
+
+                let query_str = '?'
+                for (var i in scope.report){
+                    if (i == 'date_to'){
+                        scope.report[i] = moment(scope.report[i]).add(1,'day').subtract(1,'minute').toISOString()
+                    }
+                    query_str += i+'='+scope.report[i]+'&&'
+                }
+
+                scope.get('/dashboard/reports/run/'+scope.view.report_query, query_str.replace(/\&\&$/,'')).then((report_data) => {
+
+                    if (report_data.report && report_data.report == true){
+                        scope.notify('Your report is running. Please click the results tab to view','success')
+                    } else {
+                        scope.notify('There has been an issue running the report, please try again','error')
+                    }
+
+                }).catch((err)=>{
+                    scope.notify(err,'error')
+                })
+
+            }
+
+        }
+
+    }
+
+</script>

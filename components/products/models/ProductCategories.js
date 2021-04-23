@@ -71,7 +71,7 @@
 
         }
 
-        async makeMenus(){
+        async registerMenus(){
 
             let menus = {},
                 menu_item
@@ -146,8 +146,5 @@
 
 
     }
-
-    new ProductCategories().makeMenus()
-
 
     module.exports = ProductCategories

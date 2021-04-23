@@ -161,6 +161,28 @@ const express = require('express'),
 
     })
 
+
+    routes.get('/dashboard/transactions/stats', async(req, res) => {
+
+        let status_count = await DB.read('transactions').orWhere(['status == new','status == processing','status == shipped']).collect('status')
+
+        let result = 'There are '
+
+        status_count.map((status,i)=>{
+            result += '<a href="/dashboard/transactions/'+status.field+'">'+status.count+' '+status.field+'</a>'
+
+            if (i == status_count.length-2){
+                result += ' and '
+            } else if (i < status_count.length-2){
+                result += ', '
+            }
+            return status
+        })
+        res.send(result)
+
+    })
+
+
     routes.get('/dashboard/transactions/:status?', async(req, res) => {
 
         data.status = 'paid'
@@ -208,8 +230,6 @@ const express = require('express'),
             }
 
         }
-
-
 
         res.render(settings.views+'/dashboard/transactions.ejs',data)
 

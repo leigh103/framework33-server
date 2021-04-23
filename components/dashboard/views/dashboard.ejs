@@ -3,6 +3,26 @@
 
 <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
 
-<div class="edit-wrap">
+<div class="card-wrap">
+
+<% if (view.menus && view.menus.dashboard){ %>
+    <% view.menus.dashboard.forEach((card)=>{ %>
+
+        <% if (card){ %>
+            <div id="<%- card.link %>-card" class="card" <% if (card.query){ %>app-init="getDashboardData('<%- card.query %>','<%- card.link %>-card')"<% } %> <% if (card.slug){ %>app-click="goto('<%- card.slug %>')"<% } %>>
+                <div class="image">
+                    <img src="/images/pages/161/7/bullseye-gradient-1617539411580.svg">
+                </div>
+                <div class="details">
+                    <h4><%- card.link %></h4>
+                    <% if (card.query){ %>
+                        <div class="text"><div class="loader"></div></div>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    <% }) %>
+
+<% } %>
 
 </div>

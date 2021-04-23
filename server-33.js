@@ -41,6 +41,11 @@ const express = require('express'),
         global.websocket.clients = {}
         global.websocket.data = {}
         global.component = {}
+        global.view = {
+            menus: {}
+        }
+        global.component = {}
+        global.model = {}
 
 
     // setup express
@@ -137,11 +142,7 @@ const express = require('express'),
 
         const loadComponents = ()=>{
 
-            global.view.menus = {}
 
-            if (!global.component){
-                global.component = {}
-            }
 
             // fs.readdir('components', (err, files) => {
 
@@ -200,6 +201,8 @@ const express = require('express'),
                         })
 
                         log(index+' Components loaded')
+
+                        registerModels()
                     }
 
                 })
@@ -250,7 +253,7 @@ const express = require('express'),
         const addModels = (component) => {
 
             log('Adding models for '+component)
-            glob.sync( './components/'+component+'/models/*.js' ).forEach( function( file ) {
+            glob.sync( './components/'+component+'/models/*.js' ).forEach((file, i) => {
 
                 let model = path.resolve( file ),
                     model_name = model.match(/\/([a-zA-Z_\-0-9]+)\.js/)[1],
@@ -258,13 +261,34 @@ const express = require('express'),
 
                 global[model_class_name] = require(model)
 
-                let model_class = new global[model_class_name]()
+                global.model[model_class_name] = new global[model_class_name]()
 
-                if (model_class.settings && model_class.settings.collection){
-                    DB.createCollection(model_class.settings.collection)
+                if (global.model[model_class_name].settings && global.model[model_class_name].settings.collection){
+                    DB.createCollection(global.model[model_class_name].settings.collection)
                 }
 
             })
+
+        }
+
+        const registerModels = async () => {
+
+            for (let [model_name, model] of Object.entries(global.model)){
+
+                if (typeof model.registerAutomations == 'function'){
+                    model.registerAutomations()
+                }
+                if (typeof model.registerMenus == 'function'){
+                    model.registerMenus()
+                }
+                if (typeof model.registerSettings == 'function'){
+                    model.registerSettings()
+                }
+                if (typeof model.registerReports == 'function'){
+                    model.registerReports()
+                }
+
+            }
 
         }
 

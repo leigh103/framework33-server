@@ -13,17 +13,22 @@
                     {name:'gallery',input_type:'img_array',placeholder:'Images', type:'object', tab:'images', thumbnail:true, required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'brand',input_type:'text',placeholder:'Brand', type:'string', required:false},
-                    {name:'active',input_type:'checkbox',type:'boolean',required: false},
+
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
                     {name:'barcode',input_type:'text',placeholder:'barcode', type:'barcode', required:false, barcode_type:'ean13'},
                     {name:'category',input_type:'select',option_data:'ProductCategories', type:'string', required:false},
                     {name:'sub_category',input_type:'select', option_for:'sub_category in sub_categories',type:'string', required:false},
                     {name:'variants',input_type:'multiselect',option_data:'products', tab:'product_variants', type:'string', required:false},
+
+
                     {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'prices and stock',required: true},
                     {name:'adjustment',input_type:'text',placeholder:'Adjustment', tab:'prices and stock',type:'discount',required: false},
                     {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'prices and stock',  required:false},
-                    {name:'sku',input_type:'text',placeholder:'Unique Product Code', tab:'prices and stock',type:'string',required: false},
+                    {name:'sku',input_type:'sku',placeholder:'Unique Product Code', tab:'prices and stock',type:'sku',required: false},
                     {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'prices and stock', type:'number', required:false},
+                    {name:'active',input_type:'checkbox',type:'boolean', tab:'prices and stock',required: false},
+                    {name:'requires_delivery',input_type:'checkbox',type:'boolean', tab:'prices and stock',required: false},
+                    {name:'made_to_order',input_type:'checkbox',type:'boolean', tab:'prices and stock',required: false},
                     {name:'attributes',input_type:'array', tab:'product_attributes', placeholder:'Attributes',type:'array',required: false, subitems:[
                         {name:'attribute',input_type:'select', option_data:'ProductAttributes', type:'string', required:false},
                         {name:'value',input_type:'select', option_for:'value in selected_attribute', type:'string', required:false}
@@ -32,7 +37,7 @@
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', truncate:160, required:false},
                     {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:false}
                 ],
-                search_fields:['name','brand', 'barcode']
+                search_fields:['name','brand', 'barcode', 'sku']
             }
 
             this.routes = {
@@ -106,20 +111,28 @@
 
                 let item = await new Products().find(key)
 
-                if (item.data && item.data.stock){
+                if (item.data && item.data.made_to_order === true){
+
+                    resolve()
+
+                } else if (item.data && item.data.stock){
+
+                    item.data.stock = parseInt(item.data.stock)-parseInt(quantity)
+
+                    let automation_payload = item.data
 
                     let payload = {
                         _key: item.data._key,
-                        stock: parseInt(item.data.stock)-parseInt(quantity)
+                        stock: item.data.stock
                     }
                 //    item.data.stock = parseInt(item.data.stock)-parseInt(quantity)
 
                     item.save(payload)
 
                     if (item.data.stock < 1){
-                        new Automations().trigger('out_of_stock')
+                        new Automations('out_of_stock').trigger(automation_payload)
                     } else if (item.data.stock < 6){
-                        new Automations().trigger('low_stock')
+                        new Automations('low_stock').trigger(automation_payload)
                     }
 
                 }
@@ -176,6 +189,62 @@
                 })
 
             })
+
+        }
+
+        registerAutomations(){
+
+            let low_stock = {
+                name: "Low Stock",
+                trigger: "low_stock",
+                description: "Notification when a product has fewer than 5 items left in stock",
+                actions: [
+                    {
+                        method: "email",
+                        enabled: true,
+                        to: "{{admin_email}}",
+                        subject: "Low stock for {{name}}",
+                        content: "{{name}} only has {{stock}} left",
+                        _key: 1613655093885
+                    }
+                ],
+                protect: true
+            }
+
+            let out_of_stock = {
+                name: "Out of Stock",
+                trigger: "out_of_stock",
+                description: "Notification when a product is out of stock",
+                actions: [
+                    {
+                        method: "email",
+                        enabled: true,
+                        to: "{{admin_email}}",
+                        subject: "Out of stock for {{name}}",
+                        content: "{{name}} is currently out of stock and can no longer be purchased",
+                        _key: 1613655093886
+                    }
+                ],
+                protect: true
+            }
+
+            new Automations(low_stock).saveIfNotExists(['trigger == low_stock'])
+            new Automations(out_of_stock).saveIfNotExists(['trigger == out_of_stock'])
+
+        }
+
+        async registerMenus(){
+
+            let menus = {
+                menu: {
+                    dashboard: [
+                        {slug:'products/new', weight:2, link:'Add a new product'}
+                    ]
+                }
+            }
+
+            global.addMenu(menus)
+            return this
 
         }
 

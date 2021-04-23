@@ -47,6 +47,9 @@
 
                     <% if (product.description){ %>
                         <p><%- product.description %></p>
+                        <% if (product.made_to_order === true){ %>
+                            <p>This is a made to order item, therefore any next day delivery services will only apply once the item is ready.</p>
+                        <% } %>
                         <p>Give us a call on 01706 822828 or email us at info@chocolate-café.co.uk if you have a question about this product.</p>
                         <p>Delivery information can be found <a href="/delivery-information">here</a></p>
                     <% } %>

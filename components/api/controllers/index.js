@@ -249,11 +249,13 @@ var express = require('express'),
             } else if (req.params.id){
                 model = await new global[model_class_name]().find(req.params.id)
             } else {
+
                 method = 'all'
                 model = await new global[model_class_name]()
 
                 if (model.all){ // if the class exists and the all function exists
                     await model.all(query, sort, start, end)
+
                 } else { // else fail
                     res.json(settings.not_found)
                     return false

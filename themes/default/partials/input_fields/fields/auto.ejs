@@ -1,5 +1,6 @@
 <%
     var new_prefix = 'new.'
+    var input_type
 
     if (typeof obj_prefix == 'undefined' || obj_prefix == false){
         obj_prefix = ''
@@ -14,6 +15,13 @@
             new_prefix = 'new.'+array_obj+'.'
         }
     }
+
+    if (item.input_type == 'sku'){
+        input_type = 'text'
+    } else {
+        input_type = item.input_type
+    }
+
 %>
 
 
@@ -32,6 +40,11 @@
         <% } %>
 
     <% } else { %>
-        <div <% if (item.type == 'price'){ %>app-init="fromPrice100('<%- new_prefix %><%- obj_prefix %><%- item.name %>')"<% } %>><input type="<%- item.input_type %>" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></div>
+        <div <% if (item.type == 'price'){ %>app-init="fromPrice100('<%- new_prefix %><%- obj_prefix %><%- item.name %>')"<% } %>><input type="<%- input_type %>" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" placeholder="<%- item.placeholder %>"></div>
     <% } %>
+
+    <% if (item.input_type == 'sku'){ %>
+        <a app-click="generateSKU()" app-hide="new.sku">Auto</a>
+    <% } %>
+
 </div>

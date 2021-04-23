@@ -56,6 +56,12 @@
 
         }
 
+        preSave(){
+
+
+
+        }
+
         trigger(data){
 
             return new Promise(async (resolve, reject) => {
@@ -79,6 +85,7 @@
                         recipient
 
                     data.admin_email = config.email.admin_to
+                    data.site_name = config.site.name
 
                     if (data.email){
                         data.customer_email = data.email
@@ -127,6 +134,7 @@
                             if (action.subject){
                                 action.subject = await this.parseMoustache(action.subject, data)
                             }
+
                             if (action.content){
                                 action.content = await this.parseMoustache(action.content, data)
                             }
@@ -143,6 +151,8 @@
                             if (data.timestamp){
                                 action.timestamp = data.timestamp
                             }
+
+                            delete data.content // don't overwrite the content of the action
 
                             action = Object.assign(action, data)
 
@@ -172,7 +182,7 @@
                             if (action.method == 'mailbox'){
 
                                 try{
-                                    new Notification().setContent(action.name,action.content).mailbox()
+                                    new Notification().setContent(action.subject,action.content).mailbox()
                                 }
                                 catch(err){
                                     log(err)
@@ -226,6 +236,9 @@
                             resolve(action.to)
                         } else if (data.email){
                             resolve(data.email)
+                        } else { // moustache in the to field
+                            action.to = await this.parseMoustache(action.to, data)
+                            resolve(action.to)
                         }
 
                     } else if (action.method == 'sms' && data.tel){
@@ -234,9 +247,17 @@
                             resolve(action.to)
                         } else if (data.tel){
                             resolve(data.tel)
+                        } else { // moustache in the to field
+                            action.to = await this.parseMoustache(action.to, data)
+                            resolve(action.to)
                         }
+
+                    } else {
+                        resolve(action.to)
                     }
 
+                } else {
+                    resolve(action.to)
                 }
 
             })

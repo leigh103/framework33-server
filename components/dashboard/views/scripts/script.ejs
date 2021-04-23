@@ -175,6 +175,19 @@
 
             }
 
+            scope.getDashboardData = function(query, id){
+
+                http.get(query).then((data)=>{
+
+                    let el = document.querySelector('#'+id+' .details .text')
+                    if (el){
+                        el.innerHTML = data
+                    }
+
+                })
+
+            }
+
             scope.getItem = function(collection, key){
 
                 if (key != 'new'){
@@ -242,7 +255,7 @@
                     scope.closeModal()
                     scope.notify('Added')
                 }).catch((err)=>{
-                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                    scope.notify(err,'error')
                 })
 
             }
@@ -276,7 +289,7 @@
                     }).catch((err)=>{
                         console.log(err)
                         reject(err)
-                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                        scope.notify(err,'error')
                     })
 
 
@@ -292,18 +305,19 @@
                 scope.put(collection, key, scope.new).then((data)=>{
                     scope.notify('Updated')
                 }).catch((err)=>{
-                    scope.notify(err,'error',5,'fa-exclamation-circle')
+                    scope.notify(err,'error')
                 })
 
             }
 
-            scope.deleteItem = function(collection){
+            scope.deleteItem = function(collection, idx){
 
                 if (scope.view.modal && scope.view.modal == 'delete_confirm'){
 
                     contextCloseAll()
 
                     let key = scope[collection][scope.view.key]._key
+
                     scope.closeModal()
                     scope.delete(collection,key).then(()=>{
                         delete scope.view.modal_text
@@ -311,10 +325,11 @@
                         scope.notify('Deleted')
                     }).catch((err)=>{
                         console.log(err)
-                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                        scope.notify(err,'error')
                     })
 
                 } else {
+                    console.log('delete_confirm')
                     scope.openModal('delete_confirm')
                 }
 
@@ -393,33 +408,69 @@
 
             }
 
+            scope.getMailbox = function(){
 
-            scope.getMailbox = function(user_id){
-                scope.get('admin',user_id+'/get_messages').then((data)=>{
-                    scope.admin.mailbox = data.sort((a, b) => -a.date.localeCompare(b.date))
+                scope.get('mailbox','?sort=_created').then((mailbox) => {
+                //    scope.openMessage(mailbox[0])
                 })
+
             }
 
             scope.openMessage = function(message,idx){
-                if (scope.view.mailbox == message){
-                    scope.view.mailbox = false
-                } else {
-                    scope.view.mailbox = message
+
+                if (!idx){
+                    idx = 0
                 }
+
+                scope.get('mailbox',message._key+'/open','view.message').then((msg_data) => {
+                    scope.view.message = msg_data
+                    scope.mailbox[idx] = msg_data
+                    view.update('view.message')
+                    view.update('mailbox['+idx+']')
+
+                    let msgs = document.querySelectorAll('.message-summary')
+
+                    for (var i in msgs){
+                        if (typeof msgs[i].getAttribute == 'function' && msgs[i].getAttribute('id') == scope.view.message._key){
+                            msgs[i].classList.add('open')
+                        } else if (typeof msgs[i].getAttribute == 'function'){
+                            msgs[i].classList.remove('open')
+                        }
+                    }
+
+                })
+
             }
 
-            scope.deleteMessage = function(message,idx){
+            scope.markUnread = function(){
 
-                document.getElementById('message'+idx).classList.add('deleted')
-                setTimeout(function(){
-                    scope.delete('message',message._key).then((data)=>{
-                    //    console.log(data)
-                        scope.notify('Notification Deleted','success',10,'fa-envelope-open-text')
-                    //    scope.admin.mailbox = data.sort((a, b) => -a.date.localeCompare(b.date))
-                    }).catch((err)=>{
-                        scope.notify(err,'error')
+                if (scope.view.message){
+
+                    scope.view.message.read = false
+
+                    scope.post('mailbox',scope.view.message).then((msg_data) => {
+                        scope.view.message = msg_data
+
+                        let idx = scope.mailbox.findIndex((item)=>{
+                            return item._key == scope.view.message._key
+                        })
+
+                        scope.mailbox[idx] = msg_data
+                        view.update('view.message')
+                        view.update('mailbox['+idx+']')
                     })
-                },500)
+
+                } else if (scope.view.key >= 0){
+
+                    scope.mailbox[scope.view.key].read = false
+
+                    scope.post('mailbox',scope.mailbox[scope.view.key]).then((msg_data) => {
+                        view.update('mailbox['+scope.view.key+']')
+                        contextCloseAll()
+                    })
+
+                }
+
 
             }
 
@@ -455,16 +506,23 @@
 
             }
 
-            scope.openModal = function(modal){
+            scope.openModal = function(modal, text){
 
                 document.getElementsByTagName('body')[0].style.overflowY = 'hidden'
                 document.getElementsByTagName('html')[0].style.overflowY = 'hidden'
                 contextCloseAll()
                 scope.view.modal = modal
+
+                if (text){
+                    scope.view.modal_text = text
+                    view.update('view.modal_text')
+                }
+
                 view.update('view.modal')
             }
 
             scope.closeModal = function(){
+                console.log('here')
                 document.getElementsByTagName('body')[0].style.overflowY = 'auto'
                 document.getElementsByTagName('html')[0].style.overflowY = 'auto'
                 scope.view.modal = false

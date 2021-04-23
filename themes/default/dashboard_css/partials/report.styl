@@ -1,0 +1,104 @@
+.report {
+
+    .header {
+
+        margin-bottom: 2rem;
+        padding: 1rem 2rem;
+
+        @media $small {
+            display:block;
+            height: auto;
+
+        }
+
+        .heading {
+            flex: 1;
+        }
+
+        .dates {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-weight: 700;
+
+            @media $small {
+                justify-content: flex-start;
+            }
+        }
+    }
+
+    .results {
+
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-gap: 2rem;
+
+        .result {
+            background-color: white;
+            border-radius: $border-radius;
+            padding: 1.5rem 2rem;
+            height: auto;
+        }
+
+        .label {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1rem;
+
+            .icon {
+                float: right;
+            }
+        }
+
+        .value {
+            grid-column-end: span 2;
+            line-height: 2rem;
+
+            .data {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                height: calc(100% - 6rem);
+            }
+
+            @media $medium {
+                grid-column-end: span 6;
+            }
+
+            @media $small {
+                grid-column-end: span 12;
+            }
+        }
+
+        .chart {
+
+            &.bar {
+
+                grid-column-end: span 12;
+
+                .data {
+                    display: block;
+                    height: 20rem;
+                    width: 100%;
+                }
+
+            }
+
+            &.doughnut {
+                grid-column-end: span 3;
+
+                @media $medium {
+                    grid-column-end: span 6;
+                }
+
+                @media $small {
+                    grid-column-end: span 12;
+                }
+            }
+
+        }
+    }
+
+}

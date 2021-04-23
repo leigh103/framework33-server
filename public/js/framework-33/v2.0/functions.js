@@ -9,22 +9,24 @@ function setLayer(className, idx){
 
 }
 
-var contextCloseAll = function(){
-
-    let table_wrap = document.querySelector('.table-inner-wrap')
-    if (table_wrap){
-        table_wrap.style.overflowY = 'auto'
-    }
-
-    if (scope && scope.view && scope.view.context){
-        scope.view.context = false
-    }
-
-    var contexts = document.querySelectorAll('.context')
-    for (var i=0; i < contexts.length; i++){
-        contexts[i].style.display = 'none'
-    }
-}
+// var contextCloseAll = function(){
+//
+//     document.querySelector('body').style.overflowY = 'auto'
+//
+//     let table_wrap = document.querySelector('.table-inner-wrap')
+//     if (table_wrap){
+//         table_wrap.style.overflowY = 'auto'
+//     }
+//
+//     if (scope && scope.view && scope.view.context){
+//         scope.view.context = false
+//     }
+//
+//     var contexts = document.querySelectorAll('.context')
+//     for (var i=0; i < contexts.length; i++){
+//         contexts[i].style.display = 'none'
+//     }
+// }
 
 var modalCloseAll = function(){
     if (scope){

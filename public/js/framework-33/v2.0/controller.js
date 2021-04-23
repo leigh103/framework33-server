@@ -671,7 +671,7 @@ console.log(date, obj)
 
             if (error){
 
-                scope.notify(error,'error',15,'fa-exclamation-circle')
+                scope.notify(error,'error')
                 if (submit_button){
                     submit_button[submit_button.length-1].innerHTML = 'Please check all required fields and click here to submit'
                 }
@@ -684,7 +684,7 @@ console.log(date, obj)
                         submit_button[submit_button.length-1].innerHTML = 'Sent'
                     }
                 }).catch((err)=>{
-                    scope.notify(err,'error',15,'fa-exclamation-circle')
+                    scope.notify(err,'error')
                     if (submit_button){
                         submit_button[submit_button.length-1].innerHTML = 'Error'
                     }

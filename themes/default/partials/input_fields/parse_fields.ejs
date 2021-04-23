@@ -10,7 +10,7 @@
 
         <% if (Array.isArray(fields[tab])) { %>
 
-            <div app-show="view.edit_tab == '<%- tab %>'" class="edit tab-<%- tab %>">
+            <div app-show="view.edit_tab == '<%- tab %>'" class="edit tab-<%- view.functions.parseSnake(tab) %>">
 
                 <% fields[tab].forEach((item,i) => { %>
 

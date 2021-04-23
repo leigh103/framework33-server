@@ -34,15 +34,14 @@
 
             this.routes = {
                 public: { // unauth'd routes
-                    get: {
-                        all:[],
-                        search:[],
-                        find:[]
+                    post: {
+                        save:[]
                     },
                 },
                 private: { // auth'd routes
                     get: {
-
+                        all:['admin'],
+                        find:['admin']
                     },
                     post: {
                         save:['admin']
@@ -68,6 +67,13 @@
                 last_rotate = moment()
             }
 
+            return this
+
+        }
+
+        async all(){
+
+            this.data = await DB.read(this.settings.collection).orderBy('_created','desc').limit(0, 60).get()
             return this
 
         }

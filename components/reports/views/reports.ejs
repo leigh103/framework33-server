@@ -1,0 +1,68 @@
+
+<% layout(config.site.dashboard_theme+'/dashboard.ejs') %>
+
+<%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
+
+<div class="card-wrap">
+
+<% if (view.menus && view.menus.reports){ %>
+    <% view.menus.reports.forEach((card)=>{ %>
+
+        <% if (card){ %>
+            <div id="<%- card.link %>-card" class="card" <% if (card.query){ %>app-click="runReport('<%- card.query %>','<%- card.link %>-card',true)"<% } %> <% if (card.inputs){ %>data-inputs="<%= JSON.stringify(card.inputs) %>"<% } %>>
+                <div class="image">
+                    <img src="/images/pages/161/7/bullseye-gradient-1617539411580.svg">
+                </div>
+                <div class="details">
+                    <h4><%- card.link %></h4>
+                    <% if (card.description){ %>
+                        <p><%- card.description %></p>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    <% }) %>
+
+<% } %>
+
+</div>
+
+
+<modal-auto app-show="view.modal == 'report_confirm'" data-title="Run Report">
+
+        <div class="w-75 w-s-100 my-1 flex" app-show="view.modal_text" app-bind="view.modal_text">
+
+        </div>
+
+        <div class="grid col-2 col-s-1 gap-2 my-2" app-show="view.report_inputs">
+
+            <div app-for="input in view.report_inputs">
+
+                <div app-show="input == 'date_from'">
+                    <date-picker app-model="report.date_from" class="report-input-field" placeholder="Select start date..."></date-picker>
+                </div>
+
+                <div app-show="input == 'date_to'">
+                    <date-picker app-model="report.date_to" class="report-input-field" placeholder="Select end date..."></date-picker>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="grid col-4 pb-1 gap-2">
+
+            <div class="colspan-2 text-right pt-1 mt-s-3">
+                <a class="btn bg-white w-100" app-click="closeModal()">
+                    Cancel
+                </a>
+            </div>
+
+            <div class="colspan-2 text-right pt-1 mt-s-3">
+                <a class="btn bg-primary w-100" app-click="runReport()">
+                    Run
+                </a>
+            </div>
+        </div>
+
+</modal-auto>

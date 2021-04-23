@@ -21,11 +21,18 @@ modal {
                 padding:0 2rem 2rem 2rem;
                 background-color: $dashboard-color-light-grey;
 
+                max-width: 60vw;
+
                 .tabs {
                     background-color: $dashboard-color-light-grey;
                 }
 
                 @media $small {
+                    max-width: 80vw;
+                }
+
+                @media $small {
+                    max-width: 100vw;
                     padding-bottom: 8rem;
                 }
             }

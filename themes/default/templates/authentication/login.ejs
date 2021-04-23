@@ -4,9 +4,9 @@
 
     <div class="col-form">
 
-        <div class="form">
+        <div class="form relative">
 
-            <h1 class="h4 text-light capitalise my-4"><%- guard %> Login</h1>
+            <h1 class="text-light capitalise my-4"><%- guard %> Login</h1>
 
             <% if (typeof error != 'undefined'){ %>
                 <div class="error">
@@ -30,7 +30,10 @@
                 </div>
             </form>
 
-            <span class="icon cmslogo grey xl"></span>
+            <div class="logo-wrap">
+                <span class="icon melded grey logo-size"></span>
+                <div class="text-small">by Marimo</div>
+            </div>
 
         </div>
 

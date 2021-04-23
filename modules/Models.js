@@ -11,7 +11,7 @@
 
         async find(key) {
 
-            if (key || key == 0){
+            if (key){
 
                 let query = []
 
@@ -398,6 +398,16 @@
                         return value
                     }
 
+                } else if (field.type == 'sku'){
+
+                    let check = await DB.read(this.settings.collection).where(['sku == '+value]).get()
+                    if (check.length > 0){
+                        this.error = 'This SKU '+value+' has already been used. Please update and save again'
+                        return ''
+                    } else {
+                        return value
+                    }
+
                 } else if (field.type == 'array' && typeof value == 'object'){
 
                     return value
@@ -420,7 +430,31 @@
 
         }
 
-        async save(update_data) {
+        async saveIfNotExists(query){
+
+            let check = await DB.read(this.settings.collection).where(query).first()
+
+            if (check._key){
+                return
+            } else {
+                this.save()
+            }
+
+        }
+
+        async save(update_data, check_existing) {
+
+            if (check_existing){
+                let check = await DB.read(this.settings.collection).where(query).first()
+
+                if (check._key){
+                    this.data = false
+                    resolve(this)
+                } else {
+                    resolve(this)
+                }
+            }
+
 
             if (!this.data && !update_data){
                 this.error = 'No data'
@@ -437,7 +471,7 @@
                 }
 
                 catch(err){
-                    log(err)
+                //    log(err)
                     return false
                 }
 
@@ -486,7 +520,7 @@
 
                 if (this.settings.search_fields){
                     for (var field of this.settings.search_fields){
-                        filter.push(field+' like '+str)
+                        filter.push(field+' like '+str.toLowerCase())
                     }
 
                 } else {
@@ -501,6 +535,11 @@
         }
 
         async delete(){
+
+            if (this.data.protect && this.data.protect == true){
+                this.error = 'This document is marked as protected, so cannot be deleted'
+                return this
+            }
 
             if (typeof this.preDelete == 'function'){
 

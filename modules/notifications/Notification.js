@@ -130,7 +130,7 @@
                 } else {
                     this.content.from = {
                         name: 'System Notification',
-                        avatar: '/images/logo.svg'
+                        avatar: config.site.logo
                     }
                 }
 
@@ -144,7 +144,7 @@
                 // this.class.data.mailbox.push(this.content)
                 // this.class.save()
 
-                new Message(this.content).save()
+                new Mailbox(this.content).save()
 
                 if (this.class && this.class.data && this.class.data.ws_id){
                     new WebsocketClient(this.class.data._id).send(this.content)

@@ -61,7 +61,8 @@
                     get: {
                         all:['admin','self'],
                         search:['admin'],
-                        find:['admin','self']
+                        find:['admin','self'],
+                        totalSales:['admin']
                     },
                     post: {
                         save:['admin'],
@@ -169,7 +170,6 @@
 
                 if (typeof global[item.type] == 'function'){
                     model = new global[item.type]()
-
                     if (typeof model.updateStock == 'function'){
                         await model.updateStock(item._key, item.quantity)
                     }
@@ -271,6 +271,254 @@
                 resolve()
 
             })
+
+        }
+
+        registerAutomations(){
+
+            let order_processing = {
+              "name": "Order Processing",
+              "trigger": "order_processing",
+              "description": "Notification when a paid order has been printed and marked as 'processing'",
+              "actions": [
+                {
+                  "method": "email",
+                  "enabled": false,
+                  "to": "{{email}}",
+                  "subject": "Your order is being processed",
+                  "content": "Your order ({{reference}}) is being processed and we'll let you know once it's been shipped.",
+                  "_key": 1613655093885
+                }
+              ],
+              "protect":true
+            }
+
+            let order_receipt = {
+              "name": "Send Receipt",
+              "trigger": "order_receipt",
+              "description": "Notification sent once customer has successfully paid. The customer can choose their notification method here, so only one 'email' action is recommended - otherwise they may receive two notifications.",
+              "actions": [
+                {
+                  "method": "email",
+                  "to": "{{email}}",
+                  "enabled": true,
+                  "subject": "Order: {{reference}}",
+                  "content": "Thanks for your order! We'll send you another notification once it's been dispatched. For any queries please contact on 0161 379 8778",
+                  "_key": 1613473542339
+                }
+              ],
+              "protect":true
+            }
+
+            let order_shipped = {
+              "name": "Order Shipped",
+              "trigger": "order_shipped",
+              "description": "Notification sent when the order has been shipped",
+              "actions": [
+                {
+                  "method": "email",
+                  "to": "{{email}}",
+                  "enabled": true,
+                  "subject": "Order: {{reference}}",
+                  "content": "Your order has been dispatched and will be with you shortly.",
+                  "_key": 1613660198773
+                }
+              ],
+              "protect":true
+            }
+
+            let order_refunded = {
+              "name": "Order Refunded",
+              "trigger": "order_refunded",
+              "description": "Notification sent when the order has been refunded",
+              "actions": [
+                {
+                  "method": "email",
+                  "to": "{{email}}",
+                  "enabled": true,
+                  "subject": "Refund: {{reference}}",
+                  "content": "Your order has been refunded via your original payment method.",
+                  "_key": 1613660198773
+                }
+              ],
+              "protect":true
+            }
+
+            new Automations(order_processing).saveIfNotExists(['trigger == order_processing'])
+            new Automations(order_receipt).saveIfNotExists(['trigger == order_receipt'])
+            new Automations(order_shipped).saveIfNotExists(['trigger == order_shipped'])
+            new Automations(order_refunded).saveIfNotExists(['trigger == order_refunded'])
+
+        }
+
+        async registerMenus(){
+
+            let menus = {
+                menu: {
+                    dashboard: [
+                        {link:'Transactions',slug:'transactions/new', weight:1, query:'/dashboard/transactions/stats'}
+                    ],
+                    reports: [
+                        {link:'Sales', weight:1, query:'transactions/total-sales', description:'Shows a sales breakdown over a specified period', inputs:['date_from','date_to']}
+                    ]
+                }
+            }
+
+            global.addMenu(menus)
+            return this
+
+        }
+
+        async totalSales(query_data){
+
+            if (!query_data){
+                query_data = {}
+            }
+
+            if (!query_data.date_from){
+                query_data.date_from = moment().set({hours:0, minutes:0, seconds:0}).subtract(30, 'days').toISOString()
+            }
+
+            if (!query_data.date_to){
+                query_data.date_to = moment().set({hours:23, minutes:59, seconds:59}).toISOString()
+            }
+
+
+
+            let transactions = await this.all(['_created > '+query_data.date_from,'_created < '+query_data.date_to]),
+                carts = await new Cart().all(['_created > '+query_data.date_from,'_created < '+query_data.date_to]),
+                moment_from = moment(query_data.date_from),
+                moment_to = moment(query_data.date_to),
+                total = 0,
+                net_total = 0,
+                shipping_total = 0,
+                items_total = 0,
+                items_sale_total = 0,
+                items_non_sale_total = 0,
+                total_without_shipping = 0,
+                transactions_per_day = {},
+                transactions_per_day_totals = [],
+                transactions_per_day_labels = [],
+                day,
+                current_day,
+                current_day_total = 0,
+                product_cats = {},
+                product_cats_totals = [],
+                product_cats_labels = []
+
+            // let total = transactions.data.map(item => parseInt(item.total))
+            //         .reduce((prev, next) => prev + next)
+
+            transactions.data.map((transaction) => {
+
+                transaction.items.map((item)=>{
+
+                    let slug = item.slug.split('/')
+                    slug.pop()
+                    slug = slug.join('-')
+
+                    if (product_cats[slug]){
+                        product_cats[slug]++
+                    } else {
+                        product_cats[slug] = 1
+                    }
+
+                    items_total += item.quantity
+
+                    if (item.adjustment){
+                        items_sale_total += item.quantity
+                    } else {
+                        items_non_sale_total += item.quantity
+                    }
+
+                })
+
+                day = moment(transaction._created).format('Do-MMM')
+
+                if (!current_day){
+                    current_day = day
+                }
+
+                if (day == current_day){
+                    current_day_total += parseInt(transaction.total)/100
+                } else {
+                    transactions_per_day[current_day] = current_day_total.toFixed(2)
+                    current_day_total = parseInt(transaction.total)/100
+                }
+
+                current_day = day
+
+                total += parseInt(transaction.total)
+                net_total += parseInt(transaction.sub_total)
+                shipping_total += parseInt(transaction.shipping_total)
+                total_without_shipping += parseInt(transaction.item_total)
+
+            })
+
+            transactions_per_day[current_day] = current_day_total.toFixed(2)
+
+            for (var [cat,val] of Object.entries(product_cats)){
+                product_cats_totals.push(val)
+                product_cats_labels.push(view.functions.capitalise(cat.replace(/^-/,'').replace(/-/g,' ')))
+            }
+
+            while (moment_from.isBefore(moment_to, 'day') || moment_from.isSame(moment_to, 'day')) {
+
+                let obj_ref = moment_from.format('Do-MMM')
+
+                if (transactions_per_day[obj_ref]){
+                    transactions_per_day_totals.push(transactions_per_day[obj_ref])
+                } else {
+                    transactions_per_day_totals.push(0)
+                }
+
+                transactions_per_day_labels.push(view.functions.capitalise(obj_ref.replace(/^-/,'').replace(/-/g,' ')))
+
+                moment_from.add(1, 'days')
+
+            }
+
+            let result = [
+                {label:'Transactions',type:'value', tip:'Total number of transactions processed within this date range', data:transactions.data.length},
+                {label:'Items Sold',type:'value', tip:'Total number of items sold', data:items_total},
+                {label:'Gross',type:'value',format:'currency', tip:'Total of all transactions inc. VAT and shipping', data:(total/100).toFixed(2)},
+                {label:'Net',type:'value',format:'currency', tip:'Total of all transactions minus VAT', data:(net_total/100).toFixed(2)},
+                {label:'Shipping',type:'value',format:'currency', tip:'Shipping totals', data:(shipping_total/100).toFixed(2)},
+                {label:'Avg. Sale',type:'value',format:'currency', tip:'Average sale price within this date range, inc. VAT, not inc. shipping', data:((total_without_shipping/100)/transactions.data.length).toFixed(2)},
+                // {label:'Median Sale',type:'value',format:'currency', data:view.functions.findMedian(transactions_per_day_total)},
+                {label:'Product Categories',type:'chart',format:'doughnut', data:{
+                    values: product_cats_totals,
+                    colors: view.functions.gradient('#FD7278','#72adfc',product_cats_labels.length),
+                    labels: product_cats_labels
+                }},
+                {label:'Products sold at',type:'chart',format:'doughnut', data:{
+                    values: [items_non_sale_total,items_sale_total],
+                    colors: view.functions.gradient('#FD7278','#72adfc',2),
+                    labels: ['Regular price', 'Sale price']
+                }},
+                {label:'Conversions',type:'chart',format:'doughnut', data:{
+                    values: [transactions.data.length,carts.data.length],
+                    colors: view.functions.gradient('#FD7278','#72adfc',2),
+                    labels: ['Converted', 'Abandoned']
+                }},
+                {label:'Totals Per Day (£)',type:'chart',format:'bar', tip:'Total sales (£) broken down into each day of the selected data range', data:{
+                    values: transactions_per_day_totals,
+                    colors: view.functions.gradient('#FD7278','#72adfc',transactions_per_day_totals.length),
+                    labels: transactions_per_day_labels
+                }}
+            ]
+
+            let payload = {
+                name:'Sales',
+                description: 'Shows a sales breakdown over a specified period',
+                result:result,
+                model:'Transactions',
+                date_from: query_data.date_from,
+                date_to: query_data.date_to
+            }
+
+            await new Reports(payload).save()
+            return total
 
         }
 

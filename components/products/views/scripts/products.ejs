@@ -72,6 +72,15 @@
 
         scope.getItem = function(collection, key){
 
+            if (key == 'new'){
+                scope.new = {
+                    active: true,
+                    requires_delivery: true,
+                    <% if (typeof view.site == 'object' && view.site.name){ %>brand: '<%- view.site.name %>'<% } %>
+                }
+                return
+            }
+
             scope.view.loader = true
             view.update('view.loader')
 
@@ -105,7 +114,6 @@
                     if (!scope.new.gallery){
                         scope.new.gallery = []
                     }
-                    console.log(scope.new)
                     scope.view.loader = false
                     view.update('view.loader')
                     view.update('new')
@@ -114,9 +122,44 @@
 
         }
 
+        scope.generateSKU = function(){
+
+            if (!scope.new.name){
+                scope.notify('Please enter a name to generate a SKU','error')
+                return
+            }
+
+            scope.new.sku = scope.new.name.match(/\b(\w)/g).join("")+'-'
+
+            if (scope.new.brand){
+                scope.new.sku = scope.new.brand.match(/\b(\w)/g).join("")+'-'+scope.new.sku
+            }
+
+            let url = '/api/products/search?str='+scope.new.sku
+
+            http.get(url)
+                .then((data) => {
+                    data = JSON.parse(data)
+console.log(url, data)
+                    let idx = data.length+1
+
+                    if (idx < 100){
+                        idx = '00'+idx
+                    } else if (idx < 10){
+                        idx = '0'+idx
+                    }
+
+                    scope.new.sku += idx
+                    view.update('new.sku')
+                })
+
+
+
+        }
+
 
         scope.insertMedia = function(media){
-console.log(scope.new)
+
             if (scope.exec_data.selection){
                 scope.insertCEMedia(media)
             } else {

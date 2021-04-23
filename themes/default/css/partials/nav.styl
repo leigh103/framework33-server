@@ -25,6 +25,20 @@
     }
 
     .logo {
+        height: 3rem;
+        width: 3rem;
+        background-color: #FD7278;
+        -webkit-mask-image: url('/images/Melded_Icon.svg');
+        mask-image: url('/images/Melded_Icon.svg');
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
         @media $small {
             grid-column: 1 / span 3;
         }
@@ -62,7 +76,7 @@
 
         .subitems {
 
-            display: block !important;
+            display: block;
             position: absolute;
             text-align: left;
             width:100vw;
@@ -73,6 +87,14 @@
             overflow: hidden;
 
             transition: all 0.5s ease;
+
+            &-container {
+                background-color: white;
+
+                a {
+                    color: $text-primary;
+                }
+            }
 
             &.in-view {
                 max-height:100vh;

@@ -60,6 +60,21 @@
 
         }
 
+        async registerMenus(){
+
+            let menus = {
+                menu: {
+                    dashboard: [
+                        {link:'Add a new page',slug:'pages/new', weight:10}
+                    ]
+                }
+            }
+
+            global.addMenu(menus)
+            return this
+
+        }
+
 
     }
 

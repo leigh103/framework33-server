@@ -1,0 +1,18 @@
+<div class="result value">
+    <div class="label"><%- label %><% if (typeof tip != 'undefined'){ %><span class="icon help right grey" title="<%- tip %>"></span><% } %></div>
+    <div class="data <% if (typeof format != 'undefined'){ %><%- format %><% } %>">
+
+        <% if (typeof format != 'undefined'){ %>
+
+            <% if (format == 'currency'){ %>
+                £<%- data %>
+            <% } else { %>
+                <%- data %>
+            <% } %>
+
+        <% } else { %>
+            <%- data %>
+        <% } %>
+
+    </div>
+</div>

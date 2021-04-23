@@ -234,8 +234,8 @@ html, body {
 
         display: flex;
         background:none;
-        color: $dashboard-text-white;
-        background-color: $dashboard-color-primary;
+        color: $dashboard-text-black;
+        background-color: $dashboard-color-light-grey2;
 
         flex: 0 0 $dashboard-header-height;
 
@@ -269,7 +269,7 @@ html, body {
             }
 
             .icon {
-                background-color: white;
+            
             }
 
             @media $small {
@@ -289,6 +289,10 @@ html, body {
             overflow: hidden;
 
             a {
+                color: $dashboard-text-black
+            }
+
+            a.btn {
                 color: $dashboard-text-white;
             }
 
@@ -300,7 +304,7 @@ html, body {
 
             .burger {
                 display: block;
-                color: white;
+                color: $dashboard-text-black;
                 font-size: 1.25rem;
                 margin-right: 1.2rem;
 
@@ -320,7 +324,7 @@ html, body {
             .btn {
                 margin-left: 0;
                 margin-left: 0.875rem;
-                background-color: fadeOut($dashboard-color-white, 0.1);
+                background-color: $dashboard-color-secondary;
                 color: $dashboard-text-white;
                 transition: background-color 0.5s ease;
 
@@ -503,6 +507,21 @@ html, body {
                 grid-template-columns: 1fr;
             }
 
+        }
+
+        h1 {
+            font-size: 1.75rem;
+        }
+
+        .logo-wrap {
+            margin-top: 9rem;
+            text-align: center;
+            width: 100%;
+            color: #CED1D5
+
+            .icon {
+                background-color: #CED1D5
+            }
         }
 
         .col-form {

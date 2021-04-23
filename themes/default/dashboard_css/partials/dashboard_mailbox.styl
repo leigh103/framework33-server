@@ -26,6 +26,28 @@
                     }
                 }
 
+                .text {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+
+                    .unread {
+                        flex: none;
+                        display: block;
+                        width: 0.5rem;
+                        height: 0.5rem;
+                        background-color: $dashboard-color-secondary;
+                        border-radius: 50%;
+                        margin-right: 0.5rem;
+                    }
+                }
+
+                .date {
+                    font-size: 0.7rem;
+                    color: $dashboard-text-grey;
+                    font-style: italic;
+                }
+
                 &.open {
                     box-shadow: $shadow;
                     transform: translateX(1rem);
@@ -35,13 +57,38 @@
                     opacity: 0;
                     transform: translateX(-100%);
                 }
+
+                &.read {
+                    background-color: rgba(255,255,255,0.5);
+                }
+
+
             }
         }
 
         .message {
-            padding: 2rem;
+            padding: 0.75rem 2rem 0.75rem 0.75rem;
             height: 100%;
-            overflow-y: auto
+            overflow-y: auto;
+
+            h4 {
+                font-weight:700;
+            }
+
+            .title {
+
+                display: flex;
+
+                .heading {
+                    flex:2;
+                }
+                .actions {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                }
+            }
         }
     }
 

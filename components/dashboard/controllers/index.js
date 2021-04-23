@@ -68,7 +68,9 @@ const express = require('express'),
     routes.get('/', (req, res) => {
 
         view.current_view = 'dashboard'
+        view.current_sub_view = 'dashboard'
         data.title = 'Dashboard'
+
         res.render(settings.views+'/dashboard.ejs',data)
 
     })
@@ -76,6 +78,7 @@ const express = require('express'),
     routes.get('/components', (req, res) => {
 
         view.current_view = 'dashboard'
+        view.current_sub_view = 'Components'
         data.title = 'Components'
         data.components = Object.keys(global.component).map(function(key) {
             let obj = global.component[key]
@@ -98,6 +101,7 @@ const express = require('express'),
     routes.get('/logs', (req, res) => {
 
         view.current_view = 'dashboard'
+        view.current_sub_view = 'Logs'
         data.title = 'Logs'
         res.render(settings.views+'/logs.ejs',data)
 
@@ -106,6 +110,7 @@ const express = require('express'),
     routes.get('/settings', (req, res) => {
 
         view.current_view = 'settings'
+        view.current_sub_view = 'Settings'
         data.title = 'Settings'
         res.render(settings.views+'/settings.ejs',data)
 
@@ -114,8 +119,30 @@ const express = require('express'),
     routes.get('/mailbox', (req, res) => {
 
         view.current_view = 'dashboard'
+        view.current_sub_view = 'Mailbox'
         data.title = 'Mailbox'
+        data.table = 'mailbox'
+
+        data.context_menu = [
+            {function: "markUnread",text:"Mark unread", icon:"eye"}
+        ]
+
         res.render(settings.views+'/mailbox.ejs',data)
+
+    })
+
+    routes.get('/stats', async (req, res) => {
+
+        let status_count = await DB.read('mailbox').where(['read != true']).collect('unread')
+
+        let result = 'There are '+status_count.length+' unread notifications'
+        if (status_count.length == 1){
+            result = 'There is '+status_count.length+' unread notification'
+        }
+        if (status_count.length == 0){
+            result = "You're all caught up"
+        }
+        res.send(result)
 
     })
 

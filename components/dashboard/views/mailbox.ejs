@@ -1,22 +1,22 @@
 <% layout(config.site.dashboard_theme+'/dashboard.ejs') %>
 <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
-<div class="edit-wrap">
+<div class="">
 
-    <div class="grid col-9 h-100 page-full mailbox" app-init="getMailbox('<%- user._key %>')">
+    <div class="grid col-9 h-100 page-full mailbox" app-init="getMailbox()">
 
-        <div class="colspan-3 messages">
+        <div class="colspan-3 colspan-s-9 messages">
 
-            <div app-show="!admin.mailbox.length" class="text-italic">No messages</div>
+            <div app-show="mailbox.length == 0" class="text-italic">No messages</div>
 
-            <div app-for="message in admin.mailbox" app-attr="{'id':'message'+{{index}}}" class="message-summary flex clickable" app-click="openMessage(message)" app-class="{'open':message.date == view.mailbox.date}">
+            <div app-for="message in mailbox" app-attr="{'id':message._key}" class="message-summary flex clickable" app-class="{'read':message.read == true}">
 
-                <div class="flex-none flex flex-middle">
+                <div class="flex-none flex flex-middle" app-click="openMessage(message)">
                     <img src="/images/Profile_Placeholder.svg" app-src="message.from.avatar" class="avatar sm" style="margin:0 1.4rem 0 0.4rem">
                 </div>
                 <div class="flex-4">
-                    <div class="colspan-2">
-                        <div class="text" app-bind="message.from.name"></div>
-                        <div class="text-33-grey" app-bind="parseDate(message.date,'ago')"></div>
+                    <div class="colspan-2" app-click="openMessage(message, $index)">
+                        <div class="text"><span app-bind="message.from.name"></span></div>
+                        <div class="date" app-bind="parseDate(message.date,'ago')"></div>
                         <div class="title">
                             <div app-bind="message.subject"></div>
                         </div>
@@ -24,21 +24,53 @@
                 </div>
 
                 <div class="flex-none flex flex-middle">
-                    <a app-click="deleteMessage(message,{{index}})" class="text-33-red"><i class="fas fa-trash-alt"></i></a>
+                    <div class="context-menu context-link btn" app-click="toggleContext('context',$index)">
+                        <span class="icon arrowdown black context-link"></span>
+                    </div>
                 </div>
 
             </div>
         </div>
-        <div class="colspan-6 message">
+        <div class="colspan-6 colspan-s-9 message ml-1">
 
-            <div app-show="view.mailbox">
-                <h3 app-bind="view.mailbox.subject"></h3>
-                <p class="my-2 text-small italic">From <span app-bind="view.mailbox.from.name"></span>, <span app-bind="parseDate(view.mailbox.date,'h:mma dddd Do MMM')"></span></p>
-                <p class="bg-33-white p-2" app-bind="view.mailbox.text"></p>
+            <div app-show="view.message">
+                <div class="title">
+                    <div class="heading">
+                        <h4 app-bind="view.message.subject"></h4>
+                        <p class="mb-15 text-small italic">From <span app-bind="view.message.from.name"></span>, <span app-bind="parseDate(view.message.date,'h:mma dddd Do MMM')"></span></p>
+                    </div>
+                    <div class="actions">
+                        <button app-click="markUnread()" class="btn bg-white">Mark as unread</button>
+                    </div>
+                </div>
+                <p class="bg-white p-2" app-bind="view.message.text"></p>
             </div>
 
         </div>
 
     </div>
+
+</div>
+
+<div id="context" class="context dropdown text-left" style="display: none">
+
+    <% if (typeof context_menu == 'object'){ %>
+
+        <% context_menu.forEach((item,i) => { %>
+
+            <div class="link" app-click="<%- item.function %>('<%- table %>')">
+                <span class="icon <%- item.icon %> primary"></span>
+                <%- item.text %>
+            </div>
+
+        <% }) %>
+
+    <% } %>
+
+    <div class="link" app-click="deleteItem('<%- table %>')">
+        <span class="icon bin left primary"></span>
+        Delete
+    </div>
+
 
 </div>

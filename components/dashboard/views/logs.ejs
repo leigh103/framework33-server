@@ -2,6 +2,16 @@
 
 <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
 
-<div class="edit-wrap">
+<div class="edit-wrap" app-init="get('log')">
+
+    <div app-for="lg in log" class="flex text-small mb-05">
+        <div class="flex-none pr-1 font-weight-600" app-bind="parseDate(lg._created,'Do MMM YYYY h:mma')"></div>
+        <div class="flex-1" app-bind="lg.message"></div>
+        <div class="flex-1" app-bind="lg.document_id" app-click="goto(lg.document_id)"></div>
+        <div class="flex-3">
+            <div app-show="lg.backup" app-click="lg.show_backup = !lg.show_backup">Show backup data</div>
+            <pre app-show="lg.show_backup" app-bind="lg.backup"></pre>
+        </div>
+    </div>
 
 </div>

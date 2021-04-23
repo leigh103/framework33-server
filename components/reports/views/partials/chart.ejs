@@ -1,0 +1,54 @@
+<div class="result chart <% if (typeof format != 'undefined'){ %><%- format %><% } %>">
+    <div class="label"><%- label %><% if (typeof tip != 'undefined'){ %><span class="icon help right grey" title="<%- tip %>"></span><% } %></div>
+    <div class="data">
+
+        <canvas id="<%- view.functions.parseSnake(label) %>"></canvas>
+        <script>
+            var delayed;
+            var ctx = document.getElementById('<%- view.functions.parseSnake(label) %>').getContext('2d');
+            var myDoughnutChart = new Chart(ctx, {
+                type: '<% if (typeof format != 'undefined'){ %><%- format %><% } else { %>doughnut<% } %>',
+                data: {
+                    datasets: [{
+                        data: <%- JSON.stringify(data.values) %>,
+                        backgroundColor: <%- JSON.stringify(data.colors) %>,
+                    }],
+                    labels: <%- JSON.stringify(data.labels) %>
+                },
+                options: {
+                    <% if (typeof format != 'undefined' && format == 'bar'){ %>
+                        scales : {
+                            xAxes : [ {
+                                gridLines : {
+                                    display : false
+                                }
+                            } ],
+
+                            yAxes: [{
+                               ticks: {
+                                   beginAtZero: true
+                               }
+                            }]
+
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    <% } %>
+
+                    <% if (typeof format != 'undefined' && format == 'doughnut'){ %>
+                    legend: {
+                      display: false,
+                      position: 'bottom',
+                    }
+                    <% } else { %>
+                        legend: {
+                          display: false,
+                          position: 'bottom',
+                        }
+                    <% } %>
+                }
+            });
+        </script>
+
+    </div>
+</div>
