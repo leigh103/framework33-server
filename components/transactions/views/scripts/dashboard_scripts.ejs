@@ -21,9 +21,23 @@
 
         }
 
+        scope.createRefund = function(){
+            scope.view.refund = !scope.view.refund
+            // scope.view.edit_tab = 'items'
+            view.update('view.refund')
+            // view.update('view.edit_tab')
+        }
+
         scope.setRefund = function(item){
-            item.refund = true
-            item.refund_qty = item.quantity
+
+            if (item.refund){
+                item.refund = true
+                item.refund_qty = item.quantity
+            } else {
+                item.refund = false
+                item.refund_qty = 0
+            }
+
             view.update('new.items')
         }
 
@@ -36,7 +50,7 @@
 
         }
 
-        scope.createRefund = function(){
+        scope.saveRefund = function(){
 
             let check = scope.new.items.filter((item)=>{
                 return item.refund
@@ -54,7 +68,7 @@
                     scope.view.refund = false
                     view.update('new')
                     view.update('view.refund')
-                    scope.notify('Refund Created')
+                    scope.openModal('refund_created','Refund '+data.refund_reference+' created.<br>Ok to refund £'+((Math.abs(data.refund_total))/100).toFixed(2)+' via <span class="capitalise">'+data.payment_method+'</span> - '+data.payment_id)
 
                 }).catch((err)=>{
                     console.log(err)

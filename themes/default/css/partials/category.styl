@@ -2,14 +2,18 @@
 
     &.breadcrumbs {
         width: 100%;
-        background-color: #000;
+        background-color: $color-dark-grey;
 
         padding: 1rem;
+
+        @media $small {
+            padding: 1rem 0
+        }
 
         h1, a {
             text-transform: uppercase;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
         }
 
     }
@@ -31,7 +35,7 @@
         }
 
         .details {
-            flex: 1;
+            flex: 2;
             display: flex;
             flex-direction: column;
             align-items: flex-start;

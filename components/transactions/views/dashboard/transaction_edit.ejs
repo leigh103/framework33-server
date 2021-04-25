@@ -2,20 +2,20 @@
 
     <div class="header" app-init="getItem('<%- table %>','<%- key %>')">
 
-        <div class="burger colspan-1">
+        <div class="burger visible">
             <a app-attr="{'href':'/dashboard/transactions/'+new.status}"><span class="icon arrowleft black"></span></a>
         </div>
 
         <div class="title">
             <h1 app-hide="new._id" class="capitalise"><a app-attr="{'href':'/dashboard/transactions/new'}">Cancel</a></h1>
-            <h1 app-show="new._id" class="capitalise"><a app-attr="{'href':'/dashboard/transactions/'+new.status}" app-bind="new.reference">Back</a></h1>
+            <h1 app-show="new._id" class="capitalise"><a app-attr="{'href':'/dashboard/transactions/'+new.status}" app-bind="new.customer.full_name">Back</a></h1>
         </div>
 
-        <div class="buttons">
+        <div class="buttons hidden-s">
 
-            <button class="btn bg-white" app-click="view.refund = !view.refund">
+            <button class="btn bg-white" app-click="createRefund()" app-hide="view.refund">
                 <span class="text">Refund</span>
-                <span class="icon pricetag black"></span>
+                <span class="icon pricetag white"></span>
             </button>
 
             <div app-show="new.transaction_id">
@@ -23,18 +23,31 @@
                     <span>Original Transaction</span>
                 </a>
             </div>
-            <div>
+            <div app-hide="view.refund">
                 <a class="btn bg-white capitalise" app-attr="{'href':'/dashboard/transactions/print/'+new._key}">
                     <span class="text">Print</span>
-                    <span class="icon note black"></span>
+                    <span class="icon note white"></span>
                 </a>
             </div>
             <div app-show="view.refund">
-                <button class="btn highlight capitalise" app-click="createRefund()">
-                    <span class="text">Refund</span>
-                    <span class="icon pricetag white"></span>
+                <button class="btn highlight capitalise" app-click="saveRefund()">
+                    <span class="text">Apply Refund</span>
+                    <span class="icon tick white"></span>
                 </button>
             </div>
+            <div app-hide="view.refund">
+                <button class="btn bg-primary capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
+                    <span class="text">Save</span>
+                    <span class="icon tick white"></span>
+                </button>
+                <button class="btn highlight capitalise" app-hide="new._id" app-click="addItem('<%- table %>',new)">
+                    <span class="text">Add</span>
+                    <span class="icon plus white"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="buttons hidden-d hidden-m">
             <div app-hide="view.refund">
                 <button class="btn bg-primary capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
                     <span class="text">Save</span>
@@ -52,7 +65,6 @@
 
         <div class="tabs">
             <a app-click="view.edit_tab = 'details'" app-class="{'active':view.edit_tab == 'details'}" class="capitalise">Details</a>
-            <a app-click="view.edit_tab = 'items'" app-class="{'active':view.edit_tab == 'items'}" class="capitalise">Items</a>
             <a app-click="view.edit_tab = 'logs'" app-class="{'active':view.edit_tab == 'logs'}" class="capitalise">History</a>
         </div>
 
@@ -62,60 +74,175 @@
 
         <div app-show="view.edit_tab == 'details'" class="edit">
 
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/select.ejs',{item:{name:'status', options: statuses, type:'string'}, max_characters:'', max_chars_text:''}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'total', input_type:'disabled', type:'price'}, max_characters:'', max_chars_text:''}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'full_name', input_type:'text', type:'string'}, max_characters:'', max_chars_text:'', obj_prefix:'customer'}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'tel', input_type:'text', type:'string'}, max_characters:'', max_chars_text:'', obj_prefix:'customer'}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'email', input_type:'text', type:'string'}, max_characters:'', max_chars_text:'', obj_prefix:'customer'}) %>
-            <div class="input-spacer">
-
-                <label class="text-bold">Shipping</label>
-                <div></div>
+            <div class="input-text field-shipping_address">
+                <label>Shipping Address</label>
+                <div class="text-bold">
+                    <div app-bind="new.customer.full_name" class="mb-05 capitalise"></div>
+                    <div app-bind="new.shipping_address.address_line1"></div>
+                    <div app-bind="new.shipping_address.address_line2"></div>
+                    <div app-bind="new.shipping_address.address_level1"></div>
+                    <div app-bind="new.shipping_address.address_level2"></div>
+                    <div app-bind="new.shipping_address.postal_code"></div>
+                </div>
             </div>
 
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/select.ejs',{item:{name:'shipping_method', option_data: delivery_options, type:'string'}, max_characters:'', max_chars_text:''}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'address_line1', input_type:'text', type:'text'}, max_characters:'', max_chars_text:'', obj_prefix:'shipping_address'}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'address_line2', input_type:'text', type:'text'}, max_characters:'', max_chars_text:'', obj_prefix:'shipping_address'}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'address_level1', input_type:'text', type:'text'}, max_characters:'', max_chars_text:'', obj_prefix:'shipping_address'}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'address_level2', input_type:'text', type:'text'}, max_characters:'', max_chars_text:'', obj_prefix:'shipping_address'}) %>
-            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'postal_code', input_type:'text', type:'text'}, max_characters:'', max_chars_text:'', obj_prefix:'shipping_address'}) %>
+            <div class="input-text field-billing_address">
+                <label>Billing Address</label>
+                <div>
+                    <div app-bind="new.billing_address.address_line1"></div>
+                    <div app-bind="new.billing_address.address_line2"></div>
+                    <div app-bind="new.billing_address.address_level1"></div>
+                    <div app-bind="new.billing_address.address_level2"></div>
+                    <div app-bind="new.billing_address.postal_code"></div>
+                </div>
+            </div>
 
-        </div>
+            <div class="input-text field-transaction_details">
 
-        <div app-show="view.edit_tab == 'items'">
+                <%- include(view.basedir+'/themes/default/partials/input_fields/fields/select.ejs',{item:{name:'status', options: statuses, type:'string'}, max_characters:'', max_chars_text:''}) %>
+                <%- include(view.basedir+'/themes/default/partials/input_fields/fields/select.ejs',{item:{name:'shipping_method', option_data: delivery_options, type:'string'}, max_characters:'', max_chars_text:''}) %>
 
-            <div>
-                <div app-for="item in new.items" class="edit">
+            </div>
 
-                    <div class="input-text">
+            <div class="input-text field-transaction_details">
+                <label>Customer Details</label>
+                <div app-bind="new.customer.full_name" class="capitalise text-bold text-primary" app-click="goto('customers',new.customer._key)"></div>
+                <div app-bind="new.customer.email"></div>
+                <div app-bind="new.customer.tel"></div>
 
-                        <label app-bind="item.name"></label>
-                        <div><span app-bind="item.quantity" class="mr-1"></span> <span app-bind="parseCurrency(item.price)"></span></div>
+            </div>
 
+            <div class="transaction-items grid col-3">
+                <div class="colspan-3" app-hide="view.refund">
+                    <div class="table">
+                        <div class="row table-header">
+                            <div class="cell" style="width:35%;">Item</div>
+                            <div class="cell text-center">Qty</div>
+                            <div class="cell text-right">Price</div>
+                            <div class="cell text-right" >Adj.</div>
+                            <div class="cell text-right">Paid</div>
+                            <div class="cell text-right">Tax</div>
+                            <div class="cell text-right">Total</div>
+                        </div>
+                        <div class="row" app-for="item in new.items">
+                            <div class="cell">
+                                <div class="flex flex-column">
+                                    <a app-attr="{'href':'/dashboard/products/'+item._key}" app-bind="item.name" class="text-bold text-primary"></a>
+                                    <span app-show="item.refund_transaction_id" class="text-italic">Refunded <span app-bind="parseCurrency(item.refund_value)"></span> on <span app-bind="parseDate(item.refund_date,'Do MMMM YYYY h:mma')"></span> <a app-attr="{'href':'/dashboard/transactions/edit/'+item.refund_transaction_id}"><span class="icon link primary"></span></a></span>
+                                </div>
+                            </div>
+                            <div class="cell text-center" app-bind="item.quantity"></div>
+                            <div class="cell text-right"><span app-show="item.original_price" app-bind="parseCurrency(item.original_price)"></span><span app-hide="item.original_price" app-bind="parseCurrency(item.price)"></span></div>
+                            <div class="cell text-right" app-bind="parseAdjustment(item.adjustment)"></div>
+                            <div class="cell text-right" app-bind="parseCurrency(item.price)"></div>
+                            <div class="cell text-right" app-bind="parseCurrency(item.tax)"></div>
+                            <div class="cell text-right text-bold" app-bind="parseCurrency(item.total)"></div>
+                        </div>
                     </div>
+                </div>
 
+                <div class="colspan-3" app-show="view.refund">
+                    <div class="table">
+                        <div class="row table-header">
+                            <div class="cell" style="width:35%;">Item</div>
+                            <div class="cell text-center">Qty</div>
+                            <div class="cell text-right">Price</div>
+                            <div class="cell text-center">Refund <span class="icon help primary" title="Select each item you want to refund"></span></div>
+                            <div class="cell text-center">Refund Qty <span class="icon help primary" title="Optional. Specify the number of items to include in the refund"></span></div>
+                            <div class="cell text-right">Partial Refund <span class="icon help primary" title="Optional. Enter an amount to deduct from this row either as a percentage, or monetary value"></span></div>
+                        </div>
+                        <div class="row" app-for="item in new.items">
+                            <div class="cell text-bold text-primary">
+                                <div class="flex flex-column">
+                                    <a app-attr="{'href':'/dashboard/products/'+item._key}" app-bind="item.name"></a>
+                                    <a app-show="item.refund_transaction_id" app-attr="{'href':'/dashboard/transactions/edit/'+item.refund_transaction_id}">Refunded <span app-bind="parseCurrency(item.refund_value)"></span> on <span app-bind="parseDate(item.refund_date,'Do MMMM YYYY h:mma')"></span></a>
+                                </div>
+                            </div>
+                            <div class="cell text-center" app-bind="item.quantity"></div>
+                            <div class="cell text-right"><span app-show="item.original_price" app-bind="parseCurrency(item.original_price)"></span><span app-hide="item.original_price" app-bind="parseCurrency(item.price)"></span></div>
+                            <div class="cell text-center"><input type="checkbox" app-model="item.refund" app-click="setRefund(item)" class="highlight"></div>
+                            <div class="cell text-right"><input type="number" class="highlight" app-show="item.refund" app-model="item.refund_qty" app-change="checkRefund(item,'whole')"></div>
+                            <div class="cell text-right"><input type="text" class="text-right highlight" app-show="item.refund" app-model="item.refund_amount" app-change="checkRefund(item, 'partial')"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="transaction-totals">
+                <div class="table">
+                    <div class="row table-header">
+                        <div class="cell" style="width:50%;">Totals</div>
+                        <div class="cell text-right"></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell text-bold">Sub Total</div>
+                        <div class="cell text-right" app-bind="parseCurrency(new.sub_total)"></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell text-bold">VAT</div>
+                        <div class="cell text-right" app-bind="parseCurrency(new.tax)"></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell text-bold">Item Total</div>
+                        <div class="cell text-right" app-bind="parseCurrency(new.item_total)"></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell text-bold">Shipping</div>
+                        <div class="cell text-right pt-1" app-bind="parseCurrency(new.shipping_total)"></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell text-bold text-bold">Total</div>
+                        <div class="cell text-right text-bold" app-bind="parseCurrency(new.total)"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="edit">
-                <div class="input-spacer">
-                    <label class="text-bold">Totals</label>
-                    <div></div>
-                </div>
-                <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'sub_total', input_type:'disabled', type:'price'}, max_characters:'', max_chars_text:''}) %>
-                <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'tax', input_type:'disabled', type:'price'}, max_characters:'', max_chars_text:''}) %>
-                <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'shipping_total', input_type:'disabled', type:'price'}, max_characters:'', max_chars_text:''}) %>
-                <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'total', input_type:'disabled', type:'price'}, max_characters:'', max_chars_text:''}) %>
-            </div>
+
         </div>
 
         <div app-show="view.edit_tab == 'logs'" class="edit">
+            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'payment_method', input_type:'disabled', type:'text'}, max_characters:'', max_chars_text:''}) %>
+            <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'payment_id', input_type:'disabled', type:'text'}, max_characters:'', max_chars_text:''}) %>
+            <div></div>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'paid', input_type:'disabled', type:'date'}, max_characters:'', max_chars_text:'',obj_prefix:'status_logs'}) %>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'processed', input_type:'disabled', type:'date'}, max_characters:'', max_chars_text:'',obj_prefix:'status_logs'}) %>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'shipped', input_type:'disabled', type:'date'}, max_characters:'', max_chars_text:'',obj_prefix:'status_logs'}) %>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'completed', input_type:'disabled', type:'date'}, max_characters:'', max_chars_text:'',obj_prefix:'status_logs'}) %>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'refund', input_type:'disabled', type:'date'}, max_characters:'', max_chars_text:'',obj_prefix:'status_logs'}) %>
             <%- include(view.basedir+'/themes/default/partials/input_fields/fields/auto.ejs',{item:{name:'deleted', input_type:'disabled', type:'date'}, max_characters:'', max_chars_text:'',obj_prefix:'status_logs'}) %>
+        </div>
+
+    </div>
+
+    <div class="hidden-d hidden-m p-2">
+
+        <button class="btn bg-white w-100 mb-1" app-click="createRefund()">
+            <span class="text">Refund</span>
+        </button>
+
+        <div app-show="new.transaction_id">
+            <a class="btn bg-white capitalise w-100 mb-1" app-attr="{'href':'/dashboard/transactions/edit/'+new.transaction_id}">
+                <span>Original Transaction</span>
+            </a>
+        </div>
+        <div>
+            <a class="btn bg-white capitalise w-100 mb-1" app-attr="{'href':'/dashboard/transactions/print/'+new._key}">
+                <span class="text">Print</span>
+            </a>
+        </div>
+        <div app-show="view.refund">
+            <button class="btn bg-primary capitalise w-100 mb-1" app-click="saveRefund()">
+                <span class="text">Refund</span>
+            </button>
+        </div>
+        <div app-hide="view.refund">
+            <button class="btn bg-primary capitalise w-100 mb-1" app-show="new._id" app-click="saveItem('<%- table %>',new)">
+                <span class="text">Save</span>
+            </button>
+            <button class="btn bg-primary capitalise w-100 mb-1" app-hide="new._id" app-click="addItem('<%- table %>',new)">
+                <span class="text">Add</span>
+            </button>
         </div>
 
     </div>
@@ -128,3 +255,20 @@
             <div class="dot"></div>
         </div>
     </div>
+
+    <modal-auto app-show="view.modal == 'refund_created'" data-title="Refund Created">
+
+        <div class="w-75 w-s-100 my-1" app-show="view.modal_text" app-bind="view.modal_text">
+
+        </div>
+
+        <div class="grid col-4 pb-1 gap-2">
+
+            <div class="colspan-2 text-right pt-1 mt-s-3">
+                <a class="btn bg-primary w-100" app-click="closeModal()">
+                    OK
+                </a>
+            </div>
+        </div>
+
+    </modal-auto>

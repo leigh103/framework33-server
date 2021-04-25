@@ -31,7 +31,8 @@ const express = require('express'),
         },
         includes: [
             {name:'customers',path:'customers.js'},
-            {name:'admins',path:'admins.js'}
+            {name:'admins',path:'admins.js'},
+            {name:'settings',path:'settings.js'}
         ]
     },
 
@@ -51,7 +52,7 @@ const express = require('express'),
         meta:{
             title: config.site.name+' | Dashboard'
         },
-        tabs:[{href:'/dashboard', text:'Dashboard'},{href:'/dashboard/mailbox', text:'Mailbox'},{href:'/dashboard/components', text:'Components'},{href:'/dashboard/logs', text:'Logs'}]
+        tabs:[{href:'/dashboard', text:'Dashboard'},{href:'/dashboard/mailbox', text:'Mailbox'},{href:'/dashboard/components', text:'Components'},{href:'/dashboard/logs', text:'Logs'},{href:'/dashboard/settings', text:'Settings'}]
     }
 
 

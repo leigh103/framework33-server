@@ -27,16 +27,7 @@
 
                     if (!scope.cart.shipping_total && scope.cart.delivery_method){
 
-                        let shipping = scope.cart.delivery_options.findIndex((option)=>{
-                            return option._key == scope.cart.delivery_method
-                        })
 
-                        if (shipping >= 0 && typeof scope.cart.delivery_options[shipping] == 'object'){
-                            scope.cart.shipping_method = scope.cart.delivery_options[shipping].name
-                            scope.cart.shipping_total = scope.cart.delivery_options[shipping].price
-                            scope.cart.total += scope.cart.shipping_total
-                            view.update('cart')
-                        }
                     }
 
 
@@ -122,6 +113,22 @@
 
                 }
 
+                scope.setDelivery = function(option){
+
+                    let payload = {
+                        _key: '<%- cart._key %>',
+                        delivery: option
+                    }
+
+                    scope.post('cart/set-delivery',payload).then((cart)=>{
+
+                        scope.cart = cart
+                        view.update('cart')
+                    })
+
+
+                }
+
                 scope.addToCart = function(item, type){
 
                     let qty = 1,
@@ -148,9 +155,17 @@
 
                     scope.post('cart/add-item',payload).then((cart)=>{
                         scope.cart = cart
+                        let added_item = scope.cart.items.find((item)=>{
+                            return item._key == payload.item_key
+                        })
+
                         scope.setCartCounter(cart.items)
                         view.update('cart')
-                        scope.notify('Item Added! <a href="/<%- view.ecommerce.cart_name.toLowerCase() %>">View <%- view.ecommerce.cart_name %></a>')
+
+                        let notification_content = '<a href="/<%- view.ecommerce.cart_name.toLowerCase() %>" class="grid col-12 gap-1 w-100 notification-cart-add"><div class="colspan-3 thumbnail"><img src="'+added_item.thumbnail+'" class="object-fit"></div><div class="colspan-9 details"><h4 class="text-bold">Added '+added_item.name+'</h4><div>£'+(added_item.price/100).toFixed(2)+'</div></div></a>'
+                        scope.notify(notification_content,'success',999, 'arrowright')
+                    //    scope.notify('Item Added! <a href="/<%- view.ecommerce.cart_name.toLowerCase() %>">View <%- view.ecommerce.cart_name %></a>')
+
                     }).catch((err)=>{
                         console.log(err)
                         scope.notify(err,'error',5,'fa-exclamation-circle')
@@ -245,18 +260,18 @@
                     scope.view.page = 'gateways'
                     view.update('view.page')
 
-                    let payload = {
-                        _key: scope.cart._key,
-                        delivery_method: scope.cart.delivery_method
-                    }
-
-                    scope.post('cart/set-delivery',payload).then((cart)=>{
-                        console.log(cart)
-                        scope.cart = cart
-                        view.update('cart')
-                    }).catch((err)=>{
-                        scope.notify(err,'error',5,'fa-exclamation-circle')
-                    })
+                    // let payload = {
+                    //     _key: scope.cart._key,
+                    //     delivery_method: scope.cart.delivery_method
+                    // }
+                    //
+                    // scope.post('cart/set-delivery',payload).then((cart)=>{
+                    //     console.log(cart)
+                    //     scope.cart = cart
+                    //     view.update('cart')
+                    // }).catch((err)=>{
+                    //     scope.notify(err,'error',5,'fa-exclamation-circle')
+                    // })
 
 
                 }

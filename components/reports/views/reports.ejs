@@ -9,7 +9,7 @@
     <% view.menus.reports.forEach((card)=>{ %>
 
         <% if (card){ %>
-            <div id="<%- card.link %>-card" class="card" <% if (card.query){ %>app-click="runReport('<%- card.query %>','<%- card.link %>-card',true)"<% } %> <% if (card.inputs){ %>data-inputs="<%= JSON.stringify(card.inputs) %>"<% } %>>
+            <div id="<%- view.functions.parseSnake(card.link) %>-card" class="card" <% if (card.slug){ %>app-click="runReport('<%- card.slug %>','<%- view.functions.parseSnake(card.link) %>-card',true)"<% } %> <% if (card.inputs){ %>data-inputs="<%= JSON.stringify(card.inputs) %>"<% } %>>
                 <div class="image">
                     <img src="/images/pages/161/7/bullseye-gradient-1617539411580.svg">
                 </div>

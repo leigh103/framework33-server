@@ -148,6 +148,9 @@ var express = require('express'),
                         paid: moment().toISOString()
                     }
 
+                    data.cart.payment_method = 'stripe'
+                    data.cart.payment_id = paymentIntent.id
+
                     data.transaction = await new Transactions(data.cart).save()
 
                     if (data.transaction.data){

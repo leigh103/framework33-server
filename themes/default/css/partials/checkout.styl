@@ -1,0 +1,133 @@
+.checkout {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 5rem;
+    height: 100%;
+
+    @media $small {
+        margin-bottom: 3rem;
+        grid-gap: 0;
+        grid-template-columns: 1fr
+    }
+
+    &-totals {
+        &-wrap {
+            margin-bottom: 4rem;
+            line-height: 2rem;
+        }
+    }
+
+    &-items {
+
+        grid-column-end: span 3;
+
+        @media $small {
+
+        }
+
+        &-wrap {
+            margin-bottom: 4rem;
+        }
+
+        &-item {
+
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-gap: 2rem;
+            position: relative;
+            margin-top: 1rem;
+
+            .thumbnail {
+                grid-column-end: span 1;
+                background-color: $bg-light-grey;
+                border-radius: $border-radius;
+
+                @media $small {
+                    grid-column-end: span 2;
+                }
+            }
+
+            .details {
+                grid-column-end: span 5;
+                display: flex;
+                flex-direction: column;
+                padding: 1rem 0
+
+                @media $small {
+                    grid-column-end: span 4;
+                }
+
+                .product {
+                    flex: 1;
+                    font-weight: 700
+                }
+
+                .actions {
+                    flex: 1;
+                    display: flex;
+
+
+                    .price {
+                        flex: 2;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                    }
+
+                    .quantity {
+                        flex: none;
+                        text-align: center;
+                        display: flex;
+
+                        @media $small {
+                            flex: 3;
+                        }
+
+                        .decrease-item, .increase-item {
+                            flex: none;
+                            background-color: $bg-light-grey;
+                            height: 2.5rem;
+                            width: 2.5rem;
+                            border-radius: $border-radius;
+                            padding:0;
+                            color: #aaa;
+                        }
+
+                        .item-quantity {
+                            padding:0 !important;
+                            text-align: center;
+                            max-width: 3rem;
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    &-details {
+
+        grid-column-end: span 2;
+
+        @media $small {
+
+        }
+
+    }
+
+    &-billing {
+        label {
+            color: $text-grey;
+        }
+    }
+
+    &-shipping {
+        .selected-shipping {
+            background-color: $bg-secondary;
+            color: $text-white;
+        }
+    }
+}

@@ -264,9 +264,9 @@
 
         }
 
-        async setDelivery(delivery_data){
+        async setDelivery(data){
 
-            this.data.delivery_method = delivery_data.delivery_method
+            this.data.delivery_method = data.delivery._key
             await this.save()
             return this
 

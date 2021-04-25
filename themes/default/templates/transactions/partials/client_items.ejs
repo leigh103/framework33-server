@@ -1,61 +1,37 @@
-<div class="colspan-3 hidden-s">
+<div class="checkout-items">
 
     <h1 class="h4">In your basket</h1>
 
-    <div class="grid col-5 gap-1 mb-2 mt-5 text-33-grey">
-        <div class="">Item</div>
-        <div class="colspan-2"></div>
-        <div class="text-center">Qty</div>
-        <div class="text-right">Price</div>
-    </div>
+    <div class="checkout-items-wrap">
+        <div class="checkout-items-item" app-for="item in cart.items">
+            <div class="thumbnail"><img src="/images/Product_Placeholder.svg" app-src="item.thumbnail"></div>
+            <div class="details">
+                <div class="product"><a app-attr="{'href':item.slug}" app-bind="item.name"></a></div>
+                <div class="actions">
+                    <div class="quantity">
+                        <button class="decrease-item" app-click="removeFromCart(item)">-</button>
+                        <input type="text" class="item-quantity" app-model="item.quantity">
+                        <button class="increase-item" app-click="addToCart(item)">+</button>
+                    </div>
+                    <div class="price"><span app-bind="parseCurrency(item.price)"></span></div>
 
-    <div>
-        <div class="grid col-5 gap-1 my-2" app-for="item in cart.items">
-            <div><img src="/images/Product_Placeholder.svg" app-src="item.thumbnail"></div>
-            <div class="colspan-2 text-weight-700 flex-middle-left"><a app-attr="{'href':item.slug}" app-bind="item.name"></a></div>
-            <div class="text-center flex-middle"><button class="decrease-item" app-click="removeFromCart(item)">-</button><input type="text" class="item-quantity" app-model="item.quantity"><button class="increase-item" app-click="addToCart(item)">+</button></div>
-            <div class="text-right text-weight-700 flex-middle-right"><span app-bind="parseCurrency(item.price)"></span></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="grid col-4 gap-1" app-show="cart.shipping_method">
-        <div></div>
-        <div></div>
-        <div class="colspan-2 grid col-2">
-
-            <div class="text-weight-500 text-33-grey text-right" app-bind="cart.shipping_method"></div>
-            <div class="text-right text-weight-500"><span app-bind="parseCurrency(cart.shipping_total)"></span></div>
-
+    <div class="checkout-totals-wrap">
+        <div class="grid col-2 gap-1" app-show="cart.shipping_method">
+            <div class="text-left">Shipping: <span app-bind="cart.shipping_method"></span></div>
+            <div class="text-right text-weight-700"><span app-bind="parseCurrency(cart.shipping_total)"></span></div>
         </div>
-    </div>
 
-    <div class="grid col-4 gap-1 my-5">
-        <div><a app-click="emptyCart()">Empty <%- view.ecommerce.cart_name %></a></div>
-        <div></div>
-        <div class="colspan-2 grid col-2">
+        <div class="grid col-2 gap-1 mb-2">
 
-            <div class="text-weight-500 text-33-grey text-right">Total</div>
-            <div class="text-right text-weight-500 h4"><span app-bind="parseCurrency(cart.total)"></span></div>
+            <div class="text-weight-700">Total</div>
+            <div class="text-right text-weight-700 h5"><span app-bind="parseCurrency(cart.total)"></span></div>
 
         </div>
     </div>
 
-</div>
-
-<div class="hidden-m hidden-d block-s my-2">
-    <h1 class="h4 slab">In your basket</h1>
-    <div class="grid col-2 gap-1 mt-1">
-        <div><span app-bind="getTotalItems()"></span> items</div>
-        <div app-bind="parseCurrency(cart.item_total)" class="text-right"></div>
-    </div>
-
-    <div class="grid col-2 gap-1 mt-1" app-show="cart.shipping_method">
-        <div class="text-weight-500 text-33-grey text-right" app-bind="cart.shipping_method"></div>
-        <div class="text-right text-weight-500"><span app-bind="parseCurrency(cart.shipping_total)"></span></div>
-    </div>
-
-    <div class="grid col-2 gap-1 mt-1">
-        <div class="text-weight-500 text-33-grey text-right">Total</div>
-        <div class="text-right text-weight-500 h4"><span app-bind="parseCurrency(cart.total)"></span></div>
-    </div>
 </div>

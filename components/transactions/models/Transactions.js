@@ -120,7 +120,7 @@
 
             let save = false
 
-            if (typeof this.data.customer == 'object' && this.data.customer.email && !this.data.customer._key && this.data.status == 'paid'){
+            if (typeof this.data.customer == 'object' && this.data.customer.email && !this.data.customer._key && this.data.status == 'new'){
 
                 this.data.customer.billing_address = this.data.billing_address
                 this.data.customer.shipping_address = this.data.shipping_address
@@ -135,6 +135,7 @@
 
                 let user = await new Customers(this.data.customer).findOrSave()
                 this.data.customer._key = user.data._key
+
                 save = true
 
             }
@@ -247,6 +248,8 @@
             let new_refund = await new Transactions(new_refund_cart.data).save()
             await this.updateRefundItems(data, new_refund.data._key)
             this.data.status_logs['refunded'] = moment().toISOString()
+            this.data.refund_reference = new_refund.data.reference
+            this.data.refund_total = new_refund.data.total
 // console.log('items',this)
             this.save()
             return this
@@ -359,7 +362,9 @@
                         {link:'Transactions',slug:'transactions/new', weight:1, query:'/dashboard/transactions/stats'}
                     ],
                     reports: [
-                        {link:'Sales', weight:1, query:'transactions/total-sales', description:'Shows a sales breakdown over a specified period', inputs:['date_from','date_to']}
+                        {link:'Sales', weight:1, slug:'transactions/total-sales', description:'Shows a sales breakdown over a specified period', inputs:['date_from','date_to']},
+                        {link:'Best Sellers', weight:1, slug:'transactions/best-sellers', description:'Shows the top 10 selling products in a specified period', inputs:['date_from','date_to']},
+                        {link:'Top Customers', weight:1, slug:'transactions/best-customers', description:'Shows the top 30 customers in a specified period', inputs:['date_from','date_to']}
                     ]
                 }
             }
@@ -375,15 +380,13 @@
                 query_data = {}
             }
 
-            if (!query_data.date_from){
+            if (!query_data.date_from || query_data.date_from == 'null'){
                 query_data.date_from = moment().set({hours:0, minutes:0, seconds:0}).subtract(30, 'days').toISOString()
             }
 
-            if (!query_data.date_to){
+            if (!query_data.date_to || query_data.date_to == 'null'){
                 query_data.date_to = moment().set({hours:23, minutes:59, seconds:59}).toISOString()
             }
-
-
 
             let transactions = await this.all(['_created > '+query_data.date_from,'_created < '+query_data.date_to]),
                 carts = await new Cart().all(['_created > '+query_data.date_from,'_created < '+query_data.date_to]),
@@ -404,7 +407,10 @@
                 current_day_total = 0,
                 product_cats = {},
                 product_cats_totals = [],
-                product_cats_labels = []
+                product_cats_labels = [],
+                payment_methods = {},
+                payment_methods_totals = [],
+                payment_methods_labels = []
 
             // let total = transactions.data.map(item => parseInt(item.total))
             //         .reduce((prev, next) => prev + next)
@@ -453,6 +459,15 @@
                 shipping_total += parseInt(transaction.shipping_total)
                 total_without_shipping += parseInt(transaction.item_total)
 
+                if (transaction.payment_method){
+
+                    if (!payment_methods[transaction.payment_method]){
+                        payment_methods[transaction.payment_method] = 0
+                    }
+                    payment_methods[transaction.payment_method]++
+
+                }
+
             })
 
             transactions_per_day[current_day] = current_day_total.toFixed(2)
@@ -460,6 +475,11 @@
             for (var [cat,val] of Object.entries(product_cats)){
                 product_cats_totals.push(val)
                 product_cats_labels.push(view.functions.capitalise(cat.replace(/^-/,'').replace(/-/g,' ')))
+            }
+
+            for (var [method,val] of Object.entries(payment_methods)){
+                payment_methods_totals.push(val)
+                payment_methods_labels.push(view.functions.capitalise(method.replace(/^-/,'').replace(/-/g,' ')))
             }
 
             while (moment_from.isBefore(moment_to, 'day') || moment_from.isSame(moment_to, 'day')) {
@@ -501,6 +521,11 @@
                     colors: view.functions.gradient('#FD7278','#72adfc',2),
                     labels: ['Converted', 'Abandoned']
                 }},
+                {label:'Payment Methods',type:'chart',format:'doughnut', data:{
+                    values: payment_methods_totals,
+                    colors: view.functions.gradient('#FD7278','#72adfc',2),
+                    labels: payment_methods_labels
+                }},
                 {label:'Totals Per Day (£)',type:'chart',format:'bar', tip:'Total sales (£) broken down into each day of the selected data range', data:{
                     values: transactions_per_day_totals,
                     colors: view.functions.gradient('#FD7278','#72adfc',transactions_per_day_totals.length),
@@ -519,6 +544,157 @@
 
             await new Reports(payload).save()
             return total
+
+        }
+
+        async bestSellers(query_data){
+
+            if (!query_data){
+                query_data = {}
+            }
+
+            if (!query_data.date_from || query_data.date_from == 'null'){
+                query_data.date_from = moment().set({hours:0, minutes:0, seconds:0}).subtract(30, 'days').toISOString()
+            }
+
+            if (!query_data.date_to || query_data.date_to == 'null'){
+                query_data.date_to = moment().set({hours:23, minutes:59, seconds:59}).toISOString()
+            }
+
+            let transactions = await this.all(['_created > '+query_data.date_from,'_created < '+query_data.date_to]),
+                items_total = 0,
+                products = [],
+                products_totals = [],
+                products_labels = [],
+                best_seller = {}
+
+            transactions.data.map((transaction) => {
+
+                transaction.items.map((item)=>{
+
+                    let idx = products.findIndex((itm)=>{
+                        return itm._key == item._key
+                    })
+
+                    if (idx >= 0){
+                        products[idx].count += item.quantity
+                    } else {
+                        products.push({_key:item._key, name:item.name, count:1, price:item.price})
+                    }
+                    items_total += item.quantity
+
+                })
+
+            })
+
+            products.sort((a,b)=>{
+                return b.count - a.count
+            })
+
+            for (let val of products){
+
+                products_totals.push(val.count)
+                products_labels.push(view.functions.capitalise(val.name.replace(/^-/,'').replace(/-/g,' ')))
+
+                if (products_totals.length == 10){
+                    break
+                }
+            }
+
+            let result = [
+                {label:'Transactions',type:'value', tip:'Total number of transactions processed within this date range', data:transactions.data.length},
+                {label:'Items Sold',type:'value', tip:'Total number of items sold', data:items_total},
+                {label:'Product Sales',type:'chart',format:'bar', data:{
+                    values: products_totals,
+                    colors: view.functions.gradient('#FD7278','#72adfc',products_totals.length),
+                    labels: products_labels
+                }}
+            ]
+
+            let payload = {
+                name:'Best Sellers',
+                description: 'Shows the top 10 selling products in a specified period',
+                result:result,
+                model:'Transactions',
+                date_from: query_data.date_from,
+                date_to: query_data.date_to
+            }
+
+            await new Reports(payload).save()
+            return 'done'
+
+        }
+
+        async bestCustomers(query_data){
+
+            if (!query_data){
+                query_data = {}
+            }
+
+            if (!query_data.date_from || query_data.date_from == 'null'){
+                query_data.date_from = moment().set({hours:0, minutes:0, seconds:0}).subtract(30, 'days').toISOString()
+            }
+
+            if (!query_data.date_to || query_data.date_to == 'null'){
+                query_data.date_to = moment().set({hours:23, minutes:59, seconds:59}).toISOString()
+            }
+
+            let transactions = await this.all(['_created > '+query_data.date_from,'_created < '+query_data.date_to]),
+                items_total = 0,
+                customers = [],
+                customers_totals = [],
+                customers_labels = []
+
+            transactions.data.map((transaction) => {
+
+                if (transaction.customer && transaction.customer._key){
+                    let idx = customers.findIndex((itm)=>{
+                        return itm._key == transaction.customer._key
+                    })
+
+                    if (idx >= 0){
+                        customers[idx].spent += parseInt(transaction.total)/100
+                    } else {
+                        customers.push({_key:transaction.customer._key, name:transaction.customer.full_name, spent:parseInt(transaction.total)/100})
+                    }
+                }
+
+            })
+
+            customers.sort((a,b)=>{
+                return b.spent - a.spent
+            })
+
+            for (let val of customers){
+
+                customers_totals.push(val.spent)
+                customers_labels.push(val.name)
+
+                if (customers_totals.length == 30){
+                    break
+                }
+            }
+
+            let result = [
+                {label:'Transactions',type:'value', tip:'Total number of transactions processed within this date range', data:transactions.data.length},
+                {label:'Customer Sales (£)',type:'chart',format:'bar', data:{
+                    values: customers_totals,
+                    colors: view.functions.gradient('#FD7278','#72adfc',customers_totals.length),
+                    labels: customers_labels
+                }}
+            ]
+
+            let payload = {
+                name:'Top Customers',
+                description: 'Shows the top 30 customers in a specified period',
+                result:result,
+                model:'Transactions',
+                date_from: query_data.date_from,
+                date_to: query_data.date_to
+            }
+
+            await new Reports(payload).save()
+            return 'done'
 
         }
 

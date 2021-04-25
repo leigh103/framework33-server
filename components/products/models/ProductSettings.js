@@ -67,6 +67,21 @@
 
         }
 
+        async registerMenus(){
+
+            let menus = {
+                menu: {
+                    settings: [
+                        {link:'Product Settings',slug:'products', weight:1}
+                    ]
+                }
+            }
+
+            global.addMenu(menus)
+            return this
+
+        }
+
 
     }
 

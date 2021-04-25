@@ -269,7 +269,7 @@ html, body {
             }
 
             .icon {
-            
+
             }
 
             @media $small {
@@ -320,6 +320,21 @@ html, body {
             justify-content: flex-end;
 
             overflow: hidden;
+
+            &.hidden-d, &.hidden-m {
+                @media $desktop {
+                    display: none;
+                }
+                @media $medium {
+                    display: none;
+                }
+            }
+
+            &.hidden-s {
+                @media $small {
+                    display: none;
+                }
+            }
 
             .btn {
                 margin-left: 0;

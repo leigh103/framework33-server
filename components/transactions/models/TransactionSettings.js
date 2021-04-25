@@ -122,6 +122,21 @@
 
         }
 
+        async registerMenus(){
+
+            let menus = {
+                menu: {
+                    settings: [
+                        {link:'Transaction Settings',slug:'transactions', weight:1}
+                    ]
+                }
+            }
+
+            global.addMenu(menus)
+            return this
+
+        }
+
     }
 
     new TransactionSettings().init()

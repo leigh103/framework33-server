@@ -26,11 +26,14 @@ label {
 }
 
 input, select, textarea {
+
+    height: $input-height
+
     &.rounded {
         border-radius: $border-radius;
     }
     &.border {
-        border: 1px solid $color-light-grey;
+        border: 1px solid $color-light-grey2;
     }
     &.underline {
         background: none;
@@ -39,6 +42,13 @@ input, select, textarea {
         padding: 0 !important;
         height: 3.5rem !important;
     }
+}
+
+select {
+    background-image: url('/images/dashboard-icons/Icon-ArrowDown.svg');
+    background-position: right 1rem center;
+    background-repeat: no-repeat;
+    background-size: 1rem
 }
 
 div[type=color]:not([class*=h-]), div[type=date]:not([class*=h-]), div[type=datetime-local]:not([class*=h-]), div[type=email]:not([class*=h-]), div[type=file]:not([class*=h-]), div[type=month]:not([class*=h-]), div[type=number]:not([class*=h-]), div[type=password]:not([class*=h-]), div[type=range]:not([class*=h-]), div[type=search]:not([class*=h-]), div[type=tel]:not([class*=h-]), div[type=text]:not([class*=h-]), div[type=time]:not([class*=h-]), div[type=url]:not([class*=h-]), div[type=week]:not([class*=h-]), input[type=color]:not([class*=h-]), input[type=date]:not([class*=h-]), input[type=datetime-local]:not([class*=h-]), input[type=email]:not([class*=h-]), input[type=file]:not([class*=h-]), input[type=month]:not([class*=h-]), input[type=number]:not([class*=h-]), input[type=password]:not([class*=h-]), input[type=range]:not([class*=h-]), input[type=search]:not([class*=h-]), input[type=tel]:not([class*=h-]), input[type=text]:not([class*=h-]), input[type=time]:not([class*=h-]), input[type=url]:not([class*=h-]), input[type=week]:not([class*=h-]){
@@ -64,9 +74,7 @@ input[disabled], select option[disabled] {
     background-color: rgba(255,255,255,0.5);
 }
 
-input[type="text"].border,input[type="select"].border,input[type="password"].border {
-    border: 0.01rem solid $color-mid-light-grey;
-}
+
 
 input[type=checkbox] {
 
@@ -95,14 +103,15 @@ input[type=checkbox] {
 
     &.border {
         &:after {
-            border: 0.01rem solid $color-mid-light-grey;
+            border: 1px solid $color-light-grey2;
         }
     }
 
     &:checked {
         &:after {
             content:'\2713';
-            // border: 1px solid $color-primary;
+            background-color: $color-secondary;
+            color: $text-white;
         }
     }
 
