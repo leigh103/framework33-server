@@ -1,0 +1,94 @@
+.dates {
+
+    &-wrap {
+        border: $dashboard-row-border;
+        border-radius: $border-radius;
+        box-shadow: $shadow;
+        padding: 1rem;
+
+        &.datetime {
+            .dates-time {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+
+                .dates-time-input-wrap {
+                    border-radius: $border-radius;
+                    border: 2px solid $dashboard-color-light-grey;
+
+                    input {
+                        height: 2rem;
+                    }
+                }
+            }
+        }
+
+        .dates-time {
+            .dates-time-title {
+                grid-column-end: span 3;
+            }
+        }
+    }
+
+    &-header {
+        margin: 0.75rem 0;
+        // background-color: $dashboard-color-light-grey;
+        font-weight: 600;
+        border-radius: $border-radius;
+
+        .arrow.next {
+            font-size: 0;
+            background-image: url('/images/dashboard-icons/Icon-ArrowRight.svg');
+            background-size: 1rem auto;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .arrow.prev {
+            font-size: 0;
+            background-image: url('/images/dashboard-icons/Icon-ArrowLeft.svg');
+            background-size: 1rem auto;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .month {
+            font-weight: 600;
+            color: $dashboard-color-black;
+            padding-right: 0.15rem
+        }
+
+        .year {
+            font-weight: 600;
+            color: $dashboard-color-black;
+            padding-left: 0.15rem
+        }
+
+    }
+
+    &-time {
+
+        input {
+            color: $dashboard-color-primary;
+            font-weight: 600;
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        }
+    }
+
+    .date {
+        border-radius: $border-radius;
+    }
+
+    .day {
+        background-color: $dashboard-color-light-grey2;
+        font-weight: 600;
+    }
+
+    .date.selected {
+        background-color: $dashboard-color-primary;
+        color: white;
+        font-weight: 600;
+    }
+
+}

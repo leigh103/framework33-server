@@ -49,7 +49,8 @@ var express = require('express'),
     routes.get('/testemail', async (req,res) => {
 
         if (getGuard(req) == 'admin'){
-            let email = await new Notification('lee@reformedreality.com').setContent('This is a test','This is a test email, sent from '+config.site.name).email()
+            let evnt_data = await DB.read('customers').where(['email like lee']).get()
+            let email = await new Notification(evnt_data).useEmailTemplate('21184908').email()
             res.send(email)
         } else {
             res.redirect('/login/admin')
@@ -123,7 +124,8 @@ var express = require('express'),
         if (getGuard(req) == 'admin'){
             // let admin = await new Admin().find(0)
             // let user = await new Customer().find(0)
-            let sms = await new Notification().setContent('Notification','This is a test notification').mailbox()
+        //    let sms = await new Notification().setContent('Notification','This is a test notification').mailbox()
+            let sms = await new Notification().setContent('This is a test','This is a test notification').notify()
             res.send(sms)
         } else {
             res.redirect('/login/admin')

@@ -85,6 +85,95 @@
 
     }
 
+    const sendBatch = (recipients, stream, template_id, delay) => {
+
+        return new Promise((resolve, reject) => {
+
+            if (!recipients){
+                recipients = ['lee@reformedreality.com','lee@marimo.co','leeanderson60@gmail.com']
+            }
+
+            if (!stream){
+                stream = 'Promotions'
+            }
+
+            if (!template_id){
+                reject('no template ID')
+                return
+            }
+
+            let base_payload = {
+                "From": config.email.from_address,
+                "TemplateID": template_id,
+                "MessageStream": stream,
+                "TemplateModel": {}
+            }
+
+            let payload = recipients.map((recipient) => {
+
+                if (typeof recipient == 'string' && recipient.match(/(.*?)@(.*?)\.(.*?)/)){
+
+                    let result = JSON.parse(JSON.stringify(base_payload))
+                    result.To = recipient
+                    result.TemplateModel.recipient = recipient
+                    return result
+
+                } else if (recipient.email){
+
+                    let result = JSON.parse(JSON.stringify(base_payload))
+                    result.To = recipient.email
+                    result.TemplateModel.recipient = recipient.email
+
+                    if (recipient.full_name){
+                        result.TemplateModel.name = recipient.full_name
+                    }
+
+                    return result
+
+                }
+
+            }).filter((item)=>{
+                return item != null
+            })
+
+            postmark.sendEmailBatchWithTemplates(payload, function(error, email_res) {
+                if(error) {
+                    console.log('Mail error: '+JSON.stringify(error))
+                    reject(error)
+                    return
+                }
+                resolve(email_res)
+            })
+
+        //    resolve(payload)
+
+        });
+    }
+
+    const sendBulk = (recipients, content) => {
+
+        let data = {},
+            batch_size = 500
+
+        function sendLoop(){
+
+            let batch = recipients.splice(0,batch_size)
+
+            if (batch.length > 0){
+                sendBatch(batch,'Promotions',content).then((email_res)=>{
+                    sendLoop()
+                }).catch((err)=>{
+                })
+            } else {
+                res.send('done')
+            }
+
+        }
+
+        sendLoop()
+
+    }
+
     const throttle = (to) => {
 
         return new Promise( async (resolve, reject) => {
@@ -134,7 +223,7 @@
 
 
         if (typeof data != 'object'){
-            return ''
+            return data
         }
 
         let msg = {}
@@ -227,4 +316,5 @@
 
     module.exports = {}
     module.exports.send = send
+    module.exports.sendBulk = sendBulk
     module.exports.templates = templates

@@ -1,5 +1,6 @@
 
-    const Model = require(basedir+'/modules/Models')
+    const Model = require(basedir+'/modules/Models'),
+          schedule = require('node-schedule')
 
     class Automations extends Model {
 
@@ -18,9 +19,10 @@
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Automation Name', type:'string', required:true},
                     {name:'trigger',input_type:'text',placeholder:'Automation trigger', type:'string', required:true},
+                    {name:'schedule',input_type:'datetime',placeholder:'Schedule Automation', type:'date', required:false},
                     {name:'description',input_type:'textarea',placeholder:'Automation Description', type:'string', required:true},
                     {name:'actions',input_type:'array', type:'array', tab:'actions', required:true, subitems:[
-                        {name:'method',input_type:'select', options:[{text:'Mailbox',value:'mailbox'},{text:'Email',value:'email'},{text:'SMS',value:'sms'}] , type:'string', required:true},
+                        {name:'method',input_type:'select', options:[{text:'Mailbox',value:'mailbox'},{text:'Email',value:'email'},{text:'Bulk Email',value:'bulk_email'},{text:'SMS',value:'sms'},{text:'Notify',value:'notify'}] , type:'string', required:true},
                         {name:'to',input_type:'text',placeholder:'method', type:'string', required:true},
                         {name:'enabled',input_type:'checkbox', type:'boolean', required:false},
                         {name:'subject',input_type:'text',placeholder:'Subject', type:'string', required:false},
@@ -40,7 +42,7 @@
                 },
                 private: { // auth'd routes
                     get: {
-
+                        getScheduled:['admin']
                     },
                     post: {
                         save:['admin']
@@ -62,6 +64,15 @@
 
         }
 
+        postSave(){
+
+            if (this.data.schedule){
+                this.schedule(this.data.schedule)
+                console.log('adding sched')
+            }
+
+        }
+
         trigger(data){
 
             return new Promise(async (resolve, reject) => {
@@ -80,15 +91,25 @@
                 if (evnt_data && evnt_data.actions && evnt_data.actions.length > 0){
 
                     let actions = evnt_data.actions,
-                        customer = await this.findCustomer(data),
-                    //    product_link = await this.findProductLink(data),
+                        customer,
                         recipient
 
-                    data.admin_email = config.email.admin_to
-                    data.site_name = config.site.name
+                    if (!Array.isArray(data)){ // if data is an array of recipients for eg. this part needs to be skipped
 
-                    if (data.email){
-                        data.customer_email = data.email
+                        customer = await this.findCustomer(data)
+                    //    product_link = await this.findProductLink(data),
+
+
+
+                        data.admin_email = config.email.admin_to
+                        data.site_name = config.site.name
+
+                        if (data.email){
+                            data.customer_email = data.email
+                        }
+
+                    } else {
+                        customer = false
                     }
 
                     if (customer){
@@ -148,13 +169,16 @@
                                 action.link = await this.parseMoustache(action.link, data)
                             }
 
-                            if (data.timestamp){
-                                action.timestamp = data.timestamp
+                            if (!Array.isArray(data)){
+
+                                if (data.timestamp){
+                                    action.timestamp = data.timestamp
+                                }
+
+                                delete data.content // don't overwrite the content of the action
+                                action = Object.assign(action, data)
+
                             }
-
-                            delete data.content // don't overwrite the content of the action
-
-                            action = Object.assign(action, data)
 
                             if (action.method == 'email'){
 
@@ -163,6 +187,33 @@
                                 }
                                 catch(err){
                                     log(err)
+                                }
+
+                            }
+
+                            if (action.method == 'notify'){
+
+                                try{
+                                    new Notification(action).setContent(action.subject, action.content).notify()
+                                }
+                                catch(err){
+                                    log(err)
+                                }
+
+                            }
+
+                            if (action.method == 'bulk_email'){
+
+                                try{
+                                    if (action.template_id){
+                                        new Notification(data).useEmailTemplate(action.template_id).email()
+                                    } else {
+                                        new Notification(data).useEmailTemplate(action).email()
+                                    }
+
+                                }
+                                catch(err){
+                                    log('Could not send bulk email for trigger: '+evnt_data.trigger)
                                 }
 
                             }
@@ -275,18 +326,20 @@
 
                 if (Array.isArray(data)){
                     data = data[0]
+                } else {
+                    if (data._id && data._id.match(/customers/)){
+                        resolve(data)
+                        return
+                    }
+
+                    if (data.customer_id){
+                        let client = await customers.find(data.customer_id)
+                        resolve(client)
+                        return
+                    }
                 }
 
-                if (data._id && data._id.match(/customers/)){
-                    resolve(data)
-                    return
-                }
 
-                if (data.customer_id){
-                    let client = await customers.find(data.customer_id)
-                    resolve(client)
-                    return
-                }
 
                 resolve()
 
@@ -311,8 +364,107 @@
 
         }
 
+        getScheduled(){
+            console.log(schedule.scheduledJobs)
+            return schedule.scheduledJobs
+        }
+
+        async recur(times){
+
+            if (!times){
+                this.error = 'No times specified for recurring automation'
+                return this
+            }
+
+            let rule = new schedule.RecurrenceRule()
+            rule.tz = 'Europe/London'
+
+            rule = Object.assign(rule, times)
+
+            if (schedule.scheduledJobs[this.evnt]){
+                schedule.scheduledJobs[this.evnt].cancel()
+            }
+
+            schedule.scheduleJob(this.evnt, rule, async () => {
+
+                let evnt = await DB.read(this.settings.collection).where(['trigger == '+this.evnt]).first()
+
+                if (!evnt.query || !evnt.query.filter || !evnt.query.collection){
+                    new Automations(evnt.trigger).trigger()
+                } else {
+                    let evnt_data = await DB.read(evnt.query.collection).where(evnt.query.filter).first()
+                    new Automations(evnt.trigger).trigger(evnt_data)
+                }
+
+            })
+
+            return this
+
+        }
+
+        async schedule(date){
+
+            if (!date){
+                this.error = 'No date specified for scheduled automation'
+                return this
+            }
+
+            date = Date.parse(date)
+
+            if (schedule.scheduledJobs[this.evnt]){
+                schedule.scheduledJobs[this.evnt].cancel()
+            }
+            console.log(this.evnt)
+
+            schedule.scheduleJob(this.evnt, date, async () => {
+
+                let evnt = await DB.read(this.settings.collection).where(['trigger == '+this.evnt]).first()
+
+                if (!evnt.query || !evnt.query.filter || !evnt.query.collection){
+                    new Automations(evnt.trigger).trigger()
+                } else {
+                    let evnt_data = await DB.read(evnt.query.collection).where(evnt.query.filter).first()
+                    new Automations(evnt.trigger).trigger(evnt_data)
+                }
+
+                schedule.cancelJob(this.evnt)
+
+            })
+
+            return this
+
+        }
+
+        async setRecurring(){
+
+            let evnts = await DB.read(this.settings.collection).where(['recur has value']).get()
+
+            evnts.map((evnt)=>{
+                if (evnt.trigger && evnt.recur){
+                    new Automations(evnt.trigger).recur(evnt.recur)
+                }
+            })
+
+        }
+
+        async setScheduled(){
+
+            let date_now = moment().toISOString()
+            let evnts = await DB.read(this.settings.collection).where(['schedule > '+date_now]).get()
+
+            evnts.map((evnt)=>{
+                if (evnt.trigger && evnt.schedule){
+                    new Automations(evnt.trigger).schedule(evnt.schedule)
+                }
+            })
+
+        }
 
 
     }
+
+    new Automations().setRecurring()
+    new Automations().setScheduled()
+
 
     module.exports = Automations

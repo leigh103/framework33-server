@@ -17,7 +17,11 @@
 
 <% } else if (item.input_type == 'date'){ %>
 
-    <%- include(config.site.theme_path+'/partials/input_fields/datepicker.ejs', {datepicker_name:item.name, datepicker_obj:'new'}) %>
+    <%- include(config.site.theme_path+'/partials/input_fields/fields/datepicker.ejs', {item:item, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj_prefix, array_obj: array_obj}) %>
+
+<% } else if (item.input_type == 'datetime'){ %>
+
+    <%- include(config.site.theme_path+'/partials/input_fields/fields/datepicker.ejs', {item:item, datetime:true, max_characters:max_characters, max_chars_text:max_chars_text, obj_prefix: obj_prefix, array_obj: array_obj}) %>
 
 <% } else if (item.input_type == 'multiselect'){ %>
 

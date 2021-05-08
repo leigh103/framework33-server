@@ -99,27 +99,27 @@ const express = require('express'),
                 let cookies = cookie.parse(ws.upgradeReq.headers.cookie),
                     sid = cookies['connect.sid']
 
-                if (global.websocket.clients && global.websocket.clients[sid]){
-
-                    if (global.websocket.data && global.websocket.data[sid]){
-
-                        ws.send(JSON.stringify(global.websocket.data[sid]))
-
-                        if (!global.websocket.data[sid]._persist){
-                            delete global.websocket.data[sid]
-                        }
-
-                    } else {
-                        ws.send('already connected')
-                    }
-
-                } else {
+                // if (global.websocket.clients && global.websocket.clients[sid]){
+                //
+                //     if (global.websocket.data && global.websocket.data[sid]){
+                //
+                //         ws.send(JSON.stringify(global.websocket.data[sid]))
+                //
+                //         if (!global.websocket.data[sid]._persist){
+                //             delete global.websocket.data[sid]
+                //         }
+                //
+                //     } else {
+                //         ws.send('already connected')
+                //     }
+                //
+                // } else {
                     new WebsocketClient(sid,ws).save()
-                    ws.send('connected')
-                }
+                    ws.send(JSON.stringify({system:'connected'}))
+                // }
 
             } else {
-                ws.send('connected, no session')
+                ws.send(JSON.stringify({system:'connected, no session'}))
             }
 
             ws.on('message', (msg) => {

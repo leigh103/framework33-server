@@ -610,20 +610,26 @@
             socketConnect("<%- view.websocket.url %>")
 
             watch['ws_data'] = function(data){
+
                 console.log('incoming: ',data)
+
                 if (typeof data == 'object' && data.text){
-                    scope.view.page_title = document.title+''
-                    document.title = 'New Message!'
-                    scope.notify(data.subject,'success',10,'fa-envelope-open-text').then(()=>{
-                        document.title = scope.view.page_title
-                    })
-                    if (scope.admin){
-                        if (!scope.admin.mailbox){
-                            scope.admin.mailbox = []
-                        }
-                        scope.admin.mailbox.push(data)
-                        scope.admin.mailbox.sort((a, b) => -a.date.localeCompare(b.date))
+
+                    if (data.subject){
+                        scope.view.page_title = document.title+''
+                        document.title = data.subject
                     }
+
+                    scope.notify(data.text,'success',60,'envelope').then(()=>{
+                        if (data.subject){
+                            document.title = scope.view.page_title
+                        }
+                    })
+
+                } else if (typeof data == 'string'){
+
+                    scope.notify(data,'success',60,'envelope')
+
                 }
 
             }

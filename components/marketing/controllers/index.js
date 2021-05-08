@@ -8,7 +8,6 @@
 
 const express = require('express'),
     routes = express.Router(),
-    CronJob = require('cron').CronJob,
     Pstmk = require("postmark"),
 
     settings = {

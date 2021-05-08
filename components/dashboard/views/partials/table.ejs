@@ -47,6 +47,10 @@
 
                         <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY')"></div>
 
+                    <% } else if (item.input_type == 'datetime'){ %>
+
+                        <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY [at] h:mma')"></div>
+
                     <% } else if (item.type == 'boolean'){ %>
 
                         <div class="cell middle <%- item.name %> <%- item.input_type %>">

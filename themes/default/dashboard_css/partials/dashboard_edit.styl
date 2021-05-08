@@ -32,7 +32,7 @@
             }
         }
 
-        input, textarea, select {
+        input, textarea, select, date-picker {
             border-bottom: 1px solid #E3E3E3;
             padding: 0;
             margin: 0 0 1rem;
@@ -44,6 +44,33 @@
                 height: auto !important;
                 padding: 0 !important;
                 font-size: 1rem !important;
+            }
+        }
+
+        date-picker {
+            .value {
+                padding: 0 !important;
+
+                &:before {
+                    display: inline-block;
+                    height: 1.2rem;
+                    width: 1.2rem;
+                    top:-2px;
+                    margin-right: 0.5rem;
+                    content:'';
+                    background-color: $dashboard-color-primary;
+                    -webkit-mask-image: url('/images/dashboard-icons/Icon-Calendar.svg');
+                    mask-image: url('/images/dashboard-icons/Icon-Calendar.svg');
+                    -webkit-mask-size: contain;
+                    mask-size: contain;
+                    -webkit-mask-position: center;
+                    mask-position: center;
+                    -webkit-mask-repeat: no-repeat;
+                    mask-repeat: no-repeat;
+                    vertical-align: middle;
+                    position: relative;
+                }
+
             }
         }
 
@@ -159,6 +186,7 @@
             }
 
             &-checkbox {
+                margin: 0 0 1rem;
                 grid-column-end: span 2;
 
                 & > div {

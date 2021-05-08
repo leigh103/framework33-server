@@ -54,7 +54,7 @@
             let menus = {
                 menu: {
                     dashboard: [
-                        {link:'Mailbox',slug:'/dashboard/mailbox', weight:1, query:'/dashboard/stats'}
+                        {link:'Mailbox',slug:'mailbox', weight:1, query:'/dashboard/stats'}
                     ]
                 }
             }

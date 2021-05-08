@@ -1,9 +1,11 @@
 
-    const CronJob = require('cron').CronJob,
-          provider = {
+    const provider = {
               sms: require('../providers/sms/'+config.providers.sms),
               email: require('../providers/email/'+config.providers.email)
           }
+
+    const WebsocketClient = require('../WebsocketClient.js'),
+          ws = new WebsocketClient()
 
     class Notification {
 
@@ -11,7 +13,12 @@
 
             this.class = false
 
-            if (typeof recipient == 'object'){ // find relevant data to process the notification
+            if (Array.isArray(recipient)){
+
+                this.recipient = 'bulk'
+                this.recipients = recipient
+
+            } else if (typeof recipient == 'object'){ // find relevant data to process the notification
 
                 if (recipient.data){ // if user model is provided
                     this.recipient = recipient.data
@@ -58,6 +65,11 @@
 
         setContent(subject, text){
 
+            if (!text){
+                text = subject
+                subject = ''
+            }
+
             this.content = {
                 subject: subject,
                 text: text.replace(/\<br\>/g,'\n').replace(/(<([^>]+)>)/gi, ""),
@@ -98,7 +110,7 @@
 
         email(){
 
-            if (!this.recipient || !this.recipient.email){
+            if (!this.recipient || this.recipient != 'bulk' && !this.recipient.email){
                 this.error = 'No recipient specified'
             }
 
@@ -110,7 +122,12 @@
                 return this
             }
 
-            this.result = provider.email.send(this.recipient.email, this.content)
+            if (this.recipient == 'bulk'){
+                this.result = provider.email.sendBulk(this.recipients, this.content)
+            } else {
+                this.result = provider.email.send(this.recipient.email, this.content)
+            }
+
 
             return this.result
 
@@ -162,6 +179,14 @@
             //     return this
             // }
 
+        }
+
+        notify(){
+            ws.broadcast(this.content)
+            this.result = {
+                sent:'Message sent'
+            }
+            return this.result
         }
 
     }
