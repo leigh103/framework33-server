@@ -208,6 +208,7 @@
                         _key: 1613655093885
                     }
                 ],
+                type:"products",
                 protect: true
             }
 
@@ -225,6 +226,7 @@
                         _key: 1613655093886
                     }
                 ],
+                type:"products",
                 protect: true
             }
 

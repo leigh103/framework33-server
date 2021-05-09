@@ -84,6 +84,7 @@
                     "_key": 1613930962141
                     }
                 ],
+                "type":"user",
                 "protect": true
             }
 
@@ -101,6 +102,7 @@
                   "_key": 1613921115788
                 }
               ],
+              "type":"user",
               "protect": true
             }
 
@@ -118,6 +120,7 @@
                   "enabled": true
                 }
               ],
+              "type":"user",
               "protect": true
             }
 

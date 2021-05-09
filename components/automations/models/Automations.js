@@ -1,6 +1,6 @@
 
     const Model = require(basedir+'/modules/Models'),
-          schedule = require('node-schedule')
+          Schedule = require('node-schedule')
 
     class Automations extends Model {
 
@@ -67,8 +67,8 @@
         postSave(){
 
             if (this.data.schedule){
+                this.evnt = this.data.trigger
                 this.schedule(this.data.schedule)
-                console.log('adding sched')
             }
 
         }
@@ -365,8 +365,12 @@
         }
 
         getScheduled(){
-            console.log(schedule.scheduledJobs)
-            return schedule.scheduledJobs
+
+            let jobs = []
+            for (var job in Schedule.scheduledJobs){
+                jobs.push({name:job, firing_on: new Date(Schedule.scheduledJobs[job].pendingInvocations[0].fireDate._date), recurrence: Schedule.scheduledJobs[job].pendingInvocations[0].recurrenceRule})
+            }
+            return jobs
         }
 
         async recur(times){
@@ -376,16 +380,16 @@
                 return this
             }
 
-            let rule = new schedule.RecurrenceRule()
+            let rule = new Schedule.RecurrenceRule()
             rule.tz = 'Europe/London'
 
             rule = Object.assign(rule, times)
 
-            if (schedule.scheduledJobs[this.evnt]){
-                schedule.scheduledJobs[this.evnt].cancel()
+            if (Schedule.scheduledJobs[this.evnt]){
+                Schedule.scheduledJobs[this.evnt].cancel()
             }
 
-            schedule.scheduleJob(this.evnt, rule, async () => {
+            Schedule.scheduleJob(this.evnt, rule, async () => {
 
                 let evnt = await DB.read(this.settings.collection).where(['trigger == '+this.evnt]).first()
 
@@ -411,12 +415,11 @@
 
             date = Date.parse(date)
 
-            if (schedule.scheduledJobs[this.evnt]){
-                schedule.scheduledJobs[this.evnt].cancel()
+            if (Schedule.scheduledJobs[this.evnt]){
+                Schedule.scheduledJobs[this.evnt].cancel()
             }
-            console.log(this.evnt)
 
-            schedule.scheduleJob(this.evnt, date, async () => {
+            Schedule.scheduleJob(this.evnt, date, async () => {
 
                 let evnt = await DB.read(this.settings.collection).where(['trigger == '+this.evnt]).first()
 
@@ -427,7 +430,7 @@
                     new Automations(evnt.trigger).trigger(evnt_data)
                 }
 
-                schedule.cancelJob(this.evnt)
+                Schedule.cancelJob(this.evnt)
 
             })
 

@@ -38,9 +38,11 @@ const express = require('express'),
 
 
     let data = {
+        query:'',
         meta: {},
         include_styles: ['dashboard/views/styles/dashboard-style.ejs'],
-        model: new Automations()
+        model: new Automations(),
+        tabs: [{href: '/dashboard/automations', text:'All'},{href: '/dashboard/automations/user', text:'User'},{href: '/dashboard/automations/transactions', text:'Transactions'},{href: '/dashboard/automations/products', text:'Products'},{href: '/dashboard/automations/scheduled', text:'Scheduled'},{href: '/dashboard/automations/recurring', text:'Recurring'}]
     }
 
     routes.get('*', (req, res, next) => {
@@ -52,21 +54,51 @@ const express = require('express'),
         next()
     })
 
-    routes.get('/automations/customers', async(req, res) => {
+    routes.get('/automations/:filter(user|products|transactions)', async(req, res) => {
 
         data.meta = {
             title: config.site.name+' | Automations'
         }
 
         view.current_view = 'automations'
-        view.current_sub_view = 'customers'
+        view.current_sub_view = req.params.filter
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
         data.title = 'Automations'
         data.table = 'automations'
+        data.query = '?type='+req.params.filter
 
-        data.fields = data.model.fields
-        data.search_fields = data.model.search_fields
+        data.fields = data.model.settings.fields
+        data.search_fields = data.model.settings.search_fields
+
+        res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+    })
+
+    routes.get('/automations/:filter(recurring|scheduled)', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Automations'
+        }
+
+        view.current_view = 'automations'
+        view.current_sub_view = req.params.filter
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+
+        if (req.params.filter == 'recurring'){
+            req.params.filter = 'recur'
+        }
+
+        if (req.params.filter == 'scheduled'){
+            req.params.filter = 'schedule'
+        }
+
+        data.title = 'Automations'
+        data.table = 'automations'
+        data.query = '?'+req.params.filter+'=has_value'
+
+        data.fields = data.model.settings.fields
+        data.search_fields = data.model.settings.search_fields
 
         res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
@@ -79,11 +111,12 @@ const express = require('express'),
         }
 
         view.current_view = 'automations'
-        view.current_sub_view = ''
+        view.current_sub_view = 'all'
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
         data.title = 'Automations'
         data.table = 'automations'
+        data.query = undefined
 
         if (req.params.key){
             data.key = req.params.key

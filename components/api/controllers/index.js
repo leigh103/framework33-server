@@ -84,7 +84,7 @@ var express = require('express'),
                     delete result_copy.data
                     resolve(result_copy)
 
-                } else if (result_copy.data){
+                } else if (result_copy.data && Array.isArray(result_copy.data)){
 
                     result_copy.data = result_copy.data.map((item)=>{
                         delete item.password
@@ -92,6 +92,14 @@ var express = require('express'),
                         delete item.ws_id
                         return item
                     })
+
+                    resolve(result_copy)
+
+                } else if (result_copy.data && typeof result_copy.data == 'object'){
+
+                    delete result_copy.data.password
+                    delete result_copy.data.password_reset
+                    delete result_copy.data.ws_id
 
                     resolve(result_copy)
 
@@ -183,8 +191,8 @@ var express = require('express'),
             method = parseCamelCase(req.params.function)
         }
 
-        if (req.params.id == 'search'){
-            method = 'search'
+        if (req.params.id && !req.params.id.match(/^[0-9]+$/)){
+            method = parseCamelCase(req.params.id)
         }
 
         let query,
@@ -242,36 +250,39 @@ var express = require('express'),
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
-            let model
+            let model = await new global[model_class_name]()
 
-            if (method == 'search'){
-                model = await new global[model_class_name]().search(req.query.str, sort)
-            } else if (req.params.id){
-                model = await new global[model_class_name]().find(req.params.id)
-            } else {
-
-                method = 'all'
-                model = await new global[model_class_name]()
-
-                if (model.all){ // if the class exists and the all function exists
-                    await model.all(query, sort, start, end)
-
-                } else { // else fail
-                    res.json(settings.not_found)
-                    return false
-                }
-
-            }
+            // if (method != 'find'){
+            //     model = await new global[model_class_name]().search(req.query.str, sort)
+            // } else if (req.params.id){
+            //     model = await new global[model_class_name]().find(req.params.id)
+            // } else {
+            //
+            //     method = 'all'
+            //     model = await new global[model_class_name]()
+            //
+            //     if (model.all){ // if the class exists and the all function exists
+            //         await model.all(query, sort, start, end)
+            //
+            //     } else { // else fail
+            //         res.json(settings.not_found)
+            //         return false
+            //     }
+            //
+            // }
 
             functions.accessGranted(model,req,method).then(async ()=>{
 
                 let result
 
-                if (req.params.function){
+                if (method){
                     if (req.params.fid){
+
                         result = await model[method](req.params.fid)
+                    } else if (req.params.id){
+                        result = await model[method](req.params.id)
                     } else {
-                        result = await model[method]()
+                        result = await model.all(query, sort, start, end)
                     }
                 } else {
                     result = await Promise.resolve(model.data)
