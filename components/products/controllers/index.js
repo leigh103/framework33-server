@@ -384,8 +384,9 @@ const express = require('express'),
                 if (data.category.description){
                     data.meta.description = data.category.description.substring(0,160)
                 }
-                data.products = await models.products.all(['category like '+data.category._key,'sub_category NOT EXISTS', 'active == true']).get()
-                // data.products = data.products.data
+                
+                data.products = await models.products.all(['category like '+data.category._key,'sub_category NOT EXISTS', 'active == true'])
+                data.products = data.products.data
                 res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
             }

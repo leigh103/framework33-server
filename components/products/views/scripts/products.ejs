@@ -24,7 +24,10 @@
             if (data){
                 scope.get('product_categories/'+data).then((category)=>{
                     scope.new.sub_category = ''
-                    scope.sub_categories = category.sub_categories
+                    scope.sub_categories = category.sub_categories.map((item)=>{
+                        item.value = item.name
+                        return item
+                    })
                     view.update('sub_categories')
                 })
             }
@@ -93,7 +96,10 @@
                     if (scope.new.category){
                         let sub_cat = scope.new.sub_category+''
                         scope.get('product_categories/'+scope.new.category).then((category)=>{
-                            scope.sub_categories = category.sub_categories
+                            scope.sub_categories = category.sub_categories.map((item)=>{
+                                item.value = item.name
+                                return item
+                            })
                             view.update('sub_categories')
                         }).then(()=>{
                             scope.new.sub_category = sub_cat

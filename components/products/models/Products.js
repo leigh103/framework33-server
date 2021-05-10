@@ -155,9 +155,9 @@
         async getRelated(){
 
             if (this.data && this.data.category && this.data.sub_category){
-                return await new Products().all(['category like '+this.data.category, 'sub_category like '+this.data.sub_category, '_key != '+this.data._key,'activated == true']).get()
+                return await new Products().all(['category like '+this.data.category, 'sub_category like '+this.data.sub_category, '_key != '+this.data._key,'activated == true']).data
             } else if (this.data && this.data.category){
-                return await new Products().all(['category like '+this.data.category, '_key != '+this.data._key, 'activated == true']).get()
+                return await new Products().all(['category like '+this.data.category, '_key != '+this.data._key, 'activated == true']).data
             } else {
                 return []
             }
@@ -166,7 +166,7 @@
 
         async getMostRecent(){
 
-            return await new DB.read(this.settings.collection).where(['activated == true']).orderBy('_updated','DESC').limit(5).get()
+            return await new DB.read(this.settings.collection).where(['activated == true']).orderBy('_updated','DESC').limit(5).data
 
         }
 

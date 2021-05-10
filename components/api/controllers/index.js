@@ -276,7 +276,9 @@ var express = require('express'),
                 let result
 
                 if (method){
-                    if (typeof req.params.fid != 'undefined'){
+                    if (method == 'search'){
+                        result = await model.search(req.query.str, sort)
+                    } else if (typeof req.params.fid != 'undefined'){
                         result = await model[method](req.params.fid)
                     } else if (typeof req.params.id != 'undefined'){
                         result = await model[method](req.params.id)

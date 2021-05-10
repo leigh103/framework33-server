@@ -500,7 +500,7 @@
 
         }
 
-        search(str, sort) {
+        async search(str, sort) {
 
             if (!sort){
                 sort = {
@@ -527,7 +527,7 @@
                     filter.push('name like '+str.toLowerCase())
                 }
 
-                this.data = DB.read(this.settings.collection).orWhere(filter).orderBy(sort.field, sort.dir).get()
+                this.data = await DB.read(this.settings.collection).orWhere(filter).orderBy(sort.field, sort.dir).get()
                 return this
 
             }
