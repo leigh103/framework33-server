@@ -494,7 +494,7 @@
                 scope.view.media_obj = obj
 
                 if (!scope.media_library){
-                    scope.get('media_library'<% if (typeof table != 'undefined'){ %>,'search?str=<%- table %>&sort=_created&desc=true'<% } else { %>,'?sort=_created&desc=true'<% } %>).then((data)=>{
+                    scope.get('media_library').then((data)=>{
 
                         scope.media_library = data
                         scope.openModal('show_media_library')

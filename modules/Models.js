@@ -400,13 +400,13 @@
 
                 } else if (field.type == 'sku'){
 
-                    let check = await DB.read(this.settings.collection).where(['sku == '+value]).get()
-                    if (check.length > 0){
-                        this.error = 'This SKU '+value+' has already been used. Please update and save again'
-                        return ''
-                    } else {
+                    // let check = await DB.read(this.settings.collection).where(['sku == '+value]).get()
+                    // if (check.length > 0){
+                    //     this.error = 'This SKU '+value+' has already been used. Please update and save again'
+                    //     return ''
+                    // } else {
                         return value
-                    }
+                    // }
 
                 } else if (field.type == 'array' && typeof value == 'object'){
 
