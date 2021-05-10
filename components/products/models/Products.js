@@ -66,7 +66,7 @@
 
         }
 
-        all(data, start, end) {
+        async all(data, sort, start, end) {
 
             if (!start){
                 start = 0
@@ -76,12 +76,12 @@
                 end = 999
             }
 
-            if (typeof data == 'string'){
-                this.data = DB.read(this.settings.collection).orderBy(data,'asc').orderBy('_updated','DESC').limit(start, end).get()
-            } else if (typeof data == 'object' && data.length > 0){
-                this.data = DB.read(this.settings.collection).where(data).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
+            if (data && typeof data == 'string'){
+                this.data = await DB.read(this.settings.collection).orderBy(data,'asc').orderBy('_updated','DESC').limit(start, end).get()
+            } else if (data && typeof data == 'object' && data.length > 0){
+                this.data = await DB.read(this.settings.collection).where(data).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
             } else {
-                this.data = DB.read(this.settings.collection).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
+                this.data = await DB.read(this.settings.collection).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
             }
 
             if (Array.isArray(this.data)){

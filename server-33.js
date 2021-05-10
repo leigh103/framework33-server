@@ -227,6 +227,8 @@ const express = require('express'),
 
                         if (isSet(global.component[name],'settings','protected_guards') && req.session.user && global.component[name].settings.protected_guards.indexOf(req.session.user.guard) >=0){
                             next()
+                        } else if (!req.session.user && req.path.match(/^dashboard/) || !req.session.user && global.component[name].settings.default_route.match(/^dashboard/)){
+                            res.redirect('/login/admin')
                         } else if (isSet(global.component[name],'settings','protected_guards')){
                             res.redirect('/login')
                         } else {

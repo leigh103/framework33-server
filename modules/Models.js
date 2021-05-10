@@ -106,7 +106,7 @@
                 }
             }
 
-            if (typeof data == 'object' && data.length > 0){
+            if (data && typeof data == 'object' && data.length > 0){
                 this.data = await DB.read(this.settings.collection).where(data).orderBy(sort.field,sort.dir).limit(start, end).get() //.omit(['password','password_reset']).get()
             } else {
                 this.data = await DB.read(this.settings.collection).orderBy(sort.field,sort.dir).limit(start, end).get() //.omit(['password','password_reset']).get()

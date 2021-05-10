@@ -195,7 +195,7 @@ var express = require('express'),
             method = parseCamelCase(req.params.id)
         }
 
-        let query,
+        let query = false,
             sort = {
                 dir: 'desc',
                 field: '_updated'
@@ -276,10 +276,9 @@ var express = require('express'),
                 let result
 
                 if (method){
-                    if (req.params.fid){
-
+                    if (typeof req.params.fid != 'undefined'){
                         result = await model[method](req.params.fid)
-                    } else if (req.params.id){
+                    } else if (typeof req.params.id != 'undefined'){
                         result = await model[method](req.params.id)
                     } else {
                         result = await model.all(query, sort, start, end)
