@@ -15,10 +15,12 @@
                     {name:'sub_title',input_type:'text',placeholder:'Sub Title', type:'string', required:false},
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:true},
                     {name:'weight',input_type:'select',placeholder:'URL', options:[], type:'number', required:false},
+                    {name:'active',input_type:'checkbox',type:'boolean', required:false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false},
                     {name:'sub_categories',input_type:'array',placeholder:'Sub Categories', tab:'sub_categories', type:'array', required:false, subitems:[
                         {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
                         {name:'name',input_type:'text',placeholder:'Name', type:'string', required:false},
+                        {name:'active',input_type:'checkbox',type:'boolean', required:false},
                         {name:'sub_title',input_type:'text',placeholder:'Sub Title', type:'string', required:false},
                         {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
                         {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false}
@@ -97,16 +99,33 @@
             cats.data = await cats.data
 
             cats.data.map((category,i)=>{
-                menus.menu.nav[0].subitems.push({link:category.name, slug: '/'+category.slug, weight:i})
-                menus.menu.product_categories.push({link:category.name, slug: '/'+category.slug, weight:i, subitems:[]})
 
-                if (category.sub_categories){
-                    category.sub_categories.map((sub_category,ii)=>{
-                        menus.menu.product_categories[menus.menu.product_categories.length-1].subitems.push({link:sub_category.name, slug: '/'+sub_category.slug, weight:ii})
-                    })
+                if (!category.weight){
+                    category.weight = i
                 }
 
+                if (category.active == true){
+
+                    menus.menu.nav[0].subitems.push({link:category.name, slug: '/'+category.slug, weight:category.weight})
+                    menus.menu.product_categories.push({link:category.name, slug: '/'+category.slug, weight:category.weight, subitems:[]})
+
+                    if (category.sub_categories){
+                        category.sub_categories.map((sub_category,ii)=>{
+                            if (sub_category.active == true){
+                                menus.menu.product_categories[menus.menu.product_categories.length-1].subitems.push({link:sub_category.name, slug: '/'+sub_category.slug, weight:ii})
+                            }
+                        })
+                    }
+                }
+
+
             })
+
+            if (menus.menu && menus.menu.product_categories && menus.menu.product_categories.length > 0){
+                menus.menu.product_categories.sort((a,b)=>{
+                    return a.weight - b.weight
+                })
+            }
 
             global.addMenu(menus)
             return this
