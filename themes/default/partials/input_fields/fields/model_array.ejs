@@ -39,7 +39,7 @@
                     <dropdown-search placeholder="Search items..." app-model="new.<%- item.name %>_new" data-url="/api/<%- model.settings.collection_of %>/search?str=" data-bind="name" data-value="_key" class="mb-2 layer-2">
                     </dropdown-search>
                 </div>
-                <button class="btn bg-primary" app-click="addToCollection('new.<%- item.name %>',new.<%- item.name %>_new,'new.<%- item.name %>_new')">Add <span class="icon plus right white"></span></button>
+                <button class="btn bg-primary" app-click="addToCollection(new.<%- item.name %>_new,new.<%- item.name %>)">Add <span class="icon plus right white"></span></button>
 
         </div>
 

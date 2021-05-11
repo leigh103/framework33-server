@@ -305,7 +305,7 @@
                             background-color: $dashboard-color-light-grey;
                             padding: 2rem;
                             display: inline-block !important;
-                            width: calc(33% - 2rem);
+                            width: calc(33% - 1rem);
                             vertical-align: top;
                             margin-bottom: 2rem;
                             margin-right: 2rem;
@@ -340,7 +340,8 @@
                     &-new {
 
                         display: inline-block;
-                        width: 33%;
+                        width: calc(33% - 1rem);
+                        margin-left: -3px;
 
                         .array-item {
 
@@ -384,6 +385,22 @@
 
                 }
 
+            }
+
+            &-model {
+                &-array {
+
+                    &-wrap {
+                        display: grid;
+                        grid-gap: 2rem;
+
+                        .array-item {
+                            display:block;
+                            width: 100%;
+                        }
+                    }
+
+                }
             }
 
             &-model-array-wrap {

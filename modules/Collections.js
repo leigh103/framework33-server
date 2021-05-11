@@ -8,7 +8,9 @@ class Collections extends Models {
 
     }
 
-    async getItems(){
+    async getItems(key){
+
+        this.data = await DB.read(this.settings.collection).where(['_key == '+key]).first()
 
         let collection = this.settings.collection_of
         let items = this.data.items.map((item) => {
@@ -19,7 +21,7 @@ class Collections extends Models {
         this.collection_data = await DB.read(this.settings.collection_of)
                             .whereMultiple(items)
                             .first()
-                            
+
         return this.collection_data
 
     }
