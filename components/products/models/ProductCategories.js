@@ -14,6 +14,7 @@
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'sub_title',input_type:'text',placeholder:'Sub Title', type:'string', required:false},
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:true},
+                    {name:'weight',input_type:'select',placeholder:'URL', options:[], type:'number', required:false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false},
                     {name:'sub_categories',input_type:'array',placeholder:'Sub Categories', tab:'sub_categories', type:'array', required:false, subitems:[
                         {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
@@ -24,6 +25,16 @@
                     ]},
                 ],
                 search_fields:['name']
+            }
+
+            let weight_idx = this.settings.fields.findIndex((field)=>{
+                return field.name == 'weight'
+            })
+
+            if (weight_idx >= 0){
+                for (var i=0; i<=20;i++){
+                    this.settings.fields[weight_idx].options.push({value:i,text:i})
+                }
             }
 
             this.routes = {

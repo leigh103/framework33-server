@@ -494,6 +494,10 @@
                 this.error = "Error validating fields: "+err
             }
 
+            if (this.error){
+                return this
+            }
+
             if (this.data._id){
                 this.data = await DB.read(this.settings.collection).where(['_id == '+this.data._id]).update(this.data).new()
             } else if (this.data._key){
