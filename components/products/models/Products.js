@@ -22,6 +22,7 @@
 
 
                     {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'prices and stock',required: true},
+                    {name:'vat',input_type:'number',placeholder:'VAT as decimal',type:'number', tab:'prices and stock',required: false},
                     {name:'adjustment',input_type:'text',placeholder:'Adjustment', tab:'prices and stock',type:'discount',required: false},
                     {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'prices and stock',  required:false},
                     {name:'sku',input_type:'sku',placeholder:'Unique Product Code', tab:'prices and stock',type:'sku',required: false},
