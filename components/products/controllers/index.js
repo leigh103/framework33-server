@@ -83,6 +83,7 @@ const express = require('express'),
         view.current_view = 'products'
         view.current_sub_view = 'categories'
         data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/product_categories.ejs']
+        data.include_styles = [settings.views+'/styles/dashboard_style.ejs']
 
         data.query = ''
         data.title = 'Product Categories'

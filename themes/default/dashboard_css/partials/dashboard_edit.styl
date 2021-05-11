@@ -291,6 +291,14 @@
                         grid-template-columns: 1fr 1fr 1fr;
                         grid-gap: 2rem;
 
+                        @media $medium {
+                            grid-template-columns: 1fr 1fr;
+                        }
+
+                        @media $small {
+                            grid-template-columns: 1fr;
+                        }
+
                         .array-item {
 
                             background-color: $dashboard-color-light-grey;
