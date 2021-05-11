@@ -74,6 +74,38 @@ const express = require('express'),
         res.redirect(url)
     })
 
+    routes.get('/dashboard/products/categories/:key?/items', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Product Categories'
+        }
+
+        view.current_view = 'products'
+        view.current_sub_view = 'categories'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
+
+        data.query = ''
+        data.title = 'Product Categories'
+        data.table = 'product_categories'
+
+        data.context_menu = [
+            {function: "showCategoryProducts",text:"Products", icon:"box"}
+        ]
+
+        data.model = models.categories
+
+        if (req.params.key){
+            data.key = req.params.key
+            data.fields = await data.model.parseEditFields()
+            res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+        } else {
+            data.fields = data.model.settings.fields
+            data.search_fields = data.model.settings.search_fields
+            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        }
+
+    })
+
     routes.get('/dashboard/products/categories/:key?', async(req, res) => {
 
         data.meta = {
@@ -82,12 +114,15 @@ const express = require('express'),
 
         view.current_view = 'products'
         view.current_sub_view = 'categories'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
 
         data.query = ''
         data.title = 'Product Categories'
         data.table = 'product_categories'
 
+        data.context_menu = [
+            {function: "showCategoryProducts",text:"Products", icon:"box"}
+        ]
 
         data.model = models.categories
 
@@ -236,11 +271,12 @@ const express = require('express'),
                 data.query += '&category=%27'+req.params.cat+'%27'
             }
 
+            view.current_sub_view = 'categories'
             data.option_data = await view.functions.getOptionData('product_categories')
             data.fields = data.model.settings.fields
             data.search_fields = data.model.settings.search_fields
 
-            return res.render(settings.views+'/dashboard/products.ejs',data)
+            return res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
         } else if (req.params.key){
 
@@ -353,7 +389,7 @@ const express = require('express'),
                     }
                     data.products = await models.products.all(['category == '+data.parent_category._key, 'sub_category == '+data.sub_category._key, 'active == true'])
                     data.products = data.products.get()
-                    
+
                     res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
                 } else { // check if it's a product

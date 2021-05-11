@@ -147,7 +147,7 @@
             http.get(url)
                 .then((data) => {
                     data = JSON.parse(data)
-console.log(url, data)
+
                     let idx = data.length+1
 
                     if (idx < 100){
@@ -172,7 +172,7 @@ console.log(url, data)
             } else {
 
                 let array = evaluate.getValue(scope.view.media_obj)
-                
+
                 scope.push(media.url, array)
 
                 if (scope.new._key){
@@ -186,7 +186,8 @@ console.log(url, data)
         }
 
         scope.showCategoryProducts = function(){
-            window.location.href = '/dashboard/products/'+scope.product_categories[scope.view.key]._key
+            
+            window.location.href = '/dashboard/products/category/'+scope.product_categories[scope.view.key]._key
         }
 
     }
