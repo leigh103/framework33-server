@@ -21,7 +21,7 @@
     <label><%- view.functions.parseName(item.name) %></label>
     <div class="input-array-wrap">
         <div class="input-array-item" app-for="item in <%- new_prefix %><%- item.name %>">
-            <button class="" app-click="splice(<%- new_prefix %><%- item.name %>,item.value)"><span class="icon x primary"></span></button>
+            <button class="" app-click="splice(item, $parent)"><span class="icon x primary"></span></button>
             <input type="text" app-model="item.value" placeholder="<%- item.placeholder %>">
         </div>
     </div>
@@ -37,10 +37,10 @@
                 <% } %>
 
             </select>
-            <button class="btn bg-primary" app-click="push('<%- new_prefix %><%- item.name %>',<%- new_prefix %><%- item.name %>_new,'<%- new_prefix %><%- item.name %>_new')">Add <span class="icon plus right white"></span></button>
+            <button class="btn bg-primary" app-click="push(<%- new_prefix %><%- item.name %>_new,<%- new_prefix %><%- item.name %>)">Add <span class="icon plus right white"></span></button>
         <% } else { %>
             <input type="text" app-model="new.<%- item.name %>_new" placeholder="Add new <%- view.functions.depluralise(item.name) %>">
-            <button class="btn bg-primary" app-click="push('<%- new_prefix %><%- item.name %>',<%- new_prefix %><%- item.name %>_new,'<%- new_prefix %><%- item.name %>_new')">Add <span class="icon plus right white"></span></button>
+            <button class="btn bg-primary" app-click="push(<%- new_prefix %><%- item.name %>_new,<%- new_prefix %><%- item.name %>)">Add <span class="icon plus right white"></span></button>
         <% } %>
     </div>
 </div>

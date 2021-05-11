@@ -4,23 +4,26 @@
     var new_prefix = 'new.'
 
     if (typeof obj_prefix == 'undefined' || obj_prefix == false){
-        obj_prefix = ''
+        obj_prefix = new_prefix
         obj_prefix_snake = ''
     } else {
         obj_prefix_snake = obj_prefix+'_'
-        obj_prefix = obj_prefix+'.'
+        obj_prefix = obj_prefix
     }
 
     if (typeof array_obj != 'undefined'){
         if (array_obj === true){
             new_prefix = ''
-        } else if (typeof array_obj == 'string'){
+        } else if (array_obj == 'new_array'){
             new_prefix = 'new.'+array_obj+'.'
+            obj_prefix = new_prefix
+        } else if (typeof array_obj == 'string'){
+            new_prefix = 'new.'+array_obj+'[$index].'
         }
     }
 %>
 
 <div class="input-image field-<%- obj_prefix %><%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
-    <label for="block_bg_image" app-click="showMediaLibrary('<%- new_prefix %><%- obj_prefix %><%- item.name %>')"><img src="/images/Product_Placeholder.svg" app-src="<%- new_prefix %><%- obj_prefix %><%- item.name %>" class="<%- item.name %>"></label>
+    <label for="block_bg_image" app-click="showMediaLibrary('<%- new_prefix %><%- item.name %>')"><img src="/images/Product_Placeholder.svg" app-src="<%- obj_prefix %><%- item.name %>" class="<%- item.name %>"></label>
 </div>

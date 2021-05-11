@@ -54,15 +54,15 @@
 
         async postSave(){
 
-            await this.makeMenus()
+            await this.registerMenus()
             return this
 
         }
 
         async preDelete(){
 
-            let products = await new Products().all(['category == '+this.data._key]).get()
-            if (Array.isArray(products) && products.length > 0){
+            let products = await new Products().all(['category == '+this.data._key])
+            if (Array.isArray(products.data) && products.data.length > 0){
                 this.error = 'Please remove all products from this category before deleting'
                 return this
             } else {

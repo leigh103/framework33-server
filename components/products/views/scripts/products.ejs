@@ -170,7 +170,10 @@ console.log(url, data)
             if (scope.exec_data.selection){
                 scope.insertCEMedia(media)
             } else {
-                scope.push(scope.view.media_obj,media.url)
+
+                let array = evaluate.getValue(scope.view.media_obj)
+                
+                scope.push(media.url, array)
 
                 if (scope.new._key){
                 //    scope.saveItem('<%- table %>',scope.new, true)

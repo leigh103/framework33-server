@@ -10,8 +10,11 @@
     if (typeof array_obj != 'undefined'){
         if (array_obj === true){
             new_prefix = ''
-        } else if (typeof array_obj == 'string'){
+        } else if (array_obj == 'new_array'){
             new_prefix = 'new.'+array_obj+'.'
+            obj_prefix = ''
+        } else if (typeof array_obj == 'string'){
+            new_prefix = ''
         }
     }
 %>

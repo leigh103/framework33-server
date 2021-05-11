@@ -351,8 +351,9 @@ const express = require('express'),
                     if (data.sub_category.description){
                         data.meta.description = data.sub_category.description.substring(0,160)
                     }
-                    data.products = await models.products.all(['category == '+data.parent_category._key, 'sub_category == '+data.sub_category._key, 'active == true']).get()
-
+                    data.products = await models.products.all(['category == '+data.parent_category._key, 'sub_category == '+data.sub_category._key, 'active == true'])
+                    data.products = data.products.get()
+                    
                     res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
                 } else { // check if it's a product
@@ -384,7 +385,7 @@ const express = require('express'),
                 if (data.category.description){
                     data.meta.description = data.category.description.substring(0,160)
                 }
-                
+
                 data.products = await models.products.all(['category like '+data.category._key,'sub_category NOT EXISTS', 'active == true'])
                 data.products = data.products.data
                 res.render(config.site.theme_path+'/templates/products/category.ejs',data)

@@ -335,9 +335,9 @@
 
             }
 
-            scope.addToCollection = function(obj,item,input){
+            scope.addToCollection = function(array,item){
 
-                scope.push(obj,item,input)
+                scope.push(item,array)
                 <% if (typeof key != 'undefined' && typeof table != 'undefined'){ %>
                 scope.saveItem('<%- table %>',scope.new).then(()=>{
                     scope.get('<%- table %>','<%- key %>/get-items','collection_items')
@@ -345,7 +345,37 @@
                 <% } %>
             }
 
-            scope.push = function(obj,item,input){
+            scope.push = function(item, array, source){
+
+                if (typeof item == 'string'){
+                    item = {
+                        _key: Date.now(),
+                        value: item.replace(/"/g,'')
+                    }
+                } else if (typeof item == 'object'){
+                    item._key = Date.now()
+                } else {
+                    item = item+''
+                }
+
+                if (!array && this._params[1]){
+                    array = evaluate.setValue(this._params[1],[])
+                }
+
+                array.push(item)
+
+                scope.new.new_array = {}
+
+                if (this._params){
+                    for (var i=0;i<this._params.length;i++){
+                        view.update(this._params[i])
+                    }
+                }
+
+
+            }
+
+            scope.pushOLD = function(obj,item,input){
 
                 if (!item){
                     return false
@@ -387,7 +417,15 @@
 
             }
 
-            scope.splice = function(obj_name, idx, update){
+            scope.splice = function(item, array){
+
+                array.splice(array.indexOf(item),1)
+                for (var i=0;i<this._params.length;i++){
+                    view.update(this._params[i])
+                }
+            }
+
+            scope.spliceOLD = function(obj_name, idx, update){
 
                 let obj = evaluate.getValue(obj_name)
 
@@ -479,6 +517,7 @@
                 if (scope.exec_data.selection){
                     scope.insertCEMedia(media)
                 } else {
+
                     evaluate.setValue(scope.view.media_obj,media.url)
 
                     if (typeof scope.renderPage == 'function'){
@@ -489,9 +528,13 @@
 
             }
 
-            scope.showMediaLibrary = function(obj){
+            scope.showMediaLibrary = function(obj, field){
 
                 scope.view.media_obj = obj
+
+                if (field){
+                    scope.view.media_obj_field = field
+                }
 
                 if (!scope.media_library){
                     scope.get('media_library').then((data)=>{
@@ -522,7 +565,7 @@
             }
 
             scope.closeModal = function(){
-                console.log('here')
+
                 document.getElementsByTagName('body')[0].style.overflowY = 'auto'
                 document.getElementsByTagName('html')[0].style.overflowY = 'auto'
                 scope.view.modal = false
