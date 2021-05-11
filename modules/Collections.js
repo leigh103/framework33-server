@@ -12,6 +12,11 @@ class Collections extends Models {
 
         this.data = await DB.read(this.settings.collection).where(['_key == '+key]).first()
 
+        if (!this.data.items){
+            this.data.items = []
+            return this
+        }
+
         let collection = this.settings.collection_of
         let items = this.data.items.map((item) => {
                 item = collection+'/'+item

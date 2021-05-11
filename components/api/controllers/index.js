@@ -191,10 +191,10 @@ var express = require('express'),
             method = parseCamelCase(req.params.function)
         }
 
-        if (req.params.id && !req.params.id.match(/^[0-9]+$/)){
+        if (req.params.id && req.params.id != 'new' && !req.params.id.match(/^[0-9]+$/)){
             method = parseCamelCase(req.params.id)
         }
-
+        
         let query = false,
             sort = {
                 dir: 'desc',

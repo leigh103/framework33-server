@@ -337,7 +337,7 @@ console.log(obj)
 
             scope.addToCollection = function(item,array){
 
-                scope.push(item,array)
+                scope.push(item,array, this._params)
                 <% if (typeof key != 'undefined' && typeof table != 'undefined'){ %>
                 scope.saveItem('<%- table %>',scope.new).then(()=>{
                     scope.get('<%- table %>','<%- key %>/get-items','collection_items')
@@ -345,7 +345,11 @@ console.log(obj)
                 <% } %>
             }
 
-            scope.push = function(item, array){
+            scope.push = function(item, array, params){
+
+                if (params){
+                    this._params = params
+                }
 
                 if (typeof item == 'string'){
                     item = {
