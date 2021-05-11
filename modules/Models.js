@@ -156,12 +156,22 @@
         async validate(){
 
             let fields = {},
-                subfields = {}
+                subfields = {},
+                required_fields = []
 
             this.error = false
 
             this.settings.fields.map((field)=>{
                 fields[field.name] = field
+
+                if (field.required && field.required === true){
+                    required_fields.push(field.name)
+
+                    if (!this.data[field.name]){
+                        this.error = view.functions.parseName(field.name)+' is a required field'
+                        return this
+                    }
+                }
             })
 
             for (let [key, value] of Object.entries(this.data)) {
@@ -217,7 +227,7 @@
                 return value
             }
 
-            if (field.required === true && value == ''){
+            if (field.required === true && !value){
 
                 this.error = view.functions.parseName(key)+' is a required field'
                 return false

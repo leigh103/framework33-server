@@ -261,7 +261,7 @@
             }
 
             scope.saveItem = function(collection, obj, keep_open){
-
+console.log(obj)
             //    const editordata = editor.getData()
 
                 return new Promise( async (resolve, reject) => {
@@ -345,7 +345,7 @@
                 <% } %>
             }
 
-            scope.push = function(item, array, source){
+            scope.push = function(item, array){
 
                 if (typeof item == 'string'){
                     item = {
@@ -358,7 +358,7 @@
                     item = item+''
                 }
 
-                if (!array && this._params[1]){
+                if (!array && Array.isArray(this._params)){
                     array = evaluate.setValue(this._params[1],[])
                 }
 
@@ -366,12 +366,11 @@
 
                 scope.new.new_array = {}
 
-                if (this._params){
-                    for (var i=0;i<this._params.length;i++){
-                        view.update(this._params[i])
-                    }
+                if (this._params && this._params[1]){
+                    setTimeout(function(){
+                        view.update(this._params)
+                    },100)
                 }
-
 
             }
 
@@ -517,7 +516,7 @@
                 if (scope.exec_data.selection){
                     scope.insertCEMedia(media)
                 } else {
-
+console.log(scope.view.media_obj,media.url)
                     evaluate.setValue(scope.view.media_obj,media.url)
 
                     if (typeof scope.renderPage == 'function'){
