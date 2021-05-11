@@ -2,12 +2,13 @@
 
 <div class="input-object-array field-<%- item.name %>">
     <!-- <div class="array-item-title"><%- view.functions.parseName(item.name) %></div> -->
-    <div class="mb-2 w-100 input-object-array-wrap">
+    <div class="mb-2 input-object-array-wrap sortable" app-sort="new.<%- item.name %>">
 
 
         <div class="array-item" app-for="<%- obj %> in new.<%- item.name %>">
 
             <div class="array-item-remove">
+                <span class="icon sectiongrab grey sortable-handle"></span>
                 <a app-click="splice(<%- obj %>, $parent)">Remove<span class="icon x right primary"></span></a>
             </div>
 
@@ -24,31 +25,29 @@
         </div>
 
 
-        <div class="input-object-array-new">
+    </div>
 
+    <div class="input-object-array-new sortable-disabled">
 
-            <div class="array-item">
+        <div class="array-item">
 
-                <div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
-                <% item.subitems.forEach((subitem,i)=>{ %>
+            <div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
+            <% item.subitems.forEach((subitem,i)=>{ %>
 
-                    <div class="array-item-input">
+                <div class="array-item-input">
 
-                        <%- include(view.basedir+'/themes/default/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, array_obj:'new_array'}) %>
+                    <%- include(view.basedir+'/themes/default/partials/input_fields/include_fields.ejs', {item:subitem, max_characters:max_characters, array_obj:'new_array'}) %>
 
-                    </div>
-
-                <% }) %>
-
-                <div class="array-item-button">
-                    <button class="btn bg-primary" app-click="push(new.new_array,new.<%- item.name %>)">Add <span class="icon arrowright white right"></span></button>
                 </div>
 
+            <% }) %>
+
+            <div class="array-item-button">
+                <button class="btn bg-primary" app-click="push(new.new_array,new.<%- item.name %>)">Add <span class="icon plus white right"></span></button>
             </div>
 
         </div>
 
     </div>
-
 
 </div>

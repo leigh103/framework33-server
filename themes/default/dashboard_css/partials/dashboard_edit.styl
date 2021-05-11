@@ -287,33 +287,50 @@
 
                     &-wrap {
 
-                        display: grid;
-                        grid-template-columns: 1fr 1fr 1fr;
-                        grid-gap: 2rem;
-
-                        @media $medium {
-                            grid-template-columns: 1fr 1fr;
-                        }
-
-                        @media $small {
-                            grid-template-columns: 1fr;
-                        }
+                        display: inline;
+                        // display: grid;
+                        // grid-template-columns: 1fr 1fr 1fr;
+                        // grid-gap: 2rem;
+                        //
+                        // @media $medium {
+                        //     grid-template-columns: 1fr 1fr;
+                        // }
+                        //
+                        // @media $small {
+                        //     grid-template-columns: 1fr;
+                        // }
 
                         .array-item {
 
                             background-color: $dashboard-color-light-grey;
                             padding: 2rem;
-                            display: block !important;
+                            display: inline-block !important;
+                            width: calc(33% - 2rem);
+                            vertical-align: top;
                             margin-bottom: 2rem;
+                            margin-right: 2rem;
                             border-radius: $border-radius;
 
-
+                            &:nth-child(3n) {
+                                margin-right: 0;
+                            }
 
                             &-remove {
-                                text-align: right;
+                                display: flex;
                                 padding: 0;
                                 border-bottom: 1px solid $dashboard-color-light-grey;
                                 color: $dashboard-color-primary;
+                                height: 2.5rem;
+
+                                & > .icon {
+                                    flex: none;
+                                    text-align: left;
+                                }
+                                a {
+                                    font-size: 0.875rem;
+                                    flex: 1;
+                                    text-align: right;
+                                }
                             }
 
                         }
@@ -322,7 +339,8 @@
 
                     &-new {
 
-                        display: block;
+                        display: inline-block;
+                        width: 33%;
 
                         .array-item {
 
@@ -337,6 +355,7 @@
                                 padding: 0;
                                 border-bottom: 1px solid $dashboard-color-light-grey;
                                 color: $dashboard-color-primary;
+                                height: 2.5rem;
                             }
 
                             &-button {
