@@ -348,7 +348,13 @@ console.log(obj)
             scope.push = function(item, array, params){
 
                 if (params){
-                    this._params = params
+                    if (typeof params == 'string'){
+                        this._params = []
+                        this._params.push(params)
+                    } else {
+                        this._params = params
+                    }
+
                 }
 
                 if (typeof item == 'string'){
@@ -363,7 +369,7 @@ console.log(obj)
                 }
 
                 if (!array && Array.isArray(this._params)){
-                    array = evaluate.setValue(this._params[1],[])
+                    array = evaluate.setValue(this._params[this._params.length-1],[])
                 }
 
                 array.push(item)

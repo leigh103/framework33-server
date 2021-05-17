@@ -21,7 +21,7 @@
         }
 
         label {
-            color: $dashboard-color-secondary;
+
             font-weight: 700;
             &.bg-primary {
                 color: $dashboard-color-white;
@@ -33,11 +33,14 @@
         }
 
         input, textarea, select, date-picker {
-            border-bottom: 1px solid #E3E3E3;
-            padding: 0;
+            border-radius: $border-radius;
+            height: $dashboard-input-height;
             margin: 0 0 1rem;
-            color: $dashboard-color-dark-grey;
-            background: none;
+            background-color: $dashboard-color-light-grey;
+
+            &[type=checkbox] {
+                height: auto;
+            }
 
             &.no-style {
                 border: none !important;
@@ -87,9 +90,7 @@
         }
 
         input[type=checkbox]{
-            &:after {
-                border: 1px solid #E3E3E3;
-            }
+
 
         }
 
@@ -199,9 +200,9 @@
                 grid-column-end: span 12;
 
                 &-wrap {
-                    border-bottom: 1px solid #E3E3E3;
-                    padding: 0 0 0.5rem 0;
-
+                    background-color: $dashboard-color-light-grey;
+                    padding: 0.5rem 1.2rem;
+                    border-radius: $border-radius;
                 }
 
                 .contenteditable:not(.small) {
@@ -228,13 +229,12 @@
                 .input-array-item {
                     display: flex;
                     align-items: center;
-                    height: $dashboard-mobile-row-height;
+                    // height: $dashboard-mobile-row-height;
 
-                    input {
-                        flex:1;
-                        text-align: left;
+                    input, select {
                         margin: 0;
                     }
+
                     button {
                         background: none;
                         flex: 0 0 3rem;
@@ -245,12 +245,11 @@
 
                 .input-array-new {
 
-                    height: $dashboard-mobile-row-height;
+                    // height: $dashboard-mobile-row-height;
                     display: flex;
                     margin-top: 2rem;
 
                     input {
-                        margin-left: 3rem;
                         text-align: left
                     }
 
@@ -311,6 +310,10 @@
                             margin-right: 2rem;
                             border-radius: $border-radius;
 
+                            input, select, .contenteditable {
+                                background-color: white;
+                            }
+
                             &:nth-child(3n) {
                                 margin-right: 0;
                             }
@@ -350,6 +353,10 @@
                             display: block !important;
                             margin-bottom: 2rem;
                             border-radius: $border-radius;
+
+                            input, select, .contenteditable {
+                                background-color: white;
+                            }
 
                             &-remove {
                                 text-align: right;
@@ -462,17 +469,12 @@
 
                 input {
 
-
                     text-align: left;
-                    padding: 0;
                     font-size: 1rem;
-                    border-bottom: 1px solid #EFEFEF;
-
 
                 }
 
                 label {
-                    color: $dashboard-color-secondary;
                     font-size: 0.875rem;
                     font-weight: 700;
                     margin-bottom: 0.3rem;

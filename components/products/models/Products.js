@@ -36,6 +36,7 @@
                     ]},
                     {name:'customisation',input_type:'array',placeholder:'Customisation', tab:'product_customisation', type:'object',required: false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', truncate:160, required:false},
+                    {name:'keywords',input_type:'array',placeholder:'Keywords', type:'array', required:false},
                     {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:false}
                 ],
                 search_fields:['name','brand', 'barcode', 'sku']
@@ -51,7 +52,7 @@
                 },
                 private: { // auth'd routes
                     get: {
-
+                        getInactive:['admin']
                     },
                     post: {
                         save:['admin']
@@ -167,7 +168,13 @@
 
         async getMostRecent(){
 
-            return await new DB.read(this.settings.collection).where(['activated == true']).orderBy('_updated','DESC').limit(5).data
+            return await DB.read(this.settings.collection).where(['activated == true']).orderBy('_updated','DESC').limit(5).data
+
+        }
+
+        async getInactive(){
+
+            return await DB.read(this.settings.collection).orWhere(['category has no value','active has no value','category has no value','active == false','slug has no value']).orderBy('_updated','DESC').get()
 
         }
 

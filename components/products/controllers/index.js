@@ -47,7 +47,7 @@ const express = require('express'),
         shop: view.ecommerce.shop,
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
-        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products?active=false', text:'Inactive'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'},{href: '/dashboard/products/collections', text:'Collections'}]
+        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products/inactive', text:'Inactive'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'},{href: '/dashboard/products/collections', text:'Collections'}]
     }
 
     let models = {
@@ -181,6 +181,32 @@ const express = require('express'),
 
         res.render(settings.views+'/dashboard/product_settings.ejs',data)
     //    res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+    })
+
+    routes.get('/dashboard/products/inactive', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Inactive Products'
+        }
+
+        view.current_view = 'products'
+        view.current_sub_view = 'inactive'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
+        data.include_styles = [settings.views+'/styles/dashboard_style.ejs']
+
+        data.title = 'Inactive Products'
+        data.table = 'products'
+
+        data.query = '/get-inactive'
+
+        data.model = models.products
+
+        data.fields = data.model.settings.fields
+        data.search_fields = data.model.settings.search_fields
+        return res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+        res.render(basedir+'/components/dashboard/views/edit.ejs',data)
 
     })
 

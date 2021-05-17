@@ -7,7 +7,7 @@
         <% if (status.match(/new|processing|shipped/)){ %>
         <div class="table button-overlay" app-show="view.selected" data-animation="{'enter':'fade-in','exit':'fade-out'}">
             <div class="row table-header">
-                <div class="cell middle text-left select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"></div>
+                <div class="cell middle text-left select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()"></div>
                 <div class="cell middle text-left">
                     <div class="flex button-wrap">
                         <div class="context-link btn border text-black pr-1" app-click="toggleContext('change-status')" style="width: 13rem;">
@@ -32,7 +32,7 @@
         <div class="table" app-init="get('<%- table %><% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
             <div class="row table-header">
 
-                <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="view.all_selected" app-click="selectAll()" class="border"><% } %></div>
+                <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="view.all_selected" app-click="selectAll()"><% } %></div>
                 <div class="cell middle text">Ref / Date</div>
                 <div class="cell middle">Customer / <% if (status == 'processing'){ %>Shipping<% } else { %>Email<% } %></div>
                 <% if (status == 'processing'){ %>
@@ -51,7 +51,7 @@
 
                 <div class="row" app-for="transaction in <%- table %>" app-class="{'transparent-2':transaction.status != '<%- status %>'}">
 
-                    <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="transaction.selected" app-change="showActions()" class="border"><% } %></div>
+                    <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="transaction.selected" app-change="showActions()"><% } %></div>
 
                     <div class="cell middle text title" app-click="goto('transactions/edit',transaction._key)">
                         <div class="text-secondary text-bold"><span app-bind="transaction.reference"></span><span class="hidden-d hidden-m"> - <span app-bind="transaction.customer.full_name"></span></span></div>

@@ -176,7 +176,7 @@
 
             filters.map((filter) => {
 
-                let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists|has value)\s*["|']*([^'"]*)["|']*/i)
+                let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists|has value|has no value)\s*["|']*([^'"]*)["|']*/i)
 
                 if (op[3]){
 
@@ -195,6 +195,10 @@
                 } else if (op[2].match(/^has value/i)){
 
                     this.query += 'LENGTH('+this.query_key+'.'+op[1]+') > 0'
+
+                } else if (op[2].match(/^has no value/i)){
+
+                    this.query += 'LENGTH('+this.query_key+'.'+op[1]+') == 0'
 
                 } else if (op[2].match(/^exists/i)){
 
@@ -239,7 +243,7 @@
 
             filters.map((filter) => {
 
-                let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists|has value)\s*["|']*([^'"]*)["|']*/i)
+                let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists|has value|has no value)\s*["|']*([^'"]*)["|']*/i)
 
                 if (op[3]){
 
@@ -258,6 +262,10 @@
                 } else if (op[2].match(/^has value/i)){
 
                     this.query += 'LENGTH('+this.query_key+'.'+op[1]+') > 0'
+
+                } else if (op[2].match(/^has no value/i)){
+
+                    this.query += 'LENGTH('+this.query_key+'.'+op[1]+') == 0'
 
                 } else if (op[2].match(/^exists/i)){
 
