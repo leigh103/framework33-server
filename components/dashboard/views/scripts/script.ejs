@@ -95,6 +95,12 @@
 
             }
 
+            scope.showSearchBar = function(){
+                scope.view.show_search = !scope.view.show_search
+                view.update('view.show_search')
+                document.querySelector('.search-wrap input').focus()
+            }
+
             scope.search = function(collection){
 
                 clearTimeout(scope.view.typing)
@@ -115,7 +121,7 @@
                                 view.update(collection)
 
                                 if (scope[collection].length == 0){
-                                    scope.notify('Nothing found','error',5,'fa-search')
+                                    scope.notify('Nothing found','error',5,'x')
                                 } else if (scope[collection].length == 1){
 
                                     scope.view.input_check = setTimeout(function(){

@@ -39,7 +39,7 @@
                     {name:'keywords',input_type:'array',placeholder:'Keywords', type:'array', required:false},
                     {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:false}
                 ],
-                search_fields:['name','brand', 'barcode', 'sku']
+                search_fields:['name','brand', 'barcode', 'sku', 'keywords']
             }
 
             this.routes = {
