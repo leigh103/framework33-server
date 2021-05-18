@@ -47,7 +47,7 @@ const express = require('express'),
         shop: view.ecommerce.shop,
         meta: {},
         include_styles: [settings.views+'/styles/style.ejs','dashboard/views/styles/dashboard-style.ejs'],
-        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products/inactive', text:'Inactive'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'},{href: '/dashboard/products/collections', text:'Collections'}]
+        tabs: [{href: '/dashboard/products', text:'Active'},{href: '/dashboard/products/inactive', text:'Inactive'},{href: '/dashboard/products/on-sale', text:'On Sale'},{href: '/dashboard/products/categories', text:'Categories'},{href: '/dashboard/products/attributes', text:'Attributes'},{href: '/dashboard/products/collections', text:'Collections'}]
     }
 
     let models = {
@@ -57,9 +57,25 @@ const express = require('express'),
         attributes: new ProductAttributes()
     }
 
+    routes.get('*', (req, res, next) => {
+        if (req.session && req.session.user && req.session.user.guard){
+            data.user = req.session.user
+        } else {
+            data.user = {}
+        }
+        next()
+    })
 
     routes.get('/dashboard/product_categories/:key?', async(req, res) => {
         let url = '/dashboard/products/categories'
+        if (req.params.key){
+            url += '/'+req.params.key
+        }
+        res.redirect(url)
+    })
+
+    routes.get('/dashboard/product_collections/:key?', async(req, res) => {
+        let url = '/dashboard/products/collections'
         if (req.params.key){
             url += '/'+req.params.key
         }
@@ -199,6 +215,32 @@ const express = require('express'),
         data.table = 'products'
 
         data.query = '/get-inactive'
+
+        data.model = models.products
+
+        data.fields = data.model.settings.fields
+        data.search_fields = data.model.settings.search_fields
+        return res.render(basedir+'/components/dashboard/views/table.ejs',data)
+
+        res.render(basedir+'/components/dashboard/views/edit.ejs',data)
+
+    })
+
+    routes.get('/dashboard/products/on-sale', async(req, res) => {
+
+        data.meta = {
+            title: config.site.name+' | Inactive Products'
+        }
+
+        view.current_view = 'products'
+        view.current_sub_view = 'On Sale'
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
+        data.include_styles = [settings.views+'/styles/dashboard_style.ejs']
+
+        data.title = 'On Sale Products'
+        data.table = 'products'
+
+        data.query = '?adjustment=has_value'
 
         data.model = models.products
 

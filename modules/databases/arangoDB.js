@@ -187,7 +187,7 @@
                     }
 
                     if (op[2] == 'like'){
-                        this.query += 'LOWER('+this.query_key+'.'+op[1]+') =~ '+op[3]
+                        this.query += 'REGEX_TEST('+this.query_key+'.'+op[1]+', '+op[3]+',true)'
                     } else {
                         this.query += this.query_key+'.'+op[1]+' '+op[2]+' '+op[3]
                     }
@@ -254,7 +254,7 @@
                     }
 
                     if (op[2] == 'like'){
-                        this.query += 'LOWER('+this.query_key+'.'+op[1]+') =~ '+op[3]
+                        this.query += 'REGEX_TEST('+this.query_key+'.'+op[1]+', '+op[3]+',true)'
                     } else {
                         this.query += this.query_key+'.'+op[1]+' '+op[2]+' '+op[3]
                     }

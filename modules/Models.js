@@ -532,13 +532,15 @@
 
                 let filter = []
 
+                str = '^(?=.*'+str.toLowerCase().replace(/\s/g,')(?=.*')+').*$' // (?=.*\bfox)
+
                 if (this.settings.search_fields){
                     for (var field of this.settings.search_fields){
-                        filter.push(field+' like '+str.toLowerCase())
+                        filter.push(field+' like '+str)
                     }
 
                 } else {
-                    filter.push('name like '+str.toLowerCase())
+                    filter.push('name like '+str)
                 }
 
                 this.data = await DB.read(this.settings.collection).orWhere(filter).orderBy(sort.field, sort.dir).get()

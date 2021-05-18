@@ -303,7 +303,8 @@
             parseSearchFields:(fields)=>{
 
                 let output = ''
-                fields.map((field,i)=>{
+
+                fields = fields.map((field,i)=>{
 
                     if (field.match(/\./)){
                         field = field.split('.').pop()
@@ -321,18 +322,23 @@
                         field = 'name'
                     }
 
-                    if (fields.length == 1){
-                        output += field
-                    } else if (i == fields.length-1){
-                        output += 'or '+field
-                    } else if (i == fields.length-2){
-                        output += field+' '
-                    } else {
-                        output += field+', '
-                    }
+                    let re = RegExp(field)
 
-                })
-                return output.toLowerCase()
+                    return field
+                        // if (fields.length == 1){
+                        //     output += field
+                        // } else if (i == fields.length-1){
+                        //     output += 'or '+field
+                        // } else if (i == fields.length-2){
+                        //     output += field+' '
+                        // } else {
+                        //     output += field+', '
+                        // }
+
+                }).filter((v, i, a) => a.indexOf(v) === i)
+
+                fields = fields.join(', ').toLowerCase()
+                return fields.replace(/,(?=[^,]*$)/, ' or')
             },
 
             gradient:(startColor, endColor, steps) => {
