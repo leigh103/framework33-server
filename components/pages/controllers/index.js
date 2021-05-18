@@ -252,7 +252,7 @@ const express = require('express'),
 
         var options = {
             host: config.site.url.replace(/http(s)?\:\/\//,''),
-            path: '/dashboard/pages/render'
+            path: '/component-pages/render'
         }
         var request = http.request(options, function (response) {
             var data = '';
@@ -261,7 +261,6 @@ const express = require('express'),
             });
             response.on('end', function () {
                 res.send(data)
-
             });
         });
         request.on('error', function (e) {
@@ -271,7 +270,7 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/pages/render/:external?', async (req, res) => {
+    routes.get('/component-pages/render/:external?', async (req, res) => {
 
         res.locals.functions = functions
 
