@@ -247,7 +247,6 @@
                         data = JSON.parse(data)
 
                         if (output){
-                            console.log(collection, data, output)
                             scope[output] = data
                             view.update(output)
                         } else {

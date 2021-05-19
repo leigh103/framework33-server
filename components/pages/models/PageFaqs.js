@@ -1,7 +1,7 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class PageFAQs extends Models {
+    class PageFaqs extends Models {
 
         constructor(data){
 
@@ -13,7 +13,8 @@
                     {name:'question',input_type:'text',placeholder:'Question', type:'string', required:true},
                     {name:'answer',input_type:'textarea',placeholder:'Answer', type:'string', required:true},
                     {name:'type',input_type:'select',options:config.site.testimonial_types, type:'string', required:true}
-                ]
+                ],
+                search_fields: ['question', 'answer','type']
             }
 
             this.routes = {
@@ -44,4 +45,4 @@
 
     }
 
-    module.exports = PageFAQs
+    module.exports = PageFaqs

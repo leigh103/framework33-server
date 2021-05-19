@@ -267,7 +267,7 @@
             }
 
             scope.saveItem = function(collection, obj, keep_open){
-console.log(obj)
+
             //    const editordata = editor.getData()
 
                 return new Promise( async (resolve, reject) => {
@@ -289,8 +289,15 @@ console.log(obj)
                         // if (!keep_open){
                         //     scope.closeModal()
                         // }
-                        resolve()
-                        scope.notify('Done')
+                        if (!scope.new._key && data._key){
+                            scope.notify('Added, please wait...', 'sucess', 2).then(()=>{
+                                let pathname = window.location.pathname.replace(/new$/,data._key)
+                                window.location.href = pathname
+                            })
+                        } else {
+                            resolve(data)
+                            scope.notify('Done')
+                        }
 
                     }).catch((err)=>{
                         console.log(err)
@@ -335,7 +342,7 @@ console.log(obj)
                     })
 
                 } else {
-                    console.log('delete_confirm')
+                //    console.log('delete_confirm')
                     scope.openModal('delete_confirm')
                 }
 
@@ -343,12 +350,17 @@ console.log(obj)
 
             scope.addToCollection = function(item,array){
 
-                scope.push(item,array, this._params)
-                <% if (typeof key != 'undefined' && typeof table != 'undefined'){ %>
-                scope.saveItem('<%- table %>',scope.new).then(()=>{
-                    scope.get('<%- table %>','<%- key %>/get-items','collection_items')
-                })
-                <% } %>
+                if (!scope.new.name){
+                    scope.notify('Please specify a name for this collection before adding items to it','error')
+                } else {
+                    scope.push(item, array, this._params)
+                    <% if (typeof key != 'undefined' && typeof table != 'undefined'){ %>
+                        scope.saveItem('<%- table %>',scope.new).then((save_data)=>{
+                            scope.get('<%- table %>','<%- key %>/get-items','collection_items')
+                        })
+                    <% } %>
+                }
+
             }
 
             scope.push = function(item, array, params){
@@ -382,9 +394,10 @@ console.log(obj)
 
                 scope.new.new_array = {}
 
-                if (this._params && this._params[1]){
+                if (this._params){
+                    params = this._params
                     setTimeout(function(){
-                        view.update(this._params)
+                        view.update(params)
                     },100)
                 }
 
@@ -532,7 +545,7 @@ console.log(obj)
                 if (scope.exec_data.selection){
                     scope.insertCEMedia(media)
                 } else {
-console.log(scope.view.media_obj,media.url)
+
                     evaluate.setValue(scope.view.media_obj,media.url)
 
                     if (typeof scope.renderPage == 'function'){

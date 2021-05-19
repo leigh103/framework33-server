@@ -212,12 +212,11 @@ const express = require('express'),
         next()
     })
 
-    routes.get('/dashboard/page_types/:key?', async(req, res) => {
-        let url = '/dashboard/pages/settings/page-types'
-        if (req.params.key){
-            url += '/'+req.params.key
-        }
+    routes.get('/dashboard/:page(page_*)', async(req, res) => {
+
+        let url = '/dashboard/pages/settings/'+req.params.page.replace(/page_/,'')
         res.redirect(url)
+
     })
 
     routes.get('/', async (req, res, next) => {
@@ -357,7 +356,7 @@ const express = require('express'),
 
             data.title = title_prefix+' Frequently Asked Questions'
             data.table = 'page_faqs'
-            data.model = new PageFAQs()
+            data.model = new PageFaqs()
             data.key = req.params.key
             data.fields = await data.model.parseEditFields()
 
@@ -431,7 +430,7 @@ const express = require('express'),
         } else if (req.params.page == 'faqs'){
 
             data.title = 'Frequently Asked Questions'
-            data.model = new PageFAQs().settings
+            data.model = new PageFaqs().settings
             data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
             data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
             view.current_sub_view = 'FAQs'

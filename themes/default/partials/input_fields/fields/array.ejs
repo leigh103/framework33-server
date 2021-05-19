@@ -24,6 +24,7 @@
             <button class="" app-click="splice(item, $parent)"><span class="icon x primary"></span></button>
             <input type="text" app-model="item.value" placeholder="<%- item.placeholder %>">
         </div>
+        <div class="text-italic text-grey text-small" style="margin-top: 0.9rem" app-hide="<%- new_prefix %><%- item.name %>">Type a <%- view.functions.parseName(item.name, true) %> below and click 'Add'</div>
     </div>
     <div class="input-array-new">
 

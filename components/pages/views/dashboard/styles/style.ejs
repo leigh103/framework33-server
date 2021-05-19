@@ -17,21 +17,9 @@
         font-size: 0.875rem;
     }
 
-    input[type=text] {
-        border-bottom: 1px solid #EFEFEF;
-        padding: 0;
-        padding-bottom: 0.7rem;
-    }
-
     input[type=checkbox] {
         border: none !important;
         box-shadow: none !important;
-    }
-
-    textarea {
-        border-bottom: 1px solid #EFEFEF;
-        padding: 0;
-        padding-bottom: 0.7rem;
     }
 
     a.clear-placeholder {
@@ -40,8 +28,6 @@
     }
 
     .fields input, .fields textarea {
-        padding: 0 !important;
-        font-size: 1rem !important;
         margin-top: -0.5rem;
     }
 
@@ -306,10 +292,12 @@
         font-size: 0.875rem;
     }
 
-    .menu .contenteditable {
-        font-size: 1rem;
-        border-bottom: 1px solid #EFEFEF;
-        padding-bottom: 0.7rem;
+    .menu .contenteditable, input {
+        background-color: #f4f7f8;
+        border-radius: 6px;
+        margin:0 0 1rem;
+        min-height: 2.5rem;
+        padding: 0.5rem 1.2rem !important;
     }
 
     .menu .fields {

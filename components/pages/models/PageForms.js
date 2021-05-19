@@ -18,7 +18,6 @@
 
             this.settings = {
                 collection: 'page_forms',
-
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Enter form name', type:'string', required:true},
                     {name:'fields',input_type:'array',placeholder:'Form Fields', type:'array', required:false, subitems:[

@@ -194,7 +194,7 @@ var express = require('express'),
         if (req.params.id && req.params.id != 'new' && !req.params.id.match(/^[0-9]+$/)){
             method = parseCamelCase(req.params.id)
         }
-        
+
         let query = false,
             sort = {
                 dir: 'desc',
@@ -329,9 +329,9 @@ var express = require('express'),
 
         let model_class_name = parseClassName(req.params.collection)
 
+        let model, log_method = 'create'
+console.log(model_class_name)
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
-
-            let model, log_method = 'create'
 
             if (req.body && req.body._key){
                 log_method = 'update'
