@@ -330,7 +330,7 @@ var express = require('express'),
         let model_class_name = parseClassName(req.params.collection)
 
         let model, log_method = 'create'
-console.log(model_class_name)
+
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
             if (req.body && req.body._key){

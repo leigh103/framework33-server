@@ -278,7 +278,7 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/products/:key?/:cat?', async(req, res) => {
+    routes.get('/dashboard/products/:key?/:cat?/:sub_cat?', async(req, res) => {
 
         data.meta = {
             title: config.site.name+' | Products'
@@ -298,17 +298,43 @@ const express = require('express'),
 
         if (req.params.key == 'category' && req.params.cat){
 
-            if (req.params.cat == 'inactive'){
-                view.current_sub_view = 'inactive'
-                data.query += '&active=false'
-            } else if (req.params.cat == 'sale'){
-                view.current_sub_view = 'sale'
-                data.query += '&adjustment=has_value'
-            } else {
-                data.query += '&category=%27'+req.params.cat+'%27'
+            let cat_id = req.params.cat+'',
+                sub_cat_id,
+                category = await new ProductCategories().find(req.params.cat)
+            if (category.data && category.data.name){
+                data.title = category.data.name
             }
 
-            view.current_sub_view = 'categories'
+            if (req.params.sub_cat){
+
+                sub_cat_id = req.params.sub_cat
+
+                let sub_cat = category.data.sub_categories.find((sub)=>{
+                    return sub._key == sub_cat_id
+                })
+                if (sub_cat && sub_cat.name){
+                    data.title += ' / '+sub_cat.name
+                }
+            }
+
+            data.query += '&category=%27'+cat_id+'%27'
+
+            let idx = data.tabs.findIndex((item)=>{return item.text == data.title})
+
+            if (sub_cat_id){
+                data.query += '&sub_category=%27'+sub_cat_id+'%27'
+
+                if (idx < 0){
+                    data.tabs.push({href: '/dashboard/products/category/'+cat_id+'/'+sub_cat_id, text:data.title})
+                }
+
+            } else {
+                if (idx < 0){
+                    data.tabs.push({href: '/dashboard/products/category/'+cat_id, text:data.title})
+                }
+            }
+
+            view.current_sub_view = data.title
             data.option_data = await view.functions.getOptionData('product_categories')
             data.fields = data.model.settings.fields
             data.search_fields = data.model.settings.search_fields

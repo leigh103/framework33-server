@@ -257,9 +257,12 @@
                 delete obj._id
 
                 scope.post(collection, obj).then((data)=>{
-                    view.update(collection)
-                    scope.closeModal()
-                    scope.notify('Added')
+
+                    scope.notify('Added, please wait...', 'sucess', 2).then(()=>{
+                        let pathname = window.location.pathname.replace(/new$/,data._key)
+                        window.location.href = pathname
+                    })
+                    
                 }).catch((err)=>{
                     scope.notify(err,'error')
                 })

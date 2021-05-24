@@ -95,6 +95,20 @@
             },
 
             parseName:(input, depluralise)=>{
+
+                if (!input || input == null){
+                    return ''
+                }
+
+                if (typeof input == 'object'){
+
+                    let parsed = ''
+                    for (var i in input){
+                        parsed += input[i]+' '
+                    }
+                    input = parsed.trim()
+                }
+
                 input = input.replace(/^_/,'').replace(/_/g,' ')
                 input = view.functions.capitalise(input)
 

@@ -1,5 +1,5 @@
 //
-// Products Component
+// Marketing Component
 // Dashboard and frontend CMS
 //
 

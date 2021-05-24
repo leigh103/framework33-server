@@ -213,6 +213,16 @@
 
                     }
 
+                    if (fields[key].type == 'name'){
+
+                        let name_parse = this.data[key].split(' ')
+                        this.data.name_obj = {
+                            first_name: name_parse[0],
+                            last_name: name_parse[name_parse.length-1]
+                        }
+
+                    }
+
                 }
 
             }
@@ -316,15 +326,11 @@
 
                 } else if (field.type == 'name'){
 
-                    let name = value.split(' ')
-                    if (name.length == 1){
-                        name.push('')
-                    }
-
-                    return value
-                    data.name = {
-                        first: name[0],
-                        last: name[name.length-1]
+                    if (!value.match(/\s/)){
+                        this.error = 'Please specify first and surname'
+                        return ''
+                    } else {
+                        return value
                     }
 
                 } else if (field.type == 'password'){

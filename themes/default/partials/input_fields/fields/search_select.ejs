@@ -1,0 +1,28 @@
+<%
+    var new_prefix = 'new.'
+
+    if (typeof obj_prefix == 'undefined' || obj_prefix == false){
+        obj_prefix = ''
+    } else {
+        obj_prefix = obj_prefix+'.'
+    }
+
+    if (typeof array_obj != 'undefined'){
+        if (array_obj === true){
+            new_prefix = ''
+        } else if (array_obj == 'new_array'){
+            new_prefix = 'new.'+array_obj+'.'
+            obj_prefix = ''
+        } else if (typeof array_obj == 'string'){
+            new_prefix = ''
+        }
+    }
+%>
+
+<div class="input-select field-<%- item.name %>">
+    <label><%- view.functions.parseName(item.name) %></label>
+
+    <dropdown-search placeholder="Search <%- model.option_data %>..." app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" data-url="/api/<%- item.option_data %>/search?str=" data-bind="<% if (typeof item.text_field != 'undefined'){ %><%- item.text_field %><% } else { %>name<% } %>" data-value="<% if (typeof item.value_field != 'undefined'){ %><%- item.value_field %><% } else { %>_key<% } %>" class="mb-2 layer-2">
+    </dropdown-search>
+
+</div>
