@@ -1,0 +1,135 @@
+.appointment {
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    position: absolute;
+    white-space: normal;
+    font-size: 0.7rem;
+    background: $dashboard-color-primary;
+    color: white;
+    padding: 1rem;
+    margin-left: "-%s" % $dashboard-side-nav-width;
+    transition: 0.5s height ease;
+    overflow: hidden;
+    line-height: 1rem;
+    border-radius: $border-radius;
+
+    .subject, .time {
+        font-weight: 600;
+    }
+
+    .subject {
+        font-size: 0.8rem;
+    }
+
+    .description {
+        line-height: 1rem;
+    }
+
+    &.slots-1 {
+        padding: 0 1rem;
+        justify-content: center;
+        .subject {
+            height: 100%;
+            line-height: 1.1rem;
+        }
+
+        .description, .time {
+            display: none;
+        }
+        .subject {
+            width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &.slots-2 {
+        padding: 0rem 1rem;
+        justify-content: center;
+        .description, .time {
+            display: none;
+        }
+        .subject {
+            width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &.slots-3 {
+        padding: 0rem 1rem;
+        justify-content: center;
+        .description {
+            display: none;
+        }
+        .subject {
+            width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &.slots-4 {
+        padding: 0rem 1rem;
+        justify-content: center;
+        .description {
+            display: none;
+        }
+
+        &.truncate .subject {
+            width: 90%;
+            max-height: 2rem;
+            overflow: hidden;
+            position: relative;
+
+            // &::before {
+            //     content: "...";
+            //     position: absolute;
+            //     bottom: 0;
+            //     right: 0;
+            // }
+        }
+    }
+
+    &.cancelled {
+        background: $dashboard-color-mid-light-grey;
+        color: $dashboard-color-grey;
+    }
+
+    &.staff_appointment {
+        background: $dashboard-color-light-grey;
+        color: $dashboard-color-grey;
+    }
+
+    &.none {
+        background: rgb(238, 206, 88);
+        color: $dashboard-color-black;
+    }
+
+    &.grey {
+        background: $dashboard-color-light-grey;
+    }
+
+    &.dark-grey {
+        background: $dashboard-color-grey;
+    }
+
+    &.red {
+        background: $dashboard-color-red;
+    }
+
+    &.green {
+        background: $dashboard-color-green;
+    }
+
+    &.blue {
+        background: $dashboard-color-blue;
+    }
+
+}

@@ -2,12 +2,21 @@
 
     <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
 
-    <div class="calendar providers day col-<%- x_axis.length %>">
+    <div class="vh-100 vw-100 flex-middle absolute" id="calendar-loader">
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div id="calendar-view" class="calendar providers day col-<%- x_axis.length %>" app-init="getAppointments('<% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
 
         <div class="provider-wrap">
             <% x_axis.forEach((provider)=>{ %>
-                <div class="column" id="<%- provider._key %>">
-                    <div class="provider"><%- provider.name %></div>
+                <div class="column provider" id="provider-<%- provider._key %>">
+                    <%- provider.name %>
                 </div>
             <% }) %>
         </div>
@@ -20,9 +29,13 @@
 
                     <% for (var hrs=7;hrs<=22;hrs++){ %>
 
+                        <% if (hrs < 10){hrs = '0'+hrs} %>
+
                         <% for (var mins=0;mins<=59;mins++){ %>
 
-                            <div class="slot" id="<%- provider._key %>-<%- hrs %>-<%- mins %>"></div>
+                            <% if (mins < 10){mins = '0'+mins} %>
+
+                            <a class="slot" id="<%- provider._key %>-<%- hrs %>-<%- mins %>" title="<%- provider.name %> at <%- hrs %>:<%- mins %>" href="/dashboard/appointments/new?date=<%- part_iso %>T<%- hrs %>:<%- mins %>:00.000Z&provider=<%- provider._key %>"></a>
 
                         <% } %>
 
@@ -31,12 +44,12 @@
                 </div>
             <% }) %>
 
+            <div app-for="appointment in appointments" class="appointment" app-attr="{'id':appointment._key}" app-click="goto('appointments', appointment._key)">
+                <div class="subject" app-bind="appointment.subject"></div>
+                <div class="time"></div>
+                <div class="description" app-bind="appointment.description"></div>
+            </div>
+
         </div>
 
-    </div>
-
-    <div app-init="getAppointments('<% if (typeof query != 'undefined'){ %><%- query %><% } %>')" class="grid col-3 gap-1">
-        <div app-for="appointment in appointments" class="appointment" app-attr="{'id':appointment._key}">
-            <span app-bind="parseDate(appointment.start_date,'Do MMMM')"></span>-<span app-bind="parseDate(appointment.end_date,'Do MMMM')"></span>
-        </div>
     </div>

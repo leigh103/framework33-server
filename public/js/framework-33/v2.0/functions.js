@@ -128,10 +128,6 @@ document.addEventListener("click", function (e) {
         modalCloseAll()
     }
 
-    if (e.target.classList.contains('appointment')){
-        appointmentCloseAll()
-    }
-
 });
 
 var prevScrollpos = window.pageYOffset,

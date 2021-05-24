@@ -42,7 +42,11 @@ const functions = {
     let appointment_statuses = new Appointments().statuses
 
     appointment_statuses.map((status)=>{
-        data.tabs.push({text: status.text, href: '/dashboard/appointments/status/'+status.value})
+
+        if (!status.value.match(/^(none|complete|confirmed)$/)){
+            data.tabs.push({text: status.text, href: '/dashboard/appointments/status/'+status.value})
+        }
+
     })
 
     routes.get('*', (req, res, next) => {
@@ -69,7 +73,7 @@ const functions = {
 
         view.current_view = 'calendar'
 
-        data.include_scripts = ['dashboard/views/scripts/script.ejs','calendar/views/scripts/dashboard/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','calendar/views/scripts/dashboard/calendar.ejs']
 
         data.title = view.current_sub_view+' Appointments'
         data.table = 'appointments'
@@ -92,12 +96,36 @@ const functions = {
 
         view.current_view = 'calendar'
         view.current_sub_view = ''
-        data.include_scripts = ['dashboard/views/scripts/script.ejs','calendar/views/scripts/dashboard/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','calendar/views/scripts/dashboard/appointments.ejs']
 
         data.title = 'Add New Appointment'
         data.table = 'appointments'
 
-        data.query = '?limit=30'
+        if (req.query.date){
+
+            let start = moment(req.query.date),
+                remainder = 15 - (start.minute() % 15);
+                data.selected_date = moment(start).add(remainder, "minutes").subtract(15, 'minutes')
+
+            if (!data.selected_date.isDST()){
+                data.selected_date = data.selected_date.subtract(1,'hour')
+            }
+
+            data.selected_date = data.selected_date.toISOString()
+
+        } else {
+
+            let start = moment(),
+                remainder = 15 - (start.minute() % 15);
+                data.selected_date = moment(start).add(remainder, "minutes").subtract(15, 'minutes').toISOString()
+
+        }
+
+        if (req.query.provider){
+            data.selected_provider = req.query.provider
+        } else {
+            data.selected_provider = ''
+        }
 
         data.model = new Appointments()
 
@@ -115,37 +143,43 @@ const functions = {
             title: config.site.name+' | Calendar'
         }
 
+        data.date = req.params.date
+
         view.current_sub_view = 'Calendar'
 
-        if (req.params.page){
-            view.current_sub_view = req.params.page
-        }
-
         view.current_view = 'calendar'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs','calendar/views/scripts/dashboard/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','calendar/views/scripts/dashboard/calendar.ejs']
 
         data.x_axis = await new global[config.calendar.models]().allFields(['_key','name'])
         data.x_axis = data.x_axis.get()
 
-        if (req.params.date){
+        data.title = 'Calendar'
+        data.table = 'appointments'
 
-            data.title = 'Calendar'
-            data.table = 'appointments'
-            data.query = moment(req.params.date,'YYYY-MM-DD').toISOString()
-            data.fields = new Appointments().settings.fields
+        if (data.date){
+
+            if (data.date == 'today'){
+                data.query = moment().toISOString()
+            } else {
+                data.query = moment(data.date,'YYYY-MM-DD').toISOString()
+            }
+            req.session.date = data.query
+            data.part_iso = data.query.split('T')[0]
             res.render(settings.views+'/calendar.ejs',data)
 
         } else {
 
-            data.title = 'Calendar'
-            data.table = 'appointments'
-            data.query = moment().toISOString()
-            data.fields = new Appointments().settings.fields
+            if (req.session.date){
+                data.query = moment(req.session.date,'YYYY-MM-DD').toISOString()
+            } else {
+                data.query = moment().toISOString()
+            }
+
+            data.part_iso = data.query.split('T')[0]
+
             res.render(settings.views+'/calendar.ejs',data)
 
         }
-
-
 
     })
 

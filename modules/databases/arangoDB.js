@@ -403,6 +403,7 @@
 
                     if (this.show_fields){
                         this.query += 'RETURN '+this.show_fields
+                        delete this.show_fields
                     } else {
                         this.query += 'RETURN '+this.query_key
                     }

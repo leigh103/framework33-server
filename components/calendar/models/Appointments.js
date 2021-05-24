@@ -8,12 +8,22 @@
             super(data)
 
             this.statuses = [
+                {text:'None', value:'none'},
                 {text:'Unconfirmed', value:'unconfirmed'},
                 {text:'Confirmed', value:'confirmed'},
                 {text:'Complete', value:'complete'},
                 {text:'Cancelled', value:'cancelled'},
                 {text:'Cancel Requested', value:'cancel_requested'},
-                {text:'Reschedule Requested', value:'reschedule_requested'}
+                {text:'Reschedule Requested', value:'reschedule_requested'},
+                {text:'Staff Appointment', value:'staff_appointment'}
+            ]
+
+            this.colors = [
+                {text:'Use status colour', value:''},
+                {text:'Red', value:'red'},
+                {text:'Green', value:'green'},
+                {text:'Blue', value:'blue'},
+                {text:'Grey', value:'grey'}
             ]
 
             this.settings = {
@@ -22,8 +32,9 @@
                     {name:'start_date',input_type:'datetime', type:'date', required:true},
                     {name:'end_date',input_type:'datetime', type:'date', required:true},
                     {name:'status', input_type:'select', type:'string', options: this.statuses, required: true},
+                    {name:'color', input_type:'select', type:'string', options: this.colors, required: false},
                     {name:'provider', input_type:'select', option_data: config.calendar.models, placeholder: 'Provider', type: 'string', required:true},
-                    {name:'subject',input_type:'text',placeholder:'Enter Appointment Subject', type:'string', required:false},
+                    {name:'subject',input_type:'text',placeholder:'Enter Appointment Subject', type:'string', required:true},
                     {name:'description',input_type:'textarea', placeholder:'Enter Appointment Subject', type:'string', required:false},
 
                     {name:'items', tab:'items',input_type:'array',placeholder:'Items', type: 'array', required:false, subitems:[

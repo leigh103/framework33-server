@@ -1,0 +1,135 @@
+<script>
+
+    extend.calendar = function(){
+
+         scope.view.calendar = {
+            loader: document.getElementById('calendar-loader'),
+            view: document.getElementById('calendar-view')
+         }
+
+        scope.getAppointments = function(date){
+
+            scope.view.calendar.view.classList.remove('loaded')
+            scope.view.calendar.loader.classList.remove('loaded')
+
+            scope.view.calendar.start =  moment(date).set({hours:0,minutes:0,seconds:0})
+            scope.view.calendar.end = moment(date).set({hours:23,minutes:59,seconds:59})
+
+            scope.post('appointments/find-by-date',{date:date}).then((appointments)=>{
+
+                scope.appointments = appointments
+                view.update('appointments')
+
+                setTimeout(function(){
+                    scope.positionAppointments()
+                    scope.view.calendar.view.classList.add('loaded')
+                    scope.view.calendar.loader.classList.add('loaded')
+                },500)
+            })
+
+        }
+
+        scope.positionAppointments = function(){
+
+            let appointments = document.getElementsByClassName('appointment')
+            for (var i=0; i<appointments.length;i++){
+
+                if (!appointments[i] || !appointments[i]._app){
+                    continue
+                }
+
+                scope.positionAppointment(appointments[i])
+
+            }
+
+        }
+
+        scope.positionAppointment = function(el, update){
+
+            let app_data = el._app,
+                idx = app_data.index,
+                x_axis = scope.appointments[idx].provider,
+                y_axis = scope.getYAxis(scope.appointments[idx].start_date,scope.appointments[idx].end_date),
+                parent_col = document.getElementById(x_axis),
+                start_div = document.getElementById(x_axis+'-'+y_axis.start),
+                end_div = document.getElementById(x_axis+'-'+y_axis.end)
+
+            scope.appointments[idx].el = el
+
+            if (start_div && end_div){
+
+                el.style.top = start_div.offsetTop+'px'
+                el.style.left = start_div.getBoundingClientRect().left+'px'
+                el.style.height = ((end_div.offsetTop-start_div.offsetTop)+1)+'px'
+                el.style.width = start_div.getBoundingClientRect().width+'px'
+
+                el.className = ''
+                el.classList.add('appointment', scope.appointments[idx].status)
+
+                if (scope.appointments[idx].color){
+                    el.classList.add(scope.appointments[idx].color)
+                }
+
+                if (scope.appointments[idx].subject.length > 78){
+                    el.classList.add('truncate')
+                }
+
+                if (y_axis.duration <= 15){
+                    el.classList.add('slots-1')
+                } else if (y_axis.duration > 15 && y_axis.duration <= 30){
+                    el.classList.add('slots-2')
+                } else if (y_axis.duration > 30 && y_axis.duration <= 45){
+                    el.classList.add('slots-3')
+                } else if (y_axis.duration > 45 && y_axis.duration <= 60){
+                    el.classList.add('slots-4')
+                } else {
+                    el.classList.add('slots-5')
+                }
+
+                if (y_axis.duration >= 720){
+                    el.querySelector('.time').innerHTML = moment(scope.appointments[idx].start_date).format('Do MMM h:mma')+' - '+moment(scope.appointments[idx].end_date).format('Do MMM h:mma')
+                } else {
+                    el.querySelector('.time').innerHTML = moment(scope.appointments[idx].start_date).format('h:mma')+' - '+moment(scope.appointments[idx].end_date).format('h:mma')
+                }
+
+            }
+
+            if (update){
+                view.update('appointments['+idx+']')
+            }
+
+        }
+
+        scope.getYAxis = function(start_date, end_date){
+
+            start_date = moment(start_date)
+            end_date = moment(end_date)
+
+            let result = {
+                start: start_date.format('HH-mm'),
+                end: end_date.format('HH-mm'),
+                duration: end_date.diff(start_date,'minutes')
+            }
+
+            if (start_date.isBefore(scope.view.calendar.start)){ // starts on a previous date
+                result.start = '07-00'
+            }
+
+            if (end_date.isAfter(scope.view.calendar.end)){ // end on a future date
+                result.end = '22-59'
+            }
+
+            return result
+
+        }
+
+        // setTimeout(function(){
+        //     scope.appointments[0].end_date = moment(scope.appointments[0].end_date).add(1,'hour').toISOString()
+        //     scope.appointments[0].provider = '15264505'
+        //     scope.positionAppointment(scope.appointments[0].el, true)
+        // },4000)
+
+
+    }
+
+</script>

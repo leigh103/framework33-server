@@ -537,7 +537,7 @@
         }
 
         scope.datepickerClass = function(date, obj){
-console.log(date, obj)
+
             let selected_date
 
             if (obj){
@@ -560,6 +560,7 @@ console.log(date, obj)
         }
 
         scope.goto = function(str1, str2){
+
             str1 = str1.replace(/\s/g,'-').toLowerCase()
 
             if (str2 || str2 == 0){

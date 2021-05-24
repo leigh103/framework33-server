@@ -1,0 +1,20 @@
+<script>
+
+    extend.appointments = function(){
+
+        scope.new = {
+            start_date: '<%- selected_date %>',
+            status: 'none'
+        }
+
+        scope.new.end_date = moment(scope.new.start_date).add(1,'hour').toISOString()
+
+        <% if (selected_provider){ %>
+            scope.new.provider = '<%- selected_provider %>'
+        <% } %>
+
+        view.update('new')
+
+    }
+
+</script>
