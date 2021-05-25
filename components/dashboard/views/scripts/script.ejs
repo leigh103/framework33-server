@@ -199,6 +199,7 @@
                 if (key != 'new'){
                     setTimeout(function(){
                         http.get('/api/'+collection+'/'+key).then((data)=>{
+
                             scope.new = JSON.parse(data)
 
                             scope.setPageTitle(scope.new)
@@ -262,7 +263,7 @@
                         let pathname = window.location.pathname.replace(/new$/,data._key)
                         window.location.href = pathname
                     })
-                    
+
                 }).catch((err)=>{
                     scope.notify(err,'error')
                 })

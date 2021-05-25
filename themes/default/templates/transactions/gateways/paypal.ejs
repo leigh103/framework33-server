@@ -1,0 +1,17 @@
+<% layout(config.site.theme+'/page.ejs') -%>
+
+<section class="page">
+
+    <div class="contain text-left h-100 pt-2">
+
+        <section class="h-100 pt-4">
+
+            <% if (typeof error != 'undefined'){ %>
+                <h3 class="mb-2"><%- error %></h3>
+                <p>It could be that your transaction may have already been processed, but if you need to get in touch, use our <a href="/contact-us">contact page</a></p>
+            <% } %>
+
+        </section>
+    </div>
+
+</section>

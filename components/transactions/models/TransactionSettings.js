@@ -11,18 +11,15 @@
                 collection: 'transaction_settings',
                 fields: [
                     {name:'stripe_enabled',input_type:'checkbox',placeholder:'Enable Stripe', type:'boolean', required:false},
-                    {name:'stripe_public_key',input_type:'text',placeholder:'Stripe Public Key', type:'string', required:false},
                     {name:'stripe_button_text',input_type:'text',placeholder:'Stripe Button Text', type:'string', required:false},
                     {name:'paypal_enabled',input_type:'checkbox',placeholder:'Enable PayPal', type:'boolean', required:false},
-                    {name:'paypal_url',input_type:'text',placeholder:'PayPal URL', type:'string', required:false},
                     {name:'paypal_button_text',input_type:'text',placeholder:'PayPal Button Text', type:'string', required:false},
                     {name:'worldpay_enabled',input_type:'checkbox',placeholder:'Enable Worldpay', type:'boolean', required:false},
-                    {name:'worldpay_url',input_type:'text',placeholder:'Worldpay URL', type:'string', required:false},
                     {name:'worldpay_button_text',input_type:'text',placeholder:'Worldpay Button Text', type:'string', required:false},
-                    {name:'delivery_options',input_type:'array',placeholder:'Delivery Options', type:'array', required:false, subitems:[
+                    {name:'delivery_options',input_type:'array',placeholder:'Delivery Options', type:'array', tab:'delivery_options', required:false, subitems:[
                         {name:'enabled',input_type:'checkbox',placeholder:'Enabled', type:'boolean', required:false},
                         {name:'name',input_type:'text',placeholder:'Option Name', type:'string', required:true},
-                        {name:'price',input_type:'text',placeholder:'Delivery Price', type:'price', required:true},
+                        {name:'price',input_type:'text',placeholder:'Delivery Price', type:'price', required:false},
                         {name:'orders_under',input_type:'text',placeholder:'Orders Under', type:'price', required:false},
                         {name:'orders_over',input_type:'text',placeholder:'Orders Over', type:'price', required:false},
                         {name:'postcode_match',input_type:'text',placeholder:'Postcode Match', type:'string', required:false, colspan: 5}
@@ -56,6 +53,14 @@
             if (typeof transaction_settings == 'object' && transaction_settings._key){
 
                 global.view.transactions = transaction_settings
+
+                global.view.transactions.payment_methods = global.view.transactions.payment_methods.map((gateway)=>{
+                    if (gateway.name == 'Paypal'){
+                        gateway.client_id = config.paypal.client
+                    }
+                    return gateway
+                })
+
                 log('Loaded transaction settings')
 
             } else {
@@ -85,22 +90,22 @@
                 this.data.payment_methods.push(stripe)
             }
 
-            if (this.data.paypal_enabled === true && this.data.paypal_url){
+            if (this.data.paypal_enabled === true){
                 let paypal = {
                     name:'Paypal'
                 }
                 if (this.data.paypal_button_text){
-                    stripe.button_text = this.data.paypal_button_text
+                    paypal.button_text = this.data.paypal_button_text
                 }
                 this.data.payment_methods.push(paypal)
             }
 
-            if (this.data.worldpay_enabled === true && this.data.worldpay_url){
+            if (this.data.worldpay_enabled === true){
                 let worldpay = {
                     name:'Worldpay'
                 }
                 if (this.data.worldpay_button_text){
-                    stripe.button_text = this.data.worldpay_button_text
+                    worldpay.button_text = this.data.worldpay_button_text
                 }
                 this.data.payment_methods.push(worldpay)
             }

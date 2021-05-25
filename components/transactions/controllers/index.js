@@ -29,7 +29,8 @@ const express = require('express'),
             ]
         },
         includes: [
-            {name:'stripe',path:'stripe.js'}
+            {name:'stripe',path:'stripe.js'},
+            {name:'paypal',path:'paypal.js'}
         ]
     },
 

@@ -13,23 +13,22 @@
                     {name:'gallery',input_type:'img_array',placeholder:'Images', type:'object', tab:'images', thumbnail:true, required:false},
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'brand',input_type:'text',placeholder:'Brand', type:'string', required:false},
-
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
                     {name:'barcode',input_type:'text',placeholder:'barcode', type:'barcode', required:false, barcode_type:'ean13'},
                     {name:'category',input_type:'select',option_data:'ProductCategories', type:'string', required:false},
                     {name:'sub_category',input_type:'select', option_for:'sub_category in sub_categories',type:'string', required:false},
                     {name:'variants',input_type:'multiselect',option_data:'products', tab:'product_variants', type:'string', required:false},
-
-
                     {name:'price',input_type:'text',placeholder:'Price',type:'price', tab:'prices and stock',required: true},
+                    {name:'trade_price',input_type:'text',placeholder:'Trade Price',type:'price', tab:'prices and stock',required: false},
                     {name:'vat',input_type:'number',placeholder:'VAT as decimal',type:'number', tab:'prices and stock',required: false},
-                    {name:'adjustment',input_type:'text',placeholder:'Adjustment', tab:'prices and stock',type:'discount',required: false},
+                    {name:'adjustment',input_type:'text',placeholder:'Eg, -10%, -£1', tab:'prices and stock',type:'discount',required: false},
                     {name:'stock',input_type:'number',placeholder:'Stock Amount', type:'number', tab:'prices and stock',  required:false},
                     {name:'sku',input_type:'sku',placeholder:'Unique Product Code', tab:'prices and stock',type:'sku',required: false},
                     {name:'items_per_customer',input_type:'number',placeholder:'Items per customer', tab:'prices and stock', type:'number', required:false},
                     {name:'active',input_type:'checkbox',type:'boolean', tab:'prices and stock',required: false},
                     {name:'requires_delivery',input_type:'checkbox',type:'boolean', tab:'prices and stock',required: false},
                     {name:'made_to_order',input_type:'checkbox',type:'boolean', tab:'prices and stock',required: false},
+                    {name:'promo_text',input_type:'text',placeholder:'Eg, award winning, our favourite', tab:'prices and stock',type:'string',required: false},
                     {name:'attributes',input_type:'array', tab:'product_attributes', placeholder:'Attributes',type:'array',required: false, subitems:[
                         {name:'attribute',input_type:'select', option_data:'ProductAttributes', type:'string', required:false},
                         {name:'value',input_type:'select', option_for:'value in selected_attribute', type:'string', required:false}

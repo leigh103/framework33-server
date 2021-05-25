@@ -42,7 +42,8 @@ const express = require('express'),
 
     routes.get('/:model', async(req, res) => {
 
-        let model_class_name = parseClassName(view.functions.depluralise(req.params.model))+'Settings'
+        let model_name = view.functions.depluralise(req.params.model),
+            model_class_name = parseClassName(model_name)+'Settings'
 
         if (global[model_class_name] && typeof global[model_class_name] == 'function'){
 
@@ -51,8 +52,8 @@ const express = require('express'),
             view.current_view = 'Settings'
             view.current_sub_view = 'settings'
 
-            data.title = req.params.model+' Settings'
-            data.table = req.params.model+'_settings'
+            data.title = model_name+' Settings'
+            data.table = model_name+'_settings'
 
             data.model = new global[model_class_name]()
             data.fields = await data.model.parseEditFields()
