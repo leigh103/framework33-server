@@ -92,7 +92,8 @@
 
             if (this.data.paypal_enabled === true){
                 let paypal = {
-                    name:'Paypal'
+                    name:'Paypal',
+                    client_id: config.paypal.client
                 }
                 if (this.data.paypal_button_text){
                     paypal.button_text = this.data.paypal_button_text

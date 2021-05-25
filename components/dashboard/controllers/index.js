@@ -29,11 +29,7 @@ const express = require('express'),
                 {link:'People',slug: '/dashboard/admin', weight: 6, icon:'<span class="icon person"></span>', protected_guard:['admin']}
             ]
         },
-        includes: [
-            {name:'customers',path:'customers.js'},
-            {name:'admins',path:'admins.js'},
-            {name:'settings',path:'settings.js'}
-        ]
+        includes: config.users.guards
     },
 
 

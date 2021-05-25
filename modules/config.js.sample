@@ -84,7 +84,8 @@
         users: {
             allow_registration:true,
             email_activation: true,
-            guards:['admin','user'],
+            guards:[{name:'customers',path:'customers.js'},
+		    {name:'admin',path:'admin.js'}],
             password_reset_timeout: 5,
             password_policy: {
                 min_length:8,

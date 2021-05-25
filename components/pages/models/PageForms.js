@@ -20,6 +20,8 @@
                 collection: 'page_forms',
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Enter form name', type:'string', required:true},
+                    {name:'replies_to',input_type:'email',placeholder:'admin@yoursite.com', type:'email', required:false},
+                    {name:'send_to_mailbox',input_type:'checkbox',placeholder:'Send replies to the mailbox', type:'boolean', required:false},
                     {name:'fields',input_type:'array',placeholder:'Form Fields', type:'array', required:false, subitems:[
                         {name:'label',input_type:'text',placeholder:'Field Label', type:'string', required:true},
                         {name:'input_type',input_type:'select',options:this.input_types, placeholder:'Field Type', type:'string', required:true},
