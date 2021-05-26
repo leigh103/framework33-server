@@ -16,7 +16,7 @@
                     {name:'blocks',type:'object',required:false},
                     {name:'type',input_type:'select',option_data:'page_types', type:'string', required:false},
                     {name:'tags',placeholder:'Tags', type:'string', required:false},
-                    {name:'status',input_type:'select',options:[{text:'Draft',value:'draft'},{text:'Published',value:'published'}],placeholder:'Status', type:'string', required:true},
+                    {name:'status',input_type:'select',options:[{text:'Draft',value:'draft'},{text:'Published',value:'published'}],placeholder:'Status', type:'string', required:false},
                     {name:'publish_date',placeholder:'Publish Date', type:'date', required:false},
                     {name:'hide_top_nav',placeholder:'Hide site nav', type:'boolean', required:false},
                     {name:'meta', type:'object', required:false, subitems:[

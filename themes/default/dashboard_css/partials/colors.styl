@@ -7,11 +7,17 @@
         }
     }
 
-    .btn.bg-primary {
-        color: $dashboard-color-white;
-        &:hover {
-            color: $dashboard-color-secondary;
+    .btn, button {
+
+        &.bg-primary, &.bg-secondary {
+            color: $dashboard-color-white;
+            transition: 0.5s background-color ease;
+            &:hover {
+                color: white;
+                background-color: lighten($dashboard-color-secondary, 5);
+            }
         }
+
     }
 
     .text {

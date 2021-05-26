@@ -282,7 +282,8 @@ var express = require('express'),
                         result = await model.find(req.params.id)
                         result = await result[method](req.params.fid)
                     } else if (typeof req.params.id != 'undefined'){
-                        result = await model[method](req.params.id)
+                        result = await model.find(req.params.id)
+                        result = await result[method](req.params.id)
                     } else {
                         result = await model.all(query, sort, start, end)
                     }

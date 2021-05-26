@@ -576,9 +576,9 @@
 
         scope.submitForm = function(form){
 
-            let form_name = 'form-'+form,
+            let form_name = form,
                 payload = [],
-                form_data = document.getElementById(form),
+                form_data = document.getElementById(form_name),
                 form_action = form_data.getAttribute('action'),
                 fields = document.getElementsByClassName(form_name),
                 error = false,
@@ -592,7 +592,7 @@
                 submit_button = form_data.querySelectorAll('button')
 
                 if (submit_button){
-                    submit_button[submit_button.length-1].innerHTML = '<i class="fas fa-circle-notch" anim="rotate"></i>'
+                    submit_button[submit_button.length-1].innerHTML = '<span class="icon cycle white right" anim="rotate"></span>'
                 }
             }
 

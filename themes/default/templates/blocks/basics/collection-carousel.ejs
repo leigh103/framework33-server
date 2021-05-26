@@ -1,0 +1,29 @@
+<section class="block-model-grid <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Collection Carousel" app-block-description="This is a product block which displays collection items in a row" app-init="get('product_collections','<%- data.api_address %>/get-items','collection_items')" app-input="collection_select" app-field="api_address">
+
+
+        <div class="contain">
+
+            <% if (data.heading){ %><h2 class="heading" app-field="heading" app-input="text"><%- data.heading %></h2><% } %>
+            <div class="flex">
+
+                <a class="product-thumb text-center" app-for="item in collection_items" app-attr="{'href':item.url}">
+
+                    <img app-src="item.thumbnail">
+                    <h2 class="" app-bind="item.name"></h2>
+                    <h3 class="" app-bind="parseCurrency(item.price)"></h3>
+
+                </a>
+
+            </div>
+
+            <% if (data.button_link){ %>
+                <a class="btn bg-primary" href="<%- data.button_link %>" app-input="text" app-field="button_link">
+                    <span app-field="button_text" app-input="text"><%- data.button_text %></span>
+                    <% if (data.button_icon){ %><span class="icon right white <%- data.button_icon %>" app-field="button_icon" app-input="icon"></span><% } %>
+                </a>
+            <% } %>
+
+        </div>
+
+
+</section>

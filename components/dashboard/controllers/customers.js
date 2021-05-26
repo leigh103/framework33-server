@@ -29,8 +29,12 @@ const express = require('express'),
     let data = {
         include_scripts: [settings.views+'/scripts/script.ejs'],
         model: new Customers(),
-        tabs: [{href: '/dashboard/admin', text:'Administrators'},{href: '/dashboard/customers', text:'Customers'}]
+        tabs: []
     }
+
+    config.users.guards.map((grd) => {
+        data.tabs.push({href: '/dashboard/'+grd.name, text: view.functions.capitalise(grd.name)})
+    })
 
     routes.get('*', (req, res, next) => {
         if (req.session && req.session.user && req.session.user.guard){

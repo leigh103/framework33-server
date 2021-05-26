@@ -32,7 +32,7 @@
             }
         }
 
-        input, textarea, select, date-picker {
+        input, textarea, select, date-picker, dropdown-search .value {
             border-radius: $border-radius;
             height: $dashboard-input-height;
             margin: 0 0 1rem;
@@ -300,6 +300,10 @@
                         // }
 
                         .array-item {
+
+                            dropdown-search .value {
+                                background-color: white !important;
+                            }
 
                             background-color: $dashboard-color-light-grey;
                             padding: 2rem;
@@ -677,4 +681,13 @@
 
     }
 
+}
+
+dropdown-search .value {
+    background-color: $dashboard-color-light-grey;
+}
+
+
+.dropdown-wrap {
+    box-shadow: $shadow;
 }

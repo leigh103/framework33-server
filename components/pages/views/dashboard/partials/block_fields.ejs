@@ -17,6 +17,15 @@
             <input type="number" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
         </div>
 
+        <div app-if="field.input == 'form_select'">
+            <label class="capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
+            <dropdown-search placeholder="Search forms..." app-model="field.value" data-url="/api/page_forms/search?str=" data-bind="name" data-value="_key">
+            </dropdown-search>
+            <a href="/dashboard/pages/settings/forms" target="addform">Create a new form</a>
+        </div>
+
+    
+
         <div app-if="field.input == 'color_picker'">
             <label class="capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
 

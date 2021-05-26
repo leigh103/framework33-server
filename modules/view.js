@@ -15,7 +15,8 @@
         site: {
             name: config.site.name,
             url: config.site.url,
-            logo: config.site.logo
+            logo: config.site.logo,
+            theme_path: config.site.theme_path
         },
         contact: {
             tel: config.site.tel,
@@ -129,6 +130,13 @@
 
             parseSnake:(input)=>{
                 return input.replace(/\s/g,'_').toLowerCase()
+            },
+
+            parseFieldName:(input)=>{
+
+                input = input.replace(/[^\w\s]/gi, '')
+                return view.functions.parseSnake(input)
+
             },
 
             parseCamelCase:(input) => {
@@ -247,12 +255,18 @@
 
             },
 
-            getPrice: (item, parse) => {
+            getPrice: (item, parse, guard) => {
+
+                let price_field = 'price'
+
+                if (guard && guard == 'trade' && item.trade_price){
+                    price_field = 'trade_price'
+                }
 
                 if (item.adjustment){
 
                     if (item.original_price){
-                        item.price = item.original_price
+                        item[price_field] = item.original_price
                     }
 
                     if (typeof item.adjustment == 'string' && item.adjustment.match(/%/)){
@@ -260,17 +274,17 @@
                         item.adjustment_value = item.adjustment.replace(/\$|\£|\#|p/,'')
 
                         item.adjustment_value = parseInt(item.adjustment_value.replace(/%/,''))
-                        item.adjustment_value = (item.price/100)*item.adjustment_value
-                        item.original_price = item.price
-                        item.price = parseInt(item.price)+item.adjustment_value
+                        item.adjustment_value = (item[price_field]/100)*item.adjustment_value
+                        item.original_price = item[price_field]
+                        item[price_field] = parseInt(item[price_field])+item.adjustment_value
 
                         item.adjustment_value = item.adjustment
 
                     } else {
 
-                        item.original_price = item.price
+                        item.original_price = item[price_field]
                         item.adjustment_value = parseInt(item.adjustment)
-                        item.price = parseInt(item.price)+parseInt(item.adjustment)
+                        item[price_field] = parseInt(item[price_field])+parseInt(item.adjustment)
 
                         if (item.adjustment_value < 0){
                             item.adjustment_value = Math.abs(item.adjustment_value)
@@ -280,16 +294,13 @@
 
                     }
 
-
-
                 }
 
                 if (parse){
-                    return view.functions.parseCurrency(item.price)
+                    return view.functions.parseCurrency(item[price_field])
                 } else {
-                    return parseInt(item.price)
+                    return parseInt(item[price_field])
                 }
-
 
             },
 

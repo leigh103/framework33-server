@@ -1,0 +1,36 @@
+<%
+
+    var model = view.functions.parseFieldName(field.label)
+    if (field && field.model){
+        model = field.model
+    }
+
+    var placeholder = ''
+    if (field && field.placeholder){
+        placeholder = field.placeholder
+    }
+
+    var input_type = 'text'
+    if (field && field.input_type){
+        input_type = field.input_type
+    }
+
+    var label = ''
+    if (field && field.label){
+        label = field.label
+    }
+
+    var required = ''
+    if (field && field.required && field.required === true){
+        required = 'required'
+    }
+
+%>
+
+
+<div class="input-<%- input_type %> input-<%- model %>">
+
+    <label><%- view.functions.parseName(label) %></label>
+    <div><textarea app-model="form.<%- model %>" placeholder="<%- placeholder %>" class="<%- form_name %>" id="<%- model %>" <%- required %>></textarea></div>
+
+</div>

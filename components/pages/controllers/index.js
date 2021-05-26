@@ -37,6 +37,37 @@ const express = require('express'),
         //                     });
         // },
 
+        findForms: (page_blocks) => {
+
+            return new Promise( async (resolve, reject) => {
+
+                let forms = {}
+
+                for (let block of page_blocks){
+                    if (block.block == 'form'){
+
+                        for (let field of block.fields){
+
+                            if (field.field == 'form'){
+
+                                let form = await new PageForms().find(field.value)
+                                if (form && form.data && form.data._key){
+                                    forms[form.data._key] = form.data
+                                }
+
+                            }
+
+                        }
+
+                    }
+                }
+
+                resolve(forms)
+
+            })
+
+        },
+
         parseStyle:(style, option) => {
 
             let str = ''
@@ -237,6 +268,7 @@ const express = require('express'),
             data.date = article.data._updated
             data.meta = article.data.meta
             data.pages = article.data
+            data.forms = await functions.findForms(article.data.blocks)
 
             res.render(settings.views+'/view.ejs',data)
 
@@ -282,6 +314,7 @@ const express = require('express'),
             data.date = render_pages._updated
             data.meta = render_pages.meta
             data.pages = render_pages
+            data.forms = await functions.findForms(render_pages.blocks)
 
             if (req.params.external){
                 res.render(settings.views+'/view.ejs',data)
@@ -515,6 +548,8 @@ const express = require('express'),
 
     routes.get('/:pages_type/:slug?', async (req, res, next) => {
 
+        data.include_styles = []
+
         res.locals.functions = functions
 
         let pages_type = false,
@@ -556,6 +591,7 @@ const express = require('express'),
                 data.pages = article.data
                 data.meta = article.data.meta
                 data.pages_type = pages_type.data
+                data.forms = await functions.findForms(article.data.blocks)
             //    data.recent = await functions.getRecent(pages_type,article._key)
 
                 res.render(settings.views+'/view.ejs',data)
@@ -601,6 +637,7 @@ const express = require('express'),
                     data.date = article.data._updated
                     data.pages = article.data
                     data.meta = article.data.meta
+                    data.forms = await functions.findForms(article.data.blocks)
 
                     res.render(settings.views+'/view.ejs',data)
 
@@ -620,20 +657,47 @@ const express = require('express'),
         //     return false
         // }
 
+
+
         let content = 'You have a new message submitted via the website.<br><br>',
-            contact
+            contact,
+            form_id = false
 
         req.body.map((field)=>{
-            content += '<b>'+field.name.replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase())+'</b>: '+field.value+'<br>'
+
+            if (field.name == 'form_id'){
+                form_id = field.value
+            } else {
+                content += '<b>'+field.name.replace(/_/g,' ').replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase())+'</b>: '+field.value+'<br>'
+            }
+
         })
+
         content += '<br><br>Sent from '+config.site.name
 
-        if (config.site.form_settings && config.site.form_settings.method && config.site.form_settings.method == 'mailbox'){
-            contact = await new Notification().setContent('New Website Message',content).mailbox()
-        } else if (config.site.form_settings && config.site.form_settings.method && config.site.form_settings.method == 'sms'){
-            contact = await new Notification(config.site.form_settings.to).setContent('New Website Message',content).sms()
+        if (form_id){
+
+            let form_data = await new PageForms().find(form_id)
+            form_data = form_data.get()
+
+            if (form_data && form_data.send_to_mailbox === true){
+                contact = await new Notification().setContent('New Website Message',content).mailbox()
+            }
+
+            if (form_data && form_data.replies_to){
+                contact = await new Notification(form_data.replies_to).setContent('New Website Message',content).email()
+            }
+
         } else {
-            contact = await new Notification(config.site.form_settings.to).setContent('New Website Message',content).email()
+
+            if (config.site.form_settings && config.site.form_settings.method && config.site.form_settings.method == 'mailbox'){
+                contact = await new Notification().setContent('New Website Message',content).mailbox()
+            } else if (config.site.form_settings && config.site.form_settings.method && config.site.form_settings.method == 'sms'){
+                contact = await new Notification(config.site.form_settings.to).setContent('New Website Message',content).sms()
+            } else {
+                contact = await new Notification(config.site.form_settings.to).setContent('New Website Message',content).email()
+            }
+
         }
 
         req.session.submission = moment()

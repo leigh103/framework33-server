@@ -1,0 +1,49 @@
+<section class="block-text-single-col <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Form Section" app-block-description="Add a form to your page" app-allow-styling="true">
+
+    <div class="contain <%- styling.container.class %>">
+
+
+
+
+            <div class="" app-input="form_select" app-field="form">
+
+                <% if (data.form && typeof forms == 'object' && forms[data.form]){ %>
+
+                    <% var form_name = 'form-'+view.functions.parseFieldName(forms[data.form].name) %>
+
+                    <form method="post" id="<%- form_name %>">
+
+                        <div class="headings">
+                            <% if (data.heading){ %><h3 app-input="text" app-field="heading"><%- data.heading %></h3><% } %>
+                            <% if (data.sub_heading){ %><h4 class="mb-1" app-input="text" app-field="sub_heading"><%- data.sub_heading %></h4><% } %>
+                        </div>
+
+                        <% forms[data.form].fields.forEach((field) => { %>
+
+                            <% if (field.input_type == 'textarea'){ %>
+
+                                <%- include(view.site.theme_path+'/partials/form_fields/textarea.ejs', {field:field, form_name: form_name}) %>
+
+                            <% } else { %>
+
+                                <%- include(view.site.theme_path+'/partials/form_fields/auto.ejs', {field:field, form_name: form_name}) %>
+
+                            <% } %>
+
+                        <% }) %>
+
+                        <input type="hidden" value="<%- forms[data.form]._key %>" class="<%- form_name %>" id="form_id">
+
+                        <div class="submit">
+                            <button class="btn bg-primary" app-click="submitForm('form-<%- view.functions.parseFieldName(forms[data.form].name) %>')"><% if (forms[data.form].button_text != 'undefined'){ %><%- forms[data.form].button_text %><% } else { %>Submit<% } %></button>
+                        </div>
+                    </form>
+
+                <% } %>
+
+            </div>
+
+
+    </div>
+
+</section>

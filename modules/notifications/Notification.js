@@ -154,7 +154,7 @@
                 if (this.class && this.class.data && this.class.data._id){
                     this.content._user_id = this.class.data._id
                 } else {
-                    this.content._user_id = 'admin'
+                    this.content._user_id = 'admin/0'
                 }
 
 
