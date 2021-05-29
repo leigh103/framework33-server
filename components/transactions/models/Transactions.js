@@ -9,7 +9,7 @@
 
             this.statuses = [
                 {text:'New',value:'new',icon:'cart-plus'},
-                {text:'Paid',value:'paid',icon:'clipboard-check'},
+                // {text:'Paid',value:'paid',icon:'clipboard-check'},
                 {text:'Processing',value:'processing',icon:'box-open'},
                 {text:'Shipped',value:'shipped',icon:'mail-bulk'},
                 {text:'Completed',value:'completed',icon:'check-circle'},
@@ -215,7 +215,7 @@
                     }
 
                     try {
-                        await new Events('order_'+new_status).trigger(transaction)
+                        await new Automations('order_'+new_status).trigger(transaction)
                     }
                     catch(err){
                         log(err)

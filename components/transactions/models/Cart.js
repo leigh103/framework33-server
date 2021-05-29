@@ -26,6 +26,8 @@
                         {name:'postal_code',input_type:'text',placeholder:'Post Code', type:'string', required:true}
                     ]},
                     {name:'shipping_address', type:'object', required:false, subitems:[
+                        {name:'title',input_type:'select',options:[{text:'Mr',value:'mr'},{text:'Mrs',value:'mrs'},{text:'Miss',value:'miss'},{text:'Ms',value:'ms'},{text:'Dr',value:'dr'}],placeholder:'Title', type:'string', required:false},
+                        {name:'name',input_type:'text',placeholder:'Name', type:'string', required:false},
                         {name:'address_line1',input_type:'text',placeholder:'Address Line 1', type:'string', required:true},
                         {name:'address_line2',input_type:'text',placeholder:'Address Line 2', type:'string', required:false},
                         {name:'address_level1',input_type:'text',placeholder:'County', type:'string', required:false},
@@ -223,7 +225,13 @@
             })
 
             if (this.data.items[item_idx]){
-                this.data.items[item_idx].quantity--
+
+                if (item_data.all){
+                    this.data.items[item_idx].quantity = 0
+                } else {
+                    this.data.items[item_idx].quantity--
+                }
+
 
                 if (this.data.items[item_idx].quantity <= 0){
                     this.data.items.splice(item_idx,1)

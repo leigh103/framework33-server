@@ -67,44 +67,6 @@
 
         }
 
-        async all(data, sort, start, end) {
-
-            if (!start){
-                start = 0
-            }
-
-            if (!end){
-                end = 999
-            }
-
-            if (data && typeof data == 'string'){
-                this.data = await DB.read(this.settings.collection).orderBy(data,'asc').orderBy('_updated','DESC').limit(start, end).get()
-            } else if (data && typeof data == 'object' && data.length > 0){
-                this.data = await DB.read(this.settings.collection).where(data).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
-            } else {
-                this.data = await DB.read(this.settings.collection).orderBy('_updated','DESC').limit(start, end).get() //.omit(['password','password_reset']).get()
-            }
-
-            if (Array.isArray(this.data)){
-                this.data.map((item, i)=>{
-                    let category = DB.read('product_categories').where(['_key == '+item.category]).first(),
-                        re = new RegExp(category.slug,'i'),
-                        sub_category
-
-                    if (typeof item.sub_category != 'undefined' && typeof category.sub_categories == 'object' && category.sub_categories[item.sub_category]){
-                        item.url = '/'+category.slug+'/'+category.sub_categories[item.sub_category].slug+'/'+item.slug
-                    } else {
-                        item.url = '/'+category.slug+'/'+item.slug
-                    }
-
-                    return item
-                })
-            }
-
-
-            return this
-
-        }
 
         async updateStock(key, quantity){
 
@@ -155,13 +117,17 @@
 
         async getRelated(){
 
+            let related
+
             if (this.data && this.data.category && this.data.sub_category){
-                return await new Products().all(['category like '+this.data.category, 'sub_category like '+this.data.sub_category, '_key != '+this.data._key,'activated == true']).data
+                related = await new Products().all(['category == "'+this.data.category+'"', 'sub_category == "'+this.data.sub_category+'"', '_key != '+this.data._key,'active == true'])
             } else if (this.data && this.data.category){
-                return await new Products().all(['category like '+this.data.category, '_key != '+this.data._key, 'activated == true']).data
+                related = await new Products().all(['category == '+this.data.category+'"', '_key != '+this.data._key, 'active == true'])
             } else {
-                return []
+                related = false
             }
+
+            return related.data
 
         }
 

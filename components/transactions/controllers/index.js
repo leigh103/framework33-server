@@ -132,7 +132,13 @@ const express = require('express'),
         data.statuses = data.model.statuses
     //    data.fields = data.model.parseEditFields()
         data.delivery_options = await new TransactionSettings().delivery()
-
+        data.delivery_options = data.delivery_options.map((option)=>{
+            let output = {
+                _key: option._key,
+                name: option.name+' - £'+(option.price/100).toFixed(2)
+            }
+            return output
+        })
         res.render(settings.views+'/dashboard/transaction_edit.ejs',data)
 
     })

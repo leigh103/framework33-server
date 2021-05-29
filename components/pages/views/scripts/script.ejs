@@ -1,0 +1,39 @@
+<script>
+
+    extend.pages = function(){
+
+        <% if (typeof cart != 'undefined'){ %>
+
+            let cart_menu_item = document.getElementById('menu-cart'),
+                mobile_cart_menu_item = document.getElementById('menu-cart-mobile')
+
+            scope.cart = <%- JSON.stringify(cart) %>
+
+            scope.getTotalItems = function(){
+                return scope.cart.items.reduce((acc, item)=>{
+                    return acc + item.quantity
+                }, 0)
+            }
+
+            scope.setCartCounter = function(items){
+                scope.view.cart_counter.innerHTML = scope.getTotalItems()
+            }
+
+            if (cart_menu_item && scope.cart && scope.cart.items){
+                scope.view.cart_counter = document.createElement("SPAN")
+                scope.view.cart_counter.classList.add('cart-counter')
+                scope.setCartCounter(scope.cart.items)
+                cart_menu_item.appendChild(scope.view.cart_counter)
+
+                if (mobile_cart_menu_item){
+                    scope.view.mobile_cart_counter = scope.view.cart_counter.cloneNode(true)
+                    mobile_cart_menu_item.appendChild(scope.view.mobile_cart_counter)
+                }
+
+            }
+
+        <% } %>
+
+    }
+
+</script>

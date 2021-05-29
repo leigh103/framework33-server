@@ -440,7 +440,10 @@
 
         scope.parseCurrency = function(input){
 
-            if (parseInt(input)){
+            if (typeof input == 'object' && input.price && input.quantity){
+                let item_total = input.price*input.quantity
+                return '£'+(item_total/100).toFixed(2)
+            } else if (parseInt(input)){
                 return '£'+(input/100).toFixed(2)
             } else {
                 return '£0.00'

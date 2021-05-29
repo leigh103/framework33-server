@@ -98,6 +98,23 @@ var express = require('express'),
 
     })
 
+    routes.get('/testsuccess', async (req,res) => {
+
+        if (getGuard(req) == 'admin'){
+            let data = {
+                transaction: {
+                    data:{
+                        reference: '21-234-ASDC'
+                    }
+                }
+            }
+            res.render(config.site.theme_path+'/templates/transactions/success.ejs',data)
+        } else {
+            res.redirect('/login/admin')
+        }
+
+    })
+
     routes.get('/testsms', async (req,res) => {
 
         if (getGuard(req) == 'admin'){

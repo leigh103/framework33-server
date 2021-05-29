@@ -569,7 +569,7 @@
                 }
 
                 if (!scope.media_library){
-                    scope.get('media_library').then((data)=>{
+                    scope.get('media_library','?sort=_created&limit=32').then((data)=>{
 
                         scope.media_library = data
                         scope.openModal('show_media_library')

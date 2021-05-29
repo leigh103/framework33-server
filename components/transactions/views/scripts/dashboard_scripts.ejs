@@ -3,6 +3,7 @@
     extend.transactions = function(){
 
         scope.view.selected = false
+        scope.view.all_selected = false
         scope.view.all_action_text = 'Select Bulk Actions'
 
         scope.getItem = function(collection, key){
@@ -187,8 +188,8 @@
 
             let selected = false
 
-            if (!transaction.shipping_method){
-                scope.notify('Please specify which courier the shipping is with','error',10,'fas fa-question')
+            if (!transaction.shipping_company){
+                scope.notify('Please specify which courier the shipping is with','error',10,'handstop')
                 return false
             }
 
@@ -233,8 +234,6 @@
         }
 
         scope.selectAll = function(){
-
-            scope.view.all_selected = !scope.view.all_selected
 
             scope.transactions = scope.transactions.map((transaction) => {
                 transaction.selected = scope.view.all_selected
@@ -288,6 +287,10 @@
 
                     if (status == 'processing'){
                         window.location.href = '/dashboard/transactions/print/'+keys.join(',')
+                    } else if (status == 'shipped'){
+                        window.location.href = '/dashboard/transactions/shipped'
+                    } else if (status == 'completed'){
+                        window.location.href = '/dashboard/transactions/new'
                     } else {
                         view.update('transactions')
                     }

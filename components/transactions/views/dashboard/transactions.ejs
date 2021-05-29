@@ -19,7 +19,7 @@
                 </div>
                 <div class="cell middle text-right">
 
-                    <% if (status == 'paid'){ %><button class="bg-secondary" app-click="updateAll('processing')">Print and Process<span class="icon arrowright white right"></span></button><% } %>
+                    <% if (status == 'new'){ %><button class="bg-secondary" app-click="updateAll('processing')">Print and Process<span class="icon arrowright white right"></span></button><% } %>
                     <% if (status == 'processing'){ %><button class="bg-secondary" app-click="updateAll('shipped')">Mark as Shipped<span class="icon arrowright white right"></span></button><% } %>
                     <% if (status == 'shipped'){ %><button class="bg-secondary" app-click="updateAll('completed')">Mark as Complete<span class="icon arrowright white right"></span></button><% } %>
 
@@ -32,7 +32,7 @@
         <div class="table" app-init="get('<%- table %><% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
             <div class="row table-header">
 
-                <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="view.all_selected" app-click="selectAll()"><% } %></div>
+                <div class="cell middle select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()"></div>
                 <div class="cell middle text">Ref / Date</div>
                 <div class="cell middle">Customer / <% if (status == 'processing'){ %>Shipping<% } else { %>Email<% } %></div>
                 <% if (status == 'processing'){ %>
@@ -51,14 +51,14 @@
 
                 <div class="row" app-for="transaction in <%- table %>" app-class="{'transparent-2':transaction.status != '<%- status %>'}">
 
-                    <div class="cell middle select-all"><% if (status.match(/new|processing|shipped/)){ %><input type="checkbox" app-model="transaction.selected" app-change="showActions()"><% } %></div>
+                    <div class="cell middle select-all"><input type="checkbox" app-model="transaction.selected" app-change="showActions()"></div>
 
                     <div class="cell middle text title" app-click="goto('transactions/edit',transaction._key)">
-                        <div class="text-secondary text-bold"><span app-bind="transaction.reference"></span><span class="hidden-d hidden-m"> - <span app-bind="transaction.customer.full_name"></span></span></div>
+                        <div class="text-secondary text-bold"><span app-bind="transaction.reference"></span><span class="hidden-d hidden-m"> - <span app-bind="transaction.customer.name"></span></span></div>
                         <div class="text-light" app-bind="parseDate(transaction._created,'Do MMM h:mma')"></div>
                     </div>
                     <div class="cell middle">
-                        <div app-bind="transaction.customer.full_name" class="text-bold capitalise"></div>
+                        <div app-bind="transaction.customer.name" class="text-bold capitalise"></div>
 
                         <% if (status == 'processing'){ %>
                             <span class="mr-05" app-bind="transaction.shipping_method"></span>(<span app-bind="parseCurrency(transaction.shipping_total)"></span>)
@@ -80,7 +80,7 @@
                                 </select>
                                 <div class="colspan-4 flex">
                                     <input type="text" app-model="transaction.shipping_reference" app-change="checkTracking($index)" style="border-top-left-radius: 0;border-bottom-left-radius: 0; border-left:0">
-                                    <button app-show="transaction.shipping_reference" class="btn bg-white btn-field" app-click="addTracking(transaction)"><span class="icon tick primary"></span></button>
+                                    <button app-show="transaction.shipping_reference" class="btn bg-white btn-field" app-click="addTracking(transaction)"><span class="icon cycle black"></span></button>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                     <div class="cell middle text-right context-link" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">
                         <% if (status.match(/new|processing|shipped/)){ %>
                             <div class="context-menu context-link btn" app-click="toggleContext('context',$index)">
-                                <span class="icon threedots black context-link"></span>
+                                <span class="icon arrowdown black context-link"></span>
                             </div>
                         <% } %>
                     </div>
@@ -185,7 +185,7 @@
 
             <div class="colspan-m-2">
                 <label>Customer</label>
-                <input type="text" app-model="new.customer.full_name" placeholder="Name">
+                <input type="text" app-model="new.customer.name" placeholder="Name">
                 <input type="text" app-model="new.customer.tel" placeholder="Tel">
                 <input type="text" app-model="new.customer.email" placeholder="Email">
                 <label class="within">Notification Method</label>

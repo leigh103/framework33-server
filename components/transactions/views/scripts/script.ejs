@@ -8,29 +8,15 @@
             scope.view.delivery_options = []
 
             let cart_menu_item = document.getElementById('menu-cart'),
-                mobile_cart_menu_item = document.getElementById('menu-cart-mobile')
+                mobile_cart_menu_item = document.getElementById('menu-cart-mobile'),
+                is_checkout = document.querySelector('section.checkout')
 
             <% if (typeof cart != 'undefined' && cart._key) { %>
 
-                watch['cart.notification_method'] = function(){
-                    scope.cart.email = ''
-                    scope.cart.tel = ''
-                }
-
                 watch['cart.email'] = function(data){
                     if (data.match(/hotmail/i)){
-                        scope.notify('We sometimes have issues sending mail notiications to hotmail accounts. Please consider our SMS/Text notification option where possible','error',15,'fa-exclamation-circle')
+                        scope.notify('We sometimes have issues sending mail notiications to hotmail accounts. Please consider our SMS/Text notification option where possible','error',15,'handstop white')
                     }
-                }
-
-                watch['cart.delivery_method'] = function(){
-
-                    if (!scope.cart.shipping_total && scope.cart.delivery_method){
-
-
-                    }
-
-
                 }
 
                 scope.cart = <%- JSON.stringify(cart) %>
@@ -47,14 +33,20 @@
 
                 if (cart_menu_item && scope.cart && scope.cart.items){
                     scope.view.cart_counter = document.createElement("SPAN")
-                    scope.view.cart_counter.setAttribute('id','cart-counter')
+                    scope.view.cart_counter.classList.add('cart-counter')
                     scope.setCartCounter(scope.cart.items)
                     cart_menu_item.appendChild(scope.view.cart_counter)
 
                     if (mobile_cart_menu_item){
-                        mobile_cart_menu_item.appendChild(scope.view.cart_counter)
+                        scope.view.mobile_cart_counter = scope.view.cart_counter.cloneNode(true)
+                        mobile_cart_menu_item.appendChild(scope.view.mobile_cart_counter)
                     }
 
+                }
+
+                if (!scope.cart){
+                    scope.cart = {}
+                    scope.cart.items = []
                 }
 
                 if (!scope.cart.billing_address){
@@ -63,6 +55,14 @@
 
                 if (!scope.cart.shipping_address){
                     scope.cart.shipping_address = {}
+                }
+
+                if (!scope.cart.customer){
+                    scope.cart.customer = {}
+                }
+
+                if (!scope.cart.customer.notification_method){
+                    scope.cart.customer.notification_method = 'sms'
                 }
 
                 scope.parseDeliveryOption = function(optn){
@@ -122,7 +122,7 @@
 
                     scope.post('cart/set-delivery',payload).then((cart)=>{
 
-                        scope.cart = cart
+                        scope.cart.delivery_method = cart.delivery_method
                         view.update('cart')
                     })
 
@@ -162,22 +162,29 @@
                         scope.setCartCounter(cart.items)
                         view.update('cart')
 
-                        let notification_content = '<a href="/<%- view.ecommerce.cart_name.toLowerCase() %>" class="grid col-12 gap-1 w-100 notification-cart-add"><div class="colspan-3 thumbnail"><img src="'+added_item.thumbnail+'" class="object-fit"></div><div class="colspan-9 details"><h4 class="text-bold">Added '+added_item.name+'</h4><div>£'+(added_item.price/100).toFixed(2)+'</div></div></a>'
-                        scope.notify(notification_content,'success',999, 'arrowright')
+                        if (!is_checkout){
+                            let notification_content = '<a href="/<%- view.ecommerce.cart_name.toLowerCase() %>" class="grid col-12 gap-1 w-100 notification-cart-add"><div class="colspan-2 thumbnail"><img src="'+added_item.thumbnail+'" class="object-fit"></div><div class="colspan-10 details"><h4 class="text-bold">Added '+added_item.name+'</h4><div>£'+(added_item.price/100).toFixed(2)+'</div></div></a>'
+                            scope.notify(notification_content,'success',5, 'arrowright')
+                        }
+
                     //    scope.notify('Item Added! <a href="/<%- view.ecommerce.cart_name.toLowerCase() %>">View <%- view.ecommerce.cart_name %></a>')
 
                     }).catch((err)=>{
                         console.log(err)
-                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                        scope.notify(err,'error',10,'handstop white')
                     })
 
                 }
 
-                scope.removeFromCart = function(item){
+                scope.removeFromCart = function(item, all){
 
                     let payload = {
                         _key: '<%- cart._key %>',
                         item_key: item._key
+                    }
+
+                    if (all){
+                        payload.all = true
                     }
 
                     scope.post('cart/remove-item',payload).then((cart)=>{
@@ -186,7 +193,7 @@
                         view.update('cart')
                         scope.notify('Item Removed')
                     }).catch((err)=>{
-                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                        scope.notify(err,'error',10,'handstop white')
                     })
 
                 }
@@ -203,7 +210,7 @@
                         view.update('cart')
                         scope.notify('Cart Emptied')
                     }).catch((err)=>{
-                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                        scope.notify(err,'error',10,'handstop white')
                     })
 
                 }
@@ -211,36 +218,56 @@
                 scope.checkout = function(){
 
                     if (scope.cart.items.length < 1){
-                        scope.notify('Please add at least 1 item to checkout','error',5,'fa-exclamation-circle')
+                        scope.notify('Please add at least 1 item to checkout','error',10,'handstop white')
                         return false
                     }
 
-                    if (!scope.cart.customer.full_name){
-                        scope.notify('Please add your name','error',5,'fa-exclamation-circle')
+                    if (!scope.cart.customer.name){
+                        scope.notify('Please add your name','error',10,'handstop white')
                         return false
                     }
 
-                    if (!scope.cart.billing_address.address_line1){
-                        scope.notify('Please add your address','error',5,'fa-exclamation-circle')
-                        return false
-                    }
-
-                    if (!scope.cart.billing_address.address_level2){
-                        scope.notify('Please add your town or city','error',5,'fa-exclamation-circle')
-                        return false
-                    }
+                    // if (!scope.cart.billing_address.address_line1){
+                    //     scope.notify('Please add your address','error',10,'handstop white')
+                    //     return false
+                    // }
+                    //
+                    // if (!scope.cart.billing_address.address_level2){
+                    //     scope.notify('Please add your town or city','error',10,'handstop white')
+                    //     return false
+                    // }
 
                     if (!scope.cart.customer.notification_method){
-                        scope.notify('Please select your preferred notification method','error',5,'fa-exclamation-circle')
+                        scope.notify('Please select your preferred notification method','error',10,'handstop white')
                         return false
                     }
 
-                    if (!scope.cart.customer.tel && !scope.cart.customer.email){
-                        scope.notify('Please add your mobile contact number, or email address','error',5,'fa-exclamation-circle')
+                    if (scope.cart.customer.email && !scope.cart.customer.email.match(/^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/)){
+                        scope.notify('Please add a valid email address','error',10,'handstop white')
                         return false
                     }
 
-                    scope.cart.shipping_address = scope.cart.billing_address
+                    if (scope.cart.customer.tel && !scope.cart.customer.tel.match(/^(?:07|\+?44)(?:\d\s?){8,10}$/)){
+                        scope.notify('Please add a valid mobile number','error',10,'handstop white')
+                        return false
+                    }
+
+                    if (scope.cart.customer.notification_method == 'email' && !scope.cart.customer.email){
+                        scope.notify('Please add an email address','error',10,'handstop white')
+                        return false
+                    }
+
+                    if (scope.cart.customer.notification_method == 'sms' && !scope.cart.customer.tel){
+                        scope.notify('Please add a mobile number','error',10,'handstop white')
+                        return false
+                    }
+
+                    // scope.cart.shipping_address = scope.cart.billing_address
+                    if (!scope.cart.shipping_address || !scope.cart.shipping_address.name){
+                        scope.cart.shipping_address = {}
+                        scope.cart.shipping_address.name = scope.cart.customer.name
+                        scope.cart.shipping_address.title = scope.cart.customer.title
+                    }
 
                     scope.put('cart',<%- cart._key %>,scope.cart).then((cart)=>{
                         scope.cart = cart
@@ -248,17 +275,46 @@
                         scope.parseDeliveryOptions()
                         view.update('cart')
                         view.update('view.page')
-                        scope.notify('Cart Updated')
+                        // scope.notify('Cart Updated')
                     }).catch((err)=>{
-                        scope.notify(err,'error',5,'fa-exclamation-circle')
+                        scope.notify(err,'error',10,'handstop white')
                     })
 
                 }
 
                 scope.payment = function(){
 
+                    if (!scope.cart.delivery_method){
+                        scope.notify('Please select a delivery method','error',10,'handstop white')
+                        return false
+                    }
+
+                    if (!scope.cart.shipping_address.address_line1){
+                        scope.notify('Please add your address','error',10,'handstop white')
+                        return false
+                    }
+
+                    if (!scope.cart.shipping_address.address_level2){
+                        scope.notify('Please add your town or city','error',10,'handstop white')
+                        return false
+                    }
+
+                    if (!scope.cart.shipping_address.postal_code){
+                        scope.notify('Please add your postcode','error',10,'handstop white')
+                        return false
+                    }
+
                     scope.view.page = 'gateways'
                     view.update('view.page')
+
+                    scope.put('cart',<%- cart._key %>,scope.cart).then((cart)=>{
+                        scope.cart = cart
+                        scope.view.page = 'gateways'
+                        view.update('view.page')
+                        // scope.notify('Cart Updated')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',10,'handstop white')
+                    })
 
                     // let payload = {
                     //     _key: scope.cart._key,
@@ -270,7 +326,7 @@
                     //     scope.cart = cart
                     //     view.update('cart')
                     // }).catch((err)=>{
-                    //     scope.notify(err,'error',5,'fa-exclamation-circle')
+                    //     scope.notify(err,'error',10,'handstop white')
                     // })
 
 

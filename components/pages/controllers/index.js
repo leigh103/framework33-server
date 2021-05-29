@@ -254,6 +254,13 @@ const express = require('express'),
 
         res.locals.functions = functions
 
+        data.include_scripts = []
+
+        if (typeof Cart == 'function'){
+            data.include_scripts = [settings.views+'/scripts/script.ejs']
+            data.cart = await new Cart().init(req)
+        }
+
         let article = await new Pages().find(['slug == homepage','status == published'])
 
         if (!article.data || article.error){
@@ -262,7 +269,7 @@ const express = require('express'),
 
         } else {
 
-            data.include_scripts = []
+
             data.blocks = blocks
             data.title = article.data.title
             data.date = article.data._updated
@@ -547,6 +554,11 @@ const express = require('express'),
     })
 
     routes.get('/:pages_type/:slug?', async (req, res, next) => {
+
+        if (typeof Cart == 'function'){
+            data.include_scripts = [settings.views+'/scripts/script.ejs']
+            data.cart = await new Cart().init(req)
+        }
 
         data.include_styles = []
 

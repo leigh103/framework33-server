@@ -166,16 +166,24 @@
             }
 
             input, select, textarea {
-                border: 1px solid #DDDDDD;
+
+                background-color: $dashboard-color-light-grey;
                 border-radius: $border-radius;
                 height: $input-height;
+                height: 2.5rem;
 
                 & + .btn {
-                    height: 35px;
+                    background-color: $dashboard-color-light-grey;
+                    border: none;
+                    height: 2.5rem;
                     border-top-left-radius: 0;
                     border-bottom-left-radius: 0;
                     margin-left: -6px;
                 }
+            }
+
+            select {
+                background-color: $dashboard-color-light-grey2;
             }
 
             input[type=checkbox] {
