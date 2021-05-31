@@ -65,7 +65,7 @@
             let menus = {
                 menu: {
                     dashboard: [
-                        {link:'Add a new page',slug:'pages/new', weight:10}
+                        {link:'Add a new page',slug:'pages/new', weight:10, protected_guards:['admin']}
                     ]
                 }
             }

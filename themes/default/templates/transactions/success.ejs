@@ -1,15 +1,20 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
-<section class="page">
+<section class="page bg-cream-3">
 
-    <div class="contain text-left h-100">
+    <div class="contain text-left">
 
-        <section class="grid col-2 col-s-1 gap-2 h-100">
+        <section class="py-6">
 
             <% if (typeof transaction == 'object' && transaction.data){ %>
-                <div class="mt-5 mt-s-1">
-                    <h1>Order: <%- transaction.data.reference %></h1>
-                    <p>Thanks very much for placing your order with us today! We'll process it as soon as we can and let you know once it's been dispatched</p>
+                <div class="">
+                    <h1 class="slab mb-3">Lovely! Your choccy is ordered</h1>
+                    <div class="w-50">
+                        <p class="museo h5">Your order number is <span class="h4 slab"><%- transaction.data.reference %></span></p>
+                        <p class="museo h5">We’ll send you an email or text message to confirm your order, and another one to tell you when it’s been dispatched!</p>
+                    </div>
+
+                    <a class="mt-3 btn bg-border" href="/shop">Show me more<span class="icon handpoint right secondary"></span></a>
                 </div>
             <% } %>
 

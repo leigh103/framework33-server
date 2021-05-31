@@ -111,15 +111,15 @@ const express = require('express'),
     })
 
     routes.get('/login', (req, res) => {
-        res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:'customer'})
+        res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:config.users.default_guard})
     })
 
     routes.get('/sign-up', (req, res) => {
 
         if (!config.users.allow_registration){
-            res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:'customer',error:'New account registrations are currently disabled'})
+            res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:config.users.default_guard,error:'New account registrations are currently disabled'})
         } else {
-            res.render(config.site.theme_path+'/templates/authentication/register.ejs', {guard:'customer'})
+            res.render(config.site.theme_path+'/templates/authentication/register.ejs', {guard:config.users.default_guard})
         }
 
     })
@@ -180,14 +180,19 @@ const express = require('express'),
 
     })
 
-    routes.post('/login/:guard', async (req, res) => {
+    routes.post('/login/:guard?', async (req, res) => {
 
-        let user = await new global[parseClassName(req.params.guard)]().find(req.body),
+        let guard = req.params.guard
+        if (!guard){
+            guard = config.users.default_guard
+        }
+
+        let user = await new global[parseClassName(guard)]().find(req.body),
             auth_data = await user.authenticate(req.body)
 
         if (auth_data && auth_data.error){
-            new Log(uauth_data._id, req.params.guard+'_auth_failed', auth_data._id, auth_data.error, req.headers['x-forwarded-for']).save()
-            res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:req.params.guard,error:auth_data.error})
+            new Log(auth_data._id, guard+'_auth_failed', auth_data._id, auth_data.error, req.headers['x-forwarded-for']).save()
+            res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard: guard,error:auth_data.error})
         } else if (auth_data && auth_data._id){
             req.session.user = auth_data
             if (req.cookies && req.cookies['connect.sid']){
@@ -195,11 +200,11 @@ const express = require('express'),
                 user.data.ws_id = req.cookies['connect.sid']
                 user.save()
             }
-            new Log(auth_data._id, req.params.guard+'_logged_in', auth_data._id, req.params.guard+' successfully authenticated', req.headers['x-forwarded-for']).save()
+            new Log(auth_data._id, guard+'_logged_in', auth_data._id, guard+' successfully authenticated', req.headers['x-forwarded-for']).save()
             res.redirect(user.routes.redirects.logged_in)
         } else {
-            new Log(false, req.params.guard+'_auth_failed', user.data, auth_data.error, req.headers['x-forwarded-for']).save()
-            res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard:req.params.guard,error:'There has been an issue resetting your password, please try again'})
+            new Log(false, guard+'_auth_failed', user.data, auth_data.error, req.headers['x-forwarded-for']).save()
+            res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard: guard,error:'There has been an issue resetting your password, please try again'})
         }
 
     })

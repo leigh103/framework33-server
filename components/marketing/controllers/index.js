@@ -15,7 +15,7 @@ const express = require('express'),
         views: 'marketing/views',
         menu: {
             side_nav: [
-                {link:'Marketing',slug: '/dashboard/marketing', icon:'<span class="icon megaphone"></span>', weight:7}
+                {link:'Marketing', protected_guards:['admin'],slug: '/dashboard/marketing', icon:'<span class="icon megaphone"></span>', weight:7}
             ]
         }
     }

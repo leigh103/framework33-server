@@ -86,16 +86,28 @@
                 </div>
             </div>
 
+            <div class="input-text field-transaction_details">
+                <label>Customer Details</label>
+                <div class="capitalise text-bold text-primary" app-click="goto('customers',new.customer._key)"><span app-bind="new.customer.title"></span> <span app-bind="new.customer.name"></span></div>
+                <div app-bind="new.customer.email"></div>
+                <div app-bind="new.customer.tel"></div>
+
+                <label class="mt-1">Order Date</label>
+                <div><span app-bind="parseDate(new._created,'Do MMM YYYY h:mma')"></span> (<span app-bind="parseDate(new._created,'ago')"></span>)</div>
+            </div>
+
             <div class="input-text field-billing_address">
-                <label>Billing Address</label>
+                <!-- <label>Billing Address</label>
                 <div>
                     <div app-bind="new.billing_address.address_line1"></div>
                     <div app-bind="new.billing_address.address_line2"></div>
                     <div app-bind="new.billing_address.address_level1"></div>
                     <div app-bind="new.billing_address.address_level2"></div>
                     <div app-bind="new.billing_address.postal_code"></div>
-                </div>
+                </div> -->
             </div>
+
+
 
             <div class="input-text field-transaction_details">
 
@@ -104,13 +116,7 @@
 
             </div>
 
-            <div class="input-text field-transaction_details">
-                <label>Customer Details</label>
-                <div class="capitalise text-bold text-primary" app-click="goto('customers',new.customer._key)"><span app-bind="new.customer.title"></span> <span app-bind="new.customer.name"></span></div>
-                <div app-bind="new.customer.email"></div>
-                <div app-bind="new.customer.tel"></div>
 
-            </div>
 
             <div class="transaction-items grid col-3">
                 <div class="colspan-3" app-hide="view.refund">

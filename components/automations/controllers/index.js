@@ -18,7 +18,7 @@ const express = require('express'),
         },
         menu: {
             side_nav: [
-                {link:'Automations',slug: '/dashboard/automations', icon:'<span class="icon cycle"></span>', weight:5}
+                {link:'Automations',slug: '/dashboard/automations', icon:'<span class="icon cycle"></span>', protected_guards:['admin'], weight:5}
             ]
         }
     },

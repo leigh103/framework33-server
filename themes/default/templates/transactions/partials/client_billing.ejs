@@ -1,15 +1,22 @@
 <div app-show="view.page == 'billing'">
 
     <div class="checkout-billing">
-        <h2 class="h4">Your Details</h2>
+
+        <div class="breadcrumbs">
+            <a title="Enter your checkout details" class="active">Details</a>
+            <a title="Select delivery method" app-click="checkout()">Delivery</a>
+            <span title="Pay for your items">Payment</span>
+        </div>
+
+        <h2 class="h4">Enter your details</h2>
 
         <form autocomplete="on">
             <div class="flex my-1">
 
                 <div class="flex-1 mr-1">
                     <label>Title</label>
-                    <select class="border rounded">
-                        <option selected disabled value="">Title...</option>
+                    <select class="rounded" app-model="cart.customer.title">
+                        <option selected disabled value=""></option>
                         <option value="Mr">Mr</option>
                         <option value="Dr">Dr</option>
                         <option value="Mrs">Mrs</option>
@@ -19,40 +26,53 @@
                 </div>
                 <div class="flex-2">
                     <label>Full Name</label>
-                    <input type="text" placeholder="Your Name *" class="border rounded" id="name" name="name" autocomplete="name" app-model="cart.customer.full_name">
+                    <input type="text" class="rounded" name="name" autocomplete="name" app-model="cart.customer.name">
                 </div>
 
             </div>
 
-            <label>Billing Address</label>
-            <input type="text" placeholder="Address Line 1 *" class="border rounded mb-1" name="address-line1" app-model="cart.billing_address.address_line1" autocomplete="address-line1">
-            <input type="text" placeholder="Address Line 2" class="border rounded mb-1" name="address-line2" app-model="cart.billing_address.address_line2" autocomplete="address-line2">
-            <input type="text" placeholder="Town / City" class="border rounded mb-1" name="address-level2" app-model="cart.billing_address.address_level1" autocomplete="address-level2">
+            <label>Mobile Number</label>
+            <input type="text" class="rounded mb-1" name="tel" app-model="cart.customer.tel" autocomplete="tel">
+            <label>Email Address</label>
+            <input type="text" class="rounded" name="email" app-model="cart.customer.email" autocomplete="email">
+
+
+            <!-- <label>Billing Address</label>
+            <input type="text" class="rounded mb-1" name="address-line1" app-model="cart.billing_address.address_line1" autocomplete="address-line1">
+            <input type="text" class="rounded mb-1" name="address-line2" app-model="cart.billing_address.address_line2" autocomplete="address-line2">
+
+            <label>Billing Town/City</label>
+            <input type="text"class="rounded mb-1" name="address-level2" app-model="cart.billing_address.address_level1" autocomplete="address-level2">
 
             <div class="flex mb-1">
                 <div class="flex-2 mr-05">
-                    <label>Billing Town/City</label>
-                    <input type="text" placeholder="County / State *" class="border rounded" name="address-level1" app-model="cart.billing_address.address_level2" autocomplete="address-level1">
+                    <label>Billing County</label>
+                    <input type="text" class="rounded" name="address-level1" app-model="cart.billing_address.address_level2" autocomplete="address-level1">
                 </div>
                 <div class="flex-1 ml-05">
                     <label>Billing Post Code</label>
-                    <input type="text" placeholder="Address Postcode *" class="border rounded " name="postal-code" app-model="cart.billing_address.postal_code" autocomplete="postal-code">
+                    <input type="text" class="rounded " name="postal-code" app-model="cart.billing_address.postal_code" autocomplete="postal-code">
                 </div>
+            </div> -->
+
+            <p class="notification-title">Where shall we send notifications about your order?</p>
+            <div class="grid col-2 gap-1">
+
+
+                <button class="btn" app-class="{'bg-secondary':cart.customer.notification_method == 'sms'}" app-click="cart.customer.notification_method = 'sms'">SMS / Text</button>
+                <button class="btn" app-class="{'bg-secondary':cart.customer.notification_method == 'email'}" app-click="cart.customer.notification_method = 'email'">Email</button>
             </div>
 
-            <label class="mt-2">Select preferred notification method:</label>
-            <div class="grid col-2 gap-1 mb-1">
 
-                <a class="btn" app-class="{'bg-secondary':cart.customer.notification_method == 'sms'}" app-click="cart.customer.notification_method = 'sms'">SMS / Text</a>
-                <a class="btn" app-class="{'bg-secondary':cart.customer.notification_method == 'email'}" app-click="cart.customer.notification_method = 'email'">Email</a>
-            </div>
-
-            <input type="number" app-show="cart.customer.notification_method == 'sms'" placeholder="Mobile Number *" class="border rounded" name="tel" app-model="cart.customer.tel" autocomplete="tel">
-            <input type="text" app-show="cart.customer.notification_method == 'email'" placeholder="Email Address *" class="border rounded" name="email" app-model="cart.customer.email" autocomplete="email">
 
         </form>
 
-        <button class="btn bg-secondary thick w-100 mt-5 mt-s-1 text-weight-700 mt-2" app-click="checkout()">Checkout <span class="icon right white arrowright"></span></button>
+        <div class="nav-buttons">
+            <div></div>
+            <div>
+                <button class="btn bg-secondary text-weight-700" app-click="checkout()">Delivery <span class="icon right white arrowright"></span></button>
+            </div>
+        </div>
     </div>
 
 </div>

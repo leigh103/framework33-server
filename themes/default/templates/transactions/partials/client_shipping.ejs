@@ -2,26 +2,56 @@
 
     <div class="checkout-shipping">
 
-        <h2 class="h4">Shipping</h2>
+        <div class="breadcrumbs">
+            <span title="Enter your checkout details">Details</span>
+            <span title="Select delivery method" class="active">Delivery</span>
+            <span title="Pay for your items">Payment</span>
+        </div>
+
+        <h2 class="h4">Arrange your delivery</h2>
 
         <form autocomplete="on" class="mt-1">
 
-            <label><input type="checkbox" class="border" app-click="shippingSameAsDelivery()" app-model="view.use_billing_address"> Use billing address for delivery</label>
+            <!-- <label><input type="checkbox" class="rounded" app-click="shippingSameAsDelivery()" app-model="view.use_billing_address"> Same as billing address</label> -->
 
-            <div app-hide="view.use_billing_address">
-                <label>Billing Address</label>
-                <input type="text" placeholder="Address Line 1 *" class="border rounded mb-1" name="address-line1" app-model="cart.shipping_address.address_line1" autocomplete="address-line1">
-                <input type="text" placeholder="Address Line 2" class="border rounded mb-1" name="address-line2" app-model="cart.shipping_address.address_line2" autocomplete="address-line2">
-                <input type="text" placeholder="Town / City" class="border rounded mb-1" name="address-level2" app-model="cart.shipping_address.address_level1" autocomplete="address-level2">
+            <div>
+
+                <div class="flex my-1">
+
+                    <div class="flex-1 mr-1">
+                        <label>Title</label>
+                        <select class="rounded" app-model="cart.shipping_address.title">
+                            <option selected disabled value=""></option>
+                            <option value="Mr">Mr</option>
+                            <option value="Dr">Dr</option>
+                            <option value="Mrs">Mrs</option>
+                            <option value="Miss">Miss</option>
+                            <option value="Ms">Ms</option>
+                        </select>
+                    </div>
+                    <div class="flex-2">
+                        <label>Full Name</label>
+                        <input type="text" class="rounded" name="name" autocomplete="name" app-model="cart.shipping_address.name">
+                    </div>
+
+                </div>
+
+
+                <label>Shipping Address</label>
+                <input type="text" class="rounded mb-1" name="address-line1" app-model="cart.shipping_address.address_line1" autocomplete="address-line1">
+                <input type="text" class="rounded mb-1" name="address-line2" app-model="cart.shipping_address.address_line2" autocomplete="address-line2">
+
+                <label>Shipping Town/City</label>
+                <input type="text"class="rounded mb-1" name="address-level2" app-model="cart.shipping_address.address_level1" autocomplete="address-level2">
 
                 <div class="flex mb-1">
                     <div class="flex-2 mr-05">
-                        <label>Billing Town/City</label>
-                        <input type="text" placeholder="County / State *" class="border rounded" name="address-level1" app-model="cart.shipping_address.address_level2" autocomplete="address-level1">
+                        <label>Shipping County</label>
+                        <input type="text" class="rounded" name="address-level1" app-model="cart.shipping_address.address_level2" autocomplete="address-level1">
                     </div>
                     <div class="flex-1 ml-05">
-                        <label>Billing Post Code</label>
-                        <input type="text" placeholder="Address Postcode *" class="border rounded " name="postal-code" app-model="cart.shipping_address.postal_code" autocomplete="postal-code">
+                        <label>Shipping Post Code</label>
+                        <input type="text" class="rounded " name="postal-code" app-model="cart.shipping_address.postal_code" autocomplete="postal-code">
                     </div>
                 </div>
 
@@ -31,14 +61,20 @@
 
         <label class="mt-2">Delivery Method</label>
         <div class="relative">
-            <div app-for="optn in view.delivery_options" class="mb-2 relative rounded border p-2" app-click="setDelivery(optn)" app-class="{'selected-shipping':cart.delivery_method == optn._key}">
-                <div app-bind="parseDeliveryOption(optn)"></div>
+            <div app-for="optn in view.delivery_options" class="checkout-shipping-method" app-click="setDelivery(optn)" app-class="{'selected':cart.delivery_method == optn._key}">
+                <div app-bind="optn.name"></div>
+                <div app-bind="parseCurrency(optn.price)"></div>
             </div>
         </div>
 
-        <button class="btn bg-secondary thick w-100 mt-1 text-weight-700" app-show="cart.delivery_method" app-click="payment()">Payment <span class="icon arrowright right white"></span></button>
-        <button class="btn bg-secondary thick w-100 mt-1 text-weight-700 transparent" app-hide="cart.delivery_method">Select Delivery Method</button>
-        <a class="btn bg-none mt-5 mt-s-1 text-left text-secondary w-100" app-click="view.page = 'billing'"><span class="icon arrowleft left primary"></span>Your Details</a>
+        <div class="nav-buttons">
+            <div>
+                <button class="btn text-weight-700" app-click="view.page = 'billing'"><span class="icon arrowleft left primary"></span>Back</button>
+            </div>
+            <div>
+                <button class="btn bg-secondary text-weight-700" app-click="payment()">Payment <span class="icon arrowright right white"></span></button>
+            </div>
+        </div>
 
     </div>
 

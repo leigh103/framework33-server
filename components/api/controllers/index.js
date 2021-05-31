@@ -31,8 +31,8 @@ var express = require('express'),
                     self = false,
                     user_id = false
 
-                if (req.session && req.session.user && req.session.user){
-                    user_id = user_id
+                if (req.session && req.session.user && req.session.user._id){
+                    user_id = req.session.user._id
                     guard = req.session.user.guard
                 } else if (req.cookies['connect.sid']){
                     user_id = req.cookies['connect.sid']

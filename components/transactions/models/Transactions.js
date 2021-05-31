@@ -363,7 +363,7 @@
             let menus = {
                 menu: {
                     dashboard: [
-                        {link:'Transactions',slug:'transactions/new', weight:1, query:'/dashboard/transactions/stats'}
+                        {link:'Transactions',slug:'transactions/new', weight:1, query:'/dashboard/transactions/stats', protected_guards:['admin']}
                     ],
                     reports: [
                         {link:'Sales', weight:1, slug:'transactions/total-sales', description:'Shows a sales breakdown over a specified period', inputs:['date_from','date_to']},

@@ -14,7 +14,7 @@ const express = require('express'),
         views: 'media_library/views',
         menu: {
             side_nav: [
-                {link:'Media Library',slug: '/dashboard/media-library', weight:20, icon:'<span class="icon contentbutton"></span>'}
+                {link:'Media Library', protected_guards:['admin'],slug: '/dashboard/media-library', weight:20, icon:'<span class="icon contentbutton"></span>'}
             ]
         }
     },

@@ -17,7 +17,7 @@ const express = require('express'),
         views: 'pages/views',
         menu: {
             side_nav: [
-                {link:'Pages',slug: '/dashboard/pages', weight:2, icon:'<span class="icon screen"></span>', subitems:[
+                {link:'Pages',slug: '/dashboard/pages', protected_guards:['admin'], weight:2, icon:'<span class="icon screen"></span>', subitems:[
                     {link:'Pages Types',slug: '/dashboard/pages/pages-types', weight:1}
                 ]}
             ]

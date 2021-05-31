@@ -49,7 +49,7 @@ const express = require('express'),
     routes.get('/:key?', async (req, res) => {
 
         view.current_view = 'people'
-        view.current_sub_view = 'administrators'
+        view.current_sub_view = 'admin'
 
         data.title = 'People'
         data.table = 'admin'

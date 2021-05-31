@@ -13,9 +13,10 @@ const express = require('express'),
     settings = {
         default_route: 'root',
         views: 'transactions/views',
+        protected_guards:['admin'],
         menu: {
             side_nav: [
-                {link:'Orders',slug: '/dashboard/transactions/new', icon:'<span class="icon shoppingtrolley"></span>', weight:4, subitems:[
+                {link:'Orders',slug: '/dashboard/transactions/new', icon:'<span class="icon shoppingtrolley"></span>', weight:4, protected_guards:['admin'],subitems:[
                     {link:'Incomplete Carts',slug: '/dashboard/transactions/incomplete', icon:'<span class="icon shoppingtrolley"></span>', weight:9},
                     // {link:'New',slug: '/dashboard/transactions/paid', weight:2},
                     // {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},

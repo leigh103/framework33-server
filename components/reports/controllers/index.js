@@ -13,7 +13,7 @@ const express = require('express'),
         views: 'reports/views',
         menu: {
             side_nav: [
-                {link:'Reports',slug: '/dashboard/reports', icon:'<span class="icon piechart"></span>', weight:4}
+                {link:'Reports',slug: '/dashboard/reports', icon:'<span class="icon piechart"></span>', protected_guards:['admin'], weight:4}
             ]
         }
     },

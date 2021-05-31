@@ -213,7 +213,7 @@
             let menus = {
                 menu: {
                     dashboard: [
-                        {slug:'products/new', weight:2, link:'Add a new product'}
+                        {slug:'products/new', weight:2, link:'Add a new product', protected_guards:['admin']}
                     ]
                 }
             }

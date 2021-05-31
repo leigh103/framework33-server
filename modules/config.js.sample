@@ -86,6 +86,7 @@
             email_activation: true,
             guards:[{name:'customers',path:'customers.js'},
 		    {name:'admin',path:'admin.js'}],
+            default_guard: 'customers',
             password_reset_timeout: 5,
             password_policy: {
                 min_length:8,

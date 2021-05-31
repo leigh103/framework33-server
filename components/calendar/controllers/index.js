@@ -14,7 +14,7 @@ const express = require('express'),
         views: 'calendar/views',
         menu: {
             side_nav: [
-                {link:'Calendar',slug: '/dashboard/calendar', icon:'<span class="icon calendar"></span>', weight:2}
+                {link:'Calendar',slug: '/dashboard/calendar', icon:'<span class="icon calendar"></span>', protected_guards:['admin'], weight:2}
             ]
         }
     }

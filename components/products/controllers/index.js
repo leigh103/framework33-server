@@ -14,7 +14,7 @@ const express = require('express'),
         views: 'products/views',
         menu: {
             side_nav: [
-                {link:'Products',slug: '/dashboard/products', icon:'<span class="icon box"></span>', weight:3, subitems:[
+                {link:'Products',slug: '/dashboard/products', icon:'<span class="icon box"></span>', protected_guards:['admin'], weight:3, subitems:[
                     // {link:'All',slug: '/dashboard/products', weight:1},
                     // {link:'Inactive',slug: '/dashboard/products/inactive', weight:5},
                     // {link:'Sale Items',slug: '/dashboard/products/sale', weight:6},

@@ -1,8 +1,14 @@
 <div app-show="view.page == 'gateways'">
 
-    <h2 class="h4">Select Payment Method</h2>
+    <div class="breadcrumbs">
+        <span title="Enter your checkout details">Details</span>
+        <span title="Select delivery method">Delivery</span>
+        <span title="Pay for your items" class="active">Payment</span>
+    </div>
 
-    <div class="mt-1">
+    <h2 class="h4">Select a payment method</h2>
+
+    <div class="mt-2">
 
         <% transactions.payment_methods.forEach((gateway)=>{ %>
 
@@ -43,6 +49,13 @@
 
     </div>
 
-    <a class="block mt-5 text-left" app-click="view.page = 'shipping'"><i class="fas fa-chevron-left mr-1"></i>Shipping Address</a>
+    <div class="nav-buttons">
+        <div>
+            <button class="btn text-weight-700" app-click="view.page = 'shipping'"><span class="icon arrowleft left primary"></span>Back</button>
+        </div>
+        <div>
+    
+        </div>
+    </div>
 
 </div>

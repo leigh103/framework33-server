@@ -19,7 +19,16 @@
         table tr td:first-child {
             text-align: left
         }
-        h1,h2,h3,h4 {font-weight: 500}
+
+        h1 {
+        font-size: 24pt;
+        font-family: 'Lato Bold' !important;
+        }
+
+        h2, h3, h4 {
+        font-size: 14pt;
+        font-family: 'Lato Bold' !important;
+        }
 
         img.barcode {display:inline-block;max-width: 100px}
 
@@ -78,13 +87,7 @@
                     font-size: 20px
                 }
 
-                h1 {
-                font-size: 24pt;
-                }
 
-                h2, h3, h4 {
-                font-size: 14pt;
-                }
 
                 /* Alle Seitenumbrüche definieren */
                 a {
@@ -210,13 +213,32 @@
                 <table style="margin-bottom:1rem">
                     <tr>
                         <td>
-                            <h3>Order: <%- transaction.reference %></h3>
-                            <h4><%- transaction.customer.name %></h4>
-                            <% if (transaction.customer.email){ %><h4><%- transaction.customer.email %></h4><% } %>
-                            <% if (transaction.customer.tel){ %><h4><%- transaction.customer.tel %></h4><% } %>
+                            <table>
+                                <tr>
+                                    <td style="width:6rem"><img src="<%- transaction.barcode %>" class="barcode"></td>
+                                    <td style="text-align: left; padding-left: 1rem;">
+                                        <h3>Order: <%- transaction.reference %></h3>
+                                        <h4><%- transaction.customer.name %></h4>
+                                        <% if (transaction.customer.email){ %><p class="m-0"><%- transaction.customer.email %></p><% } %>
+                                        <% if (transaction.customer.tel){ %><p class="m-0"><%- transaction.customer.tel %></p><% } %>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td style="text-align: right">
-                            <img src="<%- transaction.barcode %>" class="barcode">
+
+                            <% if (transaction.shipping_address.name){ %>
+                                <h4><% if (transaction.shipping_address.title){ %><%- transaction.shipping_address.title %> <% } %><%- transaction.shipping_address.name %></h4>
+                            <% } else { %>
+                                <h4><% if (transaction.customer.title){ %><%- transaction.customer.title %> <% } %><%- transaction.customer.name %></h4>
+                            <% } %>
+                            <% if (transaction.shipping_address.address_line1){ %><h4><%- transaction.shipping_address.address_line1 %></h4><% } %>
+                            <% if (transaction.shipping_address.address_line2){ %><h4><%- transaction.shipping_address.address_line2 %></h4><% } %>
+                            <% if (transaction.shipping_address.address_level1){ %><h4><%- transaction.shipping_address.address_level1 %></h4><% } %>
+                            <% if (transaction.shipping_address.address_level2){ %><h4><%- transaction.shipping_address.address_level2 %></h4><% } %>
+                            <% if (transaction.shipping_address.postal_code){ %><h4><%- transaction.shipping_address.postal_code %></h4><% } %>
+                            <p><%- transaction.shipping_method %></p>
+
                         </td>
                     </tr>
                 </table>
@@ -226,34 +248,7 @@
                             <div>Transaction ID: <%- transaction._key %></div>
                             <div>Transaction Date: <%- view.functions.parseDate(transaction._created,'dddd Do MMM YYYY [at] h:mma') %></div>
                         </td>
-                        <td>
 
-                            <% if (transaction.shipping_address.address_level1){ %>
-                                <h4>Billed To:</h4>
-                                <% if (transaction.billing_address.address_line1){ %><%- transaction.billing_address.address_line1 %><br><% } %>
-                                <% if (transaction.billing_address.address_line2){ %><%- transaction.billing_address.address_line2 %><br><% } %>
-                                <% if (transaction.billing_address.address_level1){ %><%- transaction.billing_address.address_level1 %><br><% } %>
-                                <% if (transaction.billing_address.address_level2){ %><%- transaction.billing_address.address_level2 %><br><% } %>
-                                <% if (transaction.billing_address.postal_code){ %><%- transaction.billing_address.postal_code %><br><% } %>
-                            <% } %>
-                        </td>
-                        <td>
-                            <h4>Post To:</h4>
-                            <% if (transaction.shipping_address || !transaction.shipping_address.address_level1){ %>
-
-                                <% if (transaction.billing_address.address_line1){ %><%- transaction.billing_address.address_line1 %><br><% } %>
-                                <% if (transaction.billing_address.address_line2){ %><%- transaction.billing_address.address_line2 %><br><% } %>
-                                <% if (transaction.billing_address.address_level1){ %><%- transaction.billing_address.address_level1 %><br><% } %>
-                                <% if (transaction.billing_address.address_level2){ %><%- transaction.billing_address.address_level2 %><br><% } %>
-                                <% if (transaction.billing_address.postal_code){ %><%- transaction.billing_address.postal_code %><br><% } %>
-                            <% } else { %>
-                                <% if (transaction.shipping_address.address_line1){ %><%- transaction.shipping_address.address_line1 %><br><% } %>
-                                <% if (transaction.shipping_address.address_line2){ %><%- transaction.shipping_address.address_line2 %><br><% } %>
-                                <% if (transaction.shipping_address.address_level1){ %><%- transaction.shipping_address.address_level1 %><br><% } %>
-                                <% if (transaction.shipping_address.address_level2){ %><%- transaction.shipping_address.address_level2 %><br><% } %>
-                                <% if (transaction.shipping_address.postal_code){ %><%- transaction.shipping_address.postal_code %><br><% } %>
-                            <% } %>
-                        </td>
                     </tr>
                 </table>
 
@@ -271,7 +266,7 @@
                                 <div class="row" style="width:100%;display: table-row">
                                     <div class="cell middle" style="display: table-cell"><b><%- item.name %></b></div>
                                     <div class="cell middle text-center" style="display: table-cell"><% if (item.refund_qty){ %><%- item.quantity - item.refund_qty %><% } else { %><%- item.quantity %><% } %></div>
-                                    <div class="cell middle text-right" style="display: table-cell">£<%- (item.price/100).toFixed(2) %></div>
+                                    <div class="cell middle text-right" style="display: table-cell">£<%- (item.total/100).toFixed(2) %></div>
                                 </div>
 
                                 <% if (item.refund_value){ %>
@@ -300,19 +295,21 @@
                             <div class="table">
                                 <div class="row">
                                     <div class="cell">
-                                        <p>Sub Total</p>
-                                        <p>VAT</p>
+                                        <div>Sub Total</div>
+                                        <div>VAT</div>
                                         <% if (transaction.refund_value){ %>
-                                            <p>Refunded <% if (transaction.refund_method){ %>via <%- transaction.refund_method %><% } %><% if (transaction.refund_time){ %> on <%- moment(transaction.refund_time).format('DD/MM/YY HH:mm') %><% } %></p>
+                                            <div>Refunded <% if (transaction.refund_method){ %>via <%- transaction.refund_method %><% } %><% if (transaction.refund_time){ %> on <%- moment(transaction.refund_time).format('DD/MM/YY HH:mm') %><% } %></div>
                                         <% } %>
+                                        <div class="mb-05">Delivery</div>
                                         <h3>TOTAL</h3>
                                     </div>
                                     <div class="cell">
-                                        <p>£<%- (transaction.sub_total/100).toFixed(2) %></p>
-                                        <p>£<%- (transaction.tax/100).toFixed(2) %></p>
+                                        <div>£<%- (transaction.sub_total/100).toFixed(2) %></div>
+                                        <div>£<%- (transaction.tax/100).toFixed(2) %></div>
                                         <% if (transaction.refund_value){ %>
-                                            <p>£<%- transaction.refund_value.toFixed(2) %></p>
+                                            <div>£<%- transaction.refund_value.toFixed(2) %></div>
                                         <% } %>
+                                        <div class="mb-05">£<%- (transaction.shipping_total/100).toFixed(2) %></div>
                                         <h3>£<%- (transaction.total/100).toFixed(2) %></h3>
                                     </div>
                                 </div>

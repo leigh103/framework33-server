@@ -1,19 +1,27 @@
 <div class="checkout-items">
 
-    <h1 class="h4">In your basket</h1>
+    <div class="breadcrumbs">
+        <span class="active">Basket</span>
+    </div>
+
+    <h1 class="h4">Your Items</h1>
 
     <div class="checkout-items-wrap">
         <div class="checkout-items-item" app-for="item in cart.items">
             <div class="thumbnail"><img src="/images/Product_Placeholder.svg" app-src="item.thumbnail"></div>
             <div class="details">
-                <div class="product"><a app-attr="{'href':item.slug}" app-bind="item.name"></a></div>
+                <div class="product">
+                    <a app-attr="{'href':item.slug}" app-bind="item.name"></a>
+
+                </div>
                 <div class="actions">
                     <div class="quantity">
                         <button class="decrease-item" app-click="removeFromCart(item)">-</button>
-                        <input type="text" class="item-quantity" app-model="item.quantity">
+                        <div class="item-quantity" app-bind="item.quantity"></div>
                         <button class="increase-item" app-click="addToCart(item)">+</button>
+                        <a class="remove" app-click="removeFromCart(item, 'true')">Remove</a>
                     </div>
-                    <div class="price"><span app-bind="parseCurrency(item.price)"></span></div>
+                    <div class="price"><span app-bind="parseCurrency(item)"></span></div>
 
                 </div>
             </div>
@@ -33,5 +41,7 @@
 
         </div>
     </div>
+
+
 
 </div>

@@ -6,7 +6,7 @@
 
         <div class="form relative">
 
-            <h1 class="text-light capitalise my-4"><%- guard %> Login</h1>
+            <h1 class="text-light capitalise my-4"><%- view.functions.depluralise(guard) %> Login</h1>
 
             <% if (typeof error != 'undefined'){ %>
                 <div class="error">
