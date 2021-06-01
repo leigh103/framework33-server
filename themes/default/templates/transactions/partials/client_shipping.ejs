@@ -12,9 +12,9 @@
 
         <form autocomplete="on" class="mt-1">
 
-            <!-- <label><input type="checkbox" class="rounded" app-click="shippingSameAsDelivery()" app-model="view.use_billing_address"> Same as billing address</label> -->
+            <label><input type="checkbox" class="rounded" app-model="view.use_billing_address"> Same as billing address</label>
 
-            <div>
+            <div app-hide="view.use_billing_address">
 
                 <div class="flex my-1">
 

@@ -18,14 +18,14 @@
         <% } %>
 
         <% if (typeof table != 'undefined'){ %>
-            <a class="btn" href="/dashboard/<%- table %>/new"><span class="text">Add&nbsp;<%- view.functions.parseName(table,true) %></span><span class="icon plus white"></span></a>
+            <a class="btn bg-primary" href="/dashboard/<%- table %>/new"><span class="text">Add&nbsp;<%- view.functions.parseName(table,true) %></span><span class="icon plus white"></span></a>
         <% } %>
 
     </div>
     <% if (typeof search_fields == 'object'){ %>
         <div class="search">
             <div class="search-wrap">
-                <input type="text" app-change="search('<%- table %>')" placeholder="Search <%- view.functions.parseSearchFields(search_fields) %>">
+                <input type="text" class="bg-white" app-change="search('<%- table %>')" placeholder="Search <%- view.functions.parseSearchFields(search_fields) %>">
                 <span app-click="showSearchBar()" class="icon search black"></span>
             </div>
         </div>
@@ -37,7 +37,7 @@
     <div class="tabs">
         <% if (typeof tabs != 'undefined'){ %>
             <% tabs.forEach(tab => { %>
-                <a href="<%- tab.href %>" class="<% if (view.current_sub_view.toLowerCase() == tab.text.toLowerCase()){ %>active<% } %>"><%- tab.text %><% if (tab.counter){ %> (<span app-bind="view.status_count_obj.<%- tab.counter %>"></span>)<% } %></a>
+                <a href="<%- tab.href %>" class="<% if (view.current_sub_view.toLowerCase() == tab.text.toLowerCase()){ %>active<% } %>"><%- tab.text %><% if (tab.counter){ %> (<span app-bind="view.status_count_obj.<%- tab.counter %>"></span><span app-hide="view.status_count_obj.<%- tab.counter %>">0</span>)<% } %></a>
             <% }) %>
         <% } %>
     </div>

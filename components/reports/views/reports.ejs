@@ -10,15 +10,16 @@
 
         <% if (card){ %>
             <div id="<%- view.functions.parseSnake(card.link) %>-card" class="card" <% if (card.slug){ %>app-click="runReport('<%- card.slug %>','<%- view.functions.parseSnake(card.link) %>-card',true)"<% } %> <% if (card.inputs){ %>data-inputs="<%= JSON.stringify(card.inputs) %>"<% } %>>
-                <div class="image">
-                    <img src="/images/Bullseye-Gradient.svg">
-                </div>
+
                 <div class="details">
                     <h4><%- card.link %></h4>
                     <% if (card.description){ %>
                         <p><%- card.description %></p>
                     <% } %>
+                    <button class="btn bg-primary">Run report</button>
                 </div>
+
+
             </div>
         <% } %>
     <% }) %>

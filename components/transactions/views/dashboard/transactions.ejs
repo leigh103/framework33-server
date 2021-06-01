@@ -54,7 +54,7 @@
                     <div class="cell middle select-all"><input type="checkbox" app-model="transaction.selected" app-change="showActions()"></div>
 
                     <div class="cell middle text title" app-click="goto('transactions/edit',transaction._key)">
-                        <div class="text-secondary text-bold"><span app-bind="transaction.reference"></span><span class="hidden-d hidden-m"> - <span app-bind="transaction.customer.name"></span></span></div>
+                        <a class="text-bold"><span app-bind="transaction.reference"></span><span class="hidden-d hidden-m"> - <span app-bind="transaction.customer.name"></span></span></a>
                         <div class="text-light" app-bind="parseDate(transaction._created,'Do MMM h:mma')"></div>
                     </div>
                     <div class="cell middle">
@@ -79,8 +79,8 @@
                                     <option value="other">Other</option>
                                 </select>
                                 <div class="colspan-4 flex">
-                                    <input type="text" app-model="transaction.shipping_reference" app-change="checkTracking($index)" style="border-top-left-radius: 0;border-bottom-left-radius: 0; border-left:0">
-                                    <button app-show="transaction.shipping_reference" class="btn bg-white btn-field" app-click="addTracking(transaction)">Save</button>
+                                    <input type="text" app-model="transaction.shipping_reference" app-change="checkTracking($index)" placeholder="Eg, AB1234567GB" style="border-top-left-radius: 0;border-bottom-left-radius: 0; border-left:0">
+                                    <button class="btn bg-white btn-field" app-click="addTracking(transaction)">Update</button>
                                 </div>
                             </div>
                         </div>

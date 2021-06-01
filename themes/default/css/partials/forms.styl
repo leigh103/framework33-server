@@ -113,7 +113,7 @@ input[type=checkbox] {
 
     flex: none;
     position: relative;
-    margin: 0 1.5rem 0 0;
+    margin: 0 !important;
     width: auto;
     height: auto;
     vertical-align: middle;
@@ -127,24 +127,25 @@ input[type=checkbox] {
         width: 1.75rem;
         height: 1.75rem;
         border-radius: 0.25rem;
-        left: -1px;
+        left: -2px;
         top: -0.45rem;
-        background-color: white;
-        color: $text-primary;
+        background-color: $dashboard-color-light-grey;
+        color: $dashboard-text-primary;
         font-size: 1.1em;
     }
 
     &.border {
         &:after {
-            border: 1px solid $color-light-grey2;
+            border: 0.01rem solid $dashboard-color-mid-light-grey;
         }
     }
 
     &:checked {
         &:after {
             content:'\2713';
-            background-color: $color-secondary;
-            color: $text-white;
+            background-color: $dashboard-color-secondary;
+            color: $dashboard-text-white;
+            // border: 1px solid $dashboard-color-primary;
         }
     }
 

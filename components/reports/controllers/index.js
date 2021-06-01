@@ -91,6 +91,21 @@ const express = require('express'),
 
     })
 
+    routes.get('/:key', async(req, res) => {
+
+        data.report = await new Reports().find(req.params.key)
+        data.report = data.report.data
+
+        data.title = 'Report Results: '+data.report.name
+        view.current_view = 'reports'
+        view.current_sub_view = 'results'
+        data.table = 'reports'
+        data.key = data.report._key
+
+        res.render(settings.views+'/report_view.ejs', data)
+
+    })
+
     routes.get('/run/:model/:report', async (req, res) => {
 
         let model_name = parseClassName(req.params.model),

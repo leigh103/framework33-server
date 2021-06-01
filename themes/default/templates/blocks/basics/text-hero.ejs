@@ -1,4 +1,4 @@
-<section class="block-text-hero" style="<%- functions.parseStyle(styling,'no-bg') %>" app-block="hero" app-block-description="This is a hero block" app-allow-styling="true">
+<section class="block-text-hero" style="<%- functions.parseStyle(styling,'no-bg') %>" app-block="hero - basic" app-block-description="This is a hero block" app-allow-styling="true">
 
     <div class="background" style="background-image:url(<%- styling.background.image %>)"  <% if (styling.add_parallax){ %>data-parallax="0.3" data-parallax_direction="down"<% } %>></div>
     <div class="contain <% if (styling.container.alignment){ %><%- styling.container.alignment %><% } else { %>align-center<% } %>" <% if (styling.add_parallax){ %>data-parallax="0.2"<% } %>>

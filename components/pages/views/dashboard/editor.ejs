@@ -21,6 +21,9 @@
                             <div class="title">
                                 <h1><a app-click="showMenu('main')" class=""><span app-bind="view.selected_block.name"></span></a></h1>
                             </div>
+                            <div class="preview-link" app-click="renderPage(true)">
+                                <span class="icon screen black"></span>
+                            </div>
                         </div>
 
                         <div class="tabs flex-none flex">
@@ -51,11 +54,16 @@
                             <div class="title">
                                 <h1><a href="/dashboard/pages" class="capitalise" app-bind="view.pages.title"></a></h1>
                             </div>
+                            <div class="flex-middle">
+                                <div class="preview-link" app-click="renderPage(true)">
+                                    <span class="icon screen black"></span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="tabs flex-none flex">
                             <a app-click="view.tab = 'blocks'" app-class="{'active':view.tab == 'blocks'}" class="flex-none">Page Sections</a>
-                            <a app-click="view.tab = 'details'" app-class="{'active':view.tab == 'details'}" class="flex-none">Pages Details</a>
+                            <a app-click="view.tab = 'details'" app-class="{'active':view.tab == 'details'}" class="flex-none">Pages Options</a>
                             <a app-click="view.tab = 'notification'" app-class="{'active':view.tab == 'notification'}" class="flex-none">Notification</a>
                             <a app-click="view.tab = 'seo'" app-class="{'active':view.tab == 'seo'}" class="flex-none">SEO</a>
                             <a app-click="view.tab = 'options'" app-class="{'active':view.tab == 'options'}" class="flex-none">Options</a>
@@ -92,15 +100,16 @@
 
                     </div>
 
-
-                    <div class="w-100 bg-primary text-white flex-none py-1 px-15 flex col-12">
+                    <div class="w-100 bg-light-grey text-white flex-none py-1 px-15 flex col-12 mb-s-8">
                         <div class="flex-1">
                             <button app-show="view.selected_block" class="btn bg-white" app-click="removeBlock(true)">Remove Block</button>
+                            <button app-hide="view.selected_block" class="btn bg-white" app-click="deletePage(true)">Delete Page</button>
                         </div>
                         <div class="flex-none text-right">
                             <button class="btn bg-secondary" app-click="savePage()">Save</button>
                         </div>
                     </div>
+
 
                 </div>
 
@@ -108,10 +117,6 @@
 
             <div class="preview-wrap vh-100 overflow-y relative" app-class="{'secondary-theme':view.pages.secondary_theme === true}">
 
-                <div class="fixed top right p-2 layer-3">
-                    <button class="btn bg-white flex-none shadow" app-click="renderPage()"><span class="icon cycle black"></span></button>
-                    <button class="btn bg-white flex-none shadow" app-click="renderPage(true)"><span class="icon merge black"></span></button>
-                </div>
                 <div id="preview" class="layer-2">
                     <div class="loader">
                         <div class="dot"></div>
@@ -121,11 +126,10 @@
                     </div>
                 </div>
 
-                <div class="absolute flex-middle" id="insert-new-section" style="display: none">
+                <div class="absolute flex-middle" id="insert-new-section">
                     <div class="icon" app-click="addNewSection()">
-                        <i class="fas fa-plus" app-click="addNewSection()"></i>
+                        <span class="icon plus white" app-click="addNewSection()"></span>
                     </div>
-
                 </div>
 
             </div>
@@ -141,6 +145,8 @@
     <%- include('partials/modals/show_icons.ejs') %>
 
     <%- include('partials/modals/show_sections.ejs') %>
+
+    <%- include('partials/modals/del_confirm.ejs') %>
 
     <%- include('partials/modals/del_block_confirm.ejs') %>
 

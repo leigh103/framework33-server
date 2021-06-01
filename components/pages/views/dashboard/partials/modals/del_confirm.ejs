@@ -1,0 +1,8 @@
+<modal-auto app-show="view.modal == 'delete_conf'" data-title="Delete block">
+
+    <div class="mb-2">Delete this page? This action cannot be undone. You can set the status of the page to draft if you're unsure.</div>
+    <div class="grid col-2 gap-2">
+        <button class="btn bg-white w-100" app-click="closeModal()">Cancel</button>
+        <button class="btn bg-primary w-100" app-click="deletePage()">Delete</button>
+    </div>
+</modal-auto>

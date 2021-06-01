@@ -339,8 +339,8 @@ html, body {
             .btn {
                 margin-left: 0;
                 margin-left: 0.875rem;
-                background-color: $dashboard-color-secondary;
-                color: $dashboard-text-white;
+                // background-color: $dashboard-color-secondary;
+                // color: $dashboard-text-white;
                 transition: background-color 0.5s ease;
 
                 &:hover {
@@ -348,7 +348,12 @@ html, body {
                 }
 
                 .icon {
+                    display: none;
                     margin-left:0.5rem;
+                    @media $small {
+                        display: inline-block;
+                    }
+
                 }
 
                 @media $small {
@@ -406,7 +411,6 @@ html, body {
                 height: 1.3rem;
                 width: 1.3rem;
                 flex: 0 0 2.5rem;
-                background-color: $dashboard-color-primary;
             }
 
         }

@@ -99,24 +99,7 @@
 
         scope.editTransacton = function(idx){
 
-            contextCloseAll()
-
-            if (!idx){
-                idx = 0
-            }
-
-            if (idx >= 0){
-                scope.new = scope.transactions[idx]
-            } else {
-                scope.new = {}
-            }
-
-            scope.openModal('show_transaction')
-            view.update('new')
-            view.update('new.customer')
-            view.update('new.status_logs')
-            view.update('new.billing_address')
-            view.update('new.shipping_address')
+            window.location.href = '/dashboard/transactions/edit/'+scope.transactions[scope.view.key]._key
 
         }
 
@@ -199,6 +182,7 @@
                 if (selected === true){
                     transaction.selected = true
                 }
+
                 scope.notify('Tracking Added')
             }).catch((err)=>{
                 scope.notify(err,'error')

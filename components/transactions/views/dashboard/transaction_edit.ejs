@@ -8,14 +8,13 @@
 
         <div class="title">
             <h1 app-hide="new._id" class="capitalise"><a app-attr="{'href':'/dashboard/transactions/new'}">Cancel</a></h1>
-            <h1 app-show="new._id" class="capitalise"><a app-attr="{'href':'/dashboard/transactions/'+new.status}" app-bind="new.customer.name">Back</a></h1>
+            <h1 app-show="new._id" class="capitalise"><a app-attr="{'href':'/dashboard/transactions/'+new.status}"><span app-bind="new.reference"></span></a></h1>
         </div>
 
         <div class="buttons hidden-s">
 
             <button class="btn bg-white" app-click="createRefund()" app-hide="view.refund">
                 <span class="text">Refund</span>
-                <span class="icon pricetag white"></span>
             </button>
 
             <div app-show="new.transaction_id">
@@ -26,13 +25,11 @@
             <div app-hide="view.refund">
                 <a class="btn bg-white capitalise" app-attr="{'href':'/dashboard/transactions/print/'+new._key}">
                     <span class="text">Print</span>
-                    <span class="icon note white"></span>
                 </a>
             </div>
             <div app-show="view.refund">
-                <button class="btn highlight capitalise" app-click="saveRefund()">
+                <button class="btn bg-primary capitalise" app-click="saveRefund()">
                     <span class="text">Apply Refund</span>
-                    <span class="icon tick white"></span>
                 </button>
             </div>
             <div app-hide="view.refund">
@@ -223,6 +220,15 @@
 
     <div class="hidden-d hidden-m p-2">
 
+        <div app-hide="view.refund">
+            <button class="btn bg-primary capitalise w-100 mb-1" app-show="new._id" app-click="saveItem('<%- table %>',new)">
+                <span class="text">Save</span>
+            </button>
+            <button class="btn bg-primary capitalise w-100 mb-1" app-hide="new._id" app-click="addItem('<%- table %>',new)">
+                <span class="text">Add</span>
+            </button>
+        </div>
+
         <button class="btn bg-white w-100 mb-1" app-click="createRefund()">
             <span class="text">Refund</span>
         </button>
@@ -242,14 +248,7 @@
                 <span class="text">Refund</span>
             </button>
         </div>
-        <div app-hide="view.refund">
-            <button class="btn bg-primary capitalise w-100 mb-1" app-show="new._id" app-click="saveItem('<%- table %>',new)">
-                <span class="text">Save</span>
-            </button>
-            <button class="btn bg-primary capitalise w-100 mb-1" app-hide="new._id" app-click="addItem('<%- table %>',new)">
-                <span class="text">Add</span>
-            </button>
-        </div>
+
 
     </div>
 

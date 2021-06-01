@@ -1,6 +1,10 @@
 <link href="/style/dashboard.css?v=1614765140082" rel="stylesheet">
 <style>
 
+    a {
+        color: #383f47;
+    }
+
     .editor-wrap {
         display: flex;
         height:100vh;
@@ -17,28 +21,20 @@
         font-size: 0.875rem;
     }
 
-    input[type=checkbox] {
-        border: none !important;
-        box-shadow: none !important;
-    }
-
     a.clear-placeholder {
         font-size: 0.7rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .fields input, .fields textarea {
-        margin-top: -0.5rem;
+
     }
 
-    .fields input[type=checkbox] {
-        width: 2.5rem;
-    }
 
     .fields label {
         font-weight: 600;
         font-size: 0.75rem;
-        margin-bottom: 1.3125rem;
+        margin-bottom: 0.5rem;
     }
 
     ul li, ol li {
@@ -50,11 +46,31 @@
         list-style: disc;
     }
 
+    .dashboard .header {
+        padding: 0 1.1rem 0 1.3rem
+    }
+
+    .preview-link {
+        height: 2.5rem;
+        width: 2.5rem;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+
+    }
+
+    .preview-link .icon {
+        height: 1.25rem;
+        width: 1.25rem;
+    }
+
     #preview {
         background-color: white;
         position: relative;
-        height:100%;
-        overflow-y: scroll;
+        height:auto;
         padding-bottom: 10rem;
     }
 
@@ -76,17 +92,27 @@
         position: relative;
     }
 
+    #preview section.editor-selected {
+        z-index:200;
+    }
+
     #preview *[app-block]:hover:after, #preview .add-new-section:hover:after, #preview section.editor-selected:after {
-        /* content:'';
+        content:'';
         display: block;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        -webkit-box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,1);
-        -moz-box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,1);
-        box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,1); */
+        z-index:200;
+        -webkit-box-shadow: inset 0px 0px 0px 4px rgba(253,114,120,1);
+        -moz-box-shadow: inset 0px 0px 0px 4px rgba(253,114,120,1);
+        box-shadow: inset 0px 0px 0px 4px rgba(253,114,120,1);
+
+    }
+
+    #preview section.editor-not-selected {
+                z-index:auto;
     }
 
     #preview section.editor-not-selected:after {
@@ -102,22 +128,22 @@
     }
 
     #insert-new-section {
+        position: absolute;
         width:100%;
-
         z-index:400;
         color: white;
         height: 3rem;
         margin-top:-1.5rem;
     }
 
-    #insert-new-section .icon {
+    #insert-new-section > .icon {
         width: 2rem;
         height: 2rem;
         border-radius: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgba(58,164,196,1);
+        background-color: rgba(253,114,120,1);
     }
 
 
@@ -279,7 +305,7 @@
         flex-direction: column;
         overflow: hidden;
 /* border-right: 1px solid #EFEFEF; */
-        box-shadow:7.7734375px 1.01953125px 56px -5px rgba(0, 0, 0, 0.42);
+        box-shadow:7.7734375px 1.01953125px 20px -7px rgba(0, 0, 0, 0.22);
         z-index: 30;
     }
 
@@ -292,12 +318,12 @@
         font-size: 0.875rem;
     }
 
-    .menu .contenteditable, input {
+    .menu .contenteditable {
         background-color: #f4f7f8;
         border-radius: 6px;
-        margin:0 0 1rem;
+        margin:0;
         min-height: 2.5rem;
-        padding: 0.5rem 1.2rem !important;
+        padding: 0.5rem 1.2rem 0.5rem 1.2rem !important;
     }
 
     modal-auto input {
@@ -307,6 +333,8 @@
     .menu .fields {
         background-color: white;
         padding: 0;
+        border: 4px solid white;
+        border-width: 4px 0;
         height: 100%;
         overflow-x: hidden;
         overflow-y: auto;
@@ -410,8 +438,7 @@
     }
 
     date-picker .value, select {
-        border: 1px solid #f2f2f2;
-        border-radius: 6px;
+
     }
 
     .color_picker {

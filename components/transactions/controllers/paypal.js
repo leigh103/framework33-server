@@ -200,9 +200,9 @@ var express = require('express'),
         axios.get(config.paypal.url + '/v2/checkout/orders/'+req.params.id, {"headers":{"Authorization":"Bearer "+access_token.access_token,"Content-Type":"application/json"}})
         .then( async (response) => {
 
-            if (response && response.data && response.data.status && response.data.status == 'COMPLETED'){
+            data.cart = await new Cart().init(req)
 
-                data.cart = await new Cart().init(req)
+            if (response && response.data && response.data.status && response.data.status == 'COMPLETED' && data.cart.items.length > 0){
 
                 if (data.cart.items.length <= 0){
                     data.type = '400'
@@ -226,6 +226,9 @@ var express = require('express'),
                     new Automations('order_receipt').trigger(data.transaction.data)
                     res.render(config.site.theme_path+'/templates/transactions/success.ejs',data)
                 } else {
+
+                    data.cart.error = 'Transaction not saved after payment'
+                    new Automations('transaction_issue').trigger(data.cart)
                     data.type = '400'
                     data.error = 'There has been an issue processing your transaction'
                     res.render(config.site.theme_path+'/templates/transactions/gateways/paypal.ejs',data)
@@ -233,17 +236,23 @@ var express = require('express'),
 
             } else {
                 data.type = '400'
-                data.error = 'There has been an issue processing your transaction'
+                data.error = 'This transaction has already been processed'
                 res.render(config.site.theme_path+'/templates/transactions/gateways/paypal.ejs',data)
                 return false
             }
 
         })
-        .catch(function (error) {
+        .catch( async (error) => {
+
+            data.cart = await new Cart().init(req)
+            data.cart.error = error.message
+
+            new Automations('transaction_issue').trigger(data.cart)
             data.type = '500'
             data.error = error.message
             res.render(config.site.theme_path+'/templates/transactions/gateways/paypal.ejs',data)
             return false
+
         })
 
 

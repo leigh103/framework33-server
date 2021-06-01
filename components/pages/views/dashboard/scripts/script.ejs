@@ -143,7 +143,7 @@
 
                 let preview_section = document.querySelector(id),
                     preview_sections = document.querySelectorAll('#preview section'),
-                    preview = document.querySelector('#preview')
+                    preview = document.querySelector('.preview-wrap')
 
                 if (preview_sections){
                     for (var i=0;i<preview_sections.length;i++){
@@ -565,17 +565,25 @@
 
             }
 
-            scope.showInsertSecton = function(id){
+            scope.showInsertSection = function(id){
 
                 scope.view.hovered_section = parseInt(id.replace(/preview_pages_block_/,''))
 
                 let section = document.getElementById(id),
                     section_insert = document.getElementById('insert-new-section')
-//                 let section_box = section.getBoundingClientRect(),
-//                     pos = (section_box.y+section_box.height)-33
-// console.log(section_box)
-//                 section_insert.style.top = pos+'px'
-//                 section_insert.style.display = 'flex'
+                let section_box = section.getBoundingClientRect()
+
+                let pos
+
+                if (section.classList.contains('separator')){
+                    pos = section.offsetTop
+                } else {
+                    pos = section.offsetTop + section.offsetHeight
+                }
+
+
+                section_insert.style.top = pos+'px'
+                section_insert.style.display = 'flex'
 
                     if (section_insert && section_insert.style){
                         section_insert.style.display = 'flex'
@@ -613,12 +621,12 @@
                             preview_blocks[i].addEventListener('click',function(){
                                 scope.loadBlock(id, i)
                             })
-                            // preview_blocks[i].addEventListener('mouseover',function(){
-                            //     scope.showInsertSecton(id)
-                            // })
-                            // preview_blocks[i].addEventListener('mouseout',function(){
-                            // //    document.getElementById('insert-new-section').style.display = 'none'
-                            // })
+                            preview_blocks[i].addEventListener('mouseover',function(){
+                                scope.showInsertSection(id)
+                            })
+                            preview_blocks[i].addEventListener('mouseout',function(){
+                                document.getElementById('insert-new-section').style.display = 'none'
+                            })
                         }
                     }
 
@@ -648,7 +656,7 @@
                     scope.updateCE().then(()=>{
 
                         let payload = scope.view.pages
-console.log(payload)
+
                         payload._user_id = '<%- user._id %>'
 
                         if (scope.view.pages.slug){
@@ -749,6 +757,23 @@ console.log(payload)
             scope.removeNotification = function(){
                 scope.view.pages.notification = ''
                 document.getElementById('pages_notification').innerHTML = ''
+            }
+
+            scope.deletePage = function(conf){
+
+                if (conf){
+
+                    scope.openModal('delete_conf')
+
+                } else {
+
+                    scope.delete('pages',scope.view.pages._key).then(()=>{
+                        window.location.href = '/dashboard/pages'
+                    })
+
+                }
+
+
             }
 
             setTimeout(function(){

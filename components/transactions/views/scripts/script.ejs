@@ -3,7 +3,7 @@
 
         extend.cart = function(){
 
-            scope.view.page = 'billing'
+            scope.view.page = 'details'
             scope.view.use_billing_address = true
             scope.view.delivery_options = []
 
@@ -60,6 +60,30 @@
                 if (!scope.cart.customer){
                     scope.cart.customer = {}
                 }
+
+                <% if (typeof user == 'object'){ %>
+                    <% if (user.title){ %>
+                        scope.cart.customer.title = '<%- user.title %>'
+                    <% } %>
+                    <% if (user.name){ %>
+                        scope.cart.customer.name = '<%- user.name %>'
+                    <% } %>
+                    <% if (user.tel){ %>
+                        scope.cart.customer.tel = '<%- user.tel %>'
+                    <% } %>
+                    <% if (user.email){ %>
+                        scope.cart.customer.email = '<%- user.email %>'
+                    <% } %>
+
+                    <% if (user.shipping_address){ %>
+                        scope.cart.shipping_address = <%- JSON.stringify(user.shipping_address) %>
+                    <% } %>
+
+                    <% if (user.billing_address){ %>
+                        scope.cart.billing_address = <%- JSON.stringify(user.billing_address) %>
+                    <% } %>
+
+                <% } %>
 
                 if (!scope.cart.customer.notification_method){
                     scope.cart.customer.notification_method = 'sms'
@@ -122,7 +146,8 @@
 
                     scope.post('cart/set-delivery',payload).then((cart)=>{
 
-                        scope.cart.delivery_method = cart.delivery_method
+                    //    scope.cart.delivery_method = cart.delivery_method
+                        scope.cart = cart
                         view.update('cart')
                     })
 
@@ -222,8 +247,8 @@
                         return false
                     }
 
-                    if (!scope.cart.customer.name){
-                        scope.notify('Please add your name','error',10,'handstop white')
+                    if (!scope.cart.customer.name || !scope.cart.customer.name.match(/\s/)){
+                        scope.notify('Please add your full name','error',10,'handstop white')
                         return false
                     }
 
@@ -262,9 +287,47 @@
                         return false
                     }
 
+                    let name_obj = scope.cart.customer.name.split(' ')
+                    scope.name_obj = {
+                        first_name: name_obj[0],
+                        last_name: name_obj[name_obj.length-1]
+                    }
+
                     // scope.cart.shipping_address = scope.cart.billing_address
                     if (!scope.cart.shipping_address || !scope.cart.shipping_address.name){
                         scope.cart.shipping_address = {}
+                        scope.cart.shipping_address.name = scope.cart.customer.name
+                        scope.cart.shipping_address.title = scope.cart.customer.title
+                    }
+
+                    scope.put('cart',<%- cart._key %>,scope.cart).then((cart)=>{
+                        scope.cart = cart
+                        scope.view.page = 'billing'
+                        view.update('cart')
+                        view.update('view.page')
+                        // scope.notify('Cart Updated')
+                    }).catch((err)=>{
+                        scope.notify(err,'error',10,'handstop white')
+                    })
+
+                }
+
+                scope.delivery = function(){
+
+                    if (!scope.cart.billing_address.address_line1){
+                        scope.notify('Please add your address','error',10,'handstop white')
+                        return false
+                    }
+
+                    if (!scope.cart.billing_address.address_level2){
+                        scope.notify('Please add your town or city','error',10,'handstop white')
+                        return false
+                    }
+
+                    if (!scope.cart.shipping_address){
+                        scope.cart.shipping_address = scope.cart.billing_address
+                    }
+                    if (!scope.cart.shipping_address.name){
                         scope.cart.shipping_address.name = scope.cart.customer.name
                         scope.cart.shipping_address.title = scope.cart.customer.title
                     }

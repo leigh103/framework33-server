@@ -351,10 +351,29 @@
               "protect":true
             }
 
+            let transaction_issue = {
+              "name": "Transaction Issue",
+              "trigger": "transaction_issue",
+              "description": "Notification sent when a transaction has failed",
+              "actions": [
+                {
+                  "method": "email",
+                  "to": "{{admin_email}}",
+                  "enabled": true,
+                  "subject": "Cart ID: {{_key}}",
+                  "content": "There has been an issue with a transaction: {{error}}<br><br>The cart details can be viewed <a href='"+config.site.url+"/dashboard/cart/{{_key}}'>here</a>",
+                  "_key": 1613660198773
+                }
+              ],
+              "type":"transactions",
+              "protect":true
+            }
+
             new Automations(order_processing).saveIfNotExists(['trigger == order_processing'])
             new Automations(order_receipt).saveIfNotExists(['trigger == order_receipt'])
             new Automations(order_shipped).saveIfNotExists(['trigger == order_shipped'])
             new Automations(order_refunded).saveIfNotExists(['trigger == order_refunded'])
+            new Automations(transaction_issue).saveIfNotExists(['trigger == transaction_issue'])
 
         }
 

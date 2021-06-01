@@ -73,7 +73,7 @@
 
         async sanitize(){
 
-            let fields = ['_key','_id','title','full_name','email','tel','activated','guard','avatar','shipping_address','billing_address']
+            let fields = ['_key','_id','title','name','email','tel','activated','guard','avatar','shipping_address','billing_address']
 
             for (var [key,val] of Object.entries(this.data)){
                 if (fields.indexOf(key) === -1){

@@ -1,5 +1,6 @@
 <%
     var new_prefix = 'new.'
+    var input_type
 
     if (typeof obj_prefix == 'undefined' || obj_prefix == false){
         obj_prefix = ''
@@ -10,8 +11,11 @@
     if (typeof array_obj != 'undefined'){
         if (array_obj === true){
             new_prefix = ''
+        } else if (array_obj == 'new_array'){
+            new_prefix = 'new.new_array.'
+            obj_prefix = ''
         } else if (typeof array_obj == 'string'){
-            new_prefix = 'new.'+array_obj+'.'
+            new_prefix = ''
         }
     }
 %>

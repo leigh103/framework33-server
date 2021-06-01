@@ -144,7 +144,7 @@
 
                         if (action.enabled === true){
 
-                            if (typeof data == 'object' && data.customer && data.customer.notification_method){ // override action settings if customer has specified the notification method
+                            if (action.to != '{{admin_email}}' && typeof data == 'object' && data.customer && data.customer.notification_method){ // override action settings if customer has specified the notification method
                                 action.method = data.customer.notification_method
                             }
 
@@ -272,6 +272,10 @@
 
 
                 } else if (typeof data == 'object'){
+
+                    if (action.to == '{{admin_email}}'){
+                        resolve(config.email.admin_to)
+                    }
 
                     if (typeof data.customer == 'object'){
 

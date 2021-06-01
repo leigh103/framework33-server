@@ -1,11 +1,12 @@
 <div>
+
     <div class="field" app-for="field in view.editor">
 
 
         <div app-if="field.input == 'text'">
             <div class="flex flex-middle-left">
-                <label class="flex-1 capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
-                <a app-click="clearBlock(field)" class="clear-placeholder text-secondary">Clear</a>
+                <label class="flex-1 capitalise" app-bind="parseSnakeCase(field.field)"></label>
+                <a app-click="clearBlock(field)" class="clear-placeholder">Clear</a>
             </div>
 
             <div class="contenteditable small" app-model="field.value" contenteditable="true"></div>
@@ -13,21 +14,21 @@
         </div>
 
         <div app-if="field.input == 'number'">
-            <label class=" capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
             <input type="number" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
         </div>
 
         <div app-if="field.input == 'form_select'">
-            <label class="capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
+            <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
             <dropdown-search placeholder="Search forms..." app-model="field.value" data-url="/api/page_forms/search?str=" data-bind="name" data-value="_key">
             </dropdown-search>
             <a href="/dashboard/pages/settings/forms" target="addform">Create a new form</a>
         </div>
 
-    
+
 
         <div app-if="field.input == 'color_picker'">
-            <label class="capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
+            <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
 
             <div class="color_picker" app-color="field">
                 <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
@@ -37,8 +38,8 @@
 
         <div app-if="field.input == 'textarea'">
             <div class="flex flex-middle-left">
-                <label class="flex-1 capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
-                <a app-click="clearBlock(field)" class="clear-placeholder text-secondary">Clear</a>
+                <label class="flex-1 capitalise" app-bind="parseSnakeCase(field.field)"></label>
+                <a app-click="clearBlock(field)" class="clear-placeholder">Clear</a>
             </div>
             <div class="input-contenteditable field-content">
 
@@ -50,32 +51,51 @@
         </div>
 
         <div app-if="field.input == 'checkbox'">
-            <label class=" text-secondary"><input type="checkbox" app-model="field.value" class="border" app-change="renderPage()"><span class=" capitalise" app-bind="parseSnakeCase(field.field)"></span></label>
+            <div class="input-checkbox field-active">
+                <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
+                <div><input type="checkbox" app-model="field.value" app-change="renderPage()"></div>
+            </div>
         </div>
 
         <div app-if="field.input == 'icon'">
-            <label class=" capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
             <label app-click="selectIcon($index)"><span class="icon xxl primary" app-class="field.value" app-show="field.value"></span><span class="placeholder" app-hide="field.value">Add an icon</span></label>
         </div>
 
 
         <div app-if="field.input == 'code'">
-            <label class=" capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
             <pre><code class="html contenteditable" contenteditable="true" app-model="field.value"></code></pre>
         </div>
 
         <div app-if="field.input == 'image'">
-            <label class=" capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
-            <label for="block_bg_image" app-click="showMediaLibrary('view.editor[$index].value')"><img src="/images/Product_Placeholder.svg" app-src="field.value" class=""></label>
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
+
+            <div class="bg-image-wrap" app-click="showMediaLibrary('view.editor[$index].value')">
+                <img class="bg-image" src="/images/Pages_Placeholder.svg" app-src="field.value">
+                <a class="bg-image-remove""><span class="icon plus secondary"></span></a>
+            </div>
         </div>
 
         <div app-if="field.input == 'none'">
-            <label class=" capitalise text-secondary" app-bind="parseSnakeCase(field.field)"></label>
+            <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
         </div>
 
         <input app-show="field.styling == 'true'" class="mt-05 transparent-3" type="text" app-model="field.classes" placeholder="Add element classes...">
 
     </div>
 </div>
+
+<div class="field">
+    <label class="capitalise">Background Image</label>
+    <div class="bg-image-wrap" app-click="showMediaLibrary('view.selected_block.styling.background.image')">
+        <img class="bg-image" src="/images/Pages_Placeholder.svg" app-src="view.selected_block.styling.background.image">
+        <a class="bg-image-remove" app-click="removeImage(view.selected_block.styling.background)" app-show="view.selected_block.styling.background.image"><span class="icon x secondary"></span></a>
+        <a class="bg-image-remove" app-hide="view.selected_block.styling.background.image"><span class="icon plus secondary"></span></a>
+    </div>
+    <!-- <label style="font-weight: normal; font-style: italic"><input type="checkbox" class="border" app-click="addClass(view.selected_block.styling.background, 'bg-text-dark')"> Darken the background for clearer text</label> -->
+    <!-- <input id="block_bg_image" type="file" app-model="view.selected_block.styling.background.image" app-change="uploadImg(view.selected_block.styling.background.image,'view.selected_block.styling.background.image')"> -->
+</div>
+
 
 <div app-show="view.editor == false" class="p-1 text-italic transparent-3 text-small">This block has no editable content</div>
