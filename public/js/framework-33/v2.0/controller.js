@@ -666,6 +666,8 @@
 
                 if (i >= fields.length-1){
                     scope.sendForm(payload,submit_button,error)
+
+                    submit_button[submit_button.length-1].setAttribute('disabled',true)
                 }
 
             }

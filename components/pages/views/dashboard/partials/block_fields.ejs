@@ -20,7 +20,7 @@
 
         <div app-if="field.input == 'form_select'">
             <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
-            <dropdown-search placeholder="Search forms..." app-model="field.value" data-url="/api/page_forms/search?str=" data-bind="name" data-value="_key">
+            <dropdown-search placeholder="Search forms..." app-model="view.editor[$index].value" data-url="/api/page_forms/search?str=" data-bind="name" data-value="_key">
             </dropdown-search>
             <a href="/dashboard/pages/settings/forms" target="addform">Create a new form</a>
         </div>
@@ -86,7 +86,7 @@
     </div>
 </div>
 
-<div class="field mb-2">
+<div class="field mb-2" app-hide="view.selected_block.disable_styling">
     <label class="capitalise">Background Image</label>
     <div class="bg-image-wrap" app-click="showMediaLibrary('view.selected_block.styling.background.image')">
         <img class="bg-image" src="/images/Pages_Placeholder.svg" app-src="view.selected_block.styling.background.image">

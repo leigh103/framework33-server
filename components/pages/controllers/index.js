@@ -663,13 +663,11 @@ const express = require('express'),
 
     routes.post('/submit-form', async (req,res) => {
 
-        // if (req.session.submission && moment().diff(req.session.submission,'minutes') < 5){
-        //     req.session.submission = moment()
-        //     res.status(429).send('Too many requests, please try later')
-        //     return false
-        // }
-
-
+        if (req.session.submission && moment().diff(req.session.submission,'minutes') < 5){
+            req.session.submission = moment()
+            res.status(429).send('Your previous message has been sent, we will respond as soon as possible')
+            return false
+        }
 
         let content = 'You have a new message submitted via the website.<br><br>',
             contact,
