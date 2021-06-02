@@ -28,9 +28,9 @@
 %>
 
 
-<div class="input-<%- input_type %> input-<%- model %>">
+<div class="input input-<%- input_type %> input-<%- model %>">
 
-    <label><%- view.functions.parseName(label) %></label>
+    <label><%- view.functions.parseName(label) %><% if (required == 'required'){ %>*<% } %></label>
     <div><textarea app-model="form.<%- model %>" placeholder="<%- placeholder %>" class="<%- form_name %>" id="<%- model %>" <%- required %>></textarea></div>
 
 </div>

@@ -17,7 +17,8 @@
                     {name:'date_from',input_type:'date',placeholder:'Date from', type:'string', required:false},
                     {name:'date_to',input_type:'date',placeholder:'Date to', type:'string', required:false},
                     {name:'data',input_type:'hidden', required:false, type:''}
-                ]
+                ],
+                allow_new: false
             }
 
             this.routes = {

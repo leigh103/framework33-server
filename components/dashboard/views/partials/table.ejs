@@ -9,7 +9,7 @@
                     <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>"><%- view.functions.parseName(item.name) %></div>
                 <% } %>
             <% }) %>
-            <div class="cell middle action"></div>
+            <div class="cell middle action">&nbsp;</div>
         </div>
     </div>
     <div class="table-inner-wrap">
@@ -25,35 +25,35 @@
 
                     <% } else if (item.input_type == 'image'){ %>
 
-                        <div class="cell middle <%- item.name %> <%- item.input_type %>"><img src="/images/Product_Placeholder.svg?v=1.2" app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
+                        <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>"><img src="/images/Product_Placeholder.svg?v=1.2" app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
 
                     <% } else if (item.input_type == 'text' && item.type.match(/barcode|qrcode/)){ %>
 
-                        <div class="cell middle <%- item.name %> <%- item.input_type %>"><img app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
+                        <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>"><img app-src="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="<%- item.name %>"></div>
 
                     <% } else if (item.type == 'price'){ %>
 
-                        <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="parseCurrency(<%- view.functions.depluralise(table) %>.<%- item.name %>)"></div>
+                        <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>" app-bind="parseCurrency(<%- view.functions.depluralise(table) %>.<%- item.name %>)"></div>
 
                     <% } else if (item.type == 'discount'){ %>
 
-                        <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="parseAdjustment(<%- view.functions.depluralise(table) %>.<%- item.name %>)"></div>
+                        <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>" app-bind="parseAdjustment(<%- view.functions.depluralise(table) %>.<%- item.name %>)"></div>
 
-                    <% } else if (item.input_type == 'object' || item.input_type == 'array'){ %>
+                    <% } else if (item.input_type == 'object' || item.input_type == 'array' || item.input_type == 'model_array'){ %>
 
-                        <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>.length"></div>
+                        <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>.length"></div>
 
                     <% } else if (item.input_type == 'date'){ %>
 
-                        <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY')"></div>
+                        <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY')"></div>
 
                     <% } else if (item.input_type == 'datetime'){ %>
 
-                        <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY [at] h:mma')"></div>
+                        <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>" app-bind="parseDate(<%- view.functions.depluralise(table) %>.<%- item.name %>,'ddd Do MMM YYYY [at] h:mma')"></div>
 
                     <% } else if (item.type == 'boolean'){ %>
 
-                        <div class="cell middle <%- item.name %> <%- item.input_type %>">
+                        <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>">
                             <span app-show="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="text-black font-weight-500">Yes</span>
                             <span app-hide="<%- view.functions.depluralise(table) %>.<%- item.name %>" class="text-dark-grey font-weight-500 transparent">No</span>
                         </div>
@@ -61,11 +61,11 @@
                     <% } else if (item.input_type && !item.input_type.match(/image/)){ %>
 
                         <% if (item.name == 'name' || item.name == 'title' || item.name == 'full_name' || item.name == 'question'){ %>
-                            <div class="cell middle <%- item.name %> <%- item.input_type %>" app-click="goto('<%- table %>',<%- view.functions.depluralise(table) %>._key)">
+                            <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>" app-click="goto('<%- table %>',<%- view.functions.depluralise(table) %>._key)">
                                 <a app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></a>
                             </div>
                         <% } else { %>
-                            <div class="cell middle <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></div>
+                            <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></div>
                         <% } %>
 
                     <% } %>

@@ -48,7 +48,8 @@
                     {name:'status', input_type: 'select', options:this.statuses, type:'string', required:true},
                     {name:'_user_id', type:'string', required:true}
                 ],
-                search_fields:['customer.name','reference','customer.email','customer.tel','billing_address.postal_code','shipping_address.postal_code']
+                search_fields:['customer.name','reference','customer.email','customer.tel','billing_address.postal_code','shipping_address.postal_code'],
+                allow_new: false
             }
 
             this.routes = {

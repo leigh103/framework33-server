@@ -120,6 +120,10 @@
                 width: 4rem;
             }
 
+            &.string {
+                width: 10rem;
+            }
+
             &.title.select {
                 width: 4rem;
             }
@@ -128,13 +132,17 @@
                 width: 6rem;
             }
 
-            &.textarea, &.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav, &.items_per_customer {
+            &.textarea, &.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav, &.items_per_customer, &.adjustment, &.requires_delivery, &.made_to_order, &.promo_text, &.vat, &.sku {
                 display: none;
             }
 
             &.checkbox {
                 width: 5rem;
                 text-align: center;
+            }
+
+            &.sku, &.date  {
+                width: 8rem;
             }
 
             &.status {
@@ -151,7 +159,7 @@
                 // width: 10rem;
             }
 
-            &.number, &.price, &.adjustment {
+            &.number, &.price {
                 width: 5rem;
                 text-align: left;
             }
@@ -162,8 +170,21 @@
             }
 
             &.name, &.title {
+                width: auto;
+            }
+
+            &.brand {
+                width: 10rem
+            }
+
+            &.slug {
                 width: 15rem;
             }
+
+            &.action, &.context-link {
+                width: 6rem;
+            }
+
 
             input, select, textarea {
 

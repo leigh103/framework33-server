@@ -20,6 +20,7 @@
                     {name:'tags',input_type:'text',placeholder:'Tags', type:'string', required:false}
                 ],
                 search_fields:['url','tags','type', 'file_type'],
+                allow_new: false
             }
 
             this.routes = {

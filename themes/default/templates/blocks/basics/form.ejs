@@ -2,16 +2,13 @@
 
     <div class="contain <%- styling.container.class %>">
 
-
-
-
             <div class="" app-input="form_select" app-field="form">
 
                 <% if (data.form && typeof forms == 'object' && forms[data.form]){ %>
 
                     <% var form_name = 'form-'+view.functions.parseFieldName(forms[data.form].name) %>
 
-                    <form method="post" id="<%- form_name %>">
+                    <form method="post" id="<%- form_name %>" class="grid">
 
                         <div class="headings">
                             <% if (data.heading){ %><h3 app-input="text" app-field="heading"><%- data.heading %></h3><% } %>

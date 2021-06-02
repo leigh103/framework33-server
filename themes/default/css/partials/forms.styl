@@ -38,6 +38,7 @@ label {
     color: $text-black;
     display: block;
     margin-bottom: 0.3rem;
+    margin-top: 1rem;
 
     @media $small {
         font-size: 1rem;
@@ -60,7 +61,8 @@ label {
 
 input, select, textarea {
 
-    height: $input-height
+    height: $input-height;
+    border-radius: $border-radius;
 
     &.rounded {
         border-radius: $border-radius;
@@ -75,6 +77,10 @@ input, select, textarea {
         padding: 0 !important;
         height: 3.5rem !important;
     }
+}
+
+textarea {
+    min-height: 8rem;
 }
 
 select {
