@@ -26,7 +26,9 @@ modal {
             }
 
             section.body {
-                padding:0 2rem 2rem 2rem;
+
+                max-width: 60vw;
+                padding: 1.5rem 2rem 2rem 2rem;
                 background-color: $dashboard-color-light-grey;
                 border-bottom-left-radius: $border-radius;
                 border-bottom-right-radius: $border-radius;
@@ -34,6 +36,10 @@ modal {
 
                 .tabs {
                     background-color: $dashboard-color-light-grey;
+                }
+
+                input, select, textarea, date-picker .value {
+                    background-color: white;
                 }
 
                 @media $small {

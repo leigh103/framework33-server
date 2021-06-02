@@ -1,6 +1,9 @@
-<modal-auto app-show="view.modal == 'delete_conf'" data-title="Delete block">
+<modal-auto app-show="view.modal == 'delete_conf'" data-title="Delete Page">
 
-    <div class="mb-2">Delete this page? This action cannot be undone. You can set the status of the page to draft if you're unsure.</div>
+    <div class="w-75 w-s-100 mb-1 flex-middle-left">
+        <span class="icon handstop primary xl left flex-none"></span>
+        <span class="flex-1">This action cannot be undone. You can set the status of the page to draft if you're unsure.</span>
+    </div>
     <div class="grid col-2 gap-2">
         <button class="btn bg-white w-100" app-click="closeModal()">Cancel</button>
         <button class="btn bg-primary w-100" app-click="deletePage()">Delete</button>

@@ -12,7 +12,7 @@
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false},
-                    {name:'view',input_type:'text',placeholder:'View', type:'string', required:true},
+                    {name:'view',input_type:'text',placeholder:'View', type:'string', required:false},
                     {name:'model',input_type:'text',placeholder:'Model', type:'string', required:true},
                     {name:'date_from',input_type:'date',placeholder:'Date from', type:'string', required:false},
                     {name:'date_to',input_type:'date',placeholder:'Date to', type:'string', required:false},
@@ -42,10 +42,6 @@
                 }
             }
 
-        }
-
-        preSave(){
-            return this
         }
 
         async toCSV(){
