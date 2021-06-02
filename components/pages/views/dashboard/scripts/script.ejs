@@ -26,7 +26,7 @@
                 scope.view.auto_update = setTimeout(function(){
                     console.log(scope.view.editor)
                     scope.renderPage()
-                },500)
+                },1000)
 
             }
 
@@ -162,8 +162,15 @@
                     }
                 }
 
+                if (id == 'none'){
+                    document.getElementById('insert-new-section').style.display = 'none'
+                } else {
+                    scope.showInsertSection(id.replace(/\#/,''))
+                }
+
+
                 if (preview_section && preview){
-                    scrollToElm(preview, preview_section, 150)
+                    scrollToElm(preview, preview_section, 1, 50)
                 }
 
             }
@@ -175,6 +182,7 @@
                 if (section == 'main'){
                     scope.view.tab = 'blocks'
                     scope.selectPreviewSection('none')
+                    scope.view.selected_block = {}
                 } else if (section == 'init'){
                     scope.view.menu = 'main'
                     scope.view.tab = 'blocks'
@@ -571,9 +579,12 @@
 
                 let section = document.getElementById(id),
                     section_insert = document.getElementById('insert-new-section')
-                let section_box = section.getBoundingClientRect()
 
-                let pos
+                if (!section){
+                    return false
+                }
+
+                let section_box = section.getBoundingClientRect()
 
                 if (section.classList.contains('separator')){
                     pos = section.offsetTop
@@ -618,6 +629,15 @@
                         if (preview_blocks[i] && typeof preview_blocks[i].addEventListener == 'function'){
                             let id = "preview_pages_block_"+i
                             preview_blocks[i].setAttribute('id',id)
+
+                            if (scope.view.selected_block && scope.view.selected_block.index >= 0 && i == scope.view.selected_block.index){
+                                preview_blocks[i].classList.add('editor-selected')
+                                scope.showInsertSection(id)
+                            } else if (scope.view.selected_block && scope.view.selected_block.index >= 0){
+                                preview_blocks[i].classList.add('editor-not-selected')
+                            }
+
+
                             preview_blocks[i].addEventListener('click',function(){
                                 scope.loadBlock(id, i)
                             })
@@ -625,7 +645,13 @@
                                 scope.showInsertSection(id)
                             })
                             preview_blocks[i].addEventListener('mouseout',function(){
-                                document.getElementById('insert-new-section').style.display = 'none'
+
+                                if (scope.view.selected_block && scope.view.selected_block.index >= 0){
+                                    scope.showInsertSection('preview_pages_block_'+scope.view.selected_block.index)
+                                } else {
+                                    document.getElementById('insert-new-section').style.display = 'none'
+                                }
+
                             })
                         }
                     }
@@ -733,6 +759,7 @@
             scope.removeImage = function(field){
 
                 field.image = false
+                view.update(this._params[0])
                 scope.renderPage()
 
             }

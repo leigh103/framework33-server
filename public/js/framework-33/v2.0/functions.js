@@ -315,10 +315,19 @@ function chgSlide(evnt,slide){
 
 }
 
-function scrollToElm(container, elm, duration){
+function scrollToElm(container, elm, duration, offset){
 
-var pos = getRelativePos(elm);
-    scrollTo( container, pos.top , 2);  // duration in seconds
+    if (!duration){
+        duration = 1
+    }
+
+    if (!offset){
+        offset = 0
+    }
+var pos = getRelativePos(elm)
+var posTop = pos.top-offset
+
+    scrollTo( container, posTop, duration);  // duration in seconds
 }
 
 function getRelativePos(elm){

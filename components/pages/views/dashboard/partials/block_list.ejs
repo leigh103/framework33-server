@@ -1,6 +1,6 @@
 <div class="sortable" app-sorted="renderPage()">
     <div class="list-block" app-for="block in view.pages.blocks" app-click="loadBlock(block,$index)" app-class="{'carousel':block.styling.carousel == true}">
-        <span app-class="getBlockIcon(block)" class="flex-none icon lg secondary left"></span>
+        <span app-class="getBlockIcon(block)" class="list-block-thumb sm"></span>
         <div class="flex-1" app-bind="block.name"></div>
         <span class="flex-none icon sectiongrab xl sortable-handle right"></span>
     </div>

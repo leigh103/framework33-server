@@ -8,11 +8,11 @@
     </div>
     <div class="bg-white p-2 h-100">
 
-        <div class="grid col-3 col-s-1 gap-2">
+        <div class="grid col-4 col-s-1 gap-2">
             <% for (var i in blocks){ %>
 
                 <div class="list-block mb-0" app-show="view.modal_tab == '<%- blocks[i].folder %>'" app-click="selectBlock('<%- blocks[i].block %>')">
-                    <span class="flex-none icon xl primary left <%- blocks[i].block %>"></span>
+                    <div class="list-block-thumb <%- blocks[i].block %>"></div>
                     <div class="flex-1"><%- blocks[i].name %></div>
                 </div>
             <% } %>

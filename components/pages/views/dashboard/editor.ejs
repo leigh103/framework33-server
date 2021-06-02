@@ -21,8 +21,10 @@
                             <div class="title">
                                 <h1><a app-click="showMenu('main')" class=""><span app-bind="view.selected_block.name"></span></a></h1>
                             </div>
-                            <div class="preview-link" app-click="renderPage(true)">
-                                <span class="icon screen black"></span>
+                            <div class="flex-middle">
+                                <div class="preview-link" app-click="renderPage(true)">
+                                    <span class="icon screen black"></span>
+                                </div>
                             </div>
                         </div>
 
@@ -100,7 +102,7 @@
 
                     </div>
 
-                    <div class="w-100 bg-light-grey text-white flex-none py-1 px-15 flex col-12 mb-s-8">
+                    <div class="menu-footer">
                         <div class="flex-1">
                             <button app-show="view.selected_block" class="btn bg-white" app-click="removeBlock(true)">Remove Block</button>
                             <button app-hide="view.selected_block" class="btn bg-white" app-click="deletePage(true)">Delete Page</button>
