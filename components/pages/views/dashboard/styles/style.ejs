@@ -47,7 +47,13 @@
     }
 
     .dashboard .header {
-        padding: 0 1.1rem 0 1.3rem
+        padding: 0 1.1rem 0 1.3rem;
+    }
+
+    .dashboard .header .title {
+        white-space: nowrap;
+        overflow: hidden;
+        margin-right: 1rem;
     }
 
     .dashboard .menu-footer {
@@ -424,6 +430,15 @@
         height: 4.375rem;
         padding: 0 1.25rem;
         border-bottom: 1px solid #EAEAEA;
+    }
+
+    .list-block-name {
+        flex: 1;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        overflow:hidden;
     }
 
     .list-block span.icon:not(.sortable-handle) {
