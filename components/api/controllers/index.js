@@ -273,24 +273,30 @@ var express = require('express'),
 
             functions.accessGranted(model,req,method).then(async ()=>{
 
-                let result
+                let result,
+                    query_data = {
+                        query: query,
+                        sort: sort,
+                        start: start,
+                        end: end
+                    }
 
                 if (method){
                     if (method == 'search'){
                         result = await model.search(req.query.str, sort)
                     } else if (typeof req.params.fid != 'undefined'){
                         result = await model.find(req.params.id)
-                        result = await result[method](req.params.fid)
+                        result = await result[method](req.params.fid, query_data)
                     } else if (typeof req.params.id != 'undefined'){
                         result = await model.find(req.params.id)
-                        result = await result[method](req.params.id)
+                        result = await result[method](req.params.id, query_data)
                     } else {
                         result = await model.all(query, sort, start, end)
                     }
                 } else {
                     result = await Promise.resolve(model.data)
                 }
-
+                
                 result = await functions.sanitizeOutput(result)
 
                 if (result.error){

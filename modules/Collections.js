@@ -8,7 +8,7 @@ class Collections extends Models {
 
     }
 
-    async getItems(key){
+    async getItems(key, query){
 
         this.data = await DB.read(this.settings.collection).where(['_key == '+key]).first()
 
@@ -18,9 +18,17 @@ class Collections extends Models {
         }
 
         let collection = this.settings.collection_of
-        let items = this.data.items.map((item) => {
-                item = collection+'/'+item
-                return item
+        let items = this.data.items.map((item, i) => {
+
+                if (i >= query.end){
+                    return ''
+                } else {
+                    item = collection+'/'+item
+                    return item
+                }
+
+            }).filter((item)=>{
+                return item.length > 0
             })
 
         this.collection_data = await DB.read(this.settings.collection_of)
