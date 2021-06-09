@@ -23,6 +23,6 @@
 <div class="input-contenteditable field-<%- obj_prefix %><%- item.name %>">
     <label><%- view.functions.parseName(item.name) %></label>
     <div class="input-contenteditable-wrap">
-        <div class="large resize contenteditable" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" contenteditable="true"></div>
+        <div class="large resize contenteditable" app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" contenteditable="true" <% if (typeof item.type != 'undefined' && item.type == 'data'){ %>data-keep-format<% } %>></div>
     </div>
 </div>

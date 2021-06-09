@@ -31,7 +31,7 @@
                     {name:'promo_text',input_type:'text',placeholder:'Eg, award winning, our favourite', tab:'prices and stock',type:'string',required: false},
                     {name:'attributes',input_type:'array', tab:'product_attributes', placeholder:'Attributes',type:'array',required: false, subitems:[
                         {name:'attribute',input_type:'select', option_data:'ProductAttributes', type:'string', required:false},
-                        {name:'value',input_type:'select', option_for:'value in selected_attribute', type:'string', required:false}
+                        {name:'value',input_type:'textarea', type:'data', required:false}
                     ]},
                     {name:'customisation',input_type:'array',placeholder:'Customisation', tab:'product_customisation', type:'object',required: false},
                     {name:'description',input_type:'textarea',placeholder:'Description', type:'string', truncate:160, required:false},

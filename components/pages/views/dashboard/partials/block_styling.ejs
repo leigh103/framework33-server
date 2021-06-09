@@ -7,13 +7,14 @@
 
     <div class="field">
         <label class=" capitalise">Text Color</label>
+        <!-- <a app-click="clearBlock(view.selected_block.styling.text.color, 'view.selected_block.styling.text.color')" class="clear-placeholder">Reset</a> -->
         <div class="color_picker" app-color="view.selected_block.styling.text.color">
             <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
         </div>
     </div>
     <div class="field">
         <label class=" capitalise">Background Color</label>
-
+        <!-- <a app-click="clearBlock(view.selected_block.styling.background.color, 'view.selected_block.styling.background.color')" class="clear-placeholder">Reset</a> -->
         <div class="color_picker" app-color="view.selected_block.styling.background.color">
             <div class="color" app-for="color in view.colors" app-class="color" app-click="selectColor()"></div>
         </div>

@@ -101,6 +101,73 @@
                 </div>
             <% } %>
 
+            <% if (!product.content_before_details && typeof product.attributes == 'object'){ %>
+                <div class="content-text" app-show="view.tab == 'nutrition'">
+                    <% product.attributes.forEach((attribute) => { %>
+
+                        <% if (attribute.attribute == '24098832' && typeof attribute.value == 'object'){ %>
+
+                            <div class="grid col-2 col-s-1 mb-2">
+                                <div class=" text-weight-700 text-right mr-1">Nutritional Information</div>
+                                <div class="">
+
+                                    <div class="table">
+                                    <% attribute.value.forEach((val) => { %>
+                                        <div class="row">
+                                            <div class="cell"><%- val[1] %></div>
+                                            <div class="cell text-right pr-05"><%- val['per 100g'] %></div>
+                                            <div class="cell" style="width: 4rem"><%- val[2] %></div>
+                                        </div>
+                                    <% }) %>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        <% } else if (attribute.attribute == '24098801' && typeof attribute.value == 'object'){ %>
+
+                            <div class="grid col-2 col-s-1 mb-2">
+                                <div class="text-weight-700 text-right mr-1">Ingredients</div>
+                                <div class="comma-list">
+
+                                    <% attribute.value.forEach((val) => { %>
+                                        <span class="comma-list-item">
+                                            <span class="capitalise"><%- val[2] %></span>
+                                            <span><%- val['%'] %>%</span>
+                                        </span>
+                                    <% }) %>
+
+                                </div>
+                            </div>
+
+                        <% } else if (attribute.attribute == '24103213' && typeof attribute.value == 'object'){ %>
+
+                            <div class="grid col-2 col-s-1 mb-2">
+                                <div class="text-weight-700 text-right mr-1">Alergens</div>
+                                <div class="comma-list">
+
+                                    <% attribute.value.forEach((val) => { %>
+
+                                        <% if (val['Value'] == 'Y'){ %>
+                                            <span class="comma-list-item">
+                                                <span class="capitalise"><%- val[1] %></span>
+                                            </span>
+                                        <% } %>
+
+                                    <% }) %>
+
+                                </div>
+                            </div>
+
+                        <% } else { %>
+                            <%- attribute.value %>
+                        <% } %>
+
+
+                    <% }) %>
+                </div>
+            <% } %>
+
         </div>
 
     </div>

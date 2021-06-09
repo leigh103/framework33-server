@@ -324,7 +324,7 @@
                         return false
                     }
 
-                    if (!scope.cart.shipping_address){
+                    if (!scope.cart.shipping_address || !scope.cart.shipping_address.address_line1){
                         scope.cart.shipping_address = scope.cart.billing_address
                     }
                     if (!scope.cart.shipping_address.name){
@@ -367,6 +367,8 @@
                         return false
                     }
 
+                    scope.initPaypal()
+
                     scope.view.page = 'gateways'
                     view.update('view.page')
 
@@ -392,6 +394,72 @@
                     //     scope.notify(err,'error',10,'handstop white')
                     // })
 
+
+                }
+
+                scope.initPaypal = function(){
+
+                    if (paypal && paypal.Buttons){
+
+                        let payload = {
+                            payer: {
+                              name: {
+                                given_name: scope.name_obj.first_name,
+                                surname: scope.name_obj.last_name
+                              },
+                              address: {
+                                address_line_1: scope.cart.billing_address.address_line1,
+                                address_line_2: scope.cart.billing_address.address_line2,
+                                admin_area_2: scope.cart.billing_address.address_level2,
+                                admin_area_1: scope.cart.billing_address.address_level1,
+                                postal_code: scope.cart.billing_address.postal_code,
+                                country_code: 'GB'
+                              },
+                              email_address: scope.cart.customer.email,
+
+                          },
+                          purchase_units: [{
+                            amount: {
+                                value: (scope.cart.total/100).toFixed(2),
+                                  currency_code: 'GBP'
+                              },
+                              shipping: {
+                                  address:{
+                                    address_line_1: scope.cart.shipping_address.address_line1,
+                                    address_line_2: scope.cart.shipping_address.address_line2,
+                                    admin_area_2: scope.cart.shipping_address.address_level2,
+                                    admin_area_1: scope.cart.shipping_address.address_level1,
+                                    postal_code: scope.cart.shipping_address.postal_code,
+                                    country_code: 'GB'
+                                }
+                              },
+                          }],
+                          application_context: {
+                              shipping_preference: 'NO_SHIPPING'
+                          }
+                        }
+
+                        if (scope.cart.customer.tel){
+                            payload.payer.phone = {
+                                phone_type: "MOBILE",
+                                phone_number: {
+                                    national_number: scope.cart.customer.tel
+                                }
+                            }
+                        }
+
+                        paypal.Buttons({
+                          createOrder: function(data, actions) {
+                            return actions.order.create(payload);
+                          },
+                          onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                              window.location.href = '/checkout/paypal/'+details.id;
+                            });
+                          }
+                          }).render('#paypal-button-container'); // Display payment options on your web page
+
+                    }
 
                 }
 

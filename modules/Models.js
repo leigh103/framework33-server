@@ -1,4 +1,4 @@
-
+    const HtmlTableToJson = require('html-table-to-json')
 
     class Model {
 
@@ -423,6 +423,23 @@
                     // } else {
                         return value
                     // }
+
+                } else if (field.type == 'data'){
+
+                    if (typeof value == 'string'){
+
+                        let result = HtmlTableToJson.parse(value)
+
+                        if (result && result._results && result._results[0]){
+                            return result._results[0]
+                        } else {
+                            return value
+                        }
+
+                    } else {
+                        return value
+                    }
+
 
                 } else if (field.type == 'array' && typeof value == 'object'){
 

@@ -16,7 +16,7 @@
             scope.view.textarea_placeholder = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id eu nisl nunc mi ipsum faucibus. Ac turpis egestas integer eget. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus. Euismod quis viverra nibh cras pulvinar mattis."
 
             scope.view.colors = ['bg-primary', 'bg-secondary', 'bg-palette-1', 'bg-palette-2', 'bg-palette-3', 'bg-palette-4', 'bg-palette-5', 'bg-palette-6', 'bg-palette-7', 'bg-palette-8', 'bg-white','bg-grey', 'bg-black']
-            scope.view.icons = ['alarm', 'arrowdown', 'arrowleft', 'arrowup', 'arrowright', 'bell', 'bin', 'binoculars', 'box', 'bulletlist', 'calendar', 'cardpayment', 'clock', 'cmslogo', 'contentbanner', 'contentbutton', 'contentfeatures', 'contenttext', 'contenttitle', 'contentvideo', 'crosshairs', 'cycle', 'duplicate', 'edit', 'envelope', 'eye', 'gauge', 'handstop', 'help', 'house', 'link', 'mapmarker', 'mapmarkerundo', 'megaphone', 'merge', 'noentry', 'note', 'person', 'piechart', 'plus', 'pricetag', 'pulse', 'repeatarrow', 'rocket', 'scissors', 'screen', 'search', 'settings', 'sectiongrab', 'shoppingbasket', 'shoppingtrolley', 'sidemenucollapse', 'sidemenuexpand', 'signin', 'signout', 'speechbubble1', 'speechbubble2', 'stopwatch', 'suppliers', 'swap', 'threedots', 'thumbsdown', 'thumbsup', 'tick', 'tickcircle', 'unlink', 'voucher', 'x', 'xcircle']
+            scope.view.icons = ['alarm', 'arrowdown', 'arrowleft', 'arrowup', 'arrowright', 'bell', 'bin', 'binoculars', 'box', 'bulletlist', 'calendar', 'cardpayment', 'clock', 'cmslogo', 'contentbanner', 'contentbutton', 'contentfeatures', 'contenttext', 'contenttitle', 'contentvideo', 'crosshairs', 'cycle', 'duplicate', 'edit', 'envelope', 'eye', 'gauge', 'handpoint', 'handstop', 'help', 'house', 'link', 'mapmarker', 'mapmarkerundo', 'megaphone', 'merge', 'noentry', 'note', 'person', 'piechart', 'plus', 'pricetag', 'pulse', 'repeatarrow', 'rocket', 'scissors', 'screen', 'search', 'settings', 'sectiongrab', 'shoppingbasket', 'shoppingtrolley', 'sidemenucollapse', 'sidemenuexpand', 'signin', 'signout', 'speechbubble1', 'speechbubble2', 'stopwatch', 'suppliers', 'swap', 'threedots', 'thumbsdown', 'thumbsup', 'tick', 'tickcircle', 'unlink', 'voucher', 'x', 'xcircle']
 
             document.onkeyup = function (e) {
 
@@ -642,15 +642,15 @@
                                 scope.loadBlock(id, i)
                             })
                             preview_blocks[i].addEventListener('mouseover',function(){
-                                scope.showInsertSection(id)
+                                // scope.showInsertSection(id)
                             })
                             preview_blocks[i].addEventListener('mouseout',function(){
 
-                                if (scope.view.selected_block && scope.view.selected_block.index >= 0){
-                                    scope.showInsertSection('preview_pages_block_'+scope.view.selected_block.index)
-                                } else {
-                                    document.getElementById('insert-new-section').style.display = 'none'
-                                }
+                                // if (scope.view.selected_block && scope.view.selected_block.index >= 0){
+                                //     scope.showInsertSection('preview_pages_block_'+scope.view.selected_block.index)
+                                // } else {
+                                //     document.getElementById('insert-new-section').style.display = 'none'
+                                // }
 
                             })
                         }
