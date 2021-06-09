@@ -42,7 +42,7 @@
     "twilio": "^3.57.0",
     "utf-8-validate": "^5.0.2",
     "uuid": "^7.0.2",
-    "ws": "^7.2.3"
+    "ws": "^7.4.6"
   },
   "devDependencies": {},
   "scripts": {
