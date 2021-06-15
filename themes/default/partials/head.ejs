@@ -32,6 +32,7 @@
             <title><%= meta.title %></title>
         <% } %>
         <% if (meta.image){ %><meta property="og:image" content="<%= meta.image %>"><% } %>
+        <% if (meta.type){ %><meta property="og:type" content="<%= meta.type %>"><% } %>
         <% if (meta.url){ %><meta property="og:url" content="<%= meta.url %>"><% } %>
         <% if (meta.updated_time){ %><meta property="og:updated_time" content="<%= meta.updated_time %>"><% } %>
         <% if (meta.description){ %>
@@ -57,9 +58,9 @@
     <link href="/style/fonts.css?v=1614765140082" rel="stylesheet">
 
     <% if (typeof dashboard != 'undefined'){ %>
-        <link href="/style/dashboard.css?v=1623230750442" rel="stylesheet">
+        <link href="/style/dashboard.css?v=1623334261040" rel="stylesheet">
     <% } else { %>
-        <link href="/style/style.css?v=1622719609838" rel="stylesheet">
+        <link href="/style/style.css?v=1623685020411" rel="stylesheet">
     <% } %>
 
     <% if (typeof stripe_id != 'undefined'){ %>

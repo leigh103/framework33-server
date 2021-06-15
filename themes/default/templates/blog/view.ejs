@@ -1,0 +1,34 @@
+<% layout(config.site.theme+'/page.ejs') -%>
+
+
+<div class="page">
+
+    <div class="contain text-left pt-5">
+
+        <div class="grid col-12 gap-3">
+
+            <div class="colspan-9">
+
+                <h1><%- article.title %></h1>
+                <p><%- moment(article._updated).format('Do MMMM YYYY') %></p>
+                <a href="/blog"><span class="icon arrowleft left primary"></span>View all articles</a>
+                <div class="mt-2"><%- article.content %></div>
+
+            </div>
+
+            <div class="colspan-3">
+
+                <% recent_articles.forEach((recent_article)=>{ %>
+                    <a href="<%- recent_article.slug %>">
+                        <h4><%- recent_article.title %></h4>
+                        <p><%- moment(recent_article._updated).format('Do MMMM YYYY') %></p>
+                    </a>
+                <% }) %>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

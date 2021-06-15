@@ -40,5 +40,10 @@
             <% }) %>
 
         <% } %>
+
+        <% if (typeof user == 'object' && user.guard == 'admin' && typeof table != 'undefined' && typeof key != 'undefined'){ %>
+            <div class="admin-bar"><a href="/dashboard/<%- table %>/<%- key %>" target="dashboard">Edit this content</div>
+        <% } %>
+        
     </body>
 </html>
