@@ -758,7 +758,13 @@
 
             scope.removeImage = function(field){
 
-                field.image = false
+                if (field.image){
+                    field.image = false
+                }
+                if (field.value){
+                    field.value = false
+                }
+
                 view.update(this._params[0])
                 scope.renderPage()
 

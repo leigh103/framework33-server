@@ -78,7 +78,7 @@ const functions = {
         data.title = view.current_sub_view+' Appointments'
         data.table = 'appointments'
 
-        data.query = '?status='+req.params.status
+        data.query = '?status='+req.params.status+'&start_date>'+moment().set({hours:0,minutes:0,seconds:0}).toISOString()
 
         data.model = new Appointments()
 

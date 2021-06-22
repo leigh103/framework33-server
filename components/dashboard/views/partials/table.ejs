@@ -1,5 +1,5 @@
 <div class="table-wrap rounded">
-    <div class="table table-header" app-init="get('<%- table %><% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
+    <div class="table table-header" app-init="get('<%- table %>','<% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
         <div class="row table-header">
             <div class="cell middle text-left select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()"></div>
             <% fields.forEach((item)=>{ %>

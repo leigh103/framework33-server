@@ -68,6 +68,37 @@ const express = require('express'),
 
         },
 
+        findFAQs: (page_blocks) => {
+
+            return new Promise( async (resolve, reject) => {
+
+                let faqs = {}
+
+                for (let block of page_blocks){
+                    if (block.block == 'FAQs'){
+
+                        for (let field of block.fields){
+
+                            if (field.field == 'form'){
+
+                                let faq = await new PageFAQs().find(field.value)
+                                if (faq && faq.data && faq.data._key){
+                                    faqs[faq.data._key] = faq.data
+                                }
+
+                            }
+
+                        }
+
+                    }
+                }
+
+                resolve(faqs)
+
+            })
+
+        },
+
         parseStyle:(style, option) => {
 
             let str = ''
@@ -278,6 +309,7 @@ const express = require('express'),
             data.meta = article.data.meta
             data.pages = article.data
             data.forms = await functions.findForms(article.data.blocks)
+            data.faqs = await functions.findFAQs(article.data.blocks)
 
             res.render(settings.views+'/view.ejs',data)
 
@@ -326,6 +358,7 @@ const express = require('express'),
             data.meta = render_pages.meta
             data.pages = render_pages
             data.forms = await functions.findForms(render_pages.blocks)
+            data.faqs = await functions.findFAQs(render_pages.blocks)
 
             if (req.params.external){
                 res.render(settings.views+'/view.ejs',data)
@@ -372,7 +405,7 @@ const express = require('express'),
              title_prefix = 'Edit'
         }
 
-        if (req.params.page == 'page-types'){
+        if (req.params.page == 'types'){
 
             data.title = title_prefix+' Page Types'
             data.table = 'page_types'
@@ -610,6 +643,7 @@ const express = require('express'),
                 data.meta = article.data.meta
                 data.pages_type = pages_type.data
                 data.forms = await functions.findForms(article.data.blocks)
+                data.faqs = await functions.findFAQs(article.data.blocks)
             //    data.recent = await functions.getRecent(pages_type,article._key)
 
                 res.render(settings.views+'/view.ejs',data)
@@ -658,6 +692,7 @@ const express = require('express'),
                     data.pages = article.data
                     data.meta = article.data.meta
                     data.forms = await functions.findForms(article.data.blocks)
+                    data.faqs = await functions.findFAQs(article.data.blocks)
 
                     res.render(settings.views+'/view.ejs',data)
 

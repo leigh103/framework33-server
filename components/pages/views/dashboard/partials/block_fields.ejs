@@ -18,6 +18,14 @@
             <input type="number" app-model="field.value" app-attr="{'placeholder':'Add '+field.field}">
         </div>
 
+        <div app-if="field.input == 'collection_select'">
+            <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
+            <div>Currently showing <span app-bind="field.value"></span></div>
+            <dropdown-search placeholder="Search collections..." app-model="field.value" data-url="/api/product_collections/search?str=" data-bind="name" data-value="_key">
+            </dropdown-search>
+            <a href="/dashboard/products/collections/new" target="addform">Create a new collection</a>
+        </div>
+
         <div app-if="field.input == 'form_select'">
             <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
             <dropdown-search placeholder="Search forms..." app-model="view.editor[$index].value" data-url="/api/page_forms/search?str=" data-bind="name" data-value="_key">
@@ -25,7 +33,11 @@
             <a href="/dashboard/pages/settings/forms" target="addform">Create a new form</a>
         </div>
 
-
+        <div app-if="field.input == 'faq_select'">
+            <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
+            <div class="contenteditable small" app-model="field.value" contenteditable="true"></div>
+            <a href="/dashboard/pages/settings/faqs" target="addform">Create a new FAQs</a>
+        </div>
 
         <div app-if="field.input == 'color_picker'">
             <label class="capitalise" app-bind="parseSnakeCase(field.field)"></label>
@@ -73,7 +85,7 @@
 
             <div class="bg-image-wrap" app-click="showMediaLibrary('view.editor[$index].value')">
                 <img class="bg-image" src="/images/Pages_Placeholder.svg" app-src="field.value">
-                <a class="bg-image-remove""><span class="icon plus secondary"></span></a>
+                <a class="bg-image-remove" app-click="removeImage(field)"><span class="icon x secondary"></span></a>
             </div>
         </div>
 

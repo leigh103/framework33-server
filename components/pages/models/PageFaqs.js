@@ -27,7 +27,7 @@
                 },
                 private: { // auth'd routes
                     get: {
-
+                        getTypes:['admin']
                     },
                     post: {
                         save:['admin']
@@ -40,6 +40,12 @@
                     }
                 }
             }
+
+        }
+
+        getTypes(){
+
+            return config.site.faq_types
 
         }
 

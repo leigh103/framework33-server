@@ -16,7 +16,7 @@
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:true},
                     {name:'weight',input_type:'select',placeholder:'URL', options:[], type:'number', required:false},
                     {name:'active',input_type:'checkbox',type:'boolean', required:false},
-                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false},
+                    {name:'description',input_type:'textarea',placeholder:'Description', type:'string', required:false, truncate: 160},
                     {name:'sub_categories',input_type:'array',placeholder:'Sub Categories', tab:'sub_categories', type:'array', required:false, subitems:[
                         {name:'image',input_type:'image',placeholder:'Image', type:'image', required:false},
                         {name:'name',input_type:'text',placeholder:'Name', type:'string', required:false},
@@ -136,7 +136,7 @@
 
             return new Promise(async (resolve, reject) => {
 
-                let slug = '/'
+                let slug = '/'+view.ecommerce.shop.slug+'/'
 
                 if (typeof product_data.category != 'undefined'){
 

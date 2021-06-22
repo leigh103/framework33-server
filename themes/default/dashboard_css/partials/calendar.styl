@@ -7,6 +7,7 @@ $column_width = 20rem
         opacity: 1
         &.loaded {
             opacity: 0
+            height: 1px;
         }
     }
 
@@ -47,6 +48,10 @@ $column_width = 20rem
                 position: relative;
                 height: 100vh;
                 overflow-x: hidden;
+                overflow-y: scroll;
+            }
+
+            &.loaded {
                 overflow-y: scroll;
             }
 

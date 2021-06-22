@@ -274,6 +274,8 @@
 
             //    const editordata = editor.getData()
 
+                delete obj.new_array
+
                 return new Promise( async (resolve, reject) => {
 
                     if (scope.view.key){
@@ -452,6 +454,11 @@
             scope.splice = function(item, array){
 
                 array.splice(array.indexOf(item),1)
+
+                if (this._params[1] && this._params[1] == 'collection_items'){
+                    scope.new.items.splice(scope.new.items.indexOf(item._key),1)
+                }
+
                 for (var i=0;i<this._params.length;i++){
                     view.update(this._params[i])
                 }

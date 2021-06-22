@@ -215,7 +215,7 @@
         }
 
         scope.get = function(collection, id, output){
-
+console.log(this)
             return new Promise(function(resolve, reject){
 
                 let url
@@ -559,6 +559,13 @@
             } else {
                 return date.type
             }
+
+        }
+
+        scope.gotoURL = function(str){
+
+            str = str.replace(/\s/g,'-').toLowerCase()
+            window.location.href = str
 
         }
 

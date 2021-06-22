@@ -30,7 +30,12 @@
 
 <div class="input-<%- item.input_type %> field-<%- obj_prefix %><%- item.name %>">
     <%- max_characters %>
-    <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
+
+    <% if (item.input_type == 'checkbox' && item.placeholder){ %>
+        <label><%- view.functions.parseName(item.placeholder) %></label>
+    <% } else { %>
+        <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
+    <% } %>
 
     <% if (item.input_type == 'disabled'){ %>
 
@@ -47,7 +52,7 @@
     <% } %>
 
     <% if (item.input_type == 'sku'){ %>
-        <a app-click="generateSKU()" app-hide="new.sku">Auto</a>
+        <a app-click="generateSKU()" class="text-small" app-hide="new.sku">Auto</a>
     <% } %>
 
 </div>

@@ -21,6 +21,7 @@
                     {name:'trigger',input_type:'text',placeholder:'Automation trigger', type:'string', required:true},
                     {name:'schedule',input_type:'datetime',placeholder:'Schedule Automation', type:'date', required:false},
                     {name:'description',input_type:'textarea',placeholder:'Automation Description', type:'string', required:true},
+                    {name:'delete_after_trigger', input_type:'checkbox', placeholder:'Delete this automation after it has triggered', type:'boolean', required: false},
                     {name:'actions',input_type:'array', type:'array', tab:'actions', required:true, subitems:[
                         {name:'method',input_type:'select', options:[{text:'Mailbox',value:'mailbox'},{text:'Email',value:'email'},{text:'Bulk Email',value:'bulk_email'},{text:'SMS',value:'sms'},{text:'Notify',value:'notify'}] , type:'string', required:true},
                         {name:'to',input_type:'text',placeholder:'method', type:'string', required:true},
@@ -58,9 +59,11 @@
 
         }
 
-        preSave(){
+        preDelete(){
 
-
+            if (this.data && this.data.trigger && Schedule.scheduledJobs[this.data.trigger]){
+                Schedule.scheduledJobs[this.data.trigger].cancel()
+            }
 
         }
 
@@ -246,6 +249,10 @@
                         }
                     }
 
+                    if (evnt_data.delete_after_trigger === true && !evnt_data.protect){
+                        await DB.read(this.settings.collection).where(['trigger == '+this.evnt]).delete()
+                    }
+
                     resolve(this.evnt+' triggered')
 
                 } else {
@@ -368,12 +375,13 @@
 
         }
 
-        getScheduled(){
+        async getScheduled(){
 
             let jobs = []
-            for (var job in Schedule.scheduledJobs){
-                jobs.push({name:job, firing_on: new Date(Schedule.scheduledJobs[job].pendingInvocations[0].fireDate._date), recurrence: Schedule.scheduledJobs[job].pendingInvocations[0].recurrenceRule})
+            for (let [key, job] of Object.entries(Schedule.scheduledJobs)){
+               jobs.push({name:key, firing_on: new Date(job.pendingInvocations[0].fireDate._date), recurrence: job.pendingInvocations[0].recurrenceRule})
             }
+
             return jobs
         }
 

@@ -51,7 +51,8 @@
                 },
                 private: { // auth'd routes
                     get: {
-                        getInactive:['admin']
+                        getInactive:['admin'],
+                        parseUrls:['admin']
                     },
                     post: {
                         save:['admin']
@@ -140,6 +141,27 @@
         async getInactive(){
 
             return await DB.read(this.settings.collection).orWhere(['category has no value','active has no value','category has no value','active == false','slug has no value']).orderBy('_updated','DESC').get()
+
+        }
+
+        async parseUrls(){
+
+            let products = await DB.read(this.settings.collection).show(['_key']).get(),
+                product
+
+            if (products.length > 0){
+                for (var item of products){
+
+                    product = await new Products().find(item._key)
+                    if (product){
+                        product.save()
+                    }
+
+
+                }
+            }
+
+            return products
 
         }
 

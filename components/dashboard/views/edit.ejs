@@ -6,8 +6,8 @@
             <a href="<%- view.functions.getModelBackLink() %>"><span class="icon arrowleft black"></span></a>
         </div>
         <div class="title">
-            <h1 app-hide="new._id" class="capitalise"><a href="<%- view.functions.getModelBackLink() %>">Cancel</a></h1>
-            <h1 app-show="new._id" class="capitalise"><a href="<%- view.functions.getModelBackLink() %>" app-bind="new.name">Back</a></h1>
+            <h1 app-hide="new.name" class="capitalise"><a href="<%- view.functions.getModelBackLink() %>"><%- view.functions.parseName(table,true) %></a></h1>
+            <h1 app-show="new.name" class="capitalise"><a href="<%- view.functions.getModelBackLink() %>" app-bind="new.name">Back</a></h1>
         </div>
 
         <div class="buttons">

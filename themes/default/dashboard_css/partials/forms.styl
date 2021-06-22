@@ -134,6 +134,22 @@ input[type=checkbox] {
     &.invalid:after {
         border: 2px solid #de4848 !important
     }
+
+}
+
+.array-item input[type=checkbox]{
+    &:after  {
+        background-color: white;
+    }
+
+    &:checked {
+        &:after {
+            content:'\2713';
+            background-color: $dashboard-color-secondary;
+            color: $dashboard-text-white;
+            // border: 1px solid $dashboard-color-primary;
+        }
+    }
 }
 
 .dropdown-wrap {

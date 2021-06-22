@@ -17,10 +17,9 @@
                         {name:'title',input_type:'text',placeholder:'SEO Title', type:'string', required:false},
                         {name:'description',input_type:'text',placeholder:'SEO Descripton', type:'string', required:false, truncate:160},
                     ]},
-                    {name:'template', input_type:'array', tab:'template', type:'array', required:false, subitems:[
-                        {name:'block',input_type:'select',options:[{text:'Hero',value:'text-hero'},{text:'Text Two Col',value:'text-two-col'}],placeholder:'Add block', type:'string', required:false}
-                    ]},
-                    {name:'_user_id',input_type:'hidden',value:'user_id', type:'user_id', required:true}
+                    // {name:'template', input_type:'array', tab:'template', type:'array', required:false, subitems:[
+                    //     {name:'block',input_type:'select',options:[{text:'Hero',value:'text-hero'},{text:'Text Two Col',value:'text-two-col'}],placeholder:'Add block', type:'string', required:false}
+                    // ]}
                 ]
             }
 

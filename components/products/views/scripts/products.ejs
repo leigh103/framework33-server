@@ -70,8 +70,6 @@
             scope.openModal('show_product_edit')
             view.update('new')
 
-
-
         }
 
         scope.getItem = function(collection, key){
@@ -121,6 +119,7 @@
                     if (!scope.new.gallery){
                         scope.new.gallery = []
                     }
+                    scope.new.new_array = {}
                     scope.view.loader = false
                     view.update('view.loader')
                     view.update('new')

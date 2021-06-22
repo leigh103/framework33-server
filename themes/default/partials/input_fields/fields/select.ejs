@@ -20,7 +20,13 @@
 %>
 
 <div class="input-select field-<%- item.name %>">
-    <label><%- view.functions.parseName(item.name) %></label>
+
+    <% if (item.placeholder){ %>
+        <label><%- view.functions.parseName(item.placeholder) %></label>
+    <% } else { %>
+        <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
+    <% } %>
+
     <select app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>">
 
         <% if (item.option_data && Array.isArray(item.options)){ %>

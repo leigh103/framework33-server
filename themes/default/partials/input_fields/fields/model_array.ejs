@@ -7,7 +7,7 @@
         <div class="array-item" app-for="<%- obj %> in collection_items">
 
             <div class="array-item-remove">
-                <a app-click="splice('new.<%- item.name %>', $index,'collection_items')">Remove<span class="icon x right primary"></span></a>
+                <a app-click="splice(<%- obj %>, $parent)">Remove<span class="icon x right primary"></span></a>
             </div>
 
             <% item.subitems.forEach((subitem,i)=>{ %>

@@ -159,7 +159,7 @@ const express = require('express'),
 
         view.current_view = 'products'
         view.current_sub_view = 'collections'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs','products/views/scripts/products.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
 
         data.query = ''
         data.title = 'Product Collections'
@@ -372,11 +372,71 @@ const express = require('express'),
         data.categories = await new ProductCategories().all()
         data.categories = data.categories.data
 
+        data.collections = await new ProductCollections().all(['slug has value'])
+
+        if (data.collections.data){
+            data.categories = data.categories.concat(data.collections.data)
+        }
+
         res.render(config.site.theme_path+'/templates/products/categories.ejs',data)
 
     })
 
-    routes.get('/:category/:sub_category?/:product?', async (req, res, next) => {
+    routes.get('/'+view.ecommerce.shop.slug+'/:category', async (req, res, next) => {
+
+        data.shop = view.ecommerce.shop
+        data.meta.title = config.site.name+' | '+view.ecommerce.shop.name
+        if (data.shop.description){
+            data.meta.description = data.shop.description.substring(0,160)
+        }
+
+        data.category = await models.categories.find(['slug == '+req.params.category])
+
+        if (data.category && data.category.data && data.category.data._key){ // category found
+
+            delete data.parent_category
+
+            data.category = data.category.data
+
+            data.meta.title = config.site.name+' | '+data.category.name
+            if (data.category.description){
+                data.meta.description = data.category.description.substring(0,160)
+            }
+
+            data.products = await models.products.all(['category like '+data.category._key, 'active == true'],'_created')
+            data.products = data.products.data
+
+        } else { // else check for collection
+
+            data.collection = await new ProductCollections().find(['slug == '+req.params.category])
+
+            if (data.collection && data.collection.data && data.collection.data._key){ // collection found
+
+                delete data.parent_category
+
+                data.category = data.collection.data
+
+                data.meta.title = config.site.name+' | '+data.category.name
+                if (data.category.description){
+                    data.meta.description = data.category.description.substring(0,160)
+                }
+
+                data.parent_category = ""
+                data.products = await data.collection.getItems(data.collection.data._key,{end:999})
+
+            } else { // it's not a category or a collection... move along
+
+                return next()
+
+            }
+
+        }
+
+        res.render(config.site.theme_path+'/templates/products/category.ejs',data)
+
+    })
+
+    routes.get('/'+view.ecommerce.shop.slug+'/:category/:sub_category/:product?', async (req, res, next) => {
 
         delete data.parent_category
 
@@ -450,7 +510,7 @@ const express = require('express'),
                     if (data.sub_category.description){
                         data.meta.description = data.sub_category.description.substring(0,160)
                     }
-                    data.products = await models.products.all(['category == '+data.parent_category._key, 'sub_category == '+data.sub_category._key, 'active == true'])
+                    data.products = await models.products.all(['category == '+data.parent_category._key, 'sub_category == '+data.sub_category._key, 'active == true'],'_created')
                     data.products = data.products.get()
 
                     res.render(config.site.theme_path+'/templates/products/category.ejs',data)
@@ -485,7 +545,7 @@ const express = require('express'),
                     data.meta.description = data.category.description.substring(0,160)
                 }
 
-                data.products = await models.products.all(['category like '+data.category._key,'sub_category NOT EXISTS', 'active == true'])
+                data.products = await models.products.all(['category like '+data.category._key, 'active == true'],'_created')
                 data.products = data.products.data
                 res.render(config.site.theme_path+'/templates/products/category.ejs',data)
 
