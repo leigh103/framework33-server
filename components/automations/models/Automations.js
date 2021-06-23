@@ -19,7 +19,7 @@
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Automation Name', type:'string', required:true},
                     {name:'trigger',input_type:'text',placeholder:'Automation trigger', type:'string', required:true},
-                    {name:'schedule',input_type:'datetime',placeholder:'Schedule Automation', type:'date', required:false},
+                    {name:'schedule',input_type:'datetime',placeholder:'Schedule Automation', type:'future_date', required:false},
                     {name:'description',input_type:'textarea',placeholder:'Automation Description', type:'string', required:true},
                     {name:'delete_after_trigger', input_type:'checkbox', placeholder:'Delete this automation after it has triggered', type:'boolean', required: false},
                     {name:'actions',input_type:'array', type:'array', tab:'actions', required:true, subitems:[

@@ -106,6 +106,68 @@
 
         }
 
+        registerAutomations(){
+
+            let activate_account = {
+                "trigger": "activate_account",
+                "name": "Account Activation",
+                "description": "Notification that is sent when a user needs to activate their account, either by email or SMS.",
+                "actions": [
+                    {
+                    "method": "email",
+                    "to": "{{email}}",
+                    "enabled": true,
+                    "subject": "Account Activation",
+                    "content": "Welcome to {{site_name}}! For your security, we ask that all new registrations are confirmed from a valid email address. Please click the link below to activate your account",
+                    "_key": 1613930962141
+                    }
+                ],
+                "type":"user",
+                "protect": true
+            }
+
+            let complete_registration = {
+              "name": "Complete Registration",
+              "trigger": "complete_registration",
+              "description": "Notification sent to customer to complete their registration. Normally used when a guest purchases something.",
+              "actions": [
+                {
+                  "method": "email",
+                  "to": "{{email}}",
+                  "enabled": true,
+                  "subject": "Complete your registration",
+                  "content": "Thanks for your interest in our site! We'd love for you to visit us again sometime, so why not complete your registration so we can save your details for future purchases. If this sounds good, click the link below.\n",
+                  "_key": 1613921115788
+                }
+              ],
+              "type":"user",
+              "protect": true
+            }
+
+            let password_reset = {
+              "name": "Password Reset",
+              "description": "Password reset notifications",
+              "trigger": "password_reset",
+              "actions": [
+                {
+                  "to": "{{email}}",
+                  "method": "email",
+                  "subject": "Password Reset",
+                  "content": "Please click the link below to reset your password. \n\nIf this wasn't you, your password has not been changed, so you don't need to take further action. However, if you suspect any suspicious activity on your account, please change your password.",
+                  "_key": 1613725131832,
+                  "enabled": true
+                }
+              ],
+              "type":"user",
+              "protect": true
+            }
+
+            new Automations(activate_account).saveIfNotExists(['trigger == activate_account'])
+            new Automations(complete_registration).saveIfNotExists(['trigger == complete_registration'])
+            new Automations(password_reset).saveIfNotExists(['trigger == password_reset'])
+
+        }
+
     }
 
     let new_admin = new Admin().setDefault()

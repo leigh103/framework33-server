@@ -150,7 +150,7 @@ const functions = {
         view.current_view = 'calendar'
         data.include_scripts = ['dashboard/views/scripts/script.ejs','calendar/views/scripts/dashboard/calendar.ejs']
 
-        data.x_axis = await new global[config.calendar.models]().allFields(['_key','name'])
+        data.x_axis = await new global[config.calendar.models.providers]().allFields(['_key','name'])
         data.x_axis = data.x_axis.get()
 
         data.title = 'Calendar'

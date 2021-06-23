@@ -1,8 +1,9 @@
 .dates {
 
     &-wrap {
-        border: $dashboard-row-border;
-        border-radius: $border-radius;
+        border: 2px solid $dashboard-color-light-grey;
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
         box-shadow: $shadow;
         padding: 1rem;
 
@@ -67,6 +68,8 @@
     &-time {
 
         input {
+            background: none;
+            border: none;
             color: $dashboard-color-primary;
             font-weight: 600;
             &::-webkit-inner-spin-button {
@@ -81,7 +84,7 @@
     }
 
     .day {
-        background-color: $dashboard-color-light-grey2;
+        background-color: $dashboard-color-light-grey;
         font-weight: 600;
     }
 
@@ -89,6 +92,11 @@
         background-color: $dashboard-color-primary;
         color: white;
         font-weight: 600;
+
+        &:hover {
+            background-color: $dashboard-color-primary;
+            color: white;
+        }
     }
 
 }

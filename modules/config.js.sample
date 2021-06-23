@@ -98,6 +98,17 @@
             self_serve:false
         },
 
+        calendar: {
+    		models:{
+    			providers:'Admin',
+    			events:['Appointments']
+    		},
+    		appointments:{
+    			users:'Customers',
+    			items:'Products'
+    		}
+    	},
+
         providers: {
             sms: 'twilio',
             email: 'postmark'
@@ -122,6 +133,12 @@
 
         stripe_secret_key: '',
         stripe_publishable_key: '',
+
+        paypal:{
+    		client: '',
+    		secret: '',
+    		url: 'https://api-m.sandbox.paypal.com'
+    	}
 
         hacp: {
             host: {

@@ -15,7 +15,7 @@
     <div class="table-inner-wrap">
         <div class="table">
 
-            <div class="row" app-for="<%- view.functions.depluralise(table) %> in <%- table %>">
+            <div class="row" app-for="<%- view.functions.depluralise(table) %> in <%- table %>" app-click="goto('<%- table %>',<%- view.functions.depluralise(table) %>._key)">
 
                 <div class="cell middle text-left select-all"><input type="checkbox"></div>
 
@@ -61,7 +61,7 @@
                     <% } else if (item.input_type && !item.input_type.match(/image/)){ %>
 
                         <% if (item.name == 'name' || item.name == 'title' || item.name == 'full_name' || item.name == 'question'){ %>
-                            <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>" app-click="goto('<%- table %>',<%- view.functions.depluralise(table) %>._key)">
+                            <div class="cell middle <%- item.type.toLowerCase() %> <%- item.name %> <%- item.input_type %>">
                                 <a app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></a>
                             </div>
                         <% } else { %>

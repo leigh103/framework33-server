@@ -275,6 +275,24 @@ class Model {
                     return ''
                 }
 
+            } else if (field.type == 'future_date'){
+
+                if (moment(value).isBefore(moment())){
+                    this.error = 'Please select a future date for '+view.functions.parseName(key)
+                    return ''
+                }
+
+                if (moment(value, "YYYY-MM-DDThh:mm:ssZ", true)){
+                    return value
+                } else if (moment(value, "DD/MM/YYYY", true)){
+                    return moment(value, "DD/MM/YYYY").toISOString()
+                } else if (moment(value, "DD-MM-YYYY", true)){
+                    return moment(value, "DD-MM-YYYY").toISOString()
+                } else {
+                    this.error = 'Invalid date specified for '+view.functions.parseName(key)
+                    return ''
+                }
+
             } else if (field.type == 'float' && parseFloat(value)){
 
                 return parseFloat(value.replace(/\D/g, ''))

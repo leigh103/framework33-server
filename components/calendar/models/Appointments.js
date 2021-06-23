@@ -31,6 +31,7 @@
                 {text:'10 minutes before', value:'10'},
                 {text:'30 minutes before', value:'30'},
                 {text:'1 hour before', value:'60'},
+                {text:'2 hours before', value:'120'},
                 {text:'1 day before', value:'1440'}
             ]
 
