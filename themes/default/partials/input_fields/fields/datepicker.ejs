@@ -26,7 +26,7 @@
 
     <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
 
-    <date-picker app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" <% if (typeof datetime != 'undefined'){ %>data-datetime<% } %>>
+    <date-picker app-model="<%- new_prefix %><%- obj_prefix %><%- item.name %>" <% if (typeof datetime != 'undefined'){ %>data-datetime="true"<% } %> <% if (item.format != 'undefined'){ %>data-format="<%- item.format %>"<% } %>>
     </date-picker>
 
 

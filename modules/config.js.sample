@@ -106,6 +106,9 @@
     		appointments:{
     			users:'Customers',
     			items:'Products'
+    		},
+            lessons:{
+    			users:'Pupils',
     		}
     	},
 

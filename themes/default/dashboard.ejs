@@ -8,7 +8,7 @@
             <div class="icon"><span class="icon white" app-class="view.notification.icon"></span></div>
         </div>
 
-        <div class="page" app-class="{'expand':view.side_nav == true}">
+        <div class="page <% if (typeof title != 'undefined'){ %>page-<%- title.toLowerCase().replace(/\s/g,'-') %><% } %>" app-class="{'expand':view.side_nav == true}">
 
 
 

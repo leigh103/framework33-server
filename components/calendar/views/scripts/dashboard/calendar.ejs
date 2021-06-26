@@ -4,18 +4,36 @@
 
          scope.view.calendar = {
             loader: document.getElementById('calendar-loader'),
-            view: document.getElementById('calendar-view')
+            view: document.getElementById('calendar-view'),
+            provider: '<%- user._id %>',
+            date: '<%- query %>',
+            providers: <%- JSON.stringify(providers) %>,
+            filtered_providers: <%- JSON.stringify(providers) %>
          }
 
-        scope.getAppointments = function(date){
+        scope.getAppointments = function(from, to){
 
             scope.view.calendar.view.classList.remove('loaded')
             scope.view.calendar.loader.classList.remove('loaded')
 
-            scope.view.calendar.start =  moment(date).set({hours:0,minutes:0,seconds:0})
-            scope.view.calendar.end = moment(date).set({hours:23,minutes:59,seconds:59})
+            let payload
 
-            scope.post('appointments/find-by-date',{date:date}).then((appointments)=>{
+            if (!to){
+
+                payload = {date:from}
+
+                scope.view.calendar.start =  moment(from).set({hours:0,minutes:0,seconds:0})
+                scope.view.calendar.end = moment(from).set({hours:23,minutes:59,seconds:59})
+
+            } else {
+
+                payload = {from:from,to:to, provider: scope.view.calendar.provider}
+                scope.view.calendar.start =  moment(from).set({hours:0,minutes:0,seconds:0})
+                scope.view.calendar.end = moment(to).set({hours:23,minutes:59,seconds:59})
+
+            }
+
+            scope.post('/dashboard/calendar/get-events',payload).then((appointments)=>{
 
                 scope.appointments = appointments
                 view.update('appointments')
@@ -29,37 +47,82 @@
 
         }
 
+        watch['view.calendar.date'] = function(data){
+            if (data && data != '<%- query %>'){
+                scope.gotoDate(data)
+            }
+        }
+
+        scope.gotoDate = function(date){
+
+            if (date == 'next'){
+                let next_monday = 8-moment(scope.view.calendar.date).day()
+                window.location.href = '/dashboard/calendar/'+moment(scope.view.calendar.date).add(next_monday,'day').format('YYYY-MM-DD')
+            } else if (date == 'prev'){
+                let prev_monday = 6+moment(scope.view.calendar.date).day()
+                window.location.href = '/dashboard/calendar/'+moment(scope.view.calendar.date).subtract(prev_monday,'day').format('YYYY-MM-DD')
+            } else {
+                window.location.href = '/dashboard/calendar/'+moment(date).format('YYYY-MM-DD')
+            }
+
+        }
+
+        scope.selectProvider = function(id){
+
+            scope.view.calendar.provider = id
+            scope.getAppointments(scope.view.calendar.start.toISOString(),scope.view.calendar.end.toISOString())
+
+        }
+
+        scope.filterProviders = function(){
+
+            let re = new RegExp(this.target.value,'i')
+            scope.view.calendar.filtered_providers = scope.view.calendar.providers.filter((provider)=>{
+                return provider.name.match(re)
+            })
+            view.update('view.calendar.filtered_providers')
+
+        }
+
         scope.positionAppointments = function(){
 
-            let appointments = document.getElementsByClassName('appointment')
+            let appointments = document.getElementsByClassName('appointment'),
+                provider_list = document.getElementById('provider-list'),
+                left_nav = document.querySelector('.side-nav'),
+                offset = provider_list.getBoundingClientRect().width+left_nav.getBoundingClientRect().width
+
             for (var i=0; i<appointments.length;i++){
 
                 if (!appointments[i] || !appointments[i]._app){
                     continue
                 }
 
-                scope.positionAppointment(appointments[i])
+                scope.positionAppointment(appointments[i], false, offset)
 
             }
 
         }
 
-        scope.positionAppointment = function(el, update){
+        scope.positionAppointment = function(el, update, offset){
 
             let app_data = el._app,
                 idx = app_data.index,
-                x_axis = scope.appointments[idx].provider,
-                y_axis = scope.getYAxis(scope.appointments[idx].start_date,scope.appointments[idx].end_date),
+                x_axis = moment(scope.appointments[idx].start_date).format('YYYY_MM_DD'),//scope.appointments[idx].provider,
+                y_axis = scope.getYAxis(idx),
                 parent_col = document.getElementById(x_axis),
                 start_div = document.getElementById(x_axis+'-'+y_axis.start),
                 end_div = document.getElementById(x_axis+'-'+y_axis.end)
 
             scope.appointments[idx].el = el
 
+            if (!end_div){
+
+            }
+
             if (start_div && end_div){
 
                 el.style.top = start_div.offsetTop+'px'
-                el.style.left = start_div.getBoundingClientRect().left+'px'
+                el.style.left = (start_div.getBoundingClientRect().left-offset)+'px'
                 el.style.height = ((end_div.offsetTop-start_div.offsetTop)+1)+'px'
                 el.style.width = start_div.getBoundingClientRect().width+'px'
 
@@ -100,10 +163,15 @@
 
         }
 
-        scope.getYAxis = function(start_date, end_date){
+        scope.addCalendarEvent = function(evnt){
+            let data = scope.view.id.split('-')
+            window.location.href = "/dashboard/"+evnt.toLowerCase()+"/new?date="+data[0].replace(/\_/g,'-')+"T"+data[1]+":"+ data[2] +":00.000Z&provider="+scope.view.calendar.provider
+        }
 
-            start_date = moment(start_date)
-            end_date = moment(end_date)
+        scope.getYAxis = function(idx){
+
+            start_date = moment(scope.appointments[idx].start_date)
+            end_date = moment(scope.appointments[idx].end_date)
 
             let result = {
                 start: start_date.format('HH-mm'),
@@ -111,11 +179,11 @@
                 duration: end_date.diff(start_date,'minutes')
             }
 
-            if (start_date.isBefore(scope.view.calendar.start)){ // starts on a previous date
+            if (start_date.hours() < 8){ // starts on a previous date
                 result.start = '07-00'
             }
 
-            if (end_date.isAfter(scope.view.calendar.end)){ // end on a future date
+            if (start_date.day() != end_date.day()){ // end on a future date
                 result.end = '22-59'
             }
 

@@ -1,0 +1,5 @@
+<date-picker app-model="view.calendar.date" placeholder="<%- moment(query).format('MMM YYYY') %>" data-format="MMM YYYY"></date-picker>
+
+<a href="/dashboard/calendar/today" class="btn bg-white text-bold mx-15">Today</a>
+<a app-click="gotoDate('prev')" class="btn bg-white round text-bold mr-1"><span class="icon arrowleft black"></span></a>
+<a app-click="gotoDate('next')" class="btn bg-white round text-bold"><span class="icon arrowright black"></span></a>

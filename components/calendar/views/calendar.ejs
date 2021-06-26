@@ -1,6 +1,6 @@
 <% layout(config.site.dashboard_theme+'/dashboard.ejs') %>
 
-    <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
+    <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs',{center_buttons:basedir+'/components/calendar/views/partials/date_picker.ejs'}) %>
 
     <div class="vh-100 vw-100 flex-middle absolute" id="calendar-loader">
         <div class="loader">
@@ -11,21 +11,41 @@
         </div>
     </div>
 
-    <div id="calendar-view" class="calendar providers day col-<%- x_axis.length %>" app-init="getAppointments('<% if (typeof query != 'undefined'){ %><%- query %><% } %>')">
+    <div class="flex relative">
 
-        <div class="provider-wrap">
-            <% x_axis.forEach((provider)=>{ %>
-                <div class="column provider" id="provider-<%- provider._key %>">
-                    <%- provider.name %>
-                </div>
-            <% }) %>
+        <div class="providers" id="provider-list">
+
+            <div class="filter">
+                <input type="text" app-change="filterProviders()" placeholder="Search...">
+            </div>
+
+            <div app-for="provider in view.calendar.filtered_providers" app-click="selectProvider(provider._id)" app-class="{'selected':provider._id == view.calendar.provider}" class="provider">
+                <span app-bind="provider.name" class="text-bold"></span>
+                <span class="text-grey">Violin Teacher</span>
+            </div>
+
         </div>
 
-        <div class="slots-wrap">
+        <div id="calendar-view" class="flex-8 calendar week col-<%- date_range.length %>" app-init="getAppointments(<% if (typeof from != 'undefined'){ %>'<%- from %>'<% } %><% if (typeof to != 'undefined'){ %>,'<%- to %>'<% } %>)">
 
-            <% x_axis.forEach((provider)=>{ %>
-                <div class="column" id="<%- provider._key %>">
+            <div class="week-day-wrap">
 
+                <div class="column time">
+
+                </div>
+
+                <% date_range.forEach((iso_day)=>{ %>
+
+                    <% var day = moment(iso_day) %>
+                    <div class="column week-day <% if (day.isSame(moment(), 'day')){ %>today<% } %><% if (day.isSame(moment(query),'day')){ %>selected<% } %>" id="provider-<%- day.format('YYYY_MM_DD') %>">
+                        <%- day.format('ddd') %> <b><%- day.format('D') %></b>
+                    </div>
+                <% }) %>
+            </div>
+
+            <div class="slots-wrap">
+
+                <div class="column time">
 
                     <% for (var hrs=7;hrs<=22;hrs++){ %>
 
@@ -35,21 +55,53 @@
 
                             <% if (mins < 10){mins = '0'+mins} %>
 
-                            <a class="slot" id="<%- provider._key %>-<%- hrs %>-<%- mins %>" title="<%- provider.name %> at <%- hrs %>:<%- mins %>" href="/dashboard/appointments/new?date=<%- part_iso %>T<%- hrs %>:<%- mins %>:00.000Z&provider=<%- provider._key %>"></a>
+                            <span class="time <% if (mins == 30){ %>half<% } %>"><% if (mins == '00' || mins == 30){ %><%- hrs %>:<%- mins %><% } %></span>
 
                         <% } %>
 
                     <% } %>
 
                 </div>
-            <% }) %>
 
-            <div app-for="appointment in appointments" class="appointment" app-attr="{'id':appointment._key}" app-click="goto('appointments', appointment._key)">
-                <div class="subject" app-bind="appointment.subject"></div>
-                <div class="time"></div>
-                <div class="description" app-bind="appointment.description"></div>
+                <% date_range.forEach((iso_day)=>{ %>
+
+                    <% var day = moment(iso_day); var day_id = day.format('YYYY_MM_DD') %>
+                    <div class="column <% if (day.isSame(moment(), 'day')){ %>today<% } %><% if (day.isSame(moment(query),'day')){ %>selected<% } %>" id="<%- day_id %>">
+
+
+                        <% for (var hrs=7;hrs<=22;hrs++){ %>
+
+                            <% if (hrs < 10){hrs = '0'+hrs} %>
+
+                            <% for (var mins=0;mins<=59;mins++){ %>
+
+                                <% if (mins < 10){mins = '0'+mins} %>
+
+                                <a class="slot" id="<%- day_id %>-<%- hrs %>-<%- mins %>" title="<%- day.format('Do MMM') %> at <%- hrs %>:<%- mins %>" app-click="toggleContext('context','<%- day_id %>-<%- hrs %>-<%- mins %>')"></a>
+
+                            <% } %>
+
+                        <% } %>
+
+                    </div>
+                <% }) %>
+
+                <div app-for="appointment in appointments" class="appointment" app-attr="{'id':appointment._key}" app-click="goto(appointment._id)">
+                    <div class="subject" app-bind="appointment.subject"></div>
+                    <div class="time"></div>
+                    <div class="description" app-bind="appointment.description"></div>
+                </div>
+
             </div>
 
         </div>
 
+    </div>
+
+    <div id="context" class="context dropdown text-left" style="display: none">
+        <% calendar_events.forEach((cal_event)=>{ %>
+            <div class="link" app-click="addCalendarEvent('<%- cal_event %>')">
+                Add <%- view.functions.depluralise(cal_event) %>
+            </div>
+        <% }) %>
     </div>

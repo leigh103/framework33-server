@@ -10,11 +10,11 @@
     background: $dashboard-color-primary;
     color: white;
     padding: 1rem;
-    margin-left: "-%s" % $dashboard-side-nav-width;
+    // margin-left: "-%s" % $dashboard-side-nav-width;
     transition: 0.5s height ease;
     overflow: hidden;
     line-height: 1rem;
-    border-radius: $border-radius;
+
 
     .subject, .time {
         font-weight: 600;
@@ -29,55 +29,22 @@
     }
 
     &.slots-1 {
-        padding: 0 1rem;
+        padding: 0rem 1rem;
         justify-content: center;
-        .subject {
-            height: 100%;
-            line-height: 1.1rem;
-        }
-
         .description, .time {
             display: none;
         }
-        .subject {
+
+        &.truncate .subject {
             width: 90%;
-            white-space: nowrap;
+            max-height: 2rem;
             overflow: hidden;
-            text-overflow: ellipsis;
+            position: relative;
         }
     }
 
     &.slots-2 {
-        padding: 0rem 1rem;
-        justify-content: center;
-        .description, .time {
-            display: none;
-        }
-        .subject {
-            width: 90%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    }
-
-    &.slots-3 {
-        padding: 0rem 1rem;
-        justify-content: center;
-        .description {
-            display: none;
-        }
-        .subject {
-            width: 90%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    }
-
-    &.slots-4 {
-        padding: 0rem 1rem;
-        justify-content: center;
+        justify-content: flex-start;
         .description {
             display: none;
         }
@@ -87,13 +54,34 @@
             max-height: 2rem;
             overflow: hidden;
             position: relative;
+        }
+    }
 
-            // &::before {
-            //     content: "...";
-            //     position: absolute;
-            //     bottom: 0;
-            //     right: 0;
-            // }
+    &.slots-3 {
+        justify-content: flex-start;
+        .description {
+            // display: none;
+        }
+
+        &.truncate .subject {
+            width: 90%;
+            max-height: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+    }
+
+    &.slots-4 {
+        justify-content: flex-start;
+        .description {
+            // display: none;
+        }
+
+        &.truncate .subject {
+            width: 90%;
+            max-height: 2rem;
+            overflow: hidden;
+            position: relative;
         }
     }
 
@@ -118,6 +106,7 @@
 
     &.grey {
         background: $dashboard-color-light-grey;
+        color: $dashboard-text-black;
     }
 
     &.dark-grey {
@@ -125,15 +114,15 @@
     }
 
     &.red {
-        background: $dashboard-color-red;
+        background: rgba(253,114,120,0.6);
     }
 
     &.green {
-        background: $dashboard-color-green;
+        background: rgba(114, 252, 132, 0.6);
     }
 
     &.blue {
-        background: $dashboard-color-blue;
+        background: rgba(114, 177, 252, 0.6);
     }
 
 }

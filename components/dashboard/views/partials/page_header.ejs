@@ -10,6 +10,13 @@
     <div class="title">
         <h1><%- title %></h1>
     </div>
+    <% if (typeof center_buttons != 'undefined'){ %>
+        <div class="center">
+
+            <%- include(center_buttons) %>
+
+        </div>
+    <% } %>
     <div class="buttons">
         <% if (typeof action_buttons != 'undefined'){ %>
             <% action_buttons.forEach(button => { %>
@@ -38,14 +45,17 @@
     <% } %>
 </div>
 
+<% if (typeof tabs != 'undefined'){ %>
 <div class="actions">
 
     <div class="tabs">
-        <% if (typeof tabs != 'undefined'){ %>
-            <% tabs.forEach(tab => { %>
-                <a href="<%- tab.href %>" class="<% if (view.current_sub_view.toLowerCase() == tab.text.toLowerCase()){ %>active<% } %>"><%- tab.text %><% if (tab.counter){ %> (<span app-bind="view.status_count_obj.<%- tab.counter %>"></span><span app-hide="view.status_count_obj.<%- tab.counter %>">0</span>)<% } %></a>
-            <% }) %>
-        <% } %>
+
+        <% tabs.forEach(tab => { %>
+            <a href="<%- tab.href %>" class="<% if (view.current_sub_view.toLowerCase() == tab.text.toLowerCase()){ %>active<% } %>"><%- tab.text %><% if (tab.counter){ %> (<span app-bind="view.status_count_obj.<%- tab.counter %>"></span><span app-hide="view.status_count_obj.<%- tab.counter %>">0</span>)<% } %></a>
+        <% }) %>
+
     </div>
 
 </div>
+
+<% } %>

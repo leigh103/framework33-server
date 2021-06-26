@@ -8,6 +8,10 @@ $column_width = 20rem
         &.loaded {
             opacity: 0
             height: 1px;
+
+            .loader {
+                display: none;
+            }
         }
     }
 
@@ -21,83 +25,186 @@ $column_width = 20rem
 
 }
 
+.dashboard .page-calendar {
+
+    .header {
+
+        .title {
+            flex: 0 0 14.5rem;
+        }
+
+        .center {
+            justify-content: flex-start;
+        }
+    }
+
+    date-picker {
+        .value {
+            background-color: white;
+            border-radius: 2rem;
+            font-weight: bold;
+        }
+    }
+
+    .providers {
+
+        flex: 0 0 16rem;
+
+        .filter {
+            height: $dashboard-mobile-tabs-height;
+            border-bottom: 1px solid $dashboard-color-mid-light-grey;
+
+            input {
+                height: 100%;
+                padding: 0 1.6rem;
+            }
+        }
+
+        .provider {
+            height: $dashboard-header-height;
+            padding: 0 1.6rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            font-size: 0.875rem;
+
+            &.selected {
+                background-color: white;
+            }
+        }
+    }
+}
+
 .calendar {
 
-    &.providers {
+    background-color: white;
+    position: relative;
 
-        &.day {
+    &.week {
 
-            height: 100vh;
-            width: 100vw;
-            overflow-x: auto;
-            overflow-y: hidden;
+        height: auto;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        margin-bottom: 2rem;
+
+        .week-day-wrap, .slots-wrap {
+            display: flex;
+            flex-direction: row;
+            width: auto;
             white-space: nowrap;
+        }
 
-            .provider-wrap, .slots-wrap {
-                display: flex;
+        .week-day-wrap {
+            height: $dashboard-mobile-tabs-height;
+            position: sticky;
+            top: 0px;
+            z-index: 3;
+            background-color: white;
+            border-bottom: 1px solid $dashboard-color-mid-light-grey
+
+            .time {
+                box-shadow: none;
+            }
+        }
+
+        .slots-wrap {
+            position: relative;
+            height: auto;
+            overflow-x: hidden;
+            overflow-y: scroll;
+
+        }
+
+        .column {
+
+            flex: 1 1 $column_width;
+            position: relative;
+            display: inline-block;
+            padding: 0.725rem 0;
+            -webkit-box-shadow: 1px 0px 0px 0px $dashboard-color-mid-light-grey;
+            -moz-box-shadow: 1px 0px 0px 0px $dashboard-color-mid-light-grey;
+            box-shadow: 1px 0px 0px 0px $dashboard-color-mid-light-grey;
+
+            &.week-day {
+                height: 100%;
+                display: inline-flex;
                 flex-direction: row;
-                width: auto;
-                white-space: nowrap;
-            }
+                align-items: center;
+                justify-content: flex-start;
+                padding: 0 1.5rem;
+                box-shadow: none;
+                font-size: 0.825rem;
 
-            .provider-wrap {
-                height: 4rem;
-            }
-
-            .slots-wrap {
-                position: relative;
-                height: 100vh;
-                overflow-x: hidden;
-                overflow-y: scroll;
-            }
-
-            &.loaded {
-                overflow-y: scroll;
-            }
-
-            for $i in (1..30){
-
-                &.col-{$i} {
-                    .provider-wrap, .slots-wrap {
-                        min-width: 'calc(100vw - %s)' % $dashboard-side-nav-width;
-                        width: "calc((%s * %s) + %s)" % ($column_width $i $border-radius)
-                    }
-                }
-
-            }
-
-            .column {
-                flex: 1 1 $column_width;
-                position: relative;
-                display: inline-block;
-                padding-right: 1rem;
-
-                &.provider {
-                    height: 100%;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: flex-start;
-                }
-
-                .slot {
-                    display: block;
-                    height: 1px;
-                    width: 100%;
-
-                    &:nth-child(15n){
-                        -webkit-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);
-                        -moz-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);
-                        box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);
-                    }
-
-                    &:nth-child(60n){
-                        -webkit-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.2);
-                        -moz-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.2);
-                        box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.2);
-                    }
+                b {
+                    margin-left: 0.2rem;
                 }
             }
 
+            &.time {
+                flex: 0 0 4.375rem;
+                padding: 0;
+                text-align: right
+            }
+
+        }
+
+    }
+
+
+
+    &.loaded {
+        overflow-y: scroll;
+    }
+
+    .column {
+
+        &.today {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        &.selected {
+            background-color: rgba(255,255,255,0.5);
+        }
+
+        .slot, .time {
+
+            display: block;
+            height: 2px;
+            width: 100%;
+
+        }
+
+        .slot {
+
+            // &:first-child {
+            //     -webkit-box-shadow: 0px -1px 0px 0px $dashboard-color-mid-light-grey;
+            //     -moz-box-shadow: 0px -1px 0px 0px $dashboard-color-mid-light-grey;
+            //     box-shadow: 0px -1px 0px 0px $dashboard-color-mid-light-grey;
+            // }
+            //
+            // &:nth-child(15n){
+            //     -webkit-box-shadow: 0px 1px 0px 0px $dashboard-color-mid-light-grey;
+            //     -moz-box-shadow: 0px 1px 0px 0px $dashboard-color-mid-light-grey;
+            //     box-shadow: 0px 1px 0px 0px $dashboard-color-mid-light-grey;
+            // }
+            //
+            // &:nth-child(60n){
+            //     -webkit-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.2);
+            //     -moz-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.2);
+            //     box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.2);
+            // }
+        }
+
+        .time {
+            font-size: 0.75rem;
+            text-align: center;
+
+            &.half {
+                color: #B2B7BA
+            }
         }
 
     }

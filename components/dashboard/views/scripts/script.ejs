@@ -89,6 +89,8 @@
 
                 if (typeof key == 'number'){
                     scope.view.key = key
+                } else if (typeof key == 'string'){
+                    scope.view.id = key
                 } else if (typeof key == 'undefined'){
                     scope.view.key = 0
                 }
