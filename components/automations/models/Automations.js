@@ -454,11 +454,13 @@
 
             let evnts = await DB.read(this.settings.collection).where(['recur has value']).get()
 
-            evnts.map((evnt)=>{
-                if (evnt.trigger && evnt.recur){
-                    new Automations(evnt.trigger).recur(evnt.recur)
-                }
-            })
+            if (evnts.length > 0){
+                evnts.map((evnt)=>{
+                    if (evnt.trigger && evnt.recur){
+                        new Automations(evnt.trigger).recur(evnt.recur)
+                    }
+                })
+            }
 
         }
 

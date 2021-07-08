@@ -1,7 +1,7 @@
-<a href="/<% if (typeof parent_category != 'undefined'){ %><%- parent_category.slug %>/<% } %><%- category.slug %>" class="category thumb">
+<a href="/<%- view.ecommerce.shop.slug %>/<% if (typeof parent_category != 'undefined'){ %><%- parent_category.slug %>/<% } %><%- category.slug %>" class="category thumb">
 
     <div class="thumbnail">
-        <img src="<%- category.image %>">
+        <img src="<% if (category.image){ %><%- category.image %><% } else { %>/images/Category_Placeholder.jpg<% } %>">
     </div>
     <div class="details">
         <h2 class="h4 slab text-weight-500"><%- category.name %></h2>

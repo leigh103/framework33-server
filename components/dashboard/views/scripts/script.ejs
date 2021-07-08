@@ -14,6 +14,8 @@
                 }
             }
 
+            <% if (typeof query != 'undefined'){ %>scope.view.query = '<%- query %>'<% } %>
+
             scope.view.icons = ['alarm','arrowdown','arrowleft','arrowup','arrowright','bell','bin','binoculars','box','bulletlist','calendar','cardpayment','clock','cmslogo','contentbanner','contentbutton','contentfeatures','contenttext','contenttitle','contentvideo','crosshairs','duplicate','edit','envelope','eye','gauge','handstop','help','house','link','mapmarker','mapmarkerundo','megaphone','merge','noentry','note','person','piechart','plus','pricetag','pulse','repeatarrow','rocket','scissors','screen','search','settings','shoppingbasket','shoppingtrolley','sidemenucollapse','sidemenuexpand','signin','signout','speechbubble1','speechbubble2','stopwatch','suppliers','swap','threedots','thumbsdown','thumbsup','tick','tickcircle','unlink','voucher','x','xcircle']
 
             scope.exec_data = {}
@@ -85,7 +87,7 @@
 
                 el.style.top = top+'px'
                 el.style.left = left+'px'
-                el.style.width = target_pos.width+'px'
+                // el.style.width = target_pos.width+'px'
 
                 if (typeof key == 'number'){
                     scope.view.key = key
@@ -251,6 +253,17 @@
             scope.editItem = function(collection){
 
                 window.location.href = '/dashboard/'+collection+'/'+scope[collection][scope.view.key]._key
+
+            }
+
+            scope.duplicateItem = function(collection){
+
+                scope.duplicate(collection, scope[collection][scope.view.key]).then((data)=>{
+                    contextCloseAll()
+                    scope.notify('Duplicated Successfully')
+                }).catch((err)=>{
+                    scope.notify(err,'error')
+                })
 
             }
 

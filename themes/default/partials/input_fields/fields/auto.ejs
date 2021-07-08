@@ -31,8 +31,8 @@
 <div class="input-<%- item.input_type %> field-<%- obj_prefix %><%- item.name %>">
     <%- max_characters %>
 
-    <% if (item.input_type == 'checkbox' && item.placeholder){ %>
-        <label><%- view.functions.parseName(item.placeholder) %></label>
+    <% if (item.input_type == 'checkbox' && item.label){ %>
+        <label><%- view.functions.parseName(item.label) %></label>
     <% } else { %>
         <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
     <% } %>

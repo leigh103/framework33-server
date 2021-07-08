@@ -144,9 +144,9 @@
 
                     filters.map((filter) => {
 
-                        let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like|exists|not exists)\s*["|']*([^'"]*)["|']*/i)
+                        let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists|has value|has no value)\s*["|']*([^'"]*)["|']*/i)
 
-                        if (op[3]){ // if middle item is operator
+                        if (typeof op[3] != 'undefined'){ // if middle item is operator
 
                             if (op[2] == '==' && o[op[1]] == op[3]){
                                 match_count++
@@ -218,9 +218,9 @@
 
                     filters.map((filter) => {
 
-                        let op = filter.match(/["|']*([a-zA-Z_\-0-9]*)["|']*\s*([!=<>][=]*|like|not like|not exists)\s*["|']*([^'"]*)["|']*/i)
+                        let op = filter.match(/["|']*([a-zA-Z_\-0-9\.]*)["|']*\s*([!=<>][=]*|like|not like|not exists|has value|has no value)\s*["|']*([^'"]*)["|']*/i)
 
-                        if (op[3]){ // if middle item is operator
+                        if (typeof op[3] != 'undefined'){ // if middle item is operator
 
                             if (op[2] == '==' && o[op[1]] == op[3]){
                                 match = true
@@ -279,9 +279,9 @@
 
         }
 
-        limit(limit) {
+        limit(lmt, end) {
 
-            this.result = this.result.slice(0,limit)
+            this.result = this.result.slice(lmt,end)
             return this
 
         }
@@ -406,6 +406,14 @@
             } else {
                 return this.result
             }
+
+        }
+
+        async collect(field){
+
+        //    console.log(this.result)
+
+            return  this.result
 
         }
 

@@ -1,7 +1,6 @@
-<section class="block-model-grid <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Collection Carousel" app-block-description="This is a product block which displays collection items in a row" app-init="get('product_collections','<%- data.api_address %>/get-items','collection_items')" app-input="collection_select" app-field="api_address">
+<section class="block-model-grid <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Collection Carousel" app-block-description="This is a product block which displays collection items in a row" app-init="get('product_collections','<%- data.api_address %>/get-items?limit=4','collection_items')" app-input="text" app-field="api_address">
 
-
-        <div class="contain">
+        <div class="contain <% if (typeof styling != 'undefined' && styling.container){ %><%- styling.container.class %><% } %> <% if (styling.container.alignment){ %><%- styling.container.alignment %><% } else { %>align-center<% } %>">
 
             <% if (data.heading){ %><h2 class="heading" app-field="heading" app-input="text"><%- data.heading %></h2><% } %>
             <div class="flex">

@@ -1,0 +1,226 @@
+.block {
+
+    &-text {
+
+        &-hero {
+
+            position: relative;
+            height: auto;
+            display: block;
+            overflow: hidden;
+
+            .background {
+
+                background-position: center;
+                background-size: cover;
+                background-repeat: no-repeat;
+
+            }
+
+            .contain {
+
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                min-height: 600px;
+
+                 & > div {
+                     width: 50%;
+                 }
+
+                &.align-center {
+                    text-align: center;
+                    justify-content: center;
+                }
+
+                &.align-right {
+                    text-align: right;
+                    justify-content: flex-end;
+                }
+
+            }
+
+            @media $small {
+                height: 80vh;
+            }
+
+            .btn {
+                background-color: $color-primary;
+                height: 50px;
+                border-radius: 25px;
+                font-size: 16px;
+                font-weight: 500;
+            }
+        }
+
+        &-single-col {
+            padding: 6rem 0;
+
+            .contain {
+
+                h3, h4, .text {
+                    margin-top: 2rem;
+                }
+                a.btn {
+                    margin-top: 2rem;
+                }
+
+                .text {
+                    width: 75%;
+
+                    @media $small {
+                        width: 100%;
+                    }
+                }
+
+            }
+
+        }
+
+        &-two-col {
+
+            padding: 6rem 0;
+            line-height: 1.4em;
+
+            h2 {
+                font-size: 3.125rem;
+                width: 100%;
+                margin-bottom: 1.5rem;
+                line-height: 1em;
+
+                @media $medium {
+                    width: 100%;
+                }
+                @media $small {
+                    width: 100%;
+                }
+            }
+
+            h3 {
+                font-size: 1.875rem;
+                width: 100%;
+                margin-bottom: 2rem;
+                line-height: 1.2em;
+
+                @media $medium {
+                    width: 100%;
+                }
+                @media $small {
+                    width: 100%;
+                }
+            }
+
+            .grid {
+                .col {
+                    display: flex;
+                    align-items: center;
+                    text-align: left;
+                }
+            }
+
+            .contain {
+                &.align-left {
+                    .col {
+                        text-align: left;
+                    }
+                }
+                &.align-center {
+                    .col {
+                        text-align: center;
+                    }
+                }
+                &.align-right {
+                    .col {
+                        text-align: right;
+                    }
+                }
+            }
+
+            .asset-wrap {
+                min-height: 5rem;
+                height: 100%;
+
+                @media $small {
+                    min-height: 10rem;
+                }
+            }
+
+        }
+
+        &-three-col {
+
+            padding: 6rem 0;
+
+            .contain {
+
+                .grid {
+
+                    .col {
+
+                        color: $text-black;
+                        position: relative;
+                        background-color: white;
+                        padding: 2rem 2rem 2rem 2rem;
+                        border-radius: $border-radius;
+
+                        h3 {
+                            margin-bottom: 1rem;
+                        }
+
+                    }
+
+                    &.with-icons {
+                        padding-top: 3rem;
+
+                        .col {
+                            padding: 3rem 2rem 2rem 2rem;
+                        }
+                    }
+
+
+                    .icon-wrap {
+                        position: absolute;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        top: -3rem;
+                        left: calc(50% - 3rem);
+                        background-color: white;
+                        border-radius: 50%;
+                        height: 6rem;
+                        width: 6rem;
+
+                        .icon {
+                            height: 3rem;
+                            width: 3rem;
+                        }
+
+                    }
+
+                }
+
+                &.align-left {
+                    text-align: left;
+
+                    .icon-wrap {
+                        left: 0;
+                    }
+                }
+                &.align-center {
+                    text-align: center;
+                }
+                &.align-right {
+                    text-align: right;
+                    .icon-wrap {
+                        left: auto;
+                        right: 0;
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+}

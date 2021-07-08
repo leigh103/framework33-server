@@ -16,13 +16,13 @@ const express = require('express'),
         protected_guards:['admin'],
         menu: {
             side_nav: [
-                {link:'Orders',slug: '/dashboard/transactions/new', icon:'<span class="icon shoppingtrolley"></span>', weight:4, protected_guards:['admin'],subitems:[
-                    {link:'Incomplete Carts',slug: '/dashboard/transactions/incomplete', icon:'<span class="icon shoppingtrolley"></span>', weight:9},
+                {link:'Orders',slug: '/dashboard/transactions/new', icon:'<span class="icon shoppingbag"></span>', weight:3, protected_guards:['admin'],subitems:[
+                    {link:'Incomplete Carts',slug: '/dashboard/transactions/incomplete', icon:'<span class="icon shoppingbag"></span>', weight:9},
                     // {link:'New',slug: '/dashboard/transactions/paid', weight:2},
                     // {link:'Processing',slug: '/dashboard/transactions/processing', weight:3},
                     // {link:'Shipped',slug: '/dashboard/transactions/shipped', weight:4},
-                    {link:'Archive',slug: '/dashboard/transactions/completed', icon:'<span class="icon shoppingtrolley"></span>', weight:5},
-                    {link:'Settings',slug: '/dashboard/transactions/settings', icon:'<span class="icon shoppingtrolley"></span>', weight:7}
+                    {link:'Archive',slug: '/dashboard/transactions/completed', icon:'<span class="icon shoppingbag"></span>', weight:5},
+                    {link:'Settings',slug: '/dashboard/transactions/settings', icon:'<span class="icon shoppingbag"></span>', weight:7}
                 ]}
             ],
             nav: [

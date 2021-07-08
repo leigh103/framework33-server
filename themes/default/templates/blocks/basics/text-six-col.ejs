@@ -1,0 +1,18 @@
+<section class="block-image-six-col <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="Image Six Column" app-block-description="This is a six column image block" app-allow-styling="true">
+
+    <div class="contain <%- styling.container.class %>  <% if (styling.container.alignment){ %><%- styling.container.alignment %><% } else { %>align-left<% } %>">
+
+        <% if (data.sub_heading){ %><h3 class="" app-input="text" app-field="sub_heading"><%- data.sub_heading %></h3><% } %>
+
+        <div class="flex">
+            <% if (data.image_1){ %><div><img src="<%- data.image_1 %>" app-input="image" app-field="image_1"></div><% } %>
+            <% if (data.image_2){ %><div><img src="<%- data.image_2 %>" app-input="image" app-field="image_2"></div><% } %>
+            <% if (data.image_3){ %><div><img src="<%- data.image_3 %>" app-input="image" app-field="image_3"></div><% } %>
+            <% if (data.image_4){ %><div><img src="<%- data.image_4 %>" app-input="image" app-field="image_4"></div><% } %>
+            <% if (data.image_5){ %><div><img src="<%- data.image_5 %>" app-input="image" app-field="image_5"></div><% } %>
+            <% if (data.image_6){ %><div><img src="<%- data.image_6 %>" app-input="image" app-field="image_6"></div><% } %>
+        </div>
+
+    </div>
+
+</section>

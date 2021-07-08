@@ -11,9 +11,6 @@
         <% if (card){ %>
             <% if (typeof user != 'undefined' && user.guard && card.protected_guards && card.protected_guards.indexOf(user.guard) >= 0 || !card.protected_guards){ %>
                 <div id="<%- card.link %>-card" class="card" <% if (card.query){ %>app-init="getDashboardData('<%- card.query %>','<%- card.link %>-card')"<% } %> <% if (card.slug){ %>app-click="goto('<%- card.slug %>')"<% } %>>
-                    <div class="image">
-                        <img src="/images/Bullseye-Gradient.svg">
-                    </div>
                     <div class="details">
                         <h4><%- card.link %></h4>
                         <% if (card.query){ %>

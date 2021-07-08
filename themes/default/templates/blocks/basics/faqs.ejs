@@ -1,0 +1,23 @@
+<section class="block-text-single-col <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<% if (typeof styling != 'undefined'){ %><%- functions.parseStyle(styling) %><% } %>" app-block="FAQ Section" app-block-description="Add FAQs to your page" app-allow-styling="true">
+
+    <div class="contain <%- styling.container.class %>">
+
+            <div class="" app-input="faq_select" app-field="FAQs">
+
+                <% if (typeof data.faqs == 'object'){ %>
+
+                    <% data.faqs.forEach((faq) => { %>
+                        <%- JSON.stringify(faq) %>
+
+                        <%- include(view.site.theme_path+'/partials/faq.ejs', {faq:faq}) %>
+
+                    <% }) %>
+
+                <% } %>
+
+            </div>
+
+
+    </div>
+
+</section>

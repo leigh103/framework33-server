@@ -73,6 +73,7 @@ const express = require('express'),
         app.use(getTemplateData)
 
         if (global.config.site.self_serve === true){
+            log('Self serve enabled')
             app.use(express.static('public'))
         }
 

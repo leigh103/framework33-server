@@ -1,0 +1,84 @@
+<% layout(config.site.dashboard_theme+'/fullscreen.ejs') %>
+
+
+<% if (typeof links == 'object'){ %>
+
+    <% links.forEach((link) => { %>
+        <a class="block" href="/dashboard/pages/settings/styling/<%- link.replace(/\.styl/,'') %>"><%- link.replace(/\.styl/,'') %></a>
+    <% }) %>
+
+<% } else { %>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/languages/stylus.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.0/components/prism-stylus.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.0/plugins/match-braces/prism-match-braces.min.js"></script> -->
+
+    <div class="page bg-light-grey text-left" app-init="setUpNew()">
+
+        <div class="h-100 editor-wrap">
+
+            <div class="dashboard loaded">
+
+                <div class="menu-wrap">
+
+                    <div class="menu">
+
+                        <div class="header">
+                            <div class="burger visible" app-click="view.side_nav = !view.side_nav">
+                                <a href="/dashboard/pages/styling"><span class="icon arrowleft left black"></span></a>
+                            </div>
+                            <div class="title">
+                                <h1><a href="/dashboard/pages/styling" class="capitalise"><%- view.functions.parseName(path) %></a></h1>
+                            </div>
+                            <div class="flex-middle">
+                                <div class="preview-link mr-05" app-click="resize('mobile')">
+                                    <span class="icon previewmobile black"></span>
+                                </div>
+                                <div class="preview-link mr-05" app-click="resize('tablet')">
+                                    <span class="icon previewtablet rotate-270 black" id="resize-tablet"></span>
+                                </div>
+                                <div class="preview-link" app-click="resize('desktop')">
+                                    <span class="icon previewdesktop black"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fields">
+
+                            <pre class="m-0"><code class="language-stylus p-2" spellcheck="false" contenteditable="true" id="code"><%- stylesheet %></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="menu-footer">
+                        <div class="flex-1">
+                            <input type="text" app-change="updateIframe()" class="flex-5" placeholder="Enter page url, eg, /shop">
+                        </div>
+                        <div class="flex-none text-right">
+                            <button class="btn bg-secondary" app-click="saveStyle()">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+
+        <div class="preview-wrap vh-100 overflow-y relative flex-middle" >
+
+                    <div class="loader layer-1">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <iframe id="frame-preview" width="100%" height="100%" frameborder="0" class="layer-4"></iframe>
+                </div>
+            </div>
+
+
+    </div>
+
+
+
+<% } %>

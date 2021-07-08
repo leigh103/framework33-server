@@ -21,8 +21,8 @@
 
 <div class="input-select field-<%- item.name %>">
 
-    <% if (item.placeholder){ %>
-        <label><%- view.functions.parseName(item.placeholder) %></label>
+    <% if (item.label){ %>
+        <label><%- view.functions.parseName(item.label) %></label>
     <% } else { %>
         <label><%- view.functions.parseName(item.name) %><%- max_chars_text %></label>
     <% } %>

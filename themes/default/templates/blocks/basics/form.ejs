@@ -19,11 +19,11 @@
 
                             <% if (field.input_type == 'textarea'){ %>
 
-                                <%- include(view.site.theme_path+'/partials/form_fields/textarea.ejs', {field:field, form_name: form_name}) %>
+                                <%- include(view.site.theme_path+'/partials/input_fields/fields/textarea.ejs', {field:field, form_name: form_name}) %>
 
                             <% } else { %>
 
-                                <%- include(view.site.theme_path+'/partials/form_fields/auto.ejs', {field:field, form_name: form_name}) %>
+                                <%- include(view.site.theme_path+'/partials/input_fields/fields/auto.ejs', {field:field, form_name: form_name}) %>
 
                             <% } %>
 

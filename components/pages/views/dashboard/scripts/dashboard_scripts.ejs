@@ -25,6 +25,18 @@
 
             }
 
+            scope.createPageFromTemplate = function(table){
+                window.location.href = '/dashboard/pages/website/new?template='+scope[table][scope.view.key]._key
+            }
+
+            scope.createTemplateFromPage = function(table){
+                scope.post('pages-templates',scope[table][scope.view.key]).then((data) => {
+                    window.location.href = '/dashboard/pages/templates'
+                }).catch((err)=>{
+                    scope.notify(err,'error')
+                })
+            }
+
 
         }
 

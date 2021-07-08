@@ -1,14 +1,14 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class PageTypes extends Models {
+    class PagesCategories extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'page_types',
+                collection: 'pages_categories',
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Page Type', type:'string', required:true},
                     {name:'slug',input_type:'text',placeholder:'Page Archive URL', type:'string', required:false},
@@ -69,6 +69,6 @@
 
     }
 
-    new PageTypes().init()
+    new PagesCategories().init()
 
-    module.exports = PageTypes
+    module.exports = PagesCategories

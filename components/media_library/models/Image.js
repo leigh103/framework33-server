@@ -176,7 +176,7 @@
 
                 if (this.ext == 'jpg'){
 
-                    if ((await sharp_img.metadata()).width > 2000 || this.resize) {
+                    if ((await sharp_img.metadata()).width > 2000 || typeof this.file_resize == 'object') {
                         await sharp_img
                             .rotate()
                             .resize(resize)
@@ -199,7 +199,7 @@
 
                 if (this.ext == 'png'){
 
-                    if ((await sharp_img.metadata()).width > 2000 || this.resize) {
+                    if ((await sharp_img.metadata()).width > 2000 || typeof this.file_resize == 'object') {
                         await sharp_img
                             .rotate()
                             .resize(resize)

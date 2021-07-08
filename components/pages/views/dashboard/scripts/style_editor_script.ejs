@@ -1,0 +1,145 @@
+
+    <script>
+
+        extend.style_editor = function(){
+
+            scope.saveStyle = function(){
+
+                let code = document.getElementById('code').innerText
+
+                let payload = {
+                    path: '<%- path.replace(/\.styl/,'') %>',
+                    code: code
+                }
+
+                scope.post('/dashboard/pages/save-style', payload).then((result)=>{
+
+                    hljs.highlightAll();
+                    scope.updateIframe()
+                    scope.notify('Saved!')
+
+
+                }).catch((err)=>{
+                    console.log(err)
+                    scope.notify(err,5,'error')
+                })
+
+            }
+
+            scope.updateIframe = function(init){
+
+                let preview = document.getElementById('frame-preview')
+                preview.style.display = 'none'
+
+                if (this.target && this.target.value){
+                    preview.setAttribute('src','<%- view.site.url %>'+this.target.value)
+                } else if (init === true){
+                    preview.setAttribute('src','<%- view.site.url %>/')
+                } else {
+
+                }
+
+                setTimeout(function(){
+                    preview.contentWindow.location.reload()
+                    setTimeout(function(){
+                        preview.style.display = 'block'
+                    },300)
+                },1000)
+
+            }
+
+            scope.resize = function(size){
+
+
+                let preview = document.getElementById('frame-preview'),
+                    tablet_button = document.getElementById('resize-tablet')
+
+                if (size == 'mobile'){
+                    preview.style.width = '375px'
+                    preview.style.height = '667px'
+                } else if (size == 'tablet' && scope.view.responsive != 'tablet'){
+                    preview.style.width = '1024px'
+                    preview.style.height = '768px'
+                    tablet_button.classList.add('rotate-270')
+
+                } else if (size == 'tablet' && scope.view.responsive == 'tablet'){
+                    preview.style.width = '768px'
+                    preview.style.height = '1024px'
+                    size = ''
+                    tablet_button.classList.remove('rotate-270')
+
+                } else {
+                    preview.style.height = '100%'
+                    preview.style.width = '100%'
+                }
+
+                scope.view.responsive = size
+
+            }
+
+            scope.updateIframe(true)
+
+
+        }
+
+        document.getElementById('code').addEventListener('click', e => {
+            // var editor = document.getElementById('code');
+            // var doc = editor.ownerDocument.defaultView;
+            // var sel = doc.getSelection();
+            // console.log(sel, editor.textContent)
+        })
+
+        document.getElementById('code').addEventListener('keydown', e => {
+
+            if (e.key == 'Tab'){
+                e.preventDefault()
+                var editor = e.target;
+                var doc = editor.ownerDocument.defaultView;
+                var sel = doc.getSelection();
+                var range = sel.getRangeAt(0);
+
+                var tabNode = document.createTextNode("    ");
+                range.insertNode(tabNode);
+
+                range.setStartAfter(tabNode);
+                range.setEndAfter(tabNode);
+                sel.removeAllRanges();
+                sel.addRange(range);
+
+            } else if (e.key == 'Enter'){
+
+                e.preventDefault()
+                var editor = e.target;
+                var doc = editor.ownerDocument.defaultView;
+                var sel = doc.getSelection();
+                var range = sel.getRangeAt(0);
+
+                var indent_spaces = sel.focusNode.data.split(/[\s]/),
+                    indent_str = '   '
+
+                if (indent_spaces){
+                    for (var i in indent_spaces){
+                        if (indent_spaces[i].length == 0){
+                            indent_str += " "
+                        }
+                        if (indent_spaces[i] == "}"){
+                            break;
+                        }
+                    }
+                }
+
+                var tabNode = document.createTextNode("\n");
+                range.insertNode(tabNode);
+
+                range.setStartAfter(tabNode);
+                range.setEndAfter(tabNode);
+                sel.removeAllRanges();
+                sel.addRange(range);
+
+            }
+
+
+
+        })
+
+    </script>

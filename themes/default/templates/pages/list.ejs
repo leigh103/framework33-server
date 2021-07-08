@@ -5,12 +5,12 @@
 
     <div class="contain text-left pt-5">
 
-        <h1 class="capitalise"><%- page_type.name %></h1>
+        <h1 class="capitalise"><%- pages_category.name %></h1>
 
         <% if (articles != 'undefined'){ %>
             <% articles.forEach((article,i)=>{ %>
 
-                <a href="<%- view.meta.url %>/<%- page_type.slug %>/<%- article.slug %>" class="flex mt-2">
+                <a href="<%- view.meta.url %>/<%- pages_category.slug %>/<%- article.slug %>" class="flex mt-2">
 
                     <div class="flex-1">
                         <% if (typeof article.meta == 'object' && article.meta.image){ %><img src="<%- article.meta.image %>" class="object-fit"><% } %>

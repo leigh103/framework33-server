@@ -17,8 +17,8 @@ const express = require('express'),
         views: 'pages/views',
         menu: {
             side_nav: [
-                {link:'Pages',slug: '/dashboard/pages', protected_guards:['admin'], weight:2, icon:'<span class="icon screen"></span>', subitems:[
-                    {link:'Pages Types',slug: '/dashboard/pages/pages-types', weight:1}
+                {link:'Pages',slug: '/dashboard/pages/website', protected_guards:['admin'], weight:7, icon:'<span class="icon screen"></span>', subitems:[
+                    {link:'Pages Types',slug: '/dashboard/pages/categories', weight:1}
                 ]}
             ]
         }
@@ -37,20 +37,20 @@ const express = require('express'),
         //                     });
         // },
 
-        findForms: (page_blocks) => {
+        findForms: (pages_blocks) => {
 
             return new Promise( async (resolve, reject) => {
 
                 let forms = {}
 
-                for (let block of page_blocks){
+                for (let block of pages_blocks){
                     if (block.block == 'form'){
 
                         for (let field of block.fields){
 
                             if (field.field == 'form'){
 
-                                let form = await new PageForms().find(field.value)
+                                let form = await new PagesForms().find(field.value)
                                 if (form && form.data && form.data._key){
                                     forms[form.data._key] = form.data
                                 }
@@ -68,13 +68,13 @@ const express = require('express'),
 
         },
 
-        findFAQs: (page_blocks) => {
+        findFAQs: (pages_blocks) => {
 
             return new Promise( async (resolve, reject) => {
 
                 let faqs = {}
 
-                for (let block of page_blocks){
+                for (let block of pages_blocks){
                     if (block.block == 'FAQs'){
 
                         for (let field of block.fields){
@@ -226,9 +226,40 @@ const express = require('express'),
 
         },
 
+        getStylesheets: async () => {
+
+            return new Promise( async (resolve, reject) => {
+
+                await glob(config.site.theme_path+'/css/partials/*.styl', async (er, files) => {
+
+                    files = files.map((file) => {
+                        return file.split('/').pop()
+                    })
+                    resolve(files)
+
+                })
+
+            })
+
+        },
+
+        getStylesheet: async (path) => {
+
+            return new Promise( async (resolve, reject) => {
+
+                fs.readFile(config.site.theme_path+'/css/partials/'+path, 'utf-8', function(err, data){
+
+                    resolve(data)
+
+                })
+
+            })
+
+        },
+
         getRecent:async (type,key) => {
 
-            let articles = await new Pages().all(['type == '+type]).get(),
+            let articles = await new PagesWebsite().all(['type == '+type]).get(),
                 article_list = ''
 
             articles.forEach((article)=>{
@@ -253,16 +284,26 @@ const express = require('express'),
     let data = {
         shop: view.ecommerce.shop,
         meta: {},
-        model: new Pages().settings,
-        tabs: [
-            {href:'/dashboard/pages', text: 'Pages'},
-            {href:'/dashboard/pages/settings/page-types', text: 'Page Types'},
-            {href:'/dashboard/pages/settings/forms', text: 'Forms'},
-            {href:'/dashboard/pages/settings/menus', text: 'Menus'},
-            {href:'/dashboard/pages/settings/testimonials', text: 'Testimonials'},
-            {href:'/dashboard/pages/settings/faqs', text: 'FAQs'}
+        model: new PagesWebsite().settings,
+        regular_tabs: [
+            {href:'/dashboard/pages/website', text: 'Website'},
+            {href:'/dashboard/pages/blog', text: 'Blog'},
+            {href:'/dashboard/pages/elements', text: 'Elements'},
+            {href:'/dashboard/pages/templates', text: 'Templates'},
+            {href:'/dashboard/pages/categories', text: 'Categories'},
+            {href:'/dashboard/pages/styling', text: 'CSS'}
+        ],
+        element_tabs: [
+            {href:'/dashboard/pages/menus', text: 'Menus'},
+            {href:'/dashboard/pages/forms', text: 'Forms'},
+            {href:'/dashboard/pages/testimonials', text: 'Testimonials'},
+            {href:'/dashboard/pages/faqs', text: 'FAQs'}
+        ],
+        action_buttons: [
+            {href:'/dashboard/media-library',text:'Media'}
         ]
     },
+
     blocks = []
 
     routes.get('*', (req, res, next) => {
@@ -274,9 +315,16 @@ const express = require('express'),
         next()
     })
 
-    routes.get('/dashboard/:page(page_*)', async(req, res) => {
+    routes.get('/dashboard/pages', async(req, res) => {
 
-        let url = '/dashboard/pages/settings/'+req.params.page.replace(/page_/,'')
+        let url = '/dashboard/pages/website'
+        res.redirect(url)
+
+    })
+
+    routes.get('/dashboard/:page(pages_*)', async(req, res) => {
+
+        let url = '/dashboard/pages/'+req.params.page.replace(/pages_/,'')
         res.redirect(url)
 
     })
@@ -292,7 +340,7 @@ const express = require('express'),
             data.cart = await new Cart().init(req)
         }
 
-        let article = await new Pages().find(['slug == homepage','status == published'])
+        let article = await new PagesWebsite().find(['slug == homepage','status == published'])
 
         if (!article.data || article.error){
 
@@ -394,7 +442,68 @@ const express = require('express'),
 
     })
 
-    routes.get('/dashboard/pages/settings/:page/:key', async(req, res) => {
+    routes.get('/dashboard/pages/styling', async(req, res) => {
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        view.current_view = 'pages'
+        view.current_sub_view = 'CSS'
+        data.title = 'Pages'
+        data.table = false
+        data.model = false
+
+        data.table = 'stylesheet'
+        data.edit_link = 'pages/settings/styling'
+
+        data.links = await functions.getStylesheets()
+
+        res.render(settings.views+'/dashboard/style_list.ejs',data)
+
+    })
+
+    routes.get('/dashboard/pages/styling/:path', async(req, res) => {
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs', settings.views+'/dashboard/scripts/style_editor_script.ejs']
+        data.include_styles = [ settings.views+'/dashboard/styles/style.ejs',settings.views+'/dashboard/styles/highlightjs.ejs']
+        view.current_view = 'pages'
+        data.links = ''
+        data.path = req.params.path
+        data.stylesheet = await functions.getStylesheet(data.path+'.styl')
+
+        res.render(settings.views+'/dashboard/style_editor.ejs',data)
+
+    })
+
+    routes.post('/dashboard/pages/save-style', async(req, res) => {
+
+        fs.writeFile(config.site.theme_path+'/css/partials/'+req.body.path+'.styl', req.body.code, function (err) {
+            if (err) return res.json({saved:false, error:err});
+            res.json({saved:true})
+        })
+
+    })
+
+    routes.get('/dashboard/pages/elements', async (req, res) => {
+
+        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.query = ''
+        view.current_view = 'pages'
+        view.current_sub_view = 'elements'
+        data.title = 'Pages'
+        data.table = false
+        data.model = false
+
+        data.cards = [
+            {link:'Menus',slug:'pages/menus', description:'Add or edit menus on your website', weight:2, button_text: 'Manage Menus', protected_guards:['admin']},
+            {link:'Forms',slug:'pages/forms', description:'Add or edit forms to include on your website pages', weight:3, button_text: 'Manage Forms', protected_guards:['admin']},
+            {link:'Testimonials',slug:'pages/testimonals', description:'Add or edit customer testimonials', button_text: 'Manage Testimonials', weight:4, protected_guards:['admin']},
+            {link:'FAQs',slug:'pages/faqs', description:'Add or edit FAQs', weight:5, button_text: 'Manage FAQs', protected_guards:['admin']}
+        ]
+
+        res.render(settings.views+'/dashboard/elements.ejs',data)
+
+    })
+
+    routes.get('/dashboard/pages/:page/:key', async(req, res) => {
 
         data.include_scripts = ['dashboard/views/scripts/script.ejs']
         data.query = ''
@@ -405,56 +514,97 @@ const express = require('express'),
              title_prefix = 'Edit'
         }
 
-        if (req.params.page == 'types'){
+        if (req.params.page == 'categories'){
 
-            data.title = title_prefix+' Page Types'
-            data.table = 'page_types'
-            data.model = new PageTypes()
-            data.key = req.params.key
+            data.title = title_prefix+' Category'
+            data.table = 'pages_categories'
+            data.model = new PagesCategories()
+
+        } else if (req.params.page == 'website'){
+
+            data.title = title_prefix+' Page'
+            data.table = 'pages_website'
+            data.model = new PagesWebsite()
+            data.edit_label = 'page'
+
+            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs',settings.views+'/dashboard/scripts/script.ejs']
+            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+
+            data.page_key = req.params.key
             data.fields = await data.model.parseEditFields()
+            data.option_data = await new PagesCategories().allFields(['_key','name'])
+            data.option_data = data.option_data.get()
+
+            blocks = await functions.parseBlocks()
+            data.blocks = blocks
+
+            res.render(settings.views+'/dashboard/editor.ejs',data)
+            return
+
+        } else if (req.params.page == 'templates'){
+
+            data.title = title_prefix+' Templates'
+            data.table = 'pages_templates'
+            data.model = new PagesTemplates()
+            data.edit_label = 'template'
+
+            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs',settings.views+'/dashboard/scripts/script.ejs']
+            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+
+            data.page_key = req.params.key
+            data.fields = await data.model.parseEditFields()
+        //    data.option_data = await view.functions.getOptionData('page_types')
+
+            blocks = await functions.parseBlocks()
+            data.blocks = blocks
+
+            res.render(settings.views+'/dashboard/editor.ejs',data)
+            return
+
+        } else if (req.params.page == 'blog'){
+
+            data.title = title_prefix+' Blog'
+            data.table = 'pages_blog'
+            data.model = new PagesBlog()
 
         } else if (req.params.page == 'forms'){
 
-            data.title = title_prefix+' Forms'
-            data.table = 'page_forms'
-            data.model = new PageForms()
-            data.key = req.params.key
-            data.fields = await data.model.parseEditFields()
+            data.title = title_prefix+' Form'
+            data.table = 'pages_forms'
+            data.model = new PagesForms()
 
         } else if (req.params.page == 'menus'){
 
-            data.title = title_prefix+' Menus'
-            data.table = 'page_menus'
-            data.model = new PageMenus()
-            data.key = req.params.key
-            data.fields = await data.model.parseEditFields()
+            data.title = title_prefix+' Menu'
+            data.table = 'pages_menus'
+            data.model = new PagesMenus()
 
         } else if (req.params.page == 'faqs'){
 
             data.title = title_prefix+' Frequently Asked Questions'
-            data.table = 'page_faqs'
-            data.model = new PageFaqs()
-            data.key = req.params.key
-            data.fields = await data.model.parseEditFields()
+            data.table = 'pages_faqs'
+            data.model = new PagesFaqs()
 
         } else if (req.params.page == 'testimonials'){
 
+            data.tabs = data.element_tabs
             data.title = title_prefix+' Testimonial'
-            data.table = 'page_testimonials'
-            data.model = new PageTestimonials()
-            data.key = req.params.key
-            data.fields = await data.model.parseEditFields()
+            data.table = 'pages_testimonials'
+            data.model = new PagesTestimonials()
 
         }
+
+        data.key = req.params.key
+        data.fields = await data.model.parseEditFields()
 
         res.render(basedir+'/components/dashboard/views/edit.ejs',data)
 
     })
 
-    routes.get('/dashboard/pages/settings/:page?', async (req, res) => {
+    routes.get('/dashboard/pages/:page?', async (req, res) => {
 
         data.meta = {
-            title: config.site.name+' | Page Settings',
+            title: config.site.name+' | '+req.params.page,
         }
 
         view.current_sub_view = req.params.page
@@ -463,129 +613,97 @@ const express = require('express'),
             view.current_sub_view = req.params.page
         }
 
+        data.title = 'Pages'
         view.current_view = 'pages'
 
-        if (req.params.page == 'page-types'){
+        data.tabs = data.regular_tabs
 
-            data.title = 'Page Types'
-            data.model = new PageTypes().settings
-            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
-            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
-            view.current_sub_view = 'Page Types'
-            data.table = 'page_types'
-            data.edit_link = 'pages/settings/page-types'
-            data.fields = data.model.fields
-            data.search_fields = data.model.search_fields
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+        if (req.params.page == 'categories'){
+
+            data.model = new PagesCategories()
+            view.current_sub_view = 'Categories'
+            data.table = 'pages_categories'
+            data.edit_link = 'pages/categories'
+            data.edit_label = 'Category'
+
+        } else if (req.params.page == 'website'){
+
+            data.model = new PagesWebsite()
+            view.current_sub_view = 'Website'
+            data.table = 'pages_website'
+            data.edit_link = 'pages/website'
+            data.edit_label = 'Page'
+
+            data.context_menu = [
+               {function: "viewPage",text:"View Page", icon:"eye"},
+               {function: "createTemplateFromPage",text:"Create Template", icon:"edit"}
+           ]
+
+        } else if (req.params.page == 'templates'){
+
+            data.model = new PagesTemplates()
+            view.current_sub_view = 'Templates'
+            data.table = 'pages_templates'
+            data.edit_link = 'pages/templates'
+            data.edit_label = 'Page Template'
+
+            data.context_menu = [
+               {function: "createPageFromTemplate",text:"Create Page", icon:"edit"}
+           ]
+
+        } else if (req.params.page == 'blog'){
+
+            data.model = new PagesBlog()
+            view.current_sub_view = 'Blog'
+            data.table = 'pages_blog'
+            data.edit_link = 'pages/blog'
+            data.edit_label = 'Blog'
 
         } else if (req.params.page == 'forms'){
 
-            data.title = 'Forms'
-            data.model = new PageForms().settings
-            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
-            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            data.tabs = data.element_tabs
+            data.model = new PagesForms()
             view.current_sub_view = 'Forms'
-            data.table = 'page_forms'
-            data.edit_link = 'pages/settings/forms'
-            data.fields = data.model.fields
-            data.search_fields = data.model.search_fields
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+            data.table = 'pages_forms'
+            data.edit_link = 'pages/forms'
+            data.edit_label = 'Form'
 
         } else if (req.params.page == 'menus'){
 
-            data.title = 'Menus'
-            data.model = new PageMenus().settings
-            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
-            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            data.tabs = data.element_tabs
+            data.model = new PagesMenus()
             view.current_sub_view = 'Menus'
-            data.table = 'page_menus'
-            data.edit_link = 'pages/settings/menus'
-            data.fields = data.model.fields
-            data.search_fields = data.model.search_fields
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+            data.table = 'pages_menus'
+            data.edit_link = 'pages/menus'
+            data.edit_label = 'Menu'
 
         } else if (req.params.page == 'faqs'){
 
-            data.title = 'Frequently Asked Questions'
-            data.model = new PageFaqs().settings
-            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
-            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            data.tabs = data.element_tabs
+            data.model = new PagesFaqs()
             view.current_sub_view = 'FAQs'
-            data.table = 'page_faqs'
-            data.edit_link = 'pages/settings/faqs'
-            data.fields = data.model.fields
-            data.search_fields = data.model.search_fields
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+            data.table = 'pages_faqs'
+            data.edit_link = 'pages/faqs'
+            data.edit_label = 'FAQ'
 
         } else if (req.params.page == 'testimonials'){
 
-            data.title = 'Testimonials'
-            data.model = new PageTestimonials().settings
-            data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs']
-            data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
+            data.tabs = data.element_tabs
+            data.model = new PagesTestimonials()
             view.current_sub_view = 'Testimonials'
-            data.table = 'page_testimonials'
-            data.fields = data.model.fields
-            data.edit_link = 'pages/settings/testimonials'
-            data.search_fields = data.model.search_fields
-            res.render(basedir+'/components/dashboard/views/table.ejs',data)
+            data.table = 'pages_testimonials'
+            data.edit_link = 'pages/testimonials'
+            data.edit_label = 'Testimonial'
 
         } else {
             res.render(settings.views+'/dashboard/settings.ejs',data)
         }
 
-    })
-
-    routes.get('/dashboard/pages/:key', async(req, res) => {
-
-        data.include_scripts = ['dashboard/views/scripts/script.ejs','dashboard/views/scripts/editor.ejs',settings.views+'/dashboard/scripts/script.ejs']
+        data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/dashboard/scripts/dashboard_scripts.ejs']
         data.include_styles = [settings.views+'/dashboard/styles/style.ejs']
 
-        data.meta = {
-            title: config.site.name+' | Pages',
-        }
-
-        view.current_view = 'pages'
-        view.current_sub_view = 'pages'
-        data.title = 'Pages'
-        data.table = 'pages'
-        data.page_key = req.params.key
-        data.model = new Pages()
-        data.fields = await data.model.parseEditFields()
-    //    data.option_data = await view.functions.getOptionData('page_types')
-
-        blocks = await functions.parseBlocks()
-        data.blocks = blocks
-
-        res.render(settings.views+'/dashboard/editor.ejs',data)
-
-    })
-
-    routes.get('/dashboard/pages', async(req, res) => {
-
-        data.include_scripts = ['dashboard/views/scripts/script.ejs',settings.views+'/dashboard/scripts/dashboard_scripts.ejs']
-
-        data.meta = {
-            title: config.site.name+' | Pages',
-        }
-
-        delete data.edit_link
-
-        view.current_view = 'pages'
-        view.current_sub_view = 'pages'
-        data.title = 'Pages'
-        data.table = 'pages'
-        data.pages_type = req.params.type
-        data.fields = new Pages().settings
-        data.search_fields = data.fields.search_fields
-        data.fields = data.fields.fields
-
-        data.context_menu = [
-            {function: "viewPage",text:"View Page", icon:"eye"}
-        ]
-
-        data.option_data = await view.functions.getOptionData('page_types')
-
+        data.fields = data.model.settings.fields
+        data.search_fields = data.model.settings.search_fields
         res.render(basedir+'/components/dashboard/views/table.ejs',data)
 
     })
@@ -606,7 +724,7 @@ const express = require('express'),
             pages
 
         if (req.params.slug){
-            pages_type = await new PageTypes().find(['slug == '+req.params.pages_type])
+            pages_type = await new PagesCategories().find(['slug == '+req.params.pages_type])
             slug = req.params.slug
         } else {
             slug = req.params.pages_type
@@ -617,7 +735,7 @@ const express = require('express'),
             let article
 
             try {
-                article = await new Pages().find(['slug == '+slug,'type == '+pages_type.data._key, 'status == published'])
+                article = await new PagesWebsite().find(['slug == '+slug,'type == '+pages_type.data._key, 'status == published'])
             }
 
             catch(err){
@@ -652,15 +770,15 @@ const express = require('express'),
 
         } else { // check pages types first, and then check for articles
 
-            pages_type = await new PageTypes().find(['slug == '+slug])
+            pages_category = await new PagesCategories().find(['slug == '+slug])
 
-            if (typeof pages_type.data == 'object' && pages_type.data._key){ // show a list of articles from that pages type
+            if (typeof pages_category.data == 'object' && pages_category.data._key){ // show a list of articles from that pages type
 
-                let articles = await new Pages().all(['type == '+pages_type.data._key, 'status == published'])
+                let articles = await new PagesWebsite().all(['type == '+pages_category.data._key, 'status == published'])
 
-                data.pages_type = pages_type.data
+                data.pages_category = pages_category.data
                 data.articles = articles.data
-                data.meta = pages_type.data.meta
+                data.meta = pages_category.data.meta
                 res.render(config.site.theme_path+'/templates/pages/list.ejs',data)
 
             } else { // if it's not a pages type, check for page pages
@@ -668,7 +786,7 @@ const express = require('express'),
                 let article
 
                 try {
-                    article = await new Pages().find(['slug == '+slug, 'status == published'])
+                    article = await new PagesWebsite().find(['slug == '+slug, 'status == published'])
                 }
 
                 catch(err){
@@ -704,6 +822,51 @@ const express = require('express'),
 
     })
 
+    routes.get('/blog/:slug', async (req, res) => {
+
+        view.current_view = 'blog'
+
+        data.include_scripts = [settings.views+'/scripts/script.ejs']
+
+        data.article = await new PagesBlog().all(['slug == '+req.params.slug])
+        data.article = data.article.first()
+
+        if (data.article.status != 'published'){
+            return res.render(basedir+'/components/default_routes/views/404')
+        }
+
+        data.meta = {
+            title: data.article.meta_title,
+            description: data.article.meta_description,
+            image: config.site.url+data.article.image,
+            type: 'article',
+            updated_time: data.article._updated,
+            url: config.site.url+'blog/'+req.params.slug
+        }
+
+        data.recent_articles = await new PagesBlog().getRecent(data.article._key)
+
+        res.render(config.site.theme_path+'/templates/blog/view.ejs',data)
+
+    })
+
+    routes.get('/blog', async (req, res) => {
+
+        view.current_view = 'blog'
+
+        data.include_scripts = [settings.views+'/scripts/script.ejs']
+        data.title = 'Blog Archive'
+        data.articles = await new PagesBlog().all(['status == published'])
+        data.articles = data.articles.get()
+
+        data.articles.sort((a,b)=>{
+            return b._created.localeCompare(a._created)
+        })
+
+        res.render(config.site.theme_path+'/templates/blog/list.ejs',data)
+
+    })
+
     routes.post('/submit-form', async (req,res) => {
 
         if (req.session.submission && moment().diff(req.session.submission,'minutes') < 5){
@@ -730,7 +893,7 @@ const express = require('express'),
 
         if (form_id){
 
-            let form_data = await new PageForms().find(form_id)
+            let form_data = await new PagesForms().find(form_id)
             form_data = form_data.get()
 
             if (form_data && form_data.send_to_mailbox === true){

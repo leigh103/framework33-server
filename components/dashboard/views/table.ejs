@@ -23,6 +23,12 @@
             <span class="icon edit left primary"></span>
             Edit
         </div>
+        <% if (typeof model == 'object' && model.routes.private.post.duplicate){ %>
+            <div class="link" app-click="duplicateItem('<%- table %>')">
+                <span class="icon plus left primary"></span>
+                Duplicate
+            </div>
+        <% } %>
         <div class="link" app-click="deleteItem('<%- table %>')">
             <span class="icon bin left primary"></span>
             Delete

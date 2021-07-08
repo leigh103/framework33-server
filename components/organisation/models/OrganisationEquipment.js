@@ -1,19 +1,19 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class PageTestimonials extends Models {
+    class OrganisationEquipment extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'page_testimonials',
+                collection: 'organisation_equipment',
                 fields: [
-                    {name:'name',input_type:'text',placeholder:'Author', type:'string', required:true},
-                    {name:'description',input_type:'text',placeholder:'Author Description', type:'string', required:false},
-                    {name:'quote',input_type:'textarea',placeholder:'Quote', type:'string', required:true},
-                    {name:'type',input_type:'select',options:config.site.testimonial_types, type:'string', required:true}
+                    {name:'name',input_type:'text',placeholder:'Name', type:'string', required:true},
+                    {name:'image',input_type:'image',placeholder:'Image', type:'string', required:false},
+                    {name:'category',input_type:'text',placeholder:'Category', type:'string', required:false},
+                    {name:'age_from',input_type:'text',label:'Available to ages above', type:'string', required:false}
                 ]
             }
 
@@ -45,4 +45,4 @@
 
     }
 
-    module.exports = PageTestimonials
+    module.exports = OrganisationEquipment

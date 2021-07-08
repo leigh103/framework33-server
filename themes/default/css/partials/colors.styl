@@ -34,8 +34,6 @@ footer {
 .nav {
     a {
         color: $text-white;
-        text-transform: uppercase;
-        font-size: 0.875rem;
 
         &:hover {
             color: $text-secondary
@@ -43,7 +41,18 @@ footer {
     }
 
     &.auto-hide-shown {
-        background-color: $bg-primary;
+
+        background-color: $bg-white;
+        color: $text-black;
+        a {
+            color: $text-black;
+        }
+        div.link.logo {
+            a.logo {
+                background-color: $bg-secondary;
+            }
+        }
+
     }
 
     &.no-auto-hide {

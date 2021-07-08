@@ -106,9 +106,17 @@
     		appointments:{
     			users:'Customers',
     			items:'Products'
-    		},
-            lessons:{
-    			users:'Pupils',
+    		}
+    	},
+
+        learning: {
+    		labels:{
+                learning: 'learning',
+    			items:'lessons',
+    			locations:'schools',
+    			suppliers:'teachers',
+    			customers:'parents',
+    			users:'pupils'
     		}
     	},
 
@@ -141,7 +149,7 @@
     		client: '',
     		secret: '',
     		url: 'https://api-m.sandbox.paypal.com'
-    	}
+    	},
 
         hacp: {
             host: {

@@ -2,32 +2,45 @@
 
     <div class="contain <%- styling.container.class %>  <% if (styling.container.alignment){ %><%- styling.container.alignment %><% } else { %>align-left<% } %>">
 
-        <% if (data.heading){ %><h2 app-input="text" app-field="heading" class="mb-2"><%- data.heading %></h2><% } %>
+        <% if (data.heading){ %><h2 app-input="text" app-field="heading" class=""><%- data.heading %></h2><% } %>
 
-        <% if (data.sub_heading){ %><h4 class="mb-2" app-input="text" app-field="sub_heading"><%- data.sub_heading %></h4><% } %>
+        <% if (data.sub_heading){ %><h3 class="" app-input="text" app-field="sub_heading"><%- data.sub_heading %></h3><% } %>
 
-        <div class="grid col-3 col-s-1 gap-3 <% if (data.text_left_icon){ %>with-icons<% } %>">
-            <div class="col col-left">
-                <% if (data.text_left_icon){ %><div class="icon-wrap"><span app-input="icon" app-field="text_left_icon" class="icon primary <%- data.text_left_icon %>"></span></div><% } %>
-                <% if (data.text_left_heading){ %><h3 app-input="text" app-field="text_left_heading"><%- data.text_left_heading %></h3><% } %>
-                <% if (data.text_left){ %><div app-input="textarea" app-field="text_left"><%- data.text_left %></div><% } %>
-            </div>
-            <div class="col col-mid">
-                <% if (data.text_mid_icon){ %><div class="icon-wrap"><span app-input="icon" app-field="text_mid_icon" class="icon primary <%- data.text_mid_icon %>"></span></div><% } %>
-                <% if (data.text_mid_heading){ %><h3 app-input="text" app-field="text_mid_heading"><%- data.text_mid_heading %></h3><% } %>
-                <% if (data.text_mid){ %><div app-input="textarea" app-field="text_mid"><%- data.text_mid %></div><% } %>
-            </div>
-            <div class="col col-right">
-                <% if (data.text_right_icon){ %><div class="icon-wrap"><span app-input="icon" app-field="text_right_icon" class="icon primary <%- data.text_right_icon %>"></span></div><% } %>
-                <% if (data.text_right_heading){ %><h3 app-input="text" app-field="text_right_heading"><%- data.text_right_heading %></h3><% } %>
-                <% if (data.text_right){ %><div app-input="textarea" app-field="text_right"><%- data.text_right %></div><% } %>
-            </div>
+        <div class="grid col-3 col-s-1 gap-3">
+            <% if (data.left_text){ %>
+                <a class="col col-left" app-input="text" app-field="left_link" <% if (data.left_link){ %>href="<%- data.left_link %>"<% } %>>
+                    <% if (data.left_image){ %><img src="<%- data.left_image %>" app-input="image" app-field="left_image"><% } %>
+                    <div class="details">
+                        <% if (data.left_heading){ %><h4 app-input="text" app-field="left_heading"><%- data.left_heading %></h4><% } %>
+                        <% if (data.left_text){ %><div app-input="textarea" app-field="left_text"><%- data.left_text %></div><% } %>
+                    </div>
+                </a>
+            <% } %>
+            <% if (data.centre_text){ %>
+            <a class="col col-mid" app-input="text" app-field="centre_link" <% if (data.centre_link){ %>href="<%- data.centre_link %>"<% } %>>
+                <% if (data.centre_image){ %><img src="<%- data.centre_image %>" app-input="image" app-field="centre_image"><% } %>
+                <div class="details">
+                    <% if (data.centre_heading){ %><h4 app-input="text" app-field="centre_heading"><%- data.centre_heading %></h4><% } %>
+                    <% if (data.centre_text){ %><div app-input="textarea" app-field="centre_text"><%- data.centre_text %></div><% } %>
+                </div>
+            </a>
+            <% } %>
+            <% if (data.right_text){ %>
+            <a class="col col-right" app-input="text" app-field="right_link" <% if (data.right_link){ %>href="<%- data.right_link %>"<% } %>>
+                <% if (data.right_image){ %><img src="<%- data.right_image %>" app-input="image" app-field="right_image"><% } %>
+                <div class="details">
+                    <% if (data.right_heading){ %><h4 app-input="text" app-field="right_heading"><%- data.right_heading %></h4><% } %>
+                    <% if (data.right_text){ %><div app-input="textarea" app-field="right_text"><%- data.right_text %></div><% } %>
+                </div>
+
+            </a>
+            <% } %>
         </div>
 
-        <% if (data.call_to_action_link){ %>
-            <a class="btn bg-primary mt-2" href="<%- data.call_to_action_link %>" app-input="text" app-field="call_to_action_link">
-                <span app-field="call_to_action_text" app-input="text"><%- data.call_to_action_text %></span>
-                <% if (data.call_to_action_icon){ %><span class="icon right white <%- data.call_to_action_icon %>" app-field="call_to_action_icon" app-input="icon"></span><% } %>
+        <% if (data.button_link){ %>
+            <a class="btn bg-primary mt-2" href="<%- data.button_link %>" app-input="text" app-field="button_link">
+                <span app-field="button_text" app-input="text"><%- data.button_text %></span>
+                <% if (data.button_icon){ %><span class="icon right white <%- data.button_icon %>" app-field="button_icon" app-input="icon"></span><% } %>
             </a>
         <% } %>
 

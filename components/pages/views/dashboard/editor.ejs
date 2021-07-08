@@ -51,10 +51,10 @@
 
                         <div class="header">
                             <div class="burger visible" app-click="view.side_nav = !view.side_nav">
-                                <a href="/dashboard/pages"><span class="icon arrowleft left black"></span></a>
+                                <a href="/dashboard/<% if (table == 'pages_templates'){%>pages/templates<% } else {%>pages/website<% }%>"><span class="icon arrowleft left black"></span></a>
                             </div>
                             <div class="title">
-                                <h1><a href="/dashboard/pages" class="capitalise" app-bind="view.pages.title"></a></h1>
+                                <h1><a href="/dashboard/<% if (table == 'pages_templates'){%>pages/templates<% } else {%>pages/website<% }%>" class="capitalise" app-bind="view.pages.title"></a></h1>
                             </div>
                             <div class="flex-middle">
                                 <div class="preview-link" app-click="renderPage(true)">
@@ -105,10 +105,10 @@
                     <div class="menu-footer">
                         <div class="flex-1">
                             <button app-show="view.selected_block" class="btn bg-white" app-click="removeBlock(true)">Remove Block</button>
-                            <button app-hide="view.selected_block" class="btn bg-white" app-click="deletePage(true)">Delete Page</button>
+                            <button app-hide="view.selected_block" class="btn bg-white capitalise" app-click="deletePage(true)">Delete <%- edit_label %></button>
                         </div>
                         <div class="flex-none text-right">
-                            <button class="btn bg-secondary" app-click="savePage()">Save</button>
+                            <button class="btn bg-secondary" app-click="savePage(<% if (table == 'pages_templates'){%><%- true %><% } %>)">Save<% if (table == 'pages_templates'){%> Template<% } %></button>
                         </div>
                     </div>
 

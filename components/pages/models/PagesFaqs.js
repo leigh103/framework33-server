@@ -1,14 +1,14 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class PageFaqs extends Models {
+    class PagesFaqs extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'page_faqs',
+                collection: 'pages_faqs',
                 fields: [
                     {name:'question',input_type:'text',placeholder:'Question', type:'string', required:true},
                     {name:'answer',input_type:'textarea',placeholder:'Answer', type:'string', required:true},
@@ -51,4 +51,4 @@
 
     }
 
-    module.exports = PageFaqs
+    module.exports = PagesFaqs

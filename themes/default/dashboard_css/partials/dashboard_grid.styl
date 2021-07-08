@@ -4,6 +4,9 @@
 
         padding: 2rem;
         background-color: white;
+        overflow-y: auto;
+
+
         @media $small {
             padding: 0;
         }
@@ -47,13 +50,15 @@
                 .details {
                     flex: 0 0 5rem;
                     display: flex;
-                    align-items: center;
+                    align-items: flex-start;
+                    justify-content: center;
+                    flex-direction: column;
                     background-color: white;
                     padding: 1rem 1.25rem;
                     text-transform: capitalize;
 
                     div {
-                        flex: 1;
+                        flex: auto;
                         &.context-link {
                             flex: none
                         }

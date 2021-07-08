@@ -1,14 +1,15 @@
-<modal-auto app-show="view.modal == 'set_up'" data-title="Create a new page" required>
+<modal-auto app-show="view.modal == 'set_up'" data-title="Create a new <%- edit_label %>" required>
 
     <div class="grid pb-2 gap-1 col-2 col-s-1" style="align-items: start;">
 
         <div class="my-1">
-            <label class="">Page Title</label>
+            <label class="capitalise"><%- edit_label %> Title</label>
             <input type="text" onchange="scope.view.pages.title = this.value">
         </div>
 
         <div class="my-1">
-            <label class="">Page Type</label>
+            <% if (table == 'pages_website'){%>
+            <label class="">Page Category</label>
             <select onchange="scope.view.pages.type = this.value">
                 <option value="" selected>None</option>
                 <% if (typeof option_data != 'undefined'){ %>
@@ -17,13 +18,14 @@
                     <% }) %>
                 <% } %>
             </select>
+            <% } %>
         </div>
 
     </div>
 
     <div class="flex flex-middle-right">
-        <button class="btn highlight capitalise" app-click="savePage()">
-            <span>Create Page</span>
+        <button class="btn highlight capitalise" app-click="savePage(<% if (table == 'pages_templates'){%><%- true %><% } %>)">
+            <span>Create <%- edit_label %></span>
         </button>
 
     </div>

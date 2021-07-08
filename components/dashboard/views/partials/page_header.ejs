@@ -7,7 +7,7 @@
     <div class="burger" app-click="view.side_nav = !view.side_nav">
         <span class="icon burger black"></span>
     </div>
-    <div class="title">
+    <div class="title capitalise">
         <h1><%- title %></h1>
     </div>
     <% if (typeof center_buttons != 'undefined'){ %>
@@ -20,17 +20,22 @@
     <div class="buttons">
         <% if (typeof action_buttons != 'undefined'){ %>
             <% action_buttons.forEach(button => { %>
-                <a <% if (button.href){ %> href="<%- button.href %>"<% } %> <% if (button.click){ %> app-click="<%- button.click %>"<% } %> class="btn"><span class="text"><%- button.text %></span><span class="icon <%- button.icon %> white"></span></a>
+                <a <% if (button.href){ %> href="<%- button.href %>"<% } %> <% if (button.click){ %> app-click="<%- button.click %>"<% } %> class="btn bg-white"><span class="text"><%- button.text %></span><span class="icon <%- button.icon %> white"></span></a>
             <% }) %>
         <% } %>
 
         <% if (typeof table != 'undefined'){ %>
+
+            <% var ed_link = table; %>
+            <% if (typeof edit_link != 'undefined'){ ed_link = edit_link } %>
+
+            <% var ed_label = view.functions.parseName(table,true); %>
+            <% if (typeof edit_label != 'undefined'){ ed_label = view.functions.parseName(edit_label,true) } %>
+
             <% if (typeof model == 'object' && model.settings && model.settings.allow_new === false){ %>
 
             <% } else if (typeof model == 'object' && model.settings && typeof model.settings.allow_new == 'undefined' || typeof model == 'object' && model.settings && model.settings.allow_new === true){ %>
-                <a class="btn bg-primary" href="/dashboard/<%- table %>/new"><span class="text">Add&nbsp;<%- view.functions.parseName(table,true) %></span><span class="icon plus white"></span></a>
-            <% } else { %>
-                <a class="btn bg-primary" href="/dashboard/<%- table %>/new"><span class="text">Add&nbsp;<%- view.functions.parseName(table,true) %></span><span class="icon plus white"></span></a>
+                <a class="btn bg-primary" href="/dashboard/<%- ed_link %>/new"><span class="text">Add&nbsp;<%- ed_label %></span><span class="icon plus white"></span></a>
             <% } %>
         <% } %>
 

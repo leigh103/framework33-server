@@ -52,7 +52,8 @@
                 private: { // auth'd routes
                     get: {
                         getInactive:['admin'],
-                        parseUrls:['admin']
+                        parseUrls:['admin'],
+                        updateAllergens:['admin']
                     },
                     post: {
                         save:['admin']
@@ -165,15 +166,26 @@
 
         }
 
-        makeCartResource(){
+        makeCartResource(requested_item){
 
             return new Promise( async (resolve, reject) => {
 
                 let category_slug = await new ProductCategories().slug(this.data)
 
+                if (requested_item.trade_guard && requested_item.trade_key && this.data.trade_price){
+
+                    let trade_user = await new global[parseClassName(requested_item.trade_guard)]().find(requested_item.trade_key)
+
+                    if (trade_user && trade_user.data && trade_user.data.activated && trade_user.data.activated == true){
+                        this.data.price = this.data.trade_price
+                    }
+
+                }
+
                 resolve({
                     _key: this.data._key,
                     price: this.data.price,
+                    vat: this.data.vat,
                     thumbnail: this.data.thumbnail,
                     name: this.data.name,
                     slug: category_slug+this.data.slug,

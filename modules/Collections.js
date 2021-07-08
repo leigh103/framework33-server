@@ -35,6 +35,10 @@ class Collections extends Models {
                             .whereMultiple(items)
                             .first()
 
+        this.collection_data = this.collection_data.filter((item) => {
+            return item.active
+        })
+
         return this.collection_data
 
     }

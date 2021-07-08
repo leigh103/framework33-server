@@ -1,14 +1,14 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class BlogPost extends Models {
+    class PagesBlog extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'blog_post',
+                collection: 'pages_blog',
                 fields: [
                     {name:'title',input_type:'text',placeholder:'Title', type:'string', required:true},
                     {name:'slug',input_type:'text',placeholder:'URL', type:'slug', required:false},
@@ -19,7 +19,8 @@
                     {name:'meta_description',input_type:'textarea',placeholder:'SEO Description', type:'string', required:false, truncate:160, tab:'SEO'},
                     {name:'keywords',input_type:'array',placeholder:'Keywords', type:'array', required:false, tab:'SEO'},
                     {name:'content',input_type:'contenteditable',placeholder:'Content', type:'string', required:true, tab:'Content'}
-                ]
+                ],
+                search_fields: ['title','keywords','slug']
             }
 
             this.routes = {
@@ -54,4 +55,4 @@
 
     }
 
-    module.exports = BlogPost
+    module.exports = PagesBlog

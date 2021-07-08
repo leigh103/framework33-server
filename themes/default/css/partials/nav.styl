@@ -4,14 +4,23 @@
     position: absolute;
     top:0;
     width: 100vw;
-    height: $top-nav-height;
+    height: 100px;
     z-index: 600;
+    border-bottom: 1px solid #FF9A9E;
+    transition: top 0.3s ease, background-color 0.8s ease;
 
-    transition: top 0.3s ease, background-color 0.5s ease;
-    background-color: rgba(255,255,255,0);
+    a {
+        text-transform: normal;
+        font-size: 1rem;
+        font-weight: 600;
+    }
 
     &.auto-hide-shown {
         position: fixed;
+
+        .logo {
+            color: $color-secondary;
+        }
     }
 
     &.no-auto-hide {
@@ -19,26 +28,31 @@
     }
 
     .links {
+        overflow-y: hidden;
         @media $small {
             display: none;
         }
     }
 
-    .logo {
-        height: 3rem;
+    div.link.logo {
+
+        height: auto;
         width: 3rem;
-        background-color: #FD7278;
-        -webkit-mask-image: url('/images/Melded_Icon.svg');
-        mask-image: url('/images/Melded_Icon.svg');
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        -webkit-mask-position: center;
-        mask-position: center;
-        -webkit-mask-repeat: no-repeat;
-        mask-repeat: no-repeat;
-        display: inline-block;
-        vertical-align: middle;
-        position: relative;
+
+        a.logo {
+            background-color: #FFFFFF;
+            -webkit-mask-image: url('/images/Melded_Icon.svg');
+            mask-image: url('/images/Melded_Icon.svg');
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-position: center;
+            mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            width: 7rem;
+        }
+
+
         @media $small {
             grid-column: 1 / span 3;
         }

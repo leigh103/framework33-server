@@ -522,7 +522,6 @@ class Model {
             }
         }
 
-
         if (!this.data && !update_data){
             this.error = 'No data'
             return this
@@ -560,6 +559,12 @@ class Model {
         } else if (this.data._key){
             this.data = await DB.read(this.settings.collection).where(['_key == '+this.data._key]).update(this.data).new()
         } else {
+
+            if (this.data.key){
+                this.data._key = this.data.key
+                delete this.data.key
+            }
+
             this.data = await DB.create(this.settings.collection,this.data)
         }
 
@@ -567,6 +572,29 @@ class Model {
             await this.postSave(update_data)
         }
 
+        return this
+
+    }
+
+    async duplicate(){
+
+        delete this.data._id
+        delete this.data._key
+        delete this.data._rev
+
+        let date = moment().toISOString()
+        this.data._created = date
+        this.data._updated = date
+
+        if (this.data.name){
+            this.data.name = this.data.name+' (copy)'
+        }
+
+        if (this.data.title){
+            this.data.title = this.data.title+' (copy)'
+        }
+
+        this.save()
         return this
 
     }

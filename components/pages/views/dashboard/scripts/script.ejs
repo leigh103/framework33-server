@@ -36,6 +36,11 @@
                 }
             }
 
+            if (scope.window.query && scope.window.query.template){
+                scope.view.template_id = scope.window.query.template
+            }
+
+
 
 // pages_type functions
 
@@ -47,7 +52,7 @@
 
             scope.getTypes = function(){
 
-                scope.get('page_types').then((data)=>{
+                scope.get('pages_categories').then((data)=>{
                     console.log(data)
                 })
 
@@ -214,12 +219,26 @@
                 //
                 // } else {
 
-                    scope.get('pages',key).then((pages)=>{
+                    scope.get(<% if (edit_label == 'page'){%>'pages-website'<% } else { %>'pages-templates'<% } %>,key).then((pages)=>{
 
-                        scope.view.pages = pages
-                        scope.view.tab = 'blocks'
+                        if (scope.view.template_id){
+                            scope.get('pages-templates',scope.view.template_id).then((template)=>{
 
-                        view.update('view.pages')
+                                scope.view.pages = pages
+                                scope.view.pages.blocks = template.blocks
+                                scope.view.tab = 'blocks'
+                                delete scope.view.template_id
+
+                                view.update('view.pages')
+                            })
+                        } else {
+                            scope.view.pages = pages
+                            scope.view.tab = 'blocks'
+
+                            view.update('view.pages')
+                        }
+
+
 
                     }).catch((err)=>{
                         scope.notify(err,5,'error')
@@ -667,7 +686,7 @@
 
             }
 
-                scope.savePage = function(){
+                scope.savePage = function(template){
 
                     if (scope.view.selected_block && scope.view.pages.blocks[scope.view.selected_block.index]){
                         scope.view.pages.blocks[scope.view.selected_block.index].name = scope.view.selected_block.name
@@ -681,7 +700,8 @@
 
                     scope.updateCE().then(()=>{
 
-                        let payload = scope.view.pages
+                        let payload = scope.view.pages,
+                            post_to
 
                         payload._user_id = '<%- user._id %>'
 
@@ -691,10 +711,23 @@
                             payload.slug = scope.view.pages.title
                         }
 
-                        scope.post('pages', payload).then((pages)=>{
+                        if (template === true){
+                            post_to = 'pages-templates'
+                        } else {
+                            post_to = 'pages-website'
+                        }
+
+                        scope.post(post_to, payload).then((pages)=>{
 
                             if (scope.window.path_obj.pop() == 'new'){
-                                window.location.href = pages._key
+
+                                let redirect_url = pages._key
+
+                                if (scope.view.template_id){
+                                    redirect_url += '?template='+scope.view.template_id
+                                }
+
+                                window.location.href = redirect_url
                             } else {
                                 scope.notify('Saved!')
                             }
@@ -792,7 +825,7 @@
                 document.getElementById('pages_notification').innerHTML = ''
             }
 
-            scope.deletePage = function(conf){
+            scope.deletePage = function(conf, template){
 
                 if (conf){
 
@@ -800,9 +833,19 @@
 
                 } else {
 
-                    scope.delete('pages',scope.view.pages._key).then(()=>{
-                        window.location.href = '/dashboard/pages'
-                    })
+                    let post_url
+
+                    if (template === true){
+                        scope.delete('pages-templates',scope.view.pages._key).then(()=>{
+                            window.location.href = '/dashboard/pages/templates'
+                        })
+                    } else {
+                        scope.delete('pages-website',scope.view.pages._key).then(()=>{
+                            window.location.href = '/dashboard/pages/website'
+                        })
+                    }
+
+
 
                 }
 

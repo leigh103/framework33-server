@@ -3,16 +3,17 @@
     <div class="grid">
 
         <div class="grid-item" app-for="<%- view.functions.depluralise(table) %> in <%- table %>">
-            <img app-src="<%- view.functions.depluralise(table) %>.thumbnail" src="/images/Product_Placeholder.svg" class="grid-thumbnail">
+            <% if (typeof model == 'object' && model.thumbnail){ %><img app-src="<%- view.functions.depluralise(table) %>.thumbnail" src="/images/Product_Placeholder.svg" class="grid-thumbnail"><% } %>
 
             <div class="details">
                 <% fields.forEach((item)=>{ %>
 
-                    <% if (item.name == 'name' || item.name == 'title' || item.name == 'full_name'){ %>
+                    <% if (item.name == 'name' || item.name == 'title' || item.name == 'full_name' || item.name == 'description'){ %>
                         <div class="<%- item.name %> <%- item.input_type %>">
                             <a app-click="goto('<%- table %>',<%- view.functions.depluralise(table) %>._key)" app-bind="<%- view.functions.depluralise(table) %>.<%- item.name %>"></a>
                         </div>
                     <% } %>
+
 
                 <% }) %>
                 <div class="text-right context-link" app-attr="{'id':'cell-'+<%- view.functions.depluralise(table) %>._key}">

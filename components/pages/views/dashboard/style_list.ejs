@@ -1,0 +1,31 @@
+<% layout(config.site.dashboard_theme+'/dashboard.ejs') %>
+
+    <%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
+
+    <div class="table-wrap rounded">
+        <div class="table table-header" >
+            <div class="row table-header">
+                <div class="cell middle text-left select-all"><input type="checkbox" app-model="view.all_selected" app-click="selectAll()"></div>
+
+                <div class="cell middle name">Filename</div>
+
+                <div class="cell middle action">&nbsp;</div>
+            </div>
+        </div>
+        <div class="table-inner-wrap">
+            <div class="table">
+
+
+                <% links.forEach((link) => { %>
+                    <div class="row" app-click="goto('pages/styling/<%- link.replace(/\.styl/,'') %>')">
+
+                        <div class="cell middle text-left select-all"></div>
+                        <div class="cell middle name text-bold"><%- view.functions.parseName(link) %></div>
+                        <div class="cell middle text-right context-link"">
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+            </div>

@@ -37,7 +37,8 @@
 
                     },
                     post: {
-                        save:['admin']
+                        save:['admin'],
+                        duplicate:['admin']
                     },
                     put: {
                         save:['admin']

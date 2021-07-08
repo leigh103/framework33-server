@@ -1,22 +1,27 @@
-<section class="block-text-hero" style="<%- functions.parseStyle(styling,'no-bg') %>" app-block="hero - basic" app-block-description="This is a hero block" app-allow-styling="true">
+<section class="block-text-hero <% if (typeof styling != 'undefined' && styling.background){ %><%- styling.background.class %><% } %>" style="<%- functions.parseStyle(styling) %>" app-block="hero" app-block-description="This is a hero block">
 
-    <div class="background" style="background-image:url(<%- styling.background.image %>)"  <% if (styling.add_parallax){ %>data-parallax="0.3" data-parallax_direction="down"<% } %>></div>
-    <div class="contain <% if (styling.container.alignment){ %><%- styling.container.alignment %><% } else { %>align-center<% } %>" <% if (styling.add_parallax){ %>data-parallax="0.2"<% } %>>
-        <div class="<%- styling.container.class %>">
-            <% if (!h1){ %>
-                <h1 class="mb-2" app-input="text" app-field="heading" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.heading %></h1>
-                <% h1 = true; %>
-            <% } else { %>
-                <h2 class="mb-2 h1" data-animation="{'enter':'move-down','duration':'0.5s','easing':'ease'}"><%- data.heading %></h2>
-            <% } %>
-            <h4 class="mb-2" data-animation="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1s'}" app-input="text" app-field="sub_heading"><%- data.sub_heading %></h4>
-            <% if (data.call_to_action_link){ %>
-                <a class="btn bg-primary" href="<%- data.call_to_action_link %>" data-animation="{'enter':'move-down','duration':'0.3s','easing':'ease','delay':'1.3s'}" app-input="text" app-field="call_to_action_link">
-                    <span app-field="call_to_action_text" app-input="text"><%- data.call_to_action_text %></span>
-                    <% if (data.call_to_action_icon){ %><span class="icon right white <%- data.call_to_action_icon %>" app-field="call_to_action_icon" app-input="icon"></span><% } %>
-                </a>
-            <% } %>
+    <div class="background" style="background-image:url(<%- styling.background.image %>)" <% if (styling.add_parallax){ %>data-parallax="0.3" data-parallax_direction="down"<% } %>></div>
+    <div class="contain <% if (typeof styling != 'undefined' && styling.container){ %><%- styling.container.class %><% } %> <% if (styling.container.alignment){ %><%- styling.container.alignment %><% } else { %>align-center<% } %>" <% if (styling.add_parallax){ %>data-parallax="0.2"<% } %>>
+        <div>
+        <% if (data.heading){ %><h1 app-input="text" app-field="heading" class="slab xl"><%- data.heading %></h1><% } %>
+        <% if (data.sub_heading){ %><h2 app-input="text" app-field="sub_heading" class="xl"><%- data.sub_heading %></h2><% } %>
+        <% if (data.button_link){ %>
+            <a class="btn bg-primary" href="<%- data.button_link %>" app-input="text" app-field="button_link">
+                <span app-field="button_text" app-input="text"><%- data.button_text %></span>
+                <% if (data.button_icon){ %><span class="icon right white <%- data.button_icon %>" app-field="button_icon" app-input="icon"></span><% } %>
+            </a>
+        <% } %>
         </div>
+
+<% if (data.image_right){ %>
+            <div class="col col-right">
+
+                <div class="relative asset-wrap" app-input="image" app-field="image_right">
+                    <img src="<%- data.image_right %>" class="">
+                </div>
+
+            </div>
+<% } %>
     </div>
 
 </section>

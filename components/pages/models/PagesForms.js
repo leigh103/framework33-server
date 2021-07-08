@@ -1,7 +1,7 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class PageForms extends Models {
+    class PagesForms extends Models {
 
         constructor(data){
 
@@ -17,7 +17,7 @@
             ]
 
             this.settings = {
-                collection: 'page_forms',
+                collection: 'pages_forms',
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Enter form name', type:'string', required:true},
                     {name:'replies_to',input_type:'email',placeholder:'admin@yoursite.com', type:'email', required:false},
@@ -61,4 +61,4 @@
 
     }
 
-    module.exports = PageForms
+    module.exports = PagesForms

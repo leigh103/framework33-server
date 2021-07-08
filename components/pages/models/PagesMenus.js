@@ -1,14 +1,14 @@
 
     const Models = require(basedir+'/modules/Models')
 
-    class PageMenus extends Models {
+    class PagesMenus extends Models {
 
         constructor(data){
 
             super(data)
 
             this.settings = {
-                collection: 'page_menus',
+                collection: 'pages_menus',
 
                 fields: [
                     {name:'name',input_type:'text',placeholder:'Enter menu name', type:'string', required:true},
@@ -67,4 +67,4 @@
 
     }
 
-    module.exports = PageMenus
+    module.exports = PagesMenus

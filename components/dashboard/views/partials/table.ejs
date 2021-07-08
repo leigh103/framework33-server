@@ -15,7 +15,10 @@
     <div class="table-inner-wrap">
         <div class="table">
 
-            <div class="row" app-for="<%- view.functions.depluralise(table) %> in <%- table %>" app-click="goto('<%- table %>',<%- view.functions.depluralise(table) %>._key)">
+            <% var ed_link = table; %>
+            <% if (typeof edit_link != 'undefined'){ ed_link = edit_link } %>
+
+            <div class="row" app-for="<%- view.functions.depluralise(table) %> in <%- table %>" app-click="goto('<%- ed_link %>',<%- view.functions.depluralise(table) %>._key)">
 
                 <div class="cell middle text-left select-all"><input type="checkbox"></div>
 

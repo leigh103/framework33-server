@@ -164,7 +164,7 @@
             if (typeof global[item_data.type] == 'function'){
 
                 let item = await new global[item_data.type]().find(item_data.item_key)
-                item = await item.makeCartResource()
+                item = await item.makeCartResource(item_data)
 
                 if (typeof item.stock != 'undefined' && item.stock == 0){
                     this.error = 'Item is out of stock'
@@ -458,12 +458,21 @@
                             this.data.total = parseInt(this.data.total)+parseInt(item.price)
                         }
 
+                        let tax_amount = config.tax_amount
+                        if (typeof item.vat != 'undefined' && item.vat != "" && item.vat != null){
+                            tax_amount = parseFloat(item.vat)
+                        }
+
                         if (item.type != 'vouchers' && item.type != 'account'){
-                            item.sub_total = parseInt(item.price)/config.tax_amount
+                            item.sub_total = parseInt(item.price)/tax_amount
                             item.tax = parseInt(item.price)-parseInt(item.sub_total)
                             item.tax = item.tax*parseInt(item.quantity)
                             item.sub_total = item.sub_total*parseInt(item.quantity)
                             item.total = parseInt(item.price)*item.quantity
+
+                            if (item.tax == null || !item.tax){
+                                item.tax = 0
+                            }
                         }
 
                     }

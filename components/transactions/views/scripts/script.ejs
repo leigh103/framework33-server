@@ -178,6 +178,11 @@
                         }
                     }
 
+                    <% if (typeof user == 'object' && user.guard && user.guard == 'trade'){ %>
+                        payload.trade_guard = '<%- user.guard %>'
+                        payload.trade_key = '<%- user._key %>'
+                    <% } %>
+
                     scope.post('cart/add-item',payload).then((cart)=>{
                         scope.cart = cart
                         let added_item = scope.cart.items.find((item)=>{
@@ -189,7 +194,7 @@
 
                         if (!is_checkout){
                             let notification_content = '<a href="/<%- view.ecommerce.cart_name.toLowerCase() %>" class="grid col-12 gap-1 w-100 notification-cart-add"><div class="colspan-2 thumbnail"><img src="'+added_item.thumbnail+'" class="object-fit"></div><div class="colspan-10 details"><h4 class="text-bold">Added '+added_item.name+'</h4><div>£'+(added_item.price/100).toFixed(2)+'</div></div></a>'
-                            scope.notify(notification_content,'success',5, 'arrowright')
+                            scope.notify(notification_content,'success',30, 'arrowright')
                         }
 
                     //    scope.notify('Item Added! <a href="/<%- view.ecommerce.cart_name.toLowerCase() %>">View <%- view.ecommerce.cart_name %></a>')

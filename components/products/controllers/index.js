@@ -478,7 +478,7 @@ const express = require('express'),
                 if (data.product){
 
                     data.product.url = config.site.url+'/'+req.params.category+'/'+req.params.sub_category+'/'+req.params.product
-
+                    data.key = data.product._key
                     data.meta = view.functions.getMeta(data.product)
 
                     res.render(config.site.theme_path+'/templates/products/product.ejs',data)
@@ -526,7 +526,7 @@ const express = require('express'),
                     if (data.product){
 
                         data.product.url = config.site.url+'/'+req.params.category+'/'+req.params.sub_category
-
+                        data.key = data.product._key
                         data.meta = view.functions.getMeta(data.product)
 
                         res.render(config.site.theme_path+'/templates/products/product.ejs',data)

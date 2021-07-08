@@ -187,25 +187,34 @@ const express = require('express'),
             guard = config.users.default_guard
         }
 
-        let user = await new global[parseClassName(guard)]().find(req.body),
-            auth_data = await user.authenticate(req.body)
+        if (typeof global[parseClassName(guard)] == 'function'){
 
-        if (auth_data && auth_data.error){
-            new Log(auth_data._id, guard+'_auth_failed', auth_data._id, auth_data.error, req.headers['x-forwarded-for']).save()
-            res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard: guard,error:auth_data.error})
-        } else if (auth_data && auth_data._id){
-            req.session.user = auth_data
-            if (req.cookies && req.cookies['connect.sid']){
-                req.session.user.ws_id = req.cookies['connect.sid']
-                user.data.ws_id = req.cookies['connect.sid']
-                user.save()
+            let user = await new global[parseClassName(guard)]().find(req.body),
+                auth_data = await user.authenticate(req.body)
+
+            if (auth_data && auth_data.error){
+                new Log(auth_data._id, guard+'_auth_failed', auth_data._id, auth_data.error, req.headers['x-forwarded-for']).save()
+                res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard: guard,error:auth_data.error})
+            } else if (auth_data && auth_data._id){
+                req.session.user = auth_data
+                if (req.cookies && req.cookies['connect.sid']){
+                    req.session.user.ws_id = req.cookies['connect.sid']
+                    user.data.ws_id = req.cookies['connect.sid']
+                    user.save()
+                }
+                new Log(auth_data._id, guard+'_logged_in', auth_data._id, guard+' successfully authenticated', req.headers['x-forwarded-for']).save()
+                res.redirect(user.routes.redirects.logged_in)
+            } else {
+                new Log(false, guard+'_auth_failed', user.data, auth_data.error, req.headers['x-forwarded-for']).save()
+                res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard: guard,error:'There has been an issue resetting your password, please try again'})
             }
-            new Log(auth_data._id, guard+'_logged_in', auth_data._id, guard+' successfully authenticated', req.headers['x-forwarded-for']).save()
-            res.redirect(user.routes.redirects.logged_in)
+
         } else {
-            new Log(false, guard+'_auth_failed', user.data, auth_data.error, req.headers['x-forwarded-for']).save()
-            res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard: guard,error:'There has been an issue resetting your password, please try again'})
+
+            res.redirect('/404')
+
         }
+
 
     })
 

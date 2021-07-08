@@ -10,28 +10,37 @@
             overflow: hidden;
 
             .background {
+
                 background-position: center;
                 background-size: cover;
                 background-repeat: no-repeat;
 
-                &:before {
-                    background-color: rgba(30,30,30,0.5);
-                    content:'';
-                    display: block;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    z-index: 1;
-                }
             }
+            .col-right img {
+            width: auto
+            }
+                
+            h1 {
+                font-size: 5rem
+                font-weight: 600
+                line-height: 1em;
+	    }
+            h2 {
+                margin: 2rem 0;
+                line-height: 1.2em;
+            }
+            
+            h2 {
+                font-size: 1.5rem
+	    }
 
             .contain {
+
                 display: flex;
                 align-items: center;
                 justify-content: flex-start;
                 min-height: 600px;
+                
 
                  & > div {
                      width: 50%;
@@ -46,19 +55,33 @@
                     text-align: right;
                     justify-content: flex-end;
                 }
+
             }
 
             @media $small {
                 height: 80vh;
+                h1 {
+                    font-size: 5rem	        }
             }
 
             .btn {
-                background-color: $color-primary;
+                background-color: $color-secondary;
                 height: 50px;
                 border-radius: 25px;
                 font-size: 16px;
-                font-weight: 500;
+                font-weight: 600;
+                color: $color-white;
+                border: 1px solid #fff;
+                transition: 0.1s all ease;
+                
+                &:hover {
+                    background-color: #FF9A9E;
+                    color: $color-primary;
+                    border: 1px solid $color-secondary;
+                }
+
             }
+
         }
 
         &-single-col {
@@ -92,6 +115,7 @@
 
             h2 {
                 font-size: 3.125rem;
+                font-weight: 600;
                 width: 100%;
                 margin-bottom: 1.5rem;
                 line-height: 1em;
@@ -105,9 +129,9 @@
             }
 
             h3 {
-                font-size: 1.875rem;
+                font-size: 1.5rem;
                 width: 100%;
-                margin-bottom: 2rem;
+                margin-bottom: 2.2rem;
                 line-height: 1.2em;
 
                 @media $medium {
@@ -149,11 +173,29 @@
                 height: 100%;
 
                 @media $small {
-                    min-height: 10rem;
+                    min-height: 10rem;            }
+            }
+
+            .btn {
+                background-color: $color-secondary;
+                height: 50px;
+                border-radius: 25px;
+                font-size: 16px;
+                font-weight: 600;
+                color: $color-white;
+                border: 1px solid $color-secondary;
+                transition: 0.1s all ease;
+                
+                &:hover {
+                    background-color: #FF9A9E;
+                    color: $color-primary;
+                    border: 1px solid $color-secondary;
                 }
+
             }
 
         }
+                
 
         &-three-col {
 
@@ -194,7 +236,7 @@
                         top: -3rem;
                         left: calc(50% - 3rem);
                         background-color: white;
-                        border-radius: 50%;
+                        border-radius: 50%; 
                         height: 6rem;
                         width: 6rem;
 

@@ -132,7 +132,7 @@
                 width: 6rem;
             }
 
-            &.textarea, &.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav, &.items_per_customer, &.adjustment, &.requires_delivery, &.made_to_order, &.promo_text, &.vat, &.sku {
+            &.textarea, &.select, &.contenteditable, &.img_array, &.object, &.array, &.multiselect, &.barcode, &.notification, &.hide_top_nav, &.items_per_customer, &.adjustment, &.requires_delivery, &.made_to_order, &.promo_text, &.vat, &.sku, &.tags, &.secondary_theme {
                 display: none;
             }
 
@@ -145,7 +145,8 @@
                 width: 8rem;
             }
 
-            &.status {
+            &.status, &.select.status {
+                display: table-cell;
                 width: 8rem;
                 text-align: center;
             }
@@ -171,6 +172,9 @@
 
             &.name, &.title {
                 width: auto;
+                &:first-letter {
+                    text-transform: uppercase;
+                }
             }
 
             &.brand {

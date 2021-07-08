@@ -31,7 +31,7 @@
 
         <div class="array-item">
 
-            <div class="array-item-new-title">Add New <%- view.functions.parseName(obj,true) %></div>
+            <div class="array-item-new-title">Add New <% if (item.label){ %><%- view.functions.parseName(item.label,true) %><% } else { %><%- view.functions.parseName(obj,true) %><% } %></div>
             <% item.subitems.forEach((subitem,i)=>{ %>
 
                 <div class="array-item-input">

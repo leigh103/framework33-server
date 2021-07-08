@@ -9,8 +9,18 @@
             path: window.location.pathname,
             path_obj: window.location.pathname.replace(/^\//,'').split('/'),
             hash: window.location.hash.substr(1),
-            search: window.location.search.substr(1).split(/&|&&/)
+            search: window.location.search.substr(1).split(/&|&&/),
+            query: {}
         }
+
+        scope.window.search.map((search) => {
+
+            let key = search.split(/=|==/),
+                val = key[1]
+
+            scope.window.query[key[0]] = val
+
+        })
 
         scope.notify = function(msg, type, duration, icon){
 
@@ -215,7 +225,7 @@
         }
 
         scope.get = function(collection, id, output){
-console.log(this)
+
             return new Promise(function(resolve, reject){
 
                 let url
@@ -418,6 +428,31 @@ console.log(this)
                     })
 
             })
+        }
+
+        scope.duplicate = function(collection, obj){
+
+            return new Promise( async (resolve, reject) => {
+
+                let dupe_collection = collection+'/duplicate'
+                scope.post(dupe_collection, obj).then((data)=>{
+
+                    if (scope.view.query){
+                        scope.get(collection, scope.view.query)
+                    } else {
+                        scope.get(collection)
+                    }
+
+                    resolve(data)
+
+                }).catch((err)=>{
+                    reject(err)
+                })
+
+            })
+
+
+
         }
 
         scope.parseDate = function(date, format){
