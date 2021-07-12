@@ -48,7 +48,7 @@
 
         async getRecent(key){
 
-            let result = await DB.read(this.settings.collection).where(['status == published','_key != '+key]).orderBy('_updated','DESC').limit(5).show(['_key','title','slug','_updated']).get()
+            let result = await DB.read(this.settings.collection).where(['status == published','_key != '+key]).orderBy('_updated','DESC').limit(5).show(['_key','title','slug','_updated','_created']).get()
             return result
 
         }

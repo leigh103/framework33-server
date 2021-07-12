@@ -116,7 +116,6 @@
 
             try {
                 await this.saveToDisk()
-                await this.getFileStats()
             }
             catch(err){
                 log(err)
@@ -125,6 +124,7 @@
             }
 
             await this.process()
+            await this.getFileStats()
 
             let ml_payload = {
                 name: this.file_name,

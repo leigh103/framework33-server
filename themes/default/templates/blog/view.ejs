@@ -1,29 +1,47 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
 
-<div class="page">
+<div class="page blog">
 
-    <div class="contain text-left pt-5">
+    <div class="contain text-left pt-2 pb-9 px-2">
 
-        <div class="grid col-12 gap-3">
+        <a href="/blog" class="btn mb-2"><span class="icon arrowleft sm left secondary"></span>All articles</a>
 
-            <div class="colspan-9">
+        <h1><%- article.title %></h1>
 
-                <h1><%- article.title %></h1>
-                <p><%- moment(article._updated).format('Do MMMM YYYY') %></p>
-                <a href="/blog"><span class="icon arrowleft left primary"></span>View all articles</a>
-                <div class="mt-2"><%- article.content %></div>
+
+        <div class="date">
+             <span class="">Written on <%- moment(article._created).format('Do MMMM YYYY') %></span>
+        </div>
+
+        <div class="grid col-12 col-s-1 gap-2 pt-3">
+
+            <div class="article-left">
+
+                <div class="article">
+                    <% if (article.image){ %><img src="<%- article.image %>" class="thumb object-fit"><% } %>
+                    <div class="mt-2"><%- article.content %></div>
+                </div>
+
+                <div class="sharing">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=<%- view.site.url %>/<%- view.functions.parseURL(article.slug) %>" target="_blank" title="Share <%- article.title %> on Facebook"><span class="icon facebook black lg"></span></a>
+                    <a href="https://twitter.com/share?text=<%- view.functions.parseURL(article.title) %>&url=<%- view.site.url %>/<%- view.functions.parseURL(article.slug) %>" target="_blank" title="Share <%- article.title %> on Twitter"><span class="icon twitter black lg"></span></a>
+                </div>
 
             </div>
 
-            <div class="colspan-3">
+            <div class="article-right">
+
+                <div class="recent-articles">
 
                 <% recent_articles.forEach((recent_article)=>{ %>
                     <a href="<%- recent_article.slug %>">
                         <h4><%- recent_article.title %></h4>
-                        <p><%- moment(recent_article._updated).format('Do MMMM YYYY') %></p>
+                        <p class="date"><%- moment(recent_article._created).format('Do MMMM YYYY') %></p>
                     </a>
                 <% }) %>
+
+                </div>
 
             </div>
 

@@ -1,30 +1,34 @@
 <% layout(config.site.theme+'/page.ejs') -%>
 
 
-<div class="page">
+<div class="page blog list">
 
-    <div class="contain text-left pt-5">
+    <div class="contain text-left pt-4 pb-9 px-2">
 
-        <h1 class="capitalise">Blog</h1>
+        <h1 class="capitalise mb-4">Our blog</h1>
 
-        <% if (articles != 'undefined'){ %>
-            <% articles.forEach((article,i)=>{ %>
+        <div class="grid col-2 gap-2 col-s-1">
 
-                <a href="<%- view.meta.url %>/blog/<%- article.slug %>" class="flex mt-2">
+            <% if (articles != 'undefined'){ %>
+                <% articles.forEach((article,i)=>{ %>
 
-                    <div class="flex-1">
-                        <% if (article.image){ %><img src="<%- article.image %>" class="object-fit"><% } else { %><img src="/images/Product_Placeholder.svg" class="object-fit"><% } %>
-                    </div>
-                    <div class="flex-4 flex-middle-left flex-column pl-1">
-                        <h2 class="h4"><%- article.title %></h2>
-                        <p class="m-0"><%- moment(article._created).format('Do MMMM YYYY') %></p>
+                    <a href="<%- view.meta.url %>/blog/<%- article.slug %>" class="article">
 
-                        <% if (typeof article.meta == 'object' && article.meta.description){ %><p class="mt-1 text-black"><%- article.meta.description %></p><% } %>
-                    </div>
-                </a>
+                        <div class="thumbnail">
+                            <% if (article.image){ %><img src="<%- article.image %>" class=""><% } else { %><img src="/images/Product_Placeholder.svg" class=""><% } %>
+                        </div>
+                        <div class="details">
+                            <h2 class="h4"><%- article.title %></h2>
+                            <p class="text-black date"><%- moment(article._created).format('Do MMMM YYYY') %></p>
 
-            <% }) %>
-        <% } %>
+                            <% if (article.meta_description){ %><p class="mt-1 text-black excerpt"><%- article.meta_description %></p><% } %>
+                        </div>
+                    </a>
+
+                <% }) %>
+            <% } %>
+
+        </div>
 
     </div>
 

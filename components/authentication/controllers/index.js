@@ -152,6 +152,7 @@ const express = require('express'),
             } else if (config.users.email_activation === true) {
 
                 let success = 'Please click the link in your email to activate your account'
+                user.sendReset()
                 res.render(config.site.theme_path+'/templates/authentication/register.ejs', {error:success,guard:'user'})
 
             } else {

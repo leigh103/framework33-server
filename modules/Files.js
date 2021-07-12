@@ -4,7 +4,7 @@
 
         constructor(data){
 
-
+            this.file_stats = []
 
         }
 

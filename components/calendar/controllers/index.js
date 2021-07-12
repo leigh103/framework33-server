@@ -14,7 +14,7 @@ const express = require('express'),
         views: 'calendar/views',
         menu: {
             side_nav: [
-                {link:'Calendar',slug: '/dashboard/calendar', icon:'<span class="icon calendar"></span>', protected_guards:['admin'], weight:2}
+                {link:'Calendar', slug: '/dashboard/calendar', icon:'<span class="icon calendar"></span>', protected_guards:['admin'], weight:2}
             ]
         }
     }
@@ -224,9 +224,6 @@ const functions = {
 
         data.date = req.params.date
 
-        view.current_sub_view = 'Calendar'
-
-        view.current_view = 'calendar'
         data.include_scripts = ['dashboard/views/scripts/script.ejs','calendar/views/scripts/dashboard/calendar.ejs']
 
         data.providers = await new global[config.calendar.models.providers]().allFields(['_id','_key','name'])
@@ -272,6 +269,8 @@ const functions = {
         data.query = data.query.toISOString()
 
         data.part_iso = data.query.split('T')[0]
+        view.current_view = 'calendar'
+        view.current_sub_view = 'Calendar'
         res.render(settings.views+'/calendar.ejs',data)
 
     })
