@@ -420,7 +420,7 @@ class Model {
             } else if (field.type == 'image'){
 
                 if (value.match(/base64/)){
-                    let img = await new Image(value,key,this.settings.collection).save()
+                    let img = await new MLImage(value,key,this.settings.collection).save()
                     return img
 
                 } else if (!value.match(/(jpg|jpeg|tiff|psd|png|gif|svg|bmp)$/)){
