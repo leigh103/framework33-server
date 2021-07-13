@@ -53,25 +53,25 @@
         date-picker {
             .value {
                 // padding: 0 !important;
+                position: relative;
 
                 &:before {
-                    display: inline-block;
+                    position: absolute;
+                    display: block;
                     height: 1.2rem;
                     width: 1.2rem;
-                    top:-2px;
-                    margin-right: 0.5rem;
+                    top:0.6rem;
+                    right: 1.2rem;
                     content:'';
-                    background-color: $dashboard-color-primary;
-                    -webkit-mask-image: url('/images/dashboard-icons/Icon-Calendar.svg');
-                    mask-image: url('/images/dashboard-icons/Icon-Calendar.svg');
+                    background-color: $dashboard-color-grey;
+                    -webkit-mask-image: url('/icons/Icon-Calendar.svg');
+                    mask-image: url('/icons/Icon-Calendar.svg');
                     -webkit-mask-size: contain;
                     mask-size: contain;
                     -webkit-mask-position: center;
                     mask-position: center;
                     -webkit-mask-repeat: no-repeat;
                     mask-repeat: no-repeat;
-                    vertical-align: middle;
-                    position: relative;
                 }
 
             }

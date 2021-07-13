@@ -22,12 +22,22 @@
                     <input type="password" class="rounded placeholder-normal" name="password" placeholder="Password">
                     <a class="text-grey mt-15 block" href="/login/<%- guard %>/reset">Forgot password?</a>
                 </div>
-                <div class="mt-3 mb-15">
+                <div class="mt-3">
                     <input type="submit" class="btn highlight thick w-100" value="Login">
                 </div>
-                <div class="text-center">
-                    <a class="btn bg-white w-100 text-bold" href="/login/register">Sign Up</a>
+                <% if (view.users && view.users.allow_registration === true){ %>
+                    <div class="text-center mt-15">
+                        <a class="btn bg-white w-100 text-bold" href="/sign-up">Sign Up</a>
+                    </div>
+                <% } %>
+                <div class="my-3 text-grey text-italic">
+                    or
                 </div>
+                <% if (typeof view.auth == 'object' && view.auth.google && view.auth.google.client_id && guard == view.users.default_guard){ %>
+                    <div id="my-signin2" class="mb-3" class="w-100 text-bold" onclick="clickLogin()">Sign in with Google</div>
+                <% } %>
+
+
             </form>
 
             <div class="logo-wrap">
@@ -46,3 +56,55 @@
     </div>
 
 </div>
+
+<% if (typeof view.auth == 'object' && view.auth.google && view.auth.google.client_id && guard == view.users.default_guard){ %>
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    <script>
+
+        var clicked = false
+        function clickLogin(){
+            clicked = true
+        }
+
+        function onSignIn(googleUser) {
+
+            if (clicked === true){
+
+                var profile = googleUser.getBasicProfile()
+                var payload = {
+                    name: profile.getName(),
+                    avatar: profile.getImageUrl(),
+                    email: profile.getEmail()
+                }
+
+                http.post('/login/google', payload).then((data)=>{
+                    data = JSON.parse(data)
+                    if (data.success){
+                        window.location.href = data.success
+                    } else {
+                        console.log(data)
+                    }
+                })
+
+            }
+
+        }
+
+        function onFailure(data){
+            console.log(data)
+        }
+
+        function renderButton() {
+            gapi.signin2.render('my-signin2', {
+                'scope': 'profile email',
+                'width': 360,
+                'height': 40,
+                'longtitle': true,
+                'theme': 'dark',
+                'onsuccess': onSignIn,
+                'onfailure': onFailure
+            });
+        }
+
+    </script>
+<% } %>

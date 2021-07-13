@@ -52,13 +52,17 @@
 
     <% } %>
 
+    <% if (typeof view.auth == 'object' && view.auth.google && view.auth.google.client_id){ %>
+        <meta name="google-signin-client_id" content="<%= view.auth.google.client_id %>">
+    <% } %>
+
     <link href="/style/framework-33/v2.0/framework33.css?v=3.0.65" rel="stylesheet">
     <link href="/style/fonts.css?v=1614765140082" rel="stylesheet">
 
     <% if (typeof dashboard != 'undefined'){ %>
-        <link href="/style/dashboard.css?v=1626109445736" rel="stylesheet">
+        <link href="/style/dashboard.css?v=1626208895364" rel="stylesheet">
     <% } else { %>
-        <link href="/style/style.css?v=1626119523338" rel="stylesheet">
+        <link href="/style/style.css?v=1626194058111" rel="stylesheet">
     <% } %>
 
     <% if (typeof stripe_id != 'undefined'){ %>

@@ -91,12 +91,14 @@
 
         async authenticate(attempt) {
 
-            if (!this.data || this.data.blocked || !attempt || typeof attempt != 'object' || !attempt.password || !attempt.email){
+            if (!this.data || this.data.blocked || !attempt || typeof attempt != 'object' || !attempt.auth_from && !attempt.password || !attempt.email){
                 this.error = 'Email address and/or password incorrect'
                 return this
             }
 
-            attempt.password = await DB.hash(attempt.password)
+            if (!attempt.auth_from){
+                attempt.password = await DB.hash(attempt.password)
+            }
 
             if (!this.data.activated && this.data.email){
 
@@ -105,7 +107,13 @@
                 await this.sanitize()
                 return this
 
-            } else if (this.data.activated == true && this.data.password == attempt.password && this.data.email == attempt.email){
+            } else if (this.data.activated === true && this.data.auth_from == attempt.auth_from && this.data.email == attempt.email){
+
+                this.data.guard = this.settings.collection
+                await this.sanitize()
+                return this.data
+
+            } else if (this.data.activated === true && this.data.password == attempt.password && this.data.email == attempt.email){
 
                 this.data.guard = this.settings.collection
                 await this.sanitize()
@@ -220,8 +228,18 @@
 
                 try {
                 //    let email = new Notification(this.data).useEmailTemplate(notification_type).email()
-                    this.data.link = config.site.url+'/login/'+this.settings.collection+'/'+this.data.timestamp
-                    this.data.link_text = 'Reset Your Password'
+
+                    if (notification_type == 'complete_registration'){
+                        this.data.link = config.site.url+'/login/'+this.settings.collection+'/'+this.data.timestamp
+                        this.data.link_text = 'Complete Your Registration'
+                    } else if (notification_type == 'activate_account'){
+                        this.data.link = config.site.url+'/activate/'+this.settings.collection+'/'+this.data.timestamp
+                        this.data.link_text = 'Activate Your Account'
+                    } else {
+                        this.data.link = config.site.url+'/login/'+this.settings.collection+'/'+this.data.timestamp
+                        this.data.link_text = 'Reset Your Password'
+                    }
+
                     await new Automations(notification_type).trigger(this.data)
                 } catch (error) {
                     console.log(error)

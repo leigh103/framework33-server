@@ -1,6 +1,5 @@
 
-    const Models = require(basedir+'/modules/Models'),
-        image = new Image()
+    const Models = require(basedir+'/modules/Models')
 
     class MediaLibrary extends Models {
 

@@ -17,9 +17,9 @@
                     </div>
                 <% } %>
 
-                <form method="post" action="/login/<%- guard %>/send-reset" class="w-100">
+                <form id="reset" method="post" action="/login/<%- guard %>/send-reset" class="w-100">
                     <div class="colspan-2">
-                        <input type="text" name="email" placeholder="Email Address" class="rounded placeholder-normal">
+                        <input id="email" type="text" name="email" placeholder="Email Address" class="rounded placeholder-normal">
                     </div>
                     <div>
                         <input type="submit" class="btn highlight thick w-100 mt-2" value="Send">
@@ -44,7 +44,7 @@
 
                 <form method="post" action="/login/<%- guard %>/reset-password" class="grid col-1 gap-1 w-100">
                     <div class="">
-                        <input type="text" name="email" placeholder="Email Address" class="rounded placeholder-normal">
+                        <input id="reset-email" type="text" name="email" placeholder="Email Address" class="rounded placeholder-normal">
                     </div>
                     <div class="">
                         <input type="password" name="password" placeholder="Password" class="rounded placeholder-normal">
@@ -60,7 +60,10 @@
 
             <% } %>
 
-            <span class="icon cmslogo grey xl"></span>
+            <div class="logo-wrap">
+                <span class="icon melded grey logo-size"></span>
+                <div class="text-small">by Marimo</div>
+            </div>
 
         </div>
 
@@ -73,3 +76,31 @@
     </div>
 
 </div>
+
+
+<script>
+
+    var form = document.getElementById('reset'),
+        email = document.getElementById('email'),
+        reset_email = document.getElementById('reset-email')
+
+    window.onload = function(evt){
+        if (localStorage.getItem('reset_email')){
+            if (email){
+                email.value = localStorage.getItem('reset_email')
+            }
+            if (reset_email){
+                reset_email.value = localStorage.getItem('reset_email')
+            }
+            localStorage.removeItem('reset_email')
+        }
+    }
+
+    if (form){
+        form.addEventListener('submit', function(evt){
+            localStorage.setItem('reset_email',document.getElementById('email').value)
+        })
+    }
+
+
+</script>

@@ -1,23 +1,10 @@
 <% layout(config.site.dashboard_theme+'/dashboard-fullscreen.ejs') -%>
 
-<div class="page grid col-2 col-s-1">
+<div class="authentication wrapper">
 
-    <div class="flex flex-middle-left flex-column px-9 px-s-2">
+    <div class="col-form">
 
-        <div class="flex-none grid col-2 w-100 mt-4 text-left">
-
-            <div>
-                <a href="/" class="block"><% if (typeof view != 'undefined' && view.logo){ %><img src="<%- view.logo %>" class="logo"><% } %></a>
-            </div>
-            <div class="flex flex-middle-right">
-                <% if (view.users.allow_registration === true){ %>
-                    <a href="/sign-up">Sign Up</a>
-                <% } %>
-            </div>
-
-        </div>
-
-        <div class="flex-5 flex flex-column flex-middle-left w-100 mb-4 text-left">
+        <div class="form relative">
 
             <% if (typeof user != 'undefined'){ %>
 
@@ -28,15 +15,21 @@
 
                 <h1 class="text-light mb-1">Hmmm...</h1>
                 <p class="text-weight-500">Looks like we've had trouble activating your account</p>
-                <p class="text-33-red"><%- error %></p>
+                <div class="error"><%- error %></div>
+                <a class="btn highlight w-100" href="/login/reset">Trouble logging in?</a>
 
             <% } %>
+
+            <div class="logo-wrap">
+                <span class="icon melded grey logo-size"></span>
+                <div class="text-small">by Marimo</div>
+            </div>
 
         </div>
 
     </div>
 
-    <div class="bg-33-dream flex flex-middle-left flex-column p-6 p-s-2">
+    <div class="col-image">
 
 
 

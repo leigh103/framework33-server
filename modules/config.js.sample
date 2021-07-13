@@ -98,6 +98,8 @@
             self_serve:false
         },
 
+        auth:{},
+
         calendar: {
     		models:{
     			providers:'Admin',

@@ -46,6 +46,7 @@
             ]
         },
         users: config.users,
+        auth: config.auth,
         basedir: global.basedir,
         functions:{
 

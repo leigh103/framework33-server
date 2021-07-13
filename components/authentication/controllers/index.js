@@ -50,6 +50,39 @@ const express = require('express'),
 
     routes.use('/login/static', express.static(__dirname + '/static'))
 
+    routes.get('/activate/:guard/:password_reset', async (req, res) => {
+
+        let time_diff = moment().diff(moment.unix(req.params.password_reset/1000),'minutes'),
+            timestamp_hash = DB.hash('password-reset'+req.params.password_reset)
+
+        if (time_diff > config.users.password_reset_timeout){
+
+            let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash]),
+                auth_data = user.deleteReset()
+
+            res.render(data.theme_path+'/templates/authentication/activate.ejs', {error:'For security reasons, activation tokens are only valid for '+config.users.password_reset_timeout+' minutes. Please try again.'})
+
+        } else {
+
+            let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash])
+
+            if (user.error){
+                res.render(data.theme_path+'/templates/authentication/activate.ejs', {error:'Invalid token'})
+            } else {
+                auth_data = await user.activate()
+
+                if (auth_data.error){
+                    res.render(data.theme_path+'/templates/authentication/activate.ejs', {error:auth_data.error})
+                } else {
+                    res.render(data.theme_path+'/templates/authentication/activate.ejs', {user:auth_data})
+                }
+            }
+
+        }
+
+
+    })
+
     routes.get('/login/:guard/:password_reset?', async (req, res) => {
 
         if (req.params.guard == 'admin'){
@@ -73,35 +106,6 @@ const express = require('express'),
 
             res.render(data.theme_path+'/templates/authentication/reset.ejs', {type:req.params.guard,guard:req.params.guard})
 
-        } else if (req.params.guard == 'activate' && req.params.password_reset){ // if a user is attempting activation
-
-            let time_diff = moment().diff(moment.unix(req.params.password_reset/1000),'minutes'),
-                timestamp_hash = DB.hash('password-reset'+req.params.password_reset)
-
-            if (time_diff > config.users.password_reset_timeout){
-
-                let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash]),
-                    auth_data = user.deleteReset()
-
-                res.render(data.theme_path+'/templates/authentication/activate.ejs', {error:'For security reasons, activation tokens are only valid for '+config.users.password_reset_timeout+' minutes. Please try again.'})
-
-            } else {
-
-                let user = await new global[parseClassName(req.params.guard)]().find(['password_reset == '+timestamp_hash])
-
-                if (user.error){
-                    res.render(data.theme_path+'/templates/authentication/activate.ejs', {error:'Invalid token'})
-                } else {
-                    auth_data = user.activate()
-                    if (auth_data.error){
-                        res.render(data.theme_path+'/templates/authentication/activate.ejs', {error:auth_data.error})
-                    } else {
-                        res.render(data.theme_path+'/templates/authentication/activate.ejs', {user:auth_data})
-                    }
-                }
-
-            }
-
         } else { // redirect to login
 
             res.render(data.theme_path+'/templates/authentication/login.ejs', {guard:req.params.guard})
@@ -119,7 +123,7 @@ const express = require('express'),
         if (!config.users.allow_registration){
             res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard:config.users.default_guard,error:'New account registrations are currently disabled'})
         } else {
-            res.render(config.site.theme_path+'/templates/authentication/register.ejs', {guard:config.users.default_guard})
+            res.render(config.site.theme_path+'/templates/authentication/sign_up.ejs', {guard:config.users.default_guard})
         }
 
     })
@@ -137,23 +141,23 @@ const express = require('express'),
 
     })
 
-    routes.post('/login/register', async (req, res) => {
+    routes.post('/sign-up', async (req, res) => {
 
         if (req.body.password && req.body.password_conf && req.body.password != '' && req.body.password_conf != '' && req.body.password == req.body.password_conf){
 
-            let user = await new Customers(req.body).findOrSave()
+            let user = await new global[parseClassName(req.body.guard)](req.body).findOrSave()
 
-             new Log(user.data._id, 'registration', user.data._id, 'User created', req.headers['x-forwarded-for']).save()
+             new Log(user.data._id, 'registration', user.data._id, req.body.guard+' created', req.headers['x-forwarded-for']).save()
 
             if (!user || user.error){
 
-                res.render(config.site.theme_path+'/templates/authentication/register.ejs', {guard:req.body.guard,error:user.error})
+                res.render(config.site.theme_path+'/templates/authentication/sign_up.ejs', {guard:req.body.guard,error:user.error})
 
             } else if (config.users.email_activation === true) {
 
                 let success = 'Please click the link in your email to activate your account'
                 user.sendReset()
-                res.render(config.site.theme_path+'/templates/authentication/register.ejs', {error:success,guard:'user'})
+                res.render(config.site.theme_path+'/templates/authentication/login.ejs', {error:success,guard:req.body.guard})
 
             } else {
 
@@ -176,10 +180,52 @@ const express = require('express'),
 
         } else {
             let error = 'Password fields must match'
-            res.render(config.site.theme_path+'/templates/authentication/register.ejs', {error:error,guard:'user'})
+            res.render(config.site.theme_path+'/templates/authentication/sign_up.ejs', {error:error,guard:req.body.guard})
         }
 
     })
+
+
+
+    routes.post('/login/google', async (req, res) => {
+
+        let payload = req.body,
+            guard = config.users.default_guard
+
+        payload.auth_from = 'google'
+        payload.activated = true
+
+        let user = await new global[parseClassName(config.users.default_guard)](payload).findOrSave()
+        let auth_data = await user.authenticate(payload)
+
+        if (auth_data && auth_data.error){
+
+            new Log(auth_data._id, guard+'_auth_failed', auth_data._id, auth_data.error, req.headers['x-forwarded-for']).save()
+        //    res.render(config.site.theme_path+'/templates/authentication/login.ejs', {guard: guard,error:auth_data.error})
+            res.json({error:auth_data.error})
+
+        } else if (auth_data && auth_data._id){
+
+            req.session.user = auth_data
+            if (req.cookies && req.cookies['connect.sid']){
+                req.session.user.ws_id = req.cookies['connect.sid']
+                user.data.ws_id = req.cookies['connect.sid']
+                user.save()
+            }
+            new Log(auth_data._id, guard+'_logged_in', auth_data._id, guard+' successfully authenticated', req.headers['x-forwarded-for']).save()
+            res.json({success:user.routes.redirects.logged_in})
+
+        } else {
+
+            new Log(false, guard+'_auth_failed', user.data, auth_data.error, req.headers['x-forwarded-for']).save()
+        //    res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',guard: guard,error:'There has been an issue resetting your password, please try again'})
+            res.json({error:'There has been an issue logging you in, please try again'})
+
+        }
+    //    new Log(user.data._id, 'registration', user.data._id, req.body.guard+' created', req.headers['x-forwarded-for']).save()
+
+    })
+
 
     routes.post('/login/:guard?', async (req, res) => {
 
@@ -216,13 +262,12 @@ const express = require('express'),
 
         }
 
-
     })
 
     routes.post('/login/:guard/send-reset', async (req, res) => {
 
         let user = await new global[parseClassName(req.params.guard)]().find(req.body),
-            auth_data = user.sendReset()
+            auth_data = await user.sendReset()
 
         if (auth_data && auth_data.error){
             res.render(config.site.theme_path+'/templates/authentication/reset.ejs', {type:'reset',error:auth_data.error,guard:req.params.guard})
