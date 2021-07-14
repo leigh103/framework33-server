@@ -84,7 +84,7 @@
             <label class=" capitalise" app-bind="parseSnakeCase(field.field)"></label>
 
             <div class="bg-image-wrap" app-click="showMediaLibrary('view.editor[$index].value')">
-                <img class="bg-image" src="/images/Pages_Placeholder.svg" app-src="field.value">
+                <img class="bg-image" src="/pages/static/Pages_Placeholder.svg" app-src="field.value">
                 <a class="bg-image-remove" app-click="removeImage(field)"><span class="icon x secondary"></span></a>
             </div>
         </div>
@@ -101,7 +101,7 @@
 <div class="field mb-2" app-hide="view.selected_block.disable_styling">
     <label class="capitalise">Background Image</label>
     <div class="bg-image-wrap" app-click="showMediaLibrary('view.selected_block.styling.background.image')">
-        <img class="bg-image" src="/images/Pages_Placeholder.svg" app-src="view.selected_block.styling.background.image">
+        <img class="bg-image" src="/pages/static/Pages_Placeholder.svg" app-src="view.selected_block.styling.background.image">
         <a class="bg-image-remove" app-click="removeImage(view.selected_block.styling.background)" app-show="view.selected_block.styling.background.image"><span class="icon x secondary"></span></a>
         <a class="bg-image-remove" app-hide="view.selected_block.styling.background.image"><span class="icon plus secondary"></span></a>
     </div>
