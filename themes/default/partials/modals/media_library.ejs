@@ -15,6 +15,14 @@
         </div>
     </div>
 
+    <div class="tabs">
+        <!-- <a app-click="view.modal_tab = 'recents'" app-class="{'active':view.modal_tab == 'recent'}" class="flex-1">Recent</a> -->
+        <a app-click="searchML(false)" app-class="{'active':view.modal_tab == 'recent'}" class="flex-1">Recent</a>
+        <!-- <a app-click="searchML('all')" app-class="{'active':view.modal_tab == 'all'}" class="flex-1">All Media</a> -->
+        <a app-click="searchML('pages')" app-class="{'active':view.modal_tab == 'pages'}" class="flex-1">Pages</a>
+        <a app-click="searchML('products')" app-class="{'active':view.modal_tab == 'products'}" class="flex-1">Products</a>
+    </div>
+
     <div class="grid-wrap">
         <div class="grid compact">
             <div class="grid-item" app-for="media in media_library" app-class="media.file_type">

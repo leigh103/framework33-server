@@ -4,6 +4,7 @@
     var view = {
         logo: config.site.logo,
         websocket: config.websocket,
+        components: config.components.load,
         menus: {},
         dont_track: ["/login"],
         meta:{

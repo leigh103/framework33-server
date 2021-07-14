@@ -105,12 +105,31 @@
                 document.querySelector('.search-wrap input').focus()
             }
 
-            scope.search = function(collection){
+            scope.searchML = function(str){
+
+                if (!str){
+                    console.log('here')
+                    scope.view.modal_tab = ''
+                    view.update('view.modal_tab')
+                    delete scope.media_library
+                    scope.showMediaLibrary(scope.view.media_obj)
+                } else {
+                    scope.view.modal_tab = str
+                    view.update('view.modal_tab')
+                    scope.search('media_library',str)
+                }
+
+
+            }
+
+            scope.search = function(collection, str){
 
                 clearTimeout(scope.view.typing)
                 clearTimeout(scope.view.input_check)
 
-                let str = this.target.value
+                if (!str){
+                    str = this.target.value
+                }
 
                 if (str.length > 2){
 
@@ -591,6 +610,8 @@
                 }
 
                 if (!scope.media_library){
+                    scope.view.modal_tab = 'recent'
+                    view.update('view.modal_tab')
                     scope.get('media_library','?sort=_created&limit=32').then((data)=>{
 
                         scope.media_library = data
