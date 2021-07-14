@@ -25,6 +25,7 @@
                     if (err){
                         reject(err)
                     } else {
+                        console.log('saved')
                         await this.getFileStats()
                         resolve(this.full_path)
                     }
@@ -70,7 +71,7 @@
             return new Promise( async (resolve, reject) => {
 
                 if (!fs.existsSync(path)){
-                    fs.mkdirSync(path, (err)=>{
+                    fs.mkdir(path, (err)=>{
 
                         if (err){
                             reject(err)

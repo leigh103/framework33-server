@@ -30,10 +30,11 @@
                         <a class="btn bg-white w-100 text-bold" href="/sign-up">Sign Up</a>
                     </div>
                 <% } %>
-                <div class="my-3 text-grey text-italic">
-                    or
-                </div>
+
                 <% if (typeof view.auth == 'object' && view.auth.google && view.auth.google.client_id && guard == view.users.default_guard){ %>
+                    <div class="my-3 text-grey text-italic">
+                        or
+                    </div>
                     <div id="my-signin2" class="mb-3" class="w-100 text-bold" onclick="clickLogin()">Sign in with Google</div>
                 <% } %>
 

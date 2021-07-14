@@ -2,7 +2,7 @@
     const Files = require(basedir+'/modules/Files'),
           sharp = require('sharp')
 
-    class MLImage extends Files {
+    class MediaLibraryImage extends Files {
 
         constructor(base64, file_name, file_path, tags){
 
@@ -118,7 +118,7 @@
                 await this.saveToDisk()
             }
             catch(err){
-                log(err)
+                console.log(err)
                 this.error = err
                 return this
             }
@@ -154,7 +154,7 @@
 
             for (let [key, value] of Object.entries(obj)) {
                 if (typeof value == 'string' && value.match(/^data:image\//)){
-                    obj[key] = await new MLImage(obj[key], prefix, path).save()
+                    obj[key] = await new MediaLibraryImage(obj[key], prefix, path).save()
                 }
             }
             return obj
@@ -281,7 +281,7 @@
                     let base64 = `data:image/png;base64,${buffer.toString('base64')}`
 
                     if (save){
-                        img_url = await new MLImage(base64,'barcode-'+code,'barcodes').save()
+                        img_url = await new MediaLibraryImage(base64,'barcode-'+code,'barcodes').save()
                         return img_url
                     } else {
                         return base64
@@ -299,4 +299,4 @@
 
     }
 
-    module.exports = MLImage
+    module.exports = MediaLibraryImage

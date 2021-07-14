@@ -401,7 +401,7 @@ class Model {
                         type = field.barcode_type
                     }
 
-                    value = await new Barcode(value,type).save()
+                    value = await new MediaLibraryBarcode(value,type).save()
 
                     if (typeof value == 'object' && value.error){
                         this.error = value.error
@@ -422,7 +422,7 @@ class Model {
 
                 if (value.match(/base64/)){
 
-                    let img = await new MLImage(value,key,this.settings.collection).save()
+                    let img = await new MediaLibraryImage(value,key,this.settings.collection).save()
                     return img
 
                 } else if (value.match(/^http/)){

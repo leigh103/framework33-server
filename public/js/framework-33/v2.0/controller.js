@@ -106,7 +106,7 @@
                             file_path: path
                         }
 
-                        http.post('/api/image/save',payload).then((data) => {
+                        http.post('/api/media_library_image/save',payload).then((data) => {
 
                             scope.media_library.unshift(JSON.parse(data))
                             view.update('media_library')

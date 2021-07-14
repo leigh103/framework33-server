@@ -2,7 +2,7 @@
     const Files = require(basedir+'/modules/Files'),
           bwipjs = require('bwip-js')
 
-    class Barcode extends Files {
+    class MediaLibraryBarcode extends Files {
 
         constructor(data, type, name){
 
@@ -197,4 +197,4 @@
 
     }
 
-    module.exports = Barcode
+    module.exports = MediaLibraryBarcode
