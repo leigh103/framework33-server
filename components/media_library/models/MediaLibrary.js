@@ -50,7 +50,7 @@
         async preDelete(){
 
             if (this.data && this.data.url){
-                await image.delete(this.data.url)
+                await new MediaLibraryImage().delete(this.data.url)
             }
 
             return this

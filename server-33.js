@@ -244,14 +244,17 @@ const express = require('express'),
                 }
 
                 if (Array.isArray(global.component[name].settings.static_files)){
+
                     for (let location of global.component[name].settings.static_files){
-console.log('/'+root_path+'/'+location.route, basedir+'/components/'+name+'/'+location.path)
+
                         if (root_path == 'root'){
                             app.use('/'+location.route, express.static(path.join(__dirname,'/components/'+name+'/'+location.path)))
                         } else {
                             app.use('/'+root_path+'/'+location.route, express.static(path.join(__dirname,'/components/'+name+'/'+location.path)))
                         }
+
                     }
+                    
                 }
 
 

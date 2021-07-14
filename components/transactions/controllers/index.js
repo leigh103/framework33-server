@@ -187,6 +187,11 @@ const express = require('express'),
             }
             return status
         })
+
+        if (result == 'There are '){
+            result = "You're all caught up"
+        }
+
         res.send(result)
 
     })

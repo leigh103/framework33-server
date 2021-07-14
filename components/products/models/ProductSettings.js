@@ -62,7 +62,7 @@
                 global.view.ecommerce.shop.slug = slug
                 log('Setting up product shop: '+global.view.ecommerce.shop.name)
             } else {
-                console.log('nowt')
+                
             }
 
         }
