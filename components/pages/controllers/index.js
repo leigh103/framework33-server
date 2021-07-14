@@ -15,6 +15,9 @@ const express = require('express'),
     settings = {
         default_route: 'root',
         views: 'pages/views',
+        static_files:[
+            {path:'static',route:'pages/static'}
+        ],
         menu: {
             side_nav: [
                 {link:'Pages',slug: '/dashboard/pages/website', protected_guards:['admin'], weight:7, icon:'<span class="icon screen"></span>', subitems:[

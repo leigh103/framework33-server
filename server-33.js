@@ -216,19 +216,21 @@ const express = require('express'),
     // functions
 
 
-        const addComponent = (name, file) => {
+        const addComponent = async (name, file) => {
 
             if (isSet(global.component[name],'settings','default_route')){
 
-                if (global.component[name].settings.default_route == 'root'){
+                let root_path = global.component[name].settings.default_route
+
+                if (root_path == 'root'){
                     app.use('/', global.component[name].routes)
                 } else {
 
-                    app.use('/'+global.component[name].settings.default_route+'/?*?', function (req, res, next) {
+                    app.use('/'+root_path+'/?*?', function (req, res, next) {
 
                         if (isSet(global.component[name],'settings','protected_guards') && req.session.user && global.component[name].settings.protected_guards.indexOf(req.session.user.guard) >=0){
                             next()
-                        } else if (!req.session.user && req.path.match(/^dashboard/) || !req.session.user && global.component[name].settings.default_route.match(/^dashboard/)){
+                        } else if (!req.session.user && req.path.match(/^dashboard/) || !req.session.user && root_path.match(/^dashboard/)){
                             res.redirect('/login/admin')
                         } else if (isSet(global.component[name],'settings','protected_guards')){
                             res.redirect('/login')
@@ -237,9 +239,21 @@ const express = require('express'),
                         }
 
                     });
-                    app.use('/'+global.component[name].settings.default_route, global.component[name].routes)
+                    app.use('/'+root_path, global.component[name].routes)
 
                 }
+
+                if (Array.isArray(global.component[name].settings.static_files)){
+                    for (let location of global.component[name].settings.static_files){
+console.log('/'+root_path+'/'+location.route, basedir+'/components/'+name+'/'+location.path)
+                        if (root_path == 'root'){
+                            app.use('/'+location.route, express.static(path.join(__dirname,'/components/'+name+'/'+location.path)))
+                        } else {
+                            app.use('/'+root_path+'/'+location.route, express.static(path.join(__dirname,'/components/'+name+'/'+location.path)))
+                        }
+                    }
+                }
+
 
             //    views.push('components/' + file + '/views')
             }
@@ -249,13 +263,13 @@ const express = require('express'),
             }
             global.component[name].loaded = true
             global.component[name].error = ''
-            log('Adding routes for '+file)
+        //    log('Adding routes for '+file)
 
         }
 
         const addModels = (component) => {
 
-            log('Adding models for '+component)
+        //    log('Adding models for '+component)
             glob.sync( './components/'+component+'/models/*.js' ).forEach((file, i) => {
 
                 let model = path.resolve( file ),
