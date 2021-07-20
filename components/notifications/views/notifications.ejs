@@ -26,6 +26,7 @@
         <div class="colspan-6 colspan-s-9 message ml-1">
 
             <div app-show="view.editing">
+
                 <h4 class="my-2"><span app-show="view.editing.method == 'sms'">SMS</span><span app-show="view.editing.method == 'email'">Email</span> notification for <span app-bind="new.name"></span></h4>
                 <div class="text-right" app-show="view.editing.method == 'sms'"><span app-bind="view.count.characters"></span>/160 characters</div>
                 <div class="p-1 bg-white rounded" style="min-height:200px">
@@ -33,9 +34,14 @@
                     <div app-show="view.editing.method == 'email'"><%- include(view.basedir+'/themes/default/partials/editor_buttons.ejs',{editor_button_type:'simple'}) %></div>
                     <div app-model="view.editing.content" contenteditable="true" style="white-space: pre-wrap;"></div>
                 </div>
-                <div class="text-right mt-2">
-                    <button class="btn bg-white" app-click="testNotification()">Test</button>
-                    <button class="btn bg-primary" app-click="saveNotification()">Save</button>
+                <div class="flex mt-2">
+                    <div class="flex-1">
+                        <button class="btn bg-white hidden-d hidden-m" app-click="mobileBack()">Done</button>
+                    </div>
+                    <div class="flex-1 text-right">
+                        <button class="btn bg-white mr-05" app-click="testNotification()">Test</button>
+                        <button class="btn bg-primary" app-click="saveNotification()">Save</button>
+                    </div>
                 </div>
             </div>
 

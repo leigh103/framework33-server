@@ -4,6 +4,11 @@
         extend.notifications = function(){
 
             scope.view.count = {}
+            scope.view.notification_list = document.querySelector('.messages')
+            scope.view.notification = document.querySelector('.message')
+            if (window.innerWidth < 800){
+                scope.view.notification.style.display = 'none'
+            }
 
             scope.getNotifications = function(){
 
@@ -47,6 +52,19 @@
                 scope.updateCounts(scope.new.actions[notification.key].content)
                 view.update('view.editing')
                 view.update('new')
+
+                if (window.innerWidth < 800){
+                    scope.view.notification_list.style.display = 'none'
+                    scope.view.notification.style.display = 'block'
+                }
+
+            }
+
+            scope.mobileBack = function(){
+                if (window.innerWidth < 800){
+                    scope.view.notification_list.style.display = 'block'
+                    scope.view.notification.style.display = 'none'
+                }
             }
 
             scope.saveNotification = function(){
