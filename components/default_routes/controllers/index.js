@@ -118,11 +118,10 @@ var express = require('express'),
     routes.get('/testsms', async (req,res) => {
 
         if (getGuard(req) == 'admin'){
-            let admin = await new Admin().all()
 
             try {
             //    let sms = await new Notification(admin[0]).setContent('','This is a test sms whoopwhoop').sms()
-                let result = await new Automations('end_it_all').trigger(admin.data[0])
+                let result = await new Notification('07936642915').setContent('Notification','This is a test notification').sms()
                 res.send(result)
             } catch (error) {
                 log(error)
