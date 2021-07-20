@@ -42,6 +42,7 @@ const express = require('express'),
         meta: {},
         include_styles: ['dashboard/views/styles/dashboard-style.ejs'],
         model: new Automations()
+        // tabs:[{href: '/dashboard/notifications', text:'Notifications'},{href: '/dashboard/notifications/send', text:'Send'}]
     }
 
     routes.get('*', (req, res, next) => {
@@ -60,7 +61,7 @@ const express = require('express'),
         }
 
         view.current_view = 'notifications'
-        view.current_sub_view = req.params.filter
+        view.current_sub_view = 'notifications'
         data.include_scripts = [settings.views+'/scripts/script.ejs','dashboard/views//scripts/script.ejs']
         data.action_buttons = [
             {href:'/dashboard/automations',text:'Advanced Settings'}
