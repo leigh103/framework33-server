@@ -9,14 +9,16 @@
         </div>
 
         <div class="page <% if (typeof title != 'undefined'){ %>page-<%- title.toLowerCase().replace(/\s/g,'-') %><% } %>" app-class="{'expand':view.side_nav == true}">
-
-
-
             <%- body -%>
         </div>
 
         <% if (typeof table != 'undefined'){ %>
             <%- include(basedir+'/themes/default/partials/modals/media_library.ejs'); %>
+            <%- include(basedir+'/themes/default/partials/modals/create_link.ejs'); %>
+            <%- include(basedir+'/themes/default/partials/modals/insert_cta.ejs'); %>
+            <%- include(basedir+'/themes/default/partials/modals/insert_icon.ejs'); %>
+            <%- include(basedir+'/themes/default/partials/modals/update_image.ejs'); %>
+            <%- include(basedir+'/themes/default/partials/modals/send_message.ejs'); %>
             <%- include(basedir+'/themes/default/partials/modals/delete.ejs'); %>
         <% } %>
 
