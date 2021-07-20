@@ -52,8 +52,14 @@ const express = require('express'),
 
         data.title = 'People'
         data.table = 'customers'
+        data.action_buttons = []
 
         if (req.params.key){
+
+            data.action_buttons = [
+                {click:"sendMessage('customers/"+req.params.key+"')",text:"Contact Customer"}
+            ]
+
             data.key = req.params.key
             data.fields = await data.model.parseEditFields()
             res.render(settings.views+'/edit.ejs',data)

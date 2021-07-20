@@ -725,6 +725,41 @@
 
             }
 
+            scope.sendMessage = function(id){
+
+                if (!scope.view.send_message){
+
+                    scope.view.send_message = {
+                        message:'',
+                        to:'',
+                        method:'email'
+                    }
+
+                    if (id){
+                        scope.view.send_message.id = id
+                    }
+
+                    scope.openModal('send_message')
+                    view.update('view.send_message.method')
+
+                } else {
+
+                    scope.closeModal()
+
+                    scope.post('/dashboard/send-message',scope.view.send_message).then((data)=>{
+                        scope.notify('Sent')
+                    }).catch((err)=>{
+                        scope.notify(err,'error')
+                    })
+
+                    scope.view.send_message.content = ''
+                    view.update('view.send_message.content')
+                    delete scope.view.send_message
+
+                }
+
+            }
+
             socketConnect("<%- view.websocket.url %>")
 
             watch['ws_data'] = function(data){

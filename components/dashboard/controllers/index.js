@@ -143,6 +143,59 @@ const express = require('express'),
 
     })
 
+    routes.post('/send-message', async (req, res) => {
+
+        if (getGuard(req) != 'admin'){
+            res.send(404).json({error:'404 - not found'})
+            return
+        }
+
+        let msg = req.body,
+            recipient = req.body.to,
+            result = 'done',
+            user_id = 'none'
+
+        if (msg.id){
+
+            let guard = msg.id.split('/')[0],
+                key =  msg.id.split('/')[1]
+
+            let user = await new global[parseClassName(guard)]().find(key)
+            user = user.data
+
+            user_id = user._id
+
+            if (msg.method == 'email' && user.email){
+                recipient = user.email
+            } else if (msg.method == 'sms'){
+                if (user.tel && user.tel.match(/^(07|\+447|\+4407)/)){
+                    recipient = user.tel
+                } else {
+                    res.status(404).json({error:'No valid mobile number found'})
+                    return
+                }
+            } else {
+                res.status(404).json({error:'No valid email address or mobile number found'})
+                return
+            }
+
+        }
+
+        if (msg.method == 'email'){
+            new Log(req.session.user._id, 'post', user_id, 'Email Sent', req.headers['x-forwarded-for'], req.body).save()
+            result = await new Notification(recipient).useEmailTemplate(msg).email()
+        } else if (msg.method == 'sms'){
+            new Log(req.session.user._id, 'post', user_id, 'SMS Sent', req.headers['x-forwarded-for'], req.body).save()
+            result = await new Notification(recipient).setContent(msg.content).sms()
+        } else {
+            res.status(401).json({error:'Method not supported'})
+            return
+        }
+
+        res.json(result)
+
+    })
+
 
 // export
 
