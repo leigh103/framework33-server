@@ -12,6 +12,12 @@
 
         <div class="buttons">
 
+            <% if (typeof action_buttons != 'undefined'){ %>
+                <% action_buttons.forEach(button => { %>
+                    <a <% if (button.href){ %> href="<%- button.href %>"<% } %> <% if (button.click){ %> app-click="<%- button.click %>"<% } %> class="btn bg-white"><span class="text"><%- button.text %></span><span class="icon <%- button.icon %> white"></span></a>
+                <% }) %>
+            <% } %>
+
             <button class="btn bg-primary capitalise" app-show="new._id" app-click="saveItem('<%- table %>',new)">
                 <span class="text">Save <%- view.functions.parseName(table,true) %></span><span class="icon tick white"></span>
             </button>
