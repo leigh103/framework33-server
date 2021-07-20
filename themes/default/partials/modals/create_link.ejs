@@ -1,0 +1,43 @@
+
+<modal-auto app-show="view.modal == 'createLink'" data-title="Insert or update a link">
+
+    <div class="grid col-3 col-s-1 gap-2 my-2">
+        <div>
+            <label>URL</label>
+            <input type="text" app-model="exec_data.url">
+        </div>
+        <div>
+            <label>Text</label>
+            <input type="text" app-model="exec_data.text">
+        </div>
+        <div>
+            <label>Target</label>
+            <input type="text" app-model="exec_data.target">
+        </div>
+        <div>
+            <label>Title</label>
+            <input type="text" app-model="exec_data.title">
+        </div>
+        <div class="colspan-2">
+            <label>Classes</label>
+            <input type="text" app-model="exec_data.classes">
+        </div>
+    </div>
+
+    <div class="grid col-4 pb-1 gap-2">
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn bg-white w-100" app-click="closeModal()">
+                Cancel
+            </a>
+        </div>
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn highlight w-100" app-click="exec('createLink',exec_data)">
+                <span app-hide="exec_data.id">Insert</span>
+                <span app-show="exec_data.id">Update</span>
+            </a>
+        </div>
+    </div>
+
+</modal-auto>

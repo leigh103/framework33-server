@@ -1,0 +1,34 @@
+
+<modal-auto app-show="view.modal == 'send_message'" data-title="Send Message" class="modal-auto">
+
+    <div class="w-75 w-s-100 mb-1 flex" app-show="view.modal_text">
+        <span class="icon handstop primary xl left flex-none"></span>
+        <span app-bind="view.modal_text" class="flex-1"></span>
+    </div>
+
+    <div class="mb-1">
+
+        <button class="btn" app-class="{'bg-primary':view.send_message.method == 'email'}" app-click="view.send_message.method = 'email'">Email</button>
+        <button class="btn" app-class="{'bg-primary':view.send_message.method == 'sms'}" app-click="view.send_message.method = 'sms'">SMS</button>
+        <div app-show="view.send_message.method == 'sms'" class="my-1">Text message content should be limited to 160 characters</div>
+        <div class="bg-white rounded p-1 mt-2">
+            <div contenteditable="true" app-model="view.send_message.content"></div>
+        </div>
+    </div>
+
+    <div class="grid col-4 pb-1 gap-2">
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn bg-white w-100" app-click="openModal(false)">
+                Cancel
+            </a>
+        </div>
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn bg-primary w-100" app-click="sendMessage()">
+                Send
+            </a>
+        </div>
+    </div>
+
+</modal-auto>

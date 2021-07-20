@@ -1,0 +1,54 @@
+<modal-auto app-show="view.modal == 'updateImage'" data-title="Update Image">
+
+    <div class="grid col-2 gap-2 my-2">
+        <div>
+            <label>Alt Text</label>
+            <input type="text" app-model="exec_data.alt_text">
+        </div>
+        <div>
+            <label>Alignment</label>
+            <dropdown-select app-model="exec_data.align">
+                <div value="inline" class="option">
+                    <div>Inline</div>
+                </div>
+                <div value="inline-block" class="option">
+                    <div>Inline Block</div>
+                </div>
+                <div value="block" class="option">
+                    <div>Block</div>
+                </div>
+            </dropdown-select>
+        </div>
+
+
+        <div>
+            <button class="btn bg-white" app-click="exec('removeImage')">Remove Image</button>
+        </div>
+
+        <div>
+            <button class="btn bg-white" app-click="execModal('insertMedia',exec_data.id)">Change Image</button>
+        </div>
+
+        <div class="colspan-2">
+            <label>Classes</label>
+            <input type="text" app-model="exec_data.classes">
+        </div>
+    </div>
+
+    <div class="grid col-4 pb-1 gap-2">
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn bg-white w-100" app-click="closeModal()">
+                Cancel
+            </a>
+        </div>
+
+        <div class="colspan-2 text-right pt-1 mt-s-3">
+            <a class="btn highlight w-100" app-click="exec('insertImage',exec_data)">
+                <span app-hide="exec_data.id">Insert</span>
+                <span app-show="exec_data.id">Update</span>
+            </a>
+        </div>
+    </div>
+
+</modal-auto>
