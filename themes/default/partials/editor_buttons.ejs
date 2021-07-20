@@ -12,7 +12,7 @@
         <button app-click="exec('formatBlock','<h4>')">H4</button>
         <button app-click="exec('formatBlock','<p>')">P</button>
         <button app-click="exec('formatBlock','<blockquote>')"><span class="icon speechbubble2 black m-0"></span></button>
-        <button app-click="exec('removeFormat')"><i class="fas fa-remove-format"></i></button>
+        <button app-click="exec('removeFormat')"><span class="icon noentry black"></span></button>
 
         <div class="spacer"></div>
 
@@ -24,20 +24,27 @@
         <button app-click="exec('formatBlock','<h4>')">H4</button>
         <button app-click="exec('formatBlock','<p>')">P</button>
         <button app-click="exec('formatBlock','<blockquote>')"><span class="icon speechbubble2 black m-0"></span></button>
-        <button app-click="exec('removeFormat')"><i class="fas fa-remove-format"></i></button>
+        <button app-click="exec('removeFormat')"><span class="icon noentry black"></span></button>
 
         <div class="spacer"></div>
 
     <% } else if (editor_button_type == "simple") { %>
 
-        <button app-click="exec('formatBlock','<blockquote>')"><span class="icon speechbubble2 black m-0"></span></button>
-        <button app-click="exec('removeFormat')"><i class="fas fa-remove-format"></i></button>
+        <button app-click="exec('formatBlock','<h1>')">H1</button>
+        <button app-click="exec('formatBlock','<h2>')">H2</button>
+        <button app-click="exec('formatBlock','<h3>')">H3</button>
+        <button app-click="exec('formatBlock','<h4>')">H4</button>
+            <button app-click="exec('formatBlock','<p>')">P</button>
+
+        <div class="spacer"></div>
+
+        <button app-click="exec('removeFormat')"><span class="icon noentry black"></span></button>
 
         <div class="spacer"></div>
 
     <% } else { %>
 
-        <button app-click="exec('removeFormat')"><i class="fas fa-remove-format"></i></button>
+        <button app-click="exec('removeFormat')"><span class="icon noentry black"></span></button>
 
     <% } %>
 

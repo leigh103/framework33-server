@@ -1,0 +1,104 @@
+
+    <script>
+
+        extend.notifications = function(){
+
+            scope.view.count = {}
+
+            scope.getNotifications = function(){
+
+                scope.notifications = []
+                scope.get('automations').then((data)=>{
+                    data.map( async (notification, idx) => {
+
+                        let idxx = 0
+                        for (const val of notification.actions){
+
+                            if (val.method == 'email' || val.method == 'sms'){
+
+                                let payload = {
+                                    name: notification.name,
+                                    description: notification.description,
+                                    method: val.method,
+                                    trigger: notification.trigger,
+                                    idx: idx,
+                                    key: idxx
+                                }
+                                scope.notifications.push(payload)
+                                idxx++
+                            }
+                        }
+
+                    })
+
+                    scope.notifications.sort((a,b)=>{
+                        return a.name.localeCompare(b.name)
+                    })
+                    view.update('notifications')
+                })
+
+            }
+
+
+            scope.openNotification = function(notification){
+                scope.new = scope.automations.find((automation)=>{return automation.trigger == notification.trigger})
+                scope.view.editing = scope.new.actions[notification.key]
+                scope.view.editing.key = notification.key
+                scope.updateCounts(scope.new.actions[notification.key].content)
+                view.update('view.editing')
+                view.update('new')
+            }
+
+            scope.saveNotification = function(){
+                scope.new.actions[scope.view.editing.key].content = scope.view.editing.content
+                scope.post('automations',scope.new).then((data)=>{
+                    scope.notify('Saved')
+                }).catch((err)=>{
+                    scope.notify(err,'error')
+                })
+            }
+
+            scope.testNotification = function(){
+
+                if (!scope.view.test_conf){
+
+                    scope.openModal('test_conf',"Testing is to be used for checking wording and layouts - any variables (text in curly brackets) or buttons used in the notification won't be parsed. Test emails and text messages are charged at the standard rate")
+                    scope.view.test_conf = true
+
+                } else {
+
+                    scope.closeModal()
+
+                    scope.post('/dashboard/notification-test',scope.view.editing).then((data)=>{
+                        console.log(data)
+                        scope.notify('Sent')
+                    }).catch((err)=>{
+                        scope.notify(err,'error')
+                    })
+
+                    scope.view.test_conf = false
+
+                }
+
+
+            }
+
+            watch['view.editing.content'] = function(data){
+                if (data){
+                    scope.updateCounts(data)
+                }
+
+            }
+
+            scope.updateCounts = function(data){
+                scope.view.count.characters = data.length
+                scope.view.count.words = data.split(/\s/).length
+                view.update('view.count')
+            }
+
+
+        }
+
+
+
+    </script>

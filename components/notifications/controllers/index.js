@@ -11,9 +11,9 @@ const express = require('express'),
 
     settings = {
         default_route: 'dashboard',
-        views: 'automations/views',
+        views: 'notifications/views',
         dashboard:{
-            link: 'automations',
+            link: 'notifications',
             label: 'Edit website notifications'
         },
         menu: {
@@ -41,8 +41,7 @@ const express = require('express'),
         query:'',
         meta: {},
         include_styles: ['dashboard/views/styles/dashboard-style.ejs'],
-        model: new Automations(),
-        tabs: [{href: '/dashboard/notifications', text:'All'},{href: '/dashboard/notifications/user', text:'User'},{href: '/dashboard/notifications/transactions', text:'Transactions'},{href: '/dashboard/notifications/products', text:'Products'}]
+        model: new Automations()
     }
 
     routes.get('*', (req, res, next) => {
@@ -54,26 +53,6 @@ const express = require('express'),
         next()
     })
 
-    routes.get('/notifications/:key', async(req, res) => {
-
-        data.meta = {
-            title: config.site.name+' | Notifications'
-        }
-
-        view.current_view = 'notifications'
-        view.current_sub_view = 'all'
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
-
-        data.title = 'Notifications'
-        data.table = 'automations'
-        data.query = undefined
-
-        data.key = req.params.key
-        data.fields = await data.model.parseEditFields()
-        res.render(basedir+'/components/dashboard/views/edit.ejs',data)
-
-    })
-
     routes.get('/notifications', async(req, res) => {
 
         data.meta = {
@@ -82,20 +61,49 @@ const express = require('express'),
 
         view.current_view = 'notifications'
         view.current_sub_view = req.params.filter
-        data.include_scripts = ['dashboard/views/scripts/script.ejs']
+        data.include_scripts = [settings.views+'/scripts/script.ejs','dashboard/views//scripts/script.ejs']
+        data.action_buttons = [
+            {href:'/dashboard/automations',text:'Advanced Settings'}
+        ]
 
         data.title = 'Notifications'
         data.table = 'automations'
         data.query = ''
+        data.model.settings.allow_new = false
 
         data.fields = data.model.settings.fields
         data.search_fields = data.model.settings.search_fields
 
-        res.render(basedir+'/components/dashboard/views/grid.ejs',data)
+        res.render(settings.views+'/notifications.ejs',data)
 
     })
 
+    routes.post('/notification-test', async(req, res) => {
 
+        let test = req.body,
+            to = req.session.user.email
+
+        if (test.method == 'sms' && req.session.user.tel){
+            to = req.session.user.tel
+        } else if (test.method == 'sms' && !req.session.user.tel){
+            res.status(404).json({error:'Please add your mobile number to test via SMS'})
+            return
+        }
+
+        let result
+
+        if (test.method == 'email'){
+            result = await new Notification(to).useEmailTemplate(test).email()
+        } else if (test.method == 'sms'){
+            result = await new Notification(to).setContent('Notification',test.content).sms()
+        } else {
+            res.status(401).json({error:'Method not supported'})
+            return
+        }
+
+        res.json(result)
+
+    })
 
 
 

@@ -1,0 +1,103 @@
+<% layout(config.site.dashboard_theme+'/dashboard.ejs') %>
+<%- include(basedir+'/components/dashboard/views/partials/page_header.ejs') %>
+<div class="">
+
+    <div class="grid col-9 h-100 page-full mailbox" app-init="getNotifications()">
+
+        <div class="colspan-3 colspan-s-9 messages">
+
+            <div app-show="notifications.length == 0" class="text-italic">No notifications</div>
+
+            <div app-for="notification in notifications" class="message-summary flex clickable">
+
+                <div class="flex-none flex flex-middle p-1" app-click="openNotification(notification)">
+                    <span class="icon envelope grey lg" app-show="notification.method == 'email'"></span>
+                    <span class="icon previewmobile grey lg" app-show="notification.method == 'sms'"></span>
+                </div>
+                <div class="flex-4 p-1">
+                    <div class="colspan-2" app-click="openNotification(notification)">
+                        <div class="title"><span app-bind="notification.name"></span></div>
+                        <div class="text"><span app-bind="notification.description"></span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="colspan-6 colspan-s-9 message ml-1">
+
+            <div app-show="view.editing">
+                <h4 class="my-2"><span app-show="view.editing.method == 'sms'">SMS</span><span app-show="view.editing.method == 'email'">Email</span> notification for <span app-bind="new.name"></span></h4>
+                <div class="text-right" app-show="view.editing.method == 'sms'"><span app-bind="view.count.characters"></span>/160 characters</div>
+                <div class="p-1 bg-white rounded" style="min-height:200px">
+
+                    <div app-show="view.editing.method == 'email'"><%- include(view.basedir+'/themes/default/partials/editor_buttons.ejs',{editor_button_type:'simple'}) %></div>
+                    <div app-model="view.editing.content" contenteditable="true" style="white-space: pre-wrap;"></div>
+                </div>
+                <div class="text-right mt-2">
+                    <button class="btn bg-white" app-click="testNotification()">Test</button>
+                    <button class="btn bg-primary" app-click="saveNotification()">Save</button>
+                </div>
+            </div>
+
+            <div app-hide="view.editing">
+
+                <h4 class="my-2">Please select a notification to edit</h4>
+                <div class="bg-light-grey2 text-small rouned p-1 w-50 w-m-75 w-s-100 flex flex-top-left">
+                    <div class="flex-none mr-1"><span class="icon primary help"></span></div>
+                    <div class="flex-1">This is a simple tool to manage the wording on all email and SMS notifications. If you want to add, remove or edit the methods used for the notifications, click the 'Advanced Settings' button above.</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="context" class="context dropdown text-left" style="display: none">
+
+    <% if (typeof context_menu == 'object'){ %>
+
+        <% context_menu.forEach((item,i) => { %>
+
+            <div class="link" app-click="<%- item.function %>('<%- table %>')">
+                <span class="icon <%- item.icon %> primary"></span>
+                <%- item.text %>
+            </div>
+
+        <% }) %>
+
+    <% } %>
+
+    <div class="link" app-click="deleteItem('<%- table %>')">
+        <span class="icon bin left primary"></span>
+        Delete
+    </div>
+
+
+</div>
+
+
+<modal-auto app-show="view.modal == 'test_conf'" data-title="Send a test notification">
+
+        <div class="w-75 w-s-100 mb-1 flex" app-show="view.modal_text">
+            <span class="icon handstop primary xl left flex-none"></span>
+            <span app-bind="view.modal_text" class="flex-1"></span>
+        </div>
+
+        <div class="grid col-4 pb-1 gap-2">
+
+            <div class="colspan-2 text-right pt-1 mt-s-3">
+                <a class="btn bg-white w-100" app-click="openModal(false)">
+                    Cancel
+                </a>
+            </div>
+
+            <div class="colspan-2 text-right pt-1 mt-s-3">
+                <a class="btn bg-primary w-100" app-click="testNotification()">
+                    Ok to send
+                </a>
+            </div>
+        </div>
+
+</modal-auto>
