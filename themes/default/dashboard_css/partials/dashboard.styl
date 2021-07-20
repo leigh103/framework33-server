@@ -82,7 +82,9 @@ html, body {
         }
     }
 
-
+    .rounded {
+        border-radius: $border-radius;
+    }
 
     button, .btn {
 
@@ -351,21 +353,6 @@ html, body {
 
             overflow: hidden;
 
-            &.hidden-d, &.hidden-m {
-                @media $desktop {
-                    display: none;
-                }
-                @media $medium {
-                    display: none;
-                }
-            }
-
-            &.hidden-s {
-                @media $small {
-                    display: none;
-                }
-            }
-
             .btn {
                 margin-left: 0;
                 margin-left: 0.875rem;
@@ -388,8 +375,14 @@ html, body {
 
                 @media $small {
 
+
+                    display: none;
+
+                    .bg-primary {
+                        display: inline-flex;
+                    }
+                    
                     padding: 0;
-                    display: inline-flex;
                     width: 2.5rem;
 
                     .text {

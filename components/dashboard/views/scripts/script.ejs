@@ -753,7 +753,8 @@
                     })
 
                     scope.view.send_message.content = ''
-                    view.update('view.send_message.content')
+                    scope.view.send_message.subject = ''
+                    view.update('view.send_message')
                     delete scope.view.send_message
 
                 }

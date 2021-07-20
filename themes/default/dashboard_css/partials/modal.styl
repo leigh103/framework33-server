@@ -7,6 +7,11 @@ modal {
             border-radius: $border-radius;
             max-width: 60vw;
 
+            @media $small {
+                max-width: 100vw;
+                height: 90vh
+            }
+
             header {
                 background-color: $dashboard-color-light-grey;
                 color: $dashboard-text-black;

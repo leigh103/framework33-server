@@ -10,11 +10,16 @@
 
         <button class="btn" app-class="{'bg-primary':view.send_message.method == 'email'}" app-click="view.send_message.method = 'email'">Email</button>
         <button class="btn" app-class="{'bg-primary':view.send_message.method == 'sms'}" app-click="view.send_message.method = 'sms'">SMS</button>
-        <div app-show="view.send_message.method == 'sms'" class="my-1">Text message content should be limited to 160 characters</div>
-        <div class="bg-white rounded p-1 mt-2">
-            <div contenteditable="true" app-model="view.send_message.content"></div>
+        <div app-show="view.send_message.method == 'email'" class="mt-2"><label>Subject</label><input type="text" app-model="view.send_message.subject"></div>
+        <label class="mt-1">Content</label>
+        <div class="bg-white rounded p-1">
+            <div contenteditable="true" app-model="view.send_message.content" style="min-height: 10rem"></div>
         </div>
     </div>
+
+    <div app-show="view.send_message.method == 'sms'" class="mt-2"><span class="icon handstop primary left"></span>Text message content should be limited to 160 characters. The recipient will not be able to reply</div>
+    <div app-show="view.send_message.method == 'email'" class="mt-2"><span class="icon envelope primary left"></span>Any replies will go to <%- view.contact.email %></div>
+    
 
     <div class="grid col-4 pb-1 gap-2">
 
