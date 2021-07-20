@@ -10,10 +10,10 @@
 
             <div app-for="message in mailbox" app-attr="{'id':message._key}" class="message-summary flex clickable" app-class="{'read':message.read == true}">
 
-                <div class="flex-none flex flex-middle" app-click="openMessage(message)">
+                <div class="flex-none flex flex-middle p-1" app-click="openMessage(message)">
                     <img src="/images/Profile_Placeholder.svg" app-src="message.from.avatar" class="avatar sm" style="margin:0 1.4rem 0 0.4rem">
                 </div>
-                <div class="flex-4">
+                <div class="flex-4 p-1">
                     <div class="colspan-2" app-click="openMessage(message, $index)">
                         <div class="text"><span app-bind="message.from.name"></span></div>
                         <div class="date" app-bind="parseDate(message.date,'ago')"></div>

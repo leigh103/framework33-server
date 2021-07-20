@@ -5,6 +5,7 @@
   "main": "server-33.js",
   "dependencies": {
     "@sendgrid/mail": "^6.5.5",
+    "@vonage/server-sdk": "^2.10.10",
     "arangojs": "^6.14.0",
     "async": "^3.2.0",
     "async-prompt": "^1.0.1",

@@ -3,6 +3,7 @@
 
         scope.view = {
             notification:{},
+            menu: false
         }
 
         scope.window = {

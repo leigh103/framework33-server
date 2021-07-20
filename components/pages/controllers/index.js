@@ -377,7 +377,7 @@ const express = require('express'),
             host: config.site.url.replace(/http(s)?\:\/\//,''),
             path: '/component-pages/render'
         }
-        var request = http.request(options, function (response) {
+        var request = https.request(options, function (response) {
             var data = '';
             response.on('data', function (chunk) {
                 data += chunk;
@@ -827,6 +827,9 @@ const express = require('express'),
 
     routes.get('/blog/:slug', async (req, res) => {
 
+        delete data.pages
+        delete data.blocks
+
         view.current_view = 'blog'
 
         data.include_scripts = [settings.views+'/scripts/script.ejs']
@@ -854,6 +857,9 @@ const express = require('express'),
     })
 
     routes.get('/blog', async (req, res) => {
+
+        delete data.pages
+        delete data.blocks
 
         view.current_view = 'blog'
 
